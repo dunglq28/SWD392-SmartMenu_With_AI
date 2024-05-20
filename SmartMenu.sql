@@ -1,0 +1,162 @@
+CREATE DATABASE [SmartMenu];
+GO
+
+USE [SmartMenu];
+GO
+
+CREATE TABLE Brand
+(
+  BrandID INT NOT NULL IDENTITY(1,1),
+  BrandCode NVARCHAR(36) NOT NULL UNIQUE,
+  BrandName NVARCHAR(100) NOT NULL,
+  CreateDate DATE NOT NULL,
+  Status INT NOT NULL,
+  Image NVARCHAR(MAX) NOT NULL,
+  PRIMARY KEY (BrandID)
+);
+
+CREATE TABLE Category
+(
+  CategoryID INT NOT NULL IDENTITY(1,1),
+  CategoryName NVARCHAR(50) NOT NULL,
+  CategoryCode NVARCHAR(36) NOT NULL UNIQUE,
+  CreateDate DATE NOT NULL,
+  UpdateDate DATE NULL,
+  Status INT NOT NULL,
+  BrandID INT NOT NULL,
+  PRIMARY KEY (CategoryID),
+  FOREIGN KEY (BrandID) REFERENCES Brand(BrandID)
+);
+
+CREATE TABLE Product
+(
+  ProductID INT NOT NULL IDENTITY(1,1),
+  ProductCode NVARCHAR(36) NOT NULL UNIQUE,
+  CreateDate DATE NOT NULL,
+  ProductName NVARCHAR(MAX) NOT NULL,
+  Price NVARCHAR(MAX) NOT NULL,
+  Description NVARCHAR(MAX) NULL,
+  ImageUrl NVARCHAR(MAX) NULL,
+  SpotlightVideo_Image NVARCHAR(MAX) NULL,
+  ImageName NVARCHAR(100) NULL,
+  CategoryID INT NOT NULL,
+  BrandID INT NOT NULL,
+  PRIMARY KEY (ProductID),
+  FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID),
+  FOREIGN KEY (BrandID) REFERENCES Brand(BrandID)
+);
+
+CREATE TABLE Size
+(
+  SizeID INT NOT NULL IDENTITY(1,1),
+  SizeName NVARCHAR(10) NOT NULL,
+  SizeAcronym NVARCHAR(5) NOT NULL,
+  PRIMARY KEY (SizeID)
+);
+
+CREATE TABLE ProductSize
+(
+  ProductID INT NOT NULL,
+  SizeID INT NOT NULL,
+  PRIMARY KEY (ProductID, SizeID),
+  FOREIGN KEY (ProductID) REFERENCES Product(ProductID),
+  FOREIGN KEY (SizeID) REFERENCES Size(SizeID)
+);
+
+CREATE TABLE CustomerSegment
+(
+  SegmentID INT NOT NULL IDENTITY(1,1),
+  SegmentCode NVARCHAR(36) NOT NULL UNIQUE,
+  SegmentName NVARCHAR(MAX) NOT NULL,
+  CreateDate DATE NOT NULL,
+  UpdateDate DATE NULL,
+  Status INT NOT NULL,
+  BrandID INT NOT NULL,
+  PRIMARY KEY (SegmentID),
+  FOREIGN KEY (BrandID) REFERENCES Brand(BrandID)
+);
+
+CREATE TABLE Attribute
+(
+  AttributeID INT NOT NULL IDENTITY(1,1),
+  AttributeCode NVARCHAR(36) NOT NULL UNIQUE,
+  AttributeName NVARCHAR(100) NOT NULL,
+  CreateDate DATE NOT NULL,
+  PRIMARY KEY (AttributeID)
+);
+
+CREATE TABLE GroupAttribute
+(
+  GroupAttributeID INT NOT NULL IDENTITY(1,1),
+  GroupAttributeCode NVARCHAR(36) NOT NULL UNIQUE,
+  Description NVARCHAR(MAX) NULL,
+  Status INT NOT NULL,
+  CreateDate DATE NOT NULL,
+  AttributeID INT NOT NULL,
+  PRIMARY KEY (GroupAttributeID),
+  FOREIGN KEY (AttributeID) REFERENCES Attribute(AttributeID)
+);
+
+CREATE TABLE SegmentAttribute
+(
+  SegmentID INT NOT NULL,
+  GroupAttributeID INT NOT NULL,
+  PRIMARY KEY (SegmentID, GroupAttributeID),
+  FOREIGN KEY (SegmentID) REFERENCES CustomerSegment(SegmentID),
+  FOREIGN KEY (GroupAttributeID) REFERENCES GroupAttribute(GroupAttributeID)
+);
+
+CREATE TABLE Menu
+(
+  MenuID INT NOT NULL IDENTITY(1,1),
+  MenuCode NVARCHAR(36) NOT NULL UNIQUE,
+  CreateDate DATE NOT NULL,
+  IsActive BIT NOT NULL,
+  Priority INT NOT NULL,
+  BrandID INT NOT NULL,
+  PRIMARY KEY (MenuID),
+  FOREIGN KEY (BrandID) REFERENCES Brand(BrandID)
+);
+
+CREATE TABLE ProductMenu
+(
+  ProductID INT NOT NULL,
+  MenuID INT NOT NULL,
+  PRIMARY KEY (ProductID, MenuID),
+  FOREIGN KEY (ProductID) REFERENCES Product(ProductID),
+  FOREIGN KEY (MenuID) REFERENCES Menu(MenuID)
+);
+
+CREATE TABLE SegmentHistory
+(
+  HistoryID INT NOT NULL IDENTITY(1,1),
+  ImageCustomer NVARCHAR(MAX) NOT NULL,
+  CreateDate DATE NOT NULL,
+  MenuID INT NOT NULL,
+  PRIMARY KEY (HistoryID),
+  FOREIGN KEY (MenuID) REFERENCES Menu(MenuID)
+);
+
+CREATE TABLE MenuSegment
+(
+  MenuID INT NOT NULL,
+  SegmentID INT NOT NULL,
+  PRIMARY KEY (MenuID, SegmentID),
+  FOREIGN KEY (MenuID) REFERENCES Menu(MenuID),
+  FOREIGN KEY (SegmentID) REFERENCES CustomerSegment(SegmentID)
+);
+
+CREATE TABLE Store
+(
+  StoreID INT NOT NULL IDENTITY(1,1),
+  StoreCode NVARCHAR(36) NOT NULL UNIQUE,
+  CreateDate DATE NOT NULL,
+  IsActive BIT NOT NULL,
+  UpdateDate DATE NOT NULL,
+  Status INT NOT NULL,
+  Address NVARCHAR(100) NOT NULL,
+  City NVARCHAR(50) NOT NULL,
+  BrandID INT NOT NULL,
+  PRIMARY KEY (StoreID),
+  FOREIGN KEY (BrandID) REFERENCES Brand(BrandID)
+);
