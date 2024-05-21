@@ -13,15 +13,11 @@ public partial class Menu
 
     public bool IsActive { get; set; }
 
-    public int Priority { get; set; }
-
     public int BrandId { get; set; }
 
     public virtual Brand Brand { get; set; } = null!;
 
-    public virtual ICollection<SegmentHistory> SegmentHistories { get; set; } = new List<SegmentHistory>();
+    public virtual ICollection<MenuSegment> MenuSegments { get; set; } = new List<MenuSegment>();
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
-
-    public virtual ICollection<CustomerSegment> Segments { get; set; } = new List<CustomerSegment>();
+    public virtual ICollection<ProductMenu> ProductMenus { get; set; } = new List<ProductMenu>();
 }

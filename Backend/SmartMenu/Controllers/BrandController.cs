@@ -102,7 +102,7 @@ namespace SmartMenu.Controllers
                     IsSuccess = true
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest(new BaseResponse
                 {
@@ -114,6 +114,7 @@ namespace SmartMenu.Controllers
             }
         }
 
+        //public override async Task<bool> DeleteEntity(int id)
 
 
 

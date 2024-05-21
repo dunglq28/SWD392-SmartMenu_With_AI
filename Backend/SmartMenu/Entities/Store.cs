@@ -13,7 +13,7 @@ public partial class Store
 
     public bool IsActive { get; set; }
 
-    public DateOnly UpdateDate { get; set; }
+    public DateOnly? UpdateDate { get; set; }
 
     public int Status { get; set; }
 
@@ -24,4 +24,6 @@ public partial class Store
     public int BrandId { get; set; }
 
     public virtual Brand Brand { get; set; } = null!;
+
+    public virtual ICollection<Screen> Screens { get; set; } = new List<Screen>();
 }

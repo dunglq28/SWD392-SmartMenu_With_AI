@@ -21,7 +21,5 @@ public partial class CustomerSegment
 
     public virtual Brand Brand { get; set; } = null!;
 
-    public virtual ICollection<GroupAttribute> GroupAttributes { get; set; } = new List<GroupAttribute>();
-
-    public virtual ICollection<Menu> Menus { get; set; } = new List<Menu>();
+    public virtual ICollection<MenuSegment> MenuSegments { get; set; } = new List<MenuSegment>();
 }

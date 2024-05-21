@@ -11,7 +11,17 @@ public partial class Attribute
 
     public string AttributeName { get; set; } = null!;
 
+    public string? Description { get; set; }
+
+    public int Status { get; set; }
+
     public DateOnly CreateDate { get; set; }
 
-    public virtual ICollection<GroupAttribute> GroupAttributes { get; set; } = new List<GroupAttribute>();
+    public DateOnly? UpdateDate { get; set; }
+
+    public int GroupAttributeId { get; set; }
+
+    public virtual GroupAttribute GroupAttribute { get; set; } = null!;
+
+    public virtual ICollection<VisitAttribute> VisitAttributes { get; set; } = new List<VisitAttribute>();
 }

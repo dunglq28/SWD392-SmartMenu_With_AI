@@ -12,6 +12,8 @@
 
         public int Status { get; set; }
 
-        public string Image { get; set; } = null!;
+        public string? ImageUrl { get; set; }
+
+        public string? ImageName { get; set; }
     }
 }
