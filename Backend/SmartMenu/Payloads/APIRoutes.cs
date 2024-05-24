@@ -18,5 +18,12 @@
             public const string GetImage = Base + "/brands/GetImageTest";
         }
 
+        public static class Authentication
+        {
+            public const string Login = Base + "/authentication/login";
+
+            public const string RefreshToken = Base + "/authentication/refreshtoken";
+        }
+
     }
 }

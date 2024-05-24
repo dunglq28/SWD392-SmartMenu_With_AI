@@ -10,7 +10,9 @@ namespace SmartMenu.Mappings
         public MappingProfile()
         {
             // Mapping classes
+            CreateMap<AppUser, AppUserDto>().ReverseMap();
             CreateMap<Brand, BrandDto>().ReverseMap();
+
         }
     }
 }

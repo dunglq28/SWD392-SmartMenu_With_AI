@@ -11,6 +11,8 @@ public partial class Brand
 
     public string BrandName { get; set; } = null!;
 
+    public int UserId { get; set; }
+
     public DateOnly CreateDate { get; set; }
 
     public int Status { get; set; }
@@ -26,4 +28,6 @@ public partial class Brand
     public virtual ICollection<Menu> Menus { get; set; } = new List<Menu>();
 
     public virtual ICollection<Store> Stores { get; set; } = new List<Store>();
+
+    public virtual AppUser User { get; set; } = null!;
 }

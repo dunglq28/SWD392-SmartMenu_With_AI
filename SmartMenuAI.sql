@@ -4,22 +4,61 @@ GO
 USE [SmartMenu];
 GO
 
+CREATE TABLE Role
+(
+  RoleID INT NOT NULL IDENTITY(1,1),
+  RoleName VARCHAR(50) NOT NULL,
+  PRIMARY KEY (RoleID)
+);
+
+CREATE TABLE AppUser
+(
+  UserID INT NOT NULL IDENTITY(1,1),
+  UserCode NVARCHAR(36) NOT NULL UNIQUE,
+  UserName VARCHAR(50) NOT NULL,
+  Password VARCHAR(255) NOT NULL,
+  RoleID INT NOT NULL,
+  CreateDate DATE NOT NULL,
+  IsActive BIT NOT NULL,
+  Status INT NOT NULL,
+  PRIMARY KEY (UserID),
+  FOREIGN KEY (RoleID) REFERENCES Role(RoleID)
+);
+
+CREATE TABLE RefreshToken
+(
+  RefreshTokenID INT NOT NULL IDENTITY(1,1),
+  RefreshTokenCode NVARCHAR(36) NOT NULL UNIQUE,
+  RefreshTokenValue NVARCHAR(255) NOT NULL,
+  UserID INT NOT NULL,
+  JwtID NVARCHAR(150) NOT NULL,
+  IsUsed BIT NULL,
+  IsRevoked BIT NULL,
+  ExpiresAt DATETIME NOT NULL,
+  CreatedAt DATETIME NOT NULL,
+  PRIMARY KEY (RefreshTokenID),
+  FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
+);
+
 CREATE TABLE Brand
 (
   BrandID INT NOT NULL IDENTITY(1,1),
   BrandCode NVARCHAR(36) NOT NULL UNIQUE,
   BrandName NVARCHAR(100) NOT NULL,
+  UserID INT NOT NULL,
   CreateDate DATE NOT NULL,
   Status INT NOT NULL,
   ImageUrl NVARCHAR(MAX) NULL,
   ImageName NVARCHAR(100) NULL,
-  PRIMARY KEY (BrandID)
+  PRIMARY KEY (BrandID),
+  FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
 );
 
 CREATE TABLE Store
 (
   StoreID INT NOT NULL IDENTITY(1,1),
   StoreCode NVARCHAR(36) NOT NULL UNIQUE,
+  UserID INT NOT NULL,
   CreateDate DATE NOT NULL,
   IsActive BIT NOT NULL,
   UpdateDate DATE NULL,
@@ -28,8 +67,10 @@ CREATE TABLE Store
   City NVARCHAR(150) NOT NULL,
   BrandID INT NOT NULL,
   PRIMARY KEY (StoreID),
-  FOREIGN KEY (BrandID) REFERENCES Brand(BrandID)
+  FOREIGN KEY (BrandID) REFERENCES Brand(BrandID),
+  FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
 );
+
 
 CREATE TABLE Category
 (
@@ -176,12 +217,29 @@ CREATE TABLE ScreenMenu
   FOREIGN KEY (MenuID) REFERENCES Menu(MenuID)
 );
 
+-- Thông tin ảo cho bảng Role
+INSERT INTO Role (RoleName) VALUES ('Admin');
+INSERT INTO Role (RoleName) VALUES ('Brand Manager');
+INSERT INTO Role (RoleName) VALUES ('Store');
 
--- Chèn thông tin mẫu vào bảng Brand
-INSERT INTO Brand (BrandCode, BrandName, CreateDate, Status, ImageUrl, ImageName)
-VALUES 
-('BRC-001', 'Brand One', '2023-01-01', 1, 'http://example.com/images/brand1.jpg', 'brand1.jpg'),
-('BRC-002', 'Brand Two', '2023-02-01', 1, 'http://example.com/images/brand2.jpg', 'brand2.jpg'),
-('BRC-003', 'Brand Three', '2023-03-01', 0, NULL, NULL),
-('BRC-004', 'Brand Four', '2023-04-01', 1, 'http://example.com/images/brand4.jpg', 'brand4.jpg'),
-('BRC-005', 'Brand Five', '2023-05-01', 1, NULL, NULL);
+-- Thông tin ảo cho bảng AppUser
+INSERT INTO AppUser (UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) VALUES 
+('9e2a9c0a-3f94-4b6a-8ef2-123456789012', 'admin', 'password123', 1, '2024-01-01', 1, 1),
+('e3c3d1f1-8b8f-4b6a-bc2e-234567890123', 'brand manager', 'password232', 2, '2024-01-02', 1, 1),
+('f3a5c4d7-9d8e-4e4b-bd3f-345678901234', 'brand manager', 'hello123', 2, '2024-01-03', 1, 1),
+('d6e6f7c5-6e7a-4e9b-af4d-456789012345', 'brand manager', 'sailamcuocdoi', 2, '2024-01-04', 1, 1);
+
+
+-- Thông tin ảo cho bảng Brand
+INSERT INTO Brand (BrandCode, BrandName, UserID, CreateDate, Status, ImageUrl, ImageName) VALUES 
+('b1234567-89ab-cdef-0123-456789abcdef', N'Phúc Long', 2, '2024-02-01', 1, NULL, NULL),
+('c2345678-9abc-def0-1234-56789abcdef0', N'Cộng', 3, '2024-02-02', 1, NULL, NULL),
+('d3456789-abcd-ef01-2345-6789abcdef01', N'Highlands', 4, '2024-02-03', 1, NULL, NULL);
+
+select * from AppUser
+
+select * from RefreshToken
+
+update AppUser 
+set IsActive = 1
+where UserCode = '9e2a9c0a-3f94-4b6a-8ef2-123456789012'

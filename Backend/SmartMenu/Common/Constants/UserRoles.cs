@@ -1,6 +1,9 @@
 ﻿namespace SmartMenu.Common.Constants
 {
-    public class UserRoles
+    public static class UserRoles
     {
+        public const string Admin = "Admin";
+        public const string BrandManager = "BrandManager";
+        public const string Store = "Store";
     }
 }
