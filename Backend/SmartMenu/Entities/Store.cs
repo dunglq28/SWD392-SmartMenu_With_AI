@@ -9,6 +9,8 @@ public partial class Store
 
     public string StoreCode { get; set; } = null!;
 
+    public int UserId { get; set; }
+
     public DateOnly CreateDate { get; set; }
 
     public bool IsActive { get; set; }
@@ -26,4 +28,6 @@ public partial class Store
     public virtual Brand Brand { get; set; } = null!;
 
     public virtual ICollection<Screen> Screens { get; set; } = new List<Screen>();
+
+    public virtual AppUser User { get; set; } = null!;
 }

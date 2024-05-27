@@ -8,6 +8,8 @@
 
         public string BrandName { get; set; } = null!;
 
+        public int UserId { get; set; }
+
         public DateOnly CreateDate { get; set; }
 
         public int Status { get; set; }
