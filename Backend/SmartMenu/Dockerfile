@@ -1,25 +1,20 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
-#For more information, please see https://aka.ms/containercompat
-
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-1809 AS base
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env 
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
+EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-1809 AS build
-WORKDIR /src
-COPY ["SmartMenu/SmartMenu.csproj", "SmartMenu/"]
-RUN dotnet restore "SmartMenu/SmartMenu.csproj"
-COPY . .
-WORKDIR "/src/SmartMenu"
-RUN dotnet build "SmartMenu.csproj" -c Release -o /app/build
+COPY SmartMenu.sln SmartMenu.sln
+COPY ["./SmartMenu/SmartMenu.csproj", "./SmartMenu/"]
 
-FROM build AS publish
-RUN dotnet publish "SmartMenu.csproj" -c Release -o /app/publish /p:UseAppHost=false
+# Restore package deps  
+RUN dotnet restore SmartMenu.sln
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SmartMenu.dll"]
+COPY SmartMenu SmartMenu
+WORKDIR /app/SmartMenu
+RUN dotnet publish -c Release -o /app/out 
+
+# runtime 
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 
+WORKDIR /app 
+COPY --from=build-env /app/out .
+ENTRYPOINT [ "dotnet", "SmartMenu.dll" ]

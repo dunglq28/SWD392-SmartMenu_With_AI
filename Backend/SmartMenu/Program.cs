@@ -2,6 +2,7 @@ using Amazon;
 using Amazon.S3;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using SmartMenu.Data;
 using SmartMenu.Entities;
 using SmartMenu.Interfaces;
 using SmartMenu.Mappings;
@@ -37,8 +38,16 @@ var mapper = new MapperConfiguration(mc =>
 builder.Services.AddSingleton(mapper.CreateMapper());
 // Register repositories
 builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<DatabaseInitialiser>();
 
 var app = builder.Build();
+
+// Hook into application lifetime events and trigger only application fully started
+app.Lifetime.ApplicationStarted.Register(async () =>
+{
+    // Database Initialiser
+    await app.InitialiseDatabaseAsync();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

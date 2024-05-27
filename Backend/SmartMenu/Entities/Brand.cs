@@ -6,7 +6,6 @@ namespace SmartMenu.Entities;
 public partial class Brand
 {
     public int BrandId { get; set; }
-
     public string BrandCode { get; set; } = null!;
 
     public string BrandName { get; set; } = null!;
