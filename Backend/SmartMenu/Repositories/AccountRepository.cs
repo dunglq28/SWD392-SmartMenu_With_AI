@@ -23,7 +23,7 @@ namespace SmartMenu.Repositories
 
         public async Task<AppUserDto?> CheckLoginAsync(string userName, string password)
         {
-            var user = await _context.AppUsers.SingleOrDefaultAsync(u => u.UserName == userName && u.Password == password);
+            var user = await _context.AppUsers.SingleOrDefaultAsync(u => u.UserName == userName && u.Password == password && u.Status == 1);
             if (user == null)
             {
                 return null;
