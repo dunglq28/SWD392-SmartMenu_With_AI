@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SmartMenu.Common.Constants;
 using SmartMenu.Entities;
 using SmartMenu.Interfaces;
 using SmartMenu.Payloads;
@@ -22,6 +24,7 @@ namespace SmartMenu.Controllers
             _s3Service = s3Service;
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Brand.GetAll, Name = "GetBrandsAsync")]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -102,7 +105,7 @@ namespace SmartMenu.Controllers
                     IsSuccess = true
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest(new BaseResponse
                 {
@@ -114,6 +117,7 @@ namespace SmartMenu.Controllers
             }
         }
 
+        //public override async Task<bool> DeleteEntity(int id)
 
 
 

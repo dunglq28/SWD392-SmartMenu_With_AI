@@ -7,17 +7,9 @@ public partial class GroupAttribute
 {
     public int GroupAttributeId { get; set; }
 
-    public string GroupAttributeCode { get; set; } = null!;
-
-    public string? Description { get; set; }
-
-    public int Status { get; set; }
+    public string GroupAttributeName { get; set; } = null!;
 
     public DateOnly CreateDate { get; set; }
 
-    public int AttributeId { get; set; }
-
-    public virtual Attribute Attribute { get; set; } = null!;
-
-    public virtual ICollection<CustomerSegment> Segments { get; set; } = new List<CustomerSegment>();
+    public virtual ICollection<Attribute> Attributes { get; set; } = new List<Attribute>();
 }

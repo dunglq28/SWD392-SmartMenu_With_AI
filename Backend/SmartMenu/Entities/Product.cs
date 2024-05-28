@@ -13,25 +13,21 @@ public partial class Product
 
     public string ProductName { get; set; } = null!;
 
-    public string Price { get; set; } = null!;
+    public string? SpotlightVideoImageUrl { get; set; }
 
-    public string? Description { get; set; }
+    public string? SpotlightVideoImageName { get; set; }
 
     public string? ImageUrl { get; set; }
 
-    public string? SpotlightVideoImage { get; set; }
-
     public string? ImageName { get; set; }
+
+    public string? Description { get; set; }
 
     public int CategoryId { get; set; }
 
     public int BrandId { get; set; }
 
-    public virtual Brand Brand { get; set; } = null!;
-
     public virtual Category Category { get; set; } = null!;
 
-    public virtual ICollection<Menu> Menus { get; set; } = new List<Menu>();
-
-    public virtual ICollection<Size> Sizes { get; set; } = new List<Size>();
+    public virtual ICollection<ProductMenu> ProductMenus { get; set; } = new List<ProductMenu>();
 }
