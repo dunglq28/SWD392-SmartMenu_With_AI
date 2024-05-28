@@ -1,0 +1,17 @@
+.Login {
+  .Wave {
+    height: 100vh;
+    width: 40vw;
+    position: absolute;
+  }
+  .Bg {
+    height: 100vh;
+    width: 30vw;
+    z-index: 0;
+    margin-left: 30%;
+  }
+  .Avatar {
+    height: 100px;
+    width: 100px;
+  }
+}
