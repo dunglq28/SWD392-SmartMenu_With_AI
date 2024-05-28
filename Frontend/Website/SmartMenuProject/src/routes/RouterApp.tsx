@@ -15,7 +15,7 @@ interface RouteItem {
 }
 
 export const publicRoutes: RouteItem[] = [
-  { path: "/", component: Home },
+  { path: "/", component: Login, layout: null },
   { path: "/home", component: Home },
   { path: "/products", component: Products },
   { path: "/branch", component: Branch },
