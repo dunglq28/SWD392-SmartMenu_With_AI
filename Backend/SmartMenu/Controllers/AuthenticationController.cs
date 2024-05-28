@@ -14,12 +14,12 @@ namespace SmartMenu.Controllers
 {
     public class AuthenticationController : Controller
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
 
-        public AuthenticationController(IAccountRepository accountRepository, IRefreshTokenRepository refreshTokenRepository)
+        public AuthenticationController(IUnitOfWork unitOfWork, IRefreshTokenRepository refreshTokenRepository)
         {
-            _accountRepository = accountRepository;
+            _unitOfWork = unitOfWork;
             _refreshTokenRepository = refreshTokenRepository;
         }
 
@@ -28,7 +28,7 @@ namespace SmartMenu.Controllers
         {
             try
             {
-                var userDto = await _accountRepository.CheckLoginAsync(reqObj.UserName, reqObj.Password);
+                var userDto = await _unitOfWork.AccountRepository.CheckLoginAsync(reqObj.UserName, reqObj.Password);
                 if (userDto == null)
                 {
                     return Unauthorized(new BaseResponse
@@ -60,7 +60,7 @@ namespace SmartMenu.Controllers
                 {
                     var reuslt = await _refreshTokenRepository.RemoveRefreshTokenAsync(tokenExist);
                 }
-                var token = await _accountRepository.GenerateAccessTokenAsync(userDto.UserId);
+                var token = await _unitOfWork.AccountRepository.GenerateAccessTokenAsync(userDto.UserId);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
@@ -150,8 +150,8 @@ namespace SmartMenu.Controllers
 
                 if (await _refreshTokenRepository.RemoveRefreshTokenAsync(refreshToken))
                 {
-                    var user = await _accountRepository.GetAsync(refreshToken.UserId);
-                    var newToken = await  _accountRepository.GenerateAccessTokenAsync(user.UserId);
+                    var user = await _unitOfWork.AccountRepository.GetAsync(refreshToken.UserId);
+                    var newToken = await  _unitOfWork.AccountRepository.GenerateAccessTokenAsync(user.UserId);
                     return Ok(new BaseResponse 
                     {
                         StatusCode = StatusCodes.Status200OK,
