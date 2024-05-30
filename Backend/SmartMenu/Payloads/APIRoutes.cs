@@ -9,6 +9,19 @@
             public const string GetAll = Base + "/weatherforecast/";
         }
 
+        public static class AppUser
+        {
+            public const string GetAll = Base + "/appuser/";
+
+            public const string GetByID = Base + "/appuser/get-by-id";
+
+            public const string Update = Base + "/appuser/update";
+
+            public const string Delete = Base + "/appuser/delete";
+
+            public const string Add = Base + "/appuser/add";
+        }
+
         public static class Brand
         {
             public const string GetAll = Base + "/brands/";

@@ -15,12 +15,12 @@ namespace SmartMenu.Controllers
     public class BrandController : ControllerBase
     {
 
-        private readonly IBrandRepository _brandRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IS3Service _s3Service;
 
-        public BrandController(IBrandRepository brandRepository, IS3Service s3Service)
+        public BrandController(IUnitOfWork unitOfWork, IS3Service s3Service)
         {
-            _brandRepository = brandRepository;
+            _unitOfWork = unitOfWork;
             _s3Service = s3Service;
         }
 
@@ -34,7 +34,7 @@ namespace SmartMenu.Controllers
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Successful!",
-                    Data = await _brandRepository.GetAllAsync(),
+                    Data = await _unitOfWork.BrandRepository.GetAllAsync(),
                     IsSuccess = true
                 });
             }
