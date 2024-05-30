@@ -1,11 +1,10 @@
-import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
-import Products from "../pages/Products";
+import Dashboard from "../pages/Dashboard";
+import User from "../pages/User";
 import Branch from "../pages/Branch";
-import Sales from "../pages/Sales";
+import Products from "../pages/Product";
 import Menu from "../pages/Menu";
-import Services from "../pages/Services";
-import Settings from "../pages/Settings";
+import Settings from "../pages/Setting";
 import New from "../pages/New";
 
 interface RouteItem {
@@ -16,13 +15,12 @@ interface RouteItem {
 
 export const publicRoutes: RouteItem[] = [
   { path: "/", component: Login, layout: null },
-  { path: "/home", component: Home },
-  { path: "/products", component: Products },
+  { path: "/dashboard", component: Dashboard },
+  { path: "/user", component: User },
   { path: "/branch", component: Branch },
-  { path: "/sales", component: Sales },
+  { path: "/product", component: Products },
   { path: "/menu", component: Menu },
-  { path: "/services", component: Services },
-  { path: "/settings", component: Settings },
+  { path: "/setting", component: Settings },
   { path: "/new", component: New },
 ];
 
