@@ -70,6 +70,7 @@ builder.Services.AddSingleton(mapper.CreateMapper());
 builder.Services.AddScoped<IBrandRepository, BrandRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 
 
