@@ -1,14 +1,14 @@
-.Wrapper{
-    justify-content: center;
+.Wrapper {
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
+  background-color: #f4f7f6;
+  .Container {
+    width: 100%;
     flex-direction: column;
-    align-items: center;
-    row-gap: 10px;
-    .Container{
-        width: 100%;
-        flex-direction: column;
-        padding-left: 10px;
-        .Children{
-            padding-top: 10px;
-        }
+    .Children {
+      padding-top: 10px;
     }
+  }
 }

@@ -1,11 +1,11 @@
 import { Flex, Text } from "@chakra-ui/react";
 
-function Sales() {
+function Setting() {
   return (
     <Flex>
-      <Text>Sales</Text>
+      <Text>Setting</Text>
     </Flex>
   );
 }
 
-export default Sales;
+export default Setting;
