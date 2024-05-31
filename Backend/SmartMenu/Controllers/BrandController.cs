@@ -7,10 +7,12 @@ using SmartMenu.DTOs;
 using SmartMenu.Entities;
 using SmartMenu.Interfaces;
 using SmartMenu.Payloads;
+using SmartMenu.Payloads.Requests;
 using SmartMenu.Payloads.Requests.BrandRequest;
 using SmartMenu.Payloads.Responses;
 using SmartMenu.Repositories;
 using SmartMenu.Services;
+using SmartMenu.Validations;
 
 namespace SmartMenu.Controllers
 {
@@ -19,11 +21,14 @@ namespace SmartMenu.Controllers
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IS3Service _s3Service;
+        private readonly AddBrandValidation _addBrandValidation;
+
 
         public BrandController(IUnitOfWork unitOfWork, IS3Service s3Service)
         {
             _unitOfWork = unitOfWork;
             _s3Service = s3Service;
+            _addBrandValidation = new AddBrandValidation();
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
@@ -119,7 +124,83 @@ namespace SmartMenu.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
+        [HttpPost(APIRoutes.Brand.Add, Name = "AddBrandAsync")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> AddAsync(AddBrandRequest reqObj)
+        {
+            try
+            {
+                var validation = await _addBrandValidation.ValidateAsync(reqObj);
+                if (!validation.IsValid)
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "Nhập đầy đủ và hợp lệ các trường",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                if (reqObj.image == null || reqObj.image.Length == 0)
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "Cần có hình ảnh",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+
+                // Kiểm tra phần mở rộng của tệp tin
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var extension = Path.GetExtension(reqObj.image.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(extension))
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "File không phải là hình ảnh hợp lệ",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+
+                string imageUrl = null;
+                string imageName = null;
+
+                if (reqObj.image != null)
+                {
+                    // Upload the image to S3 and get the URL
+                    var result = await _s3Service.UploadItemAsync(reqObj.image);
+                    imageName = reqObj.image.FileName;
+                    imageUrl = _s3Service.GetPreSignedURL(imageName);
+                }
+                var BrandAdd = await _unitOfWork.BrandRepository.AddAsync(reqObj.BrandName, reqObj.UserId, imageUrl, imageName);
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "New brand successfully",
+                    Data = BrandAdd,
+                    IsSuccess = true
+                });
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
+
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Brand.Update, Name = "UpdateAsync")]
         public async Task<IActionResult> UpdateAsync(int id, IFormFile image, string brandName)
         {
@@ -167,8 +248,6 @@ namespace SmartMenu.Controllers
         }
 
         //public override async Task<bool> DeleteEntity(int id)
-
-
 
 
     }

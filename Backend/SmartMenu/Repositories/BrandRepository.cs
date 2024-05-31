@@ -18,6 +18,23 @@ namespace SmartMenu.Repositories
             _mapper = mapper;
         }
 
+        public async Task<BrandDto> AddAsync(string brandName, int userID, string imgUrl, string imgName)
+        {
+            var brand = new Brand();
+            brand.BrandCode = Guid.NewGuid().ToString();
+            brand.BrandName = brandName;
+            brand.UserId = userID;
+            brand.Status = 1;
+            brand.ImageUrl = imgUrl;
+            brand.ImageName = imgName;
+            brand.CreateDate = DateOnly.FromDateTime(DateTime.Now);
+
+            _context.Brands.Add(brand);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<BrandDto>(brand);
+        }
+
         public async Task<BrandDto> UpdateAsync(int id, string brandName, string url, string imgName)
         {
             var entity = await _context.Brands.FindAsync(id);
