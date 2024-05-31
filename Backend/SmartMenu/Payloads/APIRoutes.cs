@@ -31,6 +31,18 @@
             public const string GetImage = Base + "/brands/GetImageTest";
         }
 
+        public static class Store
+        {
+            public const string GetAll = Base + "/stores/";
+
+            public const string GetByID = Base + "/stores/get-by-id";
+
+            public const string Update = Base + "/stores/";
+
+            public const string Delete = Base + "/stores/";
+
+            public const string Add = Base + "/stores/";
+        }
         public static class Category
         {
             public const string GetAll = Base + "/categories/";

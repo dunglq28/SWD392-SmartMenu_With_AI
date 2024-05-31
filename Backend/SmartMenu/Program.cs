@@ -68,6 +68,7 @@ var mapper = new MapperConfiguration(mc =>
 builder.Services.AddSingleton(mapper.CreateMapper());
 // Register repositories
 builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<IStoreRepository, StoreRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();

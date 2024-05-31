@@ -13,6 +13,8 @@ namespace SmartMenu.Mappings
             CreateMap<AppUser, AppUserDto>().ReverseMap();
             CreateMap<Brand, BrandDto>().ReverseMap();
             CreateMap<Category, CategoryDTo>().ReverseMap();
+            CreateMap<Store, StoreDTo>().ReverseMap();
+
         }
     }
 }
