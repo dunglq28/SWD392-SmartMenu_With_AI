@@ -20,15 +20,20 @@ namespace SmartMenu.Services
     public class S3Service : IS3Service
     {
         private readonly IAmazonS3 _s3;
-        private const string AWSAccessKeyId = "AKIA57VZDNHQRLDFRMOJ";
-        private const string AWSSecretAccessKey = "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";
+        private readonly string AWSAccessKeyId = "";
+        private readonly string AWSSecretAccessKey = "";
         private const string BucketName = "smart-menu-with-ai";
-        private static BasicAWSCredentials AwsCredentials = new(AWSAccessKeyId, AWSSecretAccessKey);
+        private static BasicAWSCredentials AwsCredentials;
         private static AmazonS3Config S3Config = new() { RegionEndpoint = Amazon.RegionEndpoint.APSoutheast1 };
 
-        public S3Service(IAmazonS3 s3)
+        private readonly IConfiguration _configuration;
+        public S3Service(IAmazonS3 s3, IConfiguration configuration)
         {
             _s3 = s3;
+            _configuration = configuration;
+            AWSAccessKeyId = _configuration["AWS:AccessKeyId"];
+            AWSSecretAccessKey = _configuration["AWS:SecretAccessKey"];
+            AwsCredentials = new(AWSAccessKeyId, AWSSecretAccessKey);
         }
 
         public async Task CreateDirectoryAsync(string directoryPath)
