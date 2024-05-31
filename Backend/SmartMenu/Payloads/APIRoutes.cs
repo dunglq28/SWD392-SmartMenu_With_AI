@@ -34,6 +34,8 @@
 
             public const string Update = Base + "/brands/Update";
 
+            public const string Delete = Base + "/brands/Delete";
+
         }
 
         public static class Authentication

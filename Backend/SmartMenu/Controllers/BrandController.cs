@@ -126,7 +126,6 @@ namespace SmartMenu.Controllers
 
         [Authorize(Roles = UserRoles.Admin)]
         [HttpPost(APIRoutes.Brand.Add, Name = "AddBrandAsync")]
-        [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddAsync(AddBrandRequest reqObj)
         {
             try
@@ -202,7 +201,7 @@ namespace SmartMenu.Controllers
 
         [Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Brand.Update, Name = "UpdateAsync")]
-        public async Task<IActionResult> UpdateAsync(int id, IFormFile image, string brandName)
+        public async Task<IActionResult> UpdateAsync(int id, IFormFile image, string brandName, int status)
         {
             try
             {
@@ -216,7 +215,7 @@ namespace SmartMenu.Controllers
                     imageName = image.FileName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName);
                 }
-                var updatedBrand = await _unitOfWork.BrandRepository.UpdateAsync(id, brandName, imageUrl, imageName);
+                var updatedBrand = await _unitOfWork.BrandRepository.UpdateAsync(id, brandName, imageUrl, imageName, status);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
@@ -247,8 +246,48 @@ namespace SmartMenu.Controllers
             }
         }
 
-        //public override async Task<bool> DeleteEntity(int id)
+        [Authorize(Roles = UserRoles.Admin)]
+        [HttpDelete(APIRoutes.Brand.Delete, Name = "DeleteBrandAsync")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            try
+            {
+                // Kiểm tra xem thương hiệu có tồn tại không
+                var existingBrand = await _unitOfWork.BrandRepository.GetByIdAsync(id);
+                if (existingBrand == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Brand not found",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
 
+                // Cập nhật trạng thái của thương hiệu thành 0 để xóa
+                existingBrand.Status = 0;
+                await _unitOfWork.BrandRepository.UpdateAsync(id, existingBrand);
+
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Brand deleted successfully",
+                    Data = null,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = $"Delete failed! Error: {ex.Message}",
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
 
     }
 }

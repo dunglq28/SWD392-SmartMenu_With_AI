@@ -35,14 +35,14 @@ namespace SmartMenu.Repositories
             return _mapper.Map<BrandDto>(brand);
         }
 
-        public async Task<BrandDto> UpdateAsync(int id, string brandName, string url, string imgName)
+        public async Task<BrandDto> UpdateAsync(int id, string brandName, string url, string imgName, int status)
         {
             var entity = await _context.Brands.FindAsync(id);
             if (entity == null)
             {
                 return default(BrandDto);
             }
-            else 
+            else
             {
                 if (brandName != null)
                 {
@@ -53,9 +53,19 @@ namespace SmartMenu.Repositories
                     entity.ImageUrl = url;
                     entity.ImageName = imgName;
                 }
+                if (status != default(int))
+                {
+                    entity.Status = status;
+                }
                 await _context.SaveChangesAsync();
                 return _mapper.Map<BrandDto>(entity);
             }
+        }
+
+        public async Task<BrandDto> GetByIdAsync(int id)
+        {
+            var brand = await _context.Brands.FindAsync(id);
+            return _mapper.Map<BrandDto>(brand);
         }
     }
 }
