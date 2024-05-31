@@ -77,7 +77,7 @@ namespace SmartMenu.Services
 
         public string GetPreSignedURL(string fileName)
         {
-            var preIamge = "https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/";
+            var preIamge = "https://" + "smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/";
             string url = preIamge + fileName;
             return url;
 
