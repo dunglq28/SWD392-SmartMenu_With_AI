@@ -1,51 +1,53 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartMenu.Common.Constants;
-using SmartMenu.DTOs;
 using SmartMenu.Interfaces;
-using SmartMenu.Payloads;
 using SmartMenu.Payloads.Requests;
 using SmartMenu.Payloads.Responses;
+using SmartMenu.Payloads;
 using SmartMenu.Utils;
 using SmartMenu.Validations;
+using SmartMenu.DTOs;
 
 namespace SmartMenu.Controllers
 {
-    public class AppUserController : Controller
+    //[Route("api/[controller]")]
+    [ApiController]
+    public class CategoryController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly AddAppUserValidation _AddUserValidation;
+        private readonly CategoriesValidation _validations;
 
-        public AppUserController(IUnitOfWork unitOfWork)
+        public CategoryController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _AddUserValidation = new AddAppUserValidation();
+            _validations = new CategoriesValidation();
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPost(APIRoutes.AppUser.Add, Name = "AddUserAsync")]
-        public async Task<IActionResult> AddAsync([FromBody] AddAppUserRequest reqObj)
+        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager)]
+        [HttpPost(APIRoutes.Category.Add, Name = "AddCategoryAsync")]
+        public async Task<IActionResult> AddAsync([FromBody] CategoryDTo reqObj)
         {
             try
             {
-                var validation = await _AddUserValidation.ValidateAsync(reqObj);
+                var validation = await _validations.ValidateAsync(reqObj);
                 if (!validation.IsValid)
                 {
                     return BadRequest(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Thông tin của bạn chưa chính xác",
+                        Message = "Your information are not suitable",
                         Data = null,
                         IsSuccess = false
                     });
                 }
-                var UserAdd = await _unitOfWork.AccountRepository.AddAsync(reqObj.UserName, reqObj.Password, reqObj.RoleId, reqObj.IsActive);
+                var category = await _unitOfWork.CategoryRepository.AddAsync(reqObj);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "New user successfully",
-                    Data = UserAdd,
+                    Message = "New category successfully",
+                    Data = category,
                     IsSuccess = true
                 });
 
@@ -63,19 +65,19 @@ namespace SmartMenu.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
-        [HttpDelete(APIRoutes.AppUser.Delete, Name = "DeleteUserAsync")]
-        public async Task<IActionResult> DeleteAsynce([FromQuery] int id)
+        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager)]
+        [HttpDelete(APIRoutes.Category.Delete, Name = "DeleteCategoryAsync")]
+        public async Task<IActionResult> DeleteAsync([FromQuery] int id)
         {
             try
             {
-                var result = await _unitOfWork.AccountRepository.DeleteAsync(id);
+                var result = await _unitOfWork.CategoryRepository.DeleteAsync(id);
                 if (!result)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Can not delete this account",
+                        Message = "Can not delete this category",
                         Data = null,
                         IsSuccess = false
                     });
@@ -83,7 +85,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Delete user successfully",
+                    Message = "Delete category successfully",
                     Data = null,
                     IsSuccess = true
                 });
@@ -100,20 +102,31 @@ namespace SmartMenu.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPut(APIRoutes.AppUser.Update, Name = "UpdateUserAsync")]
-        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateAppUserRequest reqObj)
+        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager)]
+        [HttpPut(APIRoutes.Category.Update, Name = "UpdateCategoryAsync")]
+        public async Task<IActionResult> UpdateCategoryAsync(int id, [FromBody] CategoryDTo reqObj)
         {
             try
             {
-                var result = await _unitOfWork.AccountRepository
-                    .UpdateAsync(id, reqObj.Password, reqObj.RoleId, reqObj.IsActive, reqObj.Status);
+                var validation = await _validations.ValidateAsync(reqObj);
+                if (!validation.IsValid)
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "Your information are not suitable",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                var result = await _unitOfWork.CategoryRepository
+                    .UpdateAsync(id, reqObj);
                 if (result == null)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Can not update this account",
+                        Message = "Can not update this category",
                         Data = null,
                         IsSuccess = false
                     });
@@ -121,7 +134,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Update user successfully",
+                    Message = "Update category successfully",
                     Data = result,
                     IsSuccess = true
                 });
@@ -138,19 +151,19 @@ namespace SmartMenu.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
-        [HttpGet(APIRoutes.AppUser.GetAll, Name = "GetUsersAsync")]
-        public async Task<IActionResult> GetAllAsync([FromQuery]  int currIdLoginID, string searchKey, int pageNumber = 1, int PageSize =5)
+        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager + UserRoles.Store)]
+        [HttpGet(APIRoutes.Category.GetAll, Name = "GetCategoriesAsync")]
+        public async Task<IActionResult> GetAllAsync([FromQuery]  string? searchKey = null, int brandID = 0, int pageNumber = 1, int PageSize = 5)
         {
             try
             {
-                var allAccount = await _unitOfWork.AccountRepository.GetAllAsync(currIdLoginID, searchKey);
+                var allAccount = await _unitOfWork.CategoryRepository.GetAllAsync( searchKey, brandID);
                 var paging = PaginationHelper.PaginationAsync(pageNumber, allAccount, PageSize);
 
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Update user successfully",
+                    Message = "Update cagetory successfully",
                     Data = paging,
                     IsSuccess = true
                 });
@@ -167,20 +180,20 @@ namespace SmartMenu.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
-        [HttpGet(APIRoutes.AppUser.GetByID, Name = "GetUserByID")]
-        public async Task<IActionResult> GetAsync([FromQuery] int Id, int currIdLoginID)
+        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager + UserRoles.Store)]
+        [HttpGet(APIRoutes.Category.GetByID, Name = "GetCategoryByID")]
+        public async Task<IActionResult> GetAsync([FromQuery] int Id, int brandID)
         {
             try
             {
-                var user = await _unitOfWork.AccountRepository.GetAsync(Id, currIdLoginID);
+                var category = await _unitOfWork.CategoryRepository.GetAsync(Id, brandID);
 
-                if (user == null)
+                if (category == null)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Can not find this user",
+                        Message = "Can not find this category",
                         Data = null,
                         IsSuccess = false
                     });
@@ -188,8 +201,8 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "get user successfully",
-                    Data = user,
+                    Message = "get category successfully",
+                    Data = category,
                     IsSuccess = true
                 });
             }

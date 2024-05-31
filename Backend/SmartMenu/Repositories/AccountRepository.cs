@@ -29,7 +29,7 @@ namespace SmartMenu.Repositories
             var user = new AppUser();
             user.UserCode = Guid.NewGuid().ToString();
             user.UserName = username;
-            user.Password = password;
+            user.Password = PasswordHelper.ConvertToEncrypt(password);
             user.RoleId = roleID;
             user.IsActive = isActive;
             user.CreateDate = DateOnly.FromDateTime(DateTime.Now);
@@ -44,7 +44,8 @@ namespace SmartMenu.Repositories
 
         public async Task<AppUserDto?> CheckLoginAsync(string userName, string password)
         {
-            var user = await _context.AppUsers.SingleOrDefaultAsync(u => u.UserName == userName && u.Password == password && u.Status == 1);
+            password = PasswordHelper.ConvertToEncrypt(password);
+            var user = await _context.AppUsers.FirstOrDefaultAsync(u => u.UserName == userName && u.Password == password && u.Status == 1);
             if (user == null)
             {
                 return null;
@@ -66,10 +67,13 @@ namespace SmartMenu.Repositories
 
         public async Task<IEnumerable<AppUserDto>> GetAllAsync(int currIdLoginID, string searchKey)
         {
-            var entities = await _context.AppUsers.Where( x=> x.UserId != currIdLoginID).ToListAsync();
+            var entities = new List<AppUser>();
             if(!string.IsNullOrEmpty(searchKey))
             {
                 entities = entities.Where(x => x.UserName.Contains(searchKey)).OrderBy( x=> x.UserId).ToList();
+            } else
+            {
+                await _context.AppUsers.Where(x => x.UserId != currIdLoginID).ToListAsync();
             }
             
             return _mapper.Map<IEnumerable<AppUserDto>>(entities);
@@ -88,7 +92,7 @@ namespace SmartMenu.Repositories
             {
                 return default(AppUserDto);
             }
-            entity.Password = password;
+            entity.Password = PasswordHelper.ConvertToEncrypt(password);
             entity.RoleId = RoleId;
             entity.IsActive = IsActive;
             entity.Status = status;
