@@ -34,7 +34,7 @@ function Sidebar() {
     { icon: GoHome, label: "Dashboard", to: "/dashboard" },
     { icon: AiOutlineUser, label: "User", to: "/user" },
     { icon: IoGitBranchOutline, label: "Branch", divider: true, to: "/branch" },
-    { icon: AiOutlineProduct, label: "Products", to: "/product" },
+    { icon: AiOutlineProduct, label: "Product", to: "/product" },
     { icon: MdListAlt, label: "Menu", to: "/menu" },
     {
       icon: IoSettingsOutline,
