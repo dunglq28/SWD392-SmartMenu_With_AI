@@ -3,32 +3,28 @@
   "WorkspaceRootPath": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|d:\\swd392\\swd392-smartmenu_with_ai\\backend\\smartmenu\\controllers\\brandcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|solutionrelative:smartmenu\\controllers\\brandcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|d:\\swd392\\swd392-smartmenu_with_ai\\backend\\smartmenu\\services\\s3service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|solutionrelative:smartmenu\\services\\s3service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|d:\\swd392\\swd392-smartmenu_with_ai\\backend\\smartmenu\\repositories\\brandrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|solutionrelative:smartmenu\\repositories\\brandrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|d:\\swd392\\swd392-smartmenu_with_ai\\backend\\smartmenu\\repositories\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|solutionrelative:smartmenu\\repositories\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|d:\\swd392\\swd392-smartmenu_with_ai\\backend\\smartmenu\\controllers\\brandcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|solutionrelative:smartmenu\\controllers\\brandcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|d:\\swd392\\swd392-smartmenu_with_ai\\backend\\smartmenu\\interfaces\\ibrandrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|solutionrelative:smartmenu\\interfaces\\ibrandrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|d:\\swd392\\swd392-smartmenu_with_ai\\backend\\smartmenu\\repositories\\brandrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|solutionrelative:smartmenu\\repositories\\brandrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|d:\\swd392\\swd392-smartmenu_with_ai\\backend\\smartmenu\\repositories\\refreshtokenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|solutionrelative:smartmenu\\repositories\\refreshtokenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|d:\\swd392\\swd392-smartmenu_with_ai\\backend\\smartmenu\\services\\s3service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|solutionrelative:smartmenu\\services\\s3service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|d:\\swd392\\swd392-smartmenu_with_ai\\backend\\smartmenu\\payloads\\requests\\brandrequest\\updatebrandrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|solutionrelative:smartmenu\\payloads\\requests\\brandrequest\\updatebrandrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|d:\\swd392\\swd392-smartmenu_with_ai\\backend\\smartmenu\\repositories\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|solutionrelative:smartmenu\\repositories\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{24124A14-D35D-409E-BF18-DA706D3C3775}|SmartMenu\\SmartMenu.csproj|d:\\swd392\\swd392-smartmenu_with_ai\\backend\\smartmenu\\repositories\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -90,7 +86,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -98,67 +94,54 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "S3Service.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Services\\S3Service.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Services\\S3Service.cs",
               "ToolTip": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Services\\S3Service.cs",
               "RelativeToolTip": "SmartMenu\\Services\\S3Service.cs",
-              "ViewState": "AQIAAGUAAAAAAAAAAAAowGMAAAA6AAAA",
+              "ViewState": "AQIAAEEAAAAAAAAAAAAgwE8AAABTAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T01:49:09.205Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "RefreshTokenRepository.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Repositories\\RefreshTokenRepository.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Repositories\\RefreshTokenRepository.cs",
               "ToolTip": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Repositories\\RefreshTokenRepository.cs",
               "RelativeToolTip": "SmartMenu\\Repositories\\RefreshTokenRepository.cs",
-              "ViewState": "AQIAACIAAAAAAAAAAAAkwAAAAAAAAAAA",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAAwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T01:43:15.452Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 1,
               "Title": "AccountRepository.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Repositories\\AccountRepository.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Repositories\\AccountRepository.cs",
               "ToolTip": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Repositories\\AccountRepository.cs",
               "RelativeToolTip": "SmartMenu\\Repositories\\AccountRepository.cs",
-              "ViewState": "AQIAAE4AAAAAAAAAAAAgwF8AAAAzAAAA",
+              "ViewState": "AQIAAF8AAAAAAAAAAAAkwF8AAAAzAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T01:39:06.263Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UpdateBrandRequest.cs",
-              "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Payloads\\Requests\\BrandRequest\\UpdateBrandRequest.cs",
-              "RelativeDocumentMoniker": "SmartMenu\\Payloads\\Requests\\BrandRequest\\UpdateBrandRequest.cs",
-              "ToolTip": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Payloads\\Requests\\BrandRequest\\UpdateBrandRequest.cs",
-              "RelativeToolTip": "SmartMenu\\Payloads\\Requests\\BrandRequest\\UpdateBrandRequest.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAuwAIAAAARAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:30:11.191Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 16,
               "Title": "IRefreshTokenRepository.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Interfaces\\IRefreshTokenRepository.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Interfaces\\IRefreshTokenRepository.cs",
@@ -166,12 +149,11 @@
               "RelativeToolTip": "SmartMenu\\Interfaces\\IRefreshTokenRepository.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:14:47.839Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:14:47.839Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 10,
               "Title": "Brand.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Entities\\Brand.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Entities\\Brand.cs",
@@ -179,12 +161,11 @@
               "RelativeToolTip": "SmartMenu\\Entities\\Brand.cs",
               "ViewState": "AQIAAAcAAAAAAAAAAAAIwAgAAAAaAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:10:21.87Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:10:21.87Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 11,
               "Title": "BrandDto.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\DTOs\\BrandDto.cs",
               "RelativeDocumentMoniker": "SmartMenu\\DTOs\\BrandDto.cs",
@@ -192,12 +173,11 @@
               "RelativeToolTip": "SmartMenu\\DTOs\\BrandDto.cs",
               "ViewState": "AQIAAAgAAAAAAAAAAAAAABIAAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:10:12.959Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:10:12.959Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "GenericRepository.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Repositories\\GenericRepository.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Repositories\\GenericRepository.cs",
@@ -205,25 +185,24 @@
               "RelativeToolTip": "SmartMenu\\Repositories\\GenericRepository.cs",
               "ViewState": "AQIAAC8AAAAAAAAAAAAQwEAAAAAtAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:09:33.593Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:09:33.593Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "BrandController.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Controllers\\BrandController.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Controllers\\BrandController.cs",
               "ToolTip": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Controllers\\BrandController.cs",
               "RelativeToolTip": "SmartMenu\\Controllers\\BrandController.cs",
-              "ViewState": "AQIAAHsAAAAAAAAAAAA9wBIAAAAAAAAA",
+              "ViewState": "AQIAAJkAAAAAAAAAAAAAAKcAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T01:09:11.192Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 13,
               "Title": "AppUserController.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Controllers\\AppUserController.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Controllers\\AppUserController.cs",
@@ -231,25 +210,24 @@
               "RelativeToolTip": "SmartMenu\\Controllers\\AppUserController.cs",
               "ViewState": "AQIAAGIAAAAAAAAAAAAgwGgAAABPAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:09:08.016Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:09:08.016Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "BrandRepository.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Repositories\\BrandRepository.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Repositories\\BrandRepository.cs",
               "ToolTip": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Repositories\\BrandRepository.cs",
               "RelativeToolTip": "SmartMenu\\Repositories\\BrandRepository.cs",
-              "ViewState": "AQIAAAsAAAAAAAAAAAAAwB4AAAAmAAAA",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAowCcAAAAnAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T01:08:30.294Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 14,
               "Title": "APIRoutes.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Payloads\\APIRoutes.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Payloads\\APIRoutes.cs",
@@ -257,12 +235,11 @@
               "RelativeToolTip": "SmartMenu\\Payloads\\APIRoutes.cs",
               "ViewState": "AQIAABMAAAAAAAAAAAAQwCAAAABBAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:08:03.299Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:08:03.299Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 7,
               "Title": "IAccountRepository.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Interfaces\\IAccountRepository.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Interfaces\\IAccountRepository.cs",
@@ -270,12 +247,11 @@
               "RelativeToolTip": "SmartMenu\\Interfaces\\IAccountRepository.cs",
               "ViewState": "AQIAAAIAAAAAAAAAAADgvw4AAABlAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:07:36.847Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:07:36.847Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 9,
               "Title": "IGenericRepository.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Interfaces\\IGenericRepository.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Interfaces\\IGenericRepository.cs",
@@ -283,12 +259,11 @@
               "RelativeToolTip": "SmartMenu\\Interfaces\\IGenericRepository.cs",
               "ViewState": "AQIAAAMAAAAAAAAAAAASwAsAAAATAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:07:34.991Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:07:34.991Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "IBrandRepository.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Interfaces\\IBrandRepository.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Interfaces\\IBrandRepository.cs",
@@ -301,7 +276,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 15,
               "Title": "IUnitOfWork.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Interfaces\\IUnitOfWork.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Interfaces\\IUnitOfWork.cs",
@@ -309,12 +284,11 @@
               "RelativeToolTip": "SmartMenu\\Interfaces\\IUnitOfWork.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:07:32.886Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:07:32.886Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 8,
               "Title": "MappingProfile.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Mappings\\MappingProfile.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Mappings\\MappingProfile.cs",
@@ -322,12 +296,11 @@
               "RelativeToolTip": "SmartMenu\\Mappings\\MappingProfile.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:07:22.133Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:07:22.133Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 17,
               "Title": "LoginRequest.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Payloads\\Requests\\LoginRequest.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Payloads\\Requests\\LoginRequest.cs",
@@ -335,12 +308,11 @@
               "RelativeToolTip": "SmartMenu\\Payloads\\Requests\\LoginRequest.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:06:17.638Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:06:17.638Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 12,
               "Title": "AddAppUserRequest.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Payloads\\Requests\\AddAppUserRequest.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Payloads\\Requests\\AddAppUserRequest.cs",
@@ -348,12 +320,11 @@
               "RelativeToolTip": "SmartMenu\\Payloads\\Requests\\AddAppUserRequest.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:06:16.975Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:06:16.975Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 18,
               "Title": "AddAppUserValidation.cs",
               "DocumentMoniker": "D:\\SWD392\\SWD392-SmartMenu_With_AI\\Backend\\SmartMenu\\Validations\\AddAppUserValidation.cs",
               "RelativeDocumentMoniker": "SmartMenu\\Validations\\AddAppUserValidation.cs",
@@ -361,8 +332,7 @@
               "RelativeToolTip": "SmartMenu\\Validations\\AddAppUserValidation.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T01:05:51.322Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T01:05:51.322Z"
             }
           ]
         },

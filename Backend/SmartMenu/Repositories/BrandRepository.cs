@@ -27,9 +27,15 @@ namespace SmartMenu.Repositories
             }
             else 
             {
-                entity.BrandName = brandName;
-                entity.ImageUrl = url;
-                entity.ImageName = imgName;
+                if (brandName != null)
+                {
+                    entity.BrandName = brandName;
+                }
+                if (url != null && imgName != null)
+                {
+                    entity.ImageUrl = url;
+                    entity.ImageName = imgName;
+                }
                 await _context.SaveChangesAsync();
                 return _mapper.Map<BrandDto>(entity);
             }

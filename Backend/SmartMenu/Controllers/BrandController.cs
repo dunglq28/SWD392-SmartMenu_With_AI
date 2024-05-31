@@ -125,9 +125,16 @@ namespace SmartMenu.Controllers
         {
             try
             {
-                var result = await _s3Service.UploadItemAsync(image);
-                var imageName = image.FileName;
-                var imageUrl = _s3Service.GetPreSignedURL(imageName);
+                string imageUrl = null;
+                string imageName = null;
+
+                if (image != null)
+                {
+                    // Upload the image to S3 and get the URL
+                    var result = await _s3Service.UploadItemAsync(image);
+                    imageName = image.FileName;
+                    imageUrl = _s3Service.GetPreSignedURL(imageName);
+                }
                 var updatedBrand = await _unitOfWork.BrandRepository.UpdateAsync(id, brandName, imageUrl, imageName);
                 return Ok(new BaseResponse
                 {
@@ -158,6 +165,7 @@ namespace SmartMenu.Controllers
                 });
             }
         }
+
         //public override async Task<bool> DeleteEntity(int id)
 
 
