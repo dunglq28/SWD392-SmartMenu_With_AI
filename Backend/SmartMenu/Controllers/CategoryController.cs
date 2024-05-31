@@ -9,6 +9,7 @@ using SmartMenu.Payloads;
 using SmartMenu.Utils;
 using SmartMenu.Validations;
 using SmartMenu.DTOs;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SmartMenu.Controllers
 {
@@ -17,17 +18,17 @@ namespace SmartMenu.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly CategoriesValidation _validations;
+        private readonly AddCategoriesValidation _validations;
 
         public CategoryController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _validations = new CategoriesValidation();
+            _validations = new AddCategoriesValidation();
         }
 
         //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager)]
         [HttpPost(APIRoutes.Category.Add, Name = "AddCategoryAsync")]
-        public async Task<IActionResult> AddAsync([FromBody] CategoryDTo reqObj)
+        public async Task<IActionResult> AddAsync([FromBody] AddCagetoryRequest reqObj)
         {
             try
             {
@@ -104,23 +105,23 @@ namespace SmartMenu.Controllers
 
         //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager)]
         [HttpPut(APIRoutes.Category.Update, Name = "UpdateCategoryAsync")]
-        public async Task<IActionResult> UpdateCategoryAsync(int id, [FromBody] CategoryDTo reqObj)
+        public async Task<IActionResult> UpdateCategoryAsync(int id, [FromBody] string cagetoryName)
         {
             try
             {
-                var validation = await _validations.ValidateAsync(reqObj);
-                if (!validation.IsValid)
+               
+                if (cagetoryName.IsNullOrEmpty())
                 {
                     return BadRequest(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Your information are not suitable",
+                        Message = "Thông tin không được để trống",
                         Data = null,
                         IsSuccess = false
                     });
                 }
-                var result = await _unitOfWork.CategoryRepository
-                    .UpdateAsync(id, reqObj);
+                var result = await _unitOfWork.CategoryRepository.UpdateAsync(id, cagetoryName);
+                    
                 if (result == null)
                 {
                     return NotFound(new BaseResponse
@@ -182,11 +183,11 @@ namespace SmartMenu.Controllers
 
         //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager + UserRoles.Store)]
         [HttpGet(APIRoutes.Category.GetByID, Name = "GetCategoryByID")]
-        public async Task<IActionResult> GetAsync([FromQuery] int Id, int brandID)
+        public async Task<IActionResult> GetAsync([FromQuery] int Id)
         {
             try
             {
-                var category = await _unitOfWork.CategoryRepository.GetAsync(Id, brandID);
+                var category = await _unitOfWork.CategoryRepository.GetAsync(Id);
 
                 if (category == null)
                 {

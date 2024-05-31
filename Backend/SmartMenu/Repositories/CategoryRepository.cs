@@ -4,6 +4,7 @@ using SmartMenu.Common.Enums;
 using SmartMenu.DTOs;
 using SmartMenu.Entities;
 using SmartMenu.Interfaces;
+using SmartMenu.Payloads.Requests;
 
 namespace SmartMenu.Repositories
 {
@@ -19,14 +20,14 @@ namespace SmartMenu.Repositories
             _mapper = mapper;
         }
 
-        public async Task<CategoryDTo> AddAsync(CategoryDTo reqObj)
+        public async Task<CategoryDTo> AddAsync(AddCagetoryRequest reqObj)
         {
             var category = new Category();
             category.CategoryCode = Guid.NewGuid().ToString();
             category.CategoryName = reqObj.CategoryName;
             category.UpdateDate = DateOnly.FromDateTime(DateTime.Now);
             category.CreateDate = DateOnly.FromDateTime(DateTime.Now);
-            category.Status = reqObj.Status;
+            category.Status = (int) Status.Exist ;
             category.BrandId = reqObj.BrandId;
 
              await _context.Categories.AddAsync(category);
@@ -35,35 +36,50 @@ namespace SmartMenu.Repositories
             return _mapper.Map<CategoryDTo>(category);
         }
 
-        public async Task<CategoryDTo?> UpdateAsync(int id ,CategoryDTo reqObj)
+        public async Task<CategoryDTo?> UpdateAsync(int id ,string cagetoryName)
         {
             var entity = await _context.Categories.FindAsync(id);
             if (entity == null)
             {
                 return default(CategoryDTo);
             }
-            entity.CategoryName = reqObj.CategoryName;
+            entity.CategoryName = cagetoryName;
             entity.UpdateDate = DateOnly.FromDateTime(DateTime.Now);
-            entity.Status = reqObj.Status;
             await _context.SaveChangesAsync();
             return _mapper.Map<CategoryDTo>(entity);
         }
 
         public async Task<IEnumerable<CategoryDTo>?> GetAllAsync(string searchKey, int brandID)
         {
-            var entities = await _context.Categories.Where(x => x.BrandId == brandID ).ToListAsync();
+            var entities = new List<Category>();
             if (!string.IsNullOrEmpty(searchKey))
             {
-                entities = entities.Where(x => x.CategoryName.Contains(searchKey)).OrderBy(x => x.CategoryId).ToList();
+                entities = await _context.Categories.Where(x => x.CategoryName.ToLower().Contains(searchKey.ToLower())).OrderBy(x => x.CategoryId).ToListAsync();
+            }
+            else
+            {
+                entities = await _context.Categories.Where(x => x.BrandId == brandID).ToListAsync();
             }
 
             return _mapper.Map<IEnumerable<CategoryDTo>>(entities);
         }
 
-        public async Task<CategoryDTo?> GetAsync(int id, int brandID)
+        public async Task<CategoryDTo?> GetAsync(int id)
         {
-            var entities = await _context.Categories.FirstOrDefaultAsync(x => x.CategoryId == id && x.BrandId == brandID);
+            var entities = await _context.Categories.FirstOrDefaultAsync(x => x.CategoryId == id);
             return _mapper.Map<CategoryDTo>(entities);
+        }
+
+        public async Task<bool> Delete(int id)
+        {
+            var entity = await _context.Categories.FindAsync(id);
+            if (entity == null)
+            {
+                return false;
+            }
+            entity.Status = (int)Status.Deleted;
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
