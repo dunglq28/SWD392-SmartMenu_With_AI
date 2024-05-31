@@ -75,7 +75,7 @@ namespace SmartMenu.Controllers
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Can not delete this account",
+                        Message = "không tìm thấy người dùng",
                         Data = null,
                         IsSuccess = false
                     });
@@ -83,7 +83,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Delete user successfully",
+                    Message = "xoá người dùng thành công",
                     Data = null,
                     IsSuccess = true
                 });
@@ -113,7 +113,7 @@ namespace SmartMenu.Controllers
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Can not update this account",
+                        Message = "Không tìm thấy người dùng",
                         Data = null,
                         IsSuccess = false
                     });
@@ -121,7 +121,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Update user successfully",
+                    Message = "Cập nhật người dùng thành công",
                     Data = result,
                     IsSuccess = true
                 });
@@ -150,7 +150,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Update user successfully",
+                    Message = "Tải dữ liệu thành công",
                     Data = paging,
                     IsSuccess = true
                 });
@@ -180,7 +180,7 @@ namespace SmartMenu.Controllers
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Can not find this user",
+                        Message = "Không tìm thấy người dùng",
                         Data = null,
                         IsSuccess = false
                     });
@@ -188,7 +188,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "get user successfully",
+                    Message = "Tìm người dùng thành công",
                     Data = user,
                     IsSuccess = true
                 });
