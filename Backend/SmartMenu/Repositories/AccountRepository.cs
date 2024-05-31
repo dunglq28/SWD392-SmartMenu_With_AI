@@ -70,10 +70,10 @@ namespace SmartMenu.Repositories
             var entities = new List<AppUser>();
             if(!string.IsNullOrEmpty(searchKey))
             {
-                entities = entities.Where(x => x.UserName.Contains(searchKey)).OrderBy( x=> x.UserId).ToList();
+                entities = await _context.AppUsers.Where(x => x.UserName.Contains(searchKey)).OrderBy( x=> x.UserId).ToListAsync();
             } else
             {
-                await _context.AppUsers.Where(x => x.UserId != currIdLoginID).ToListAsync();
+                entities = await _context.AppUsers.Where(x => x.UserId != currIdLoginID).ToListAsync();
             }
             
             return _mapper.Map<IEnumerable<AppUserDto>>(entities);
