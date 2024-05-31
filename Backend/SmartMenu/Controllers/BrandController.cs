@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartMenu.Common.Constants;
+using SmartMenu.DTOs;
 using SmartMenu.Entities;
 using SmartMenu.Interfaces;
 using SmartMenu.Payloads;
+using SmartMenu.Payloads.Requests.BrandRequest;
 using SmartMenu.Payloads.Responses;
 using SmartMenu.Repositories;
 using SmartMenu.Services;
@@ -24,7 +26,7 @@ namespace SmartMenu.Controllers
             _s3Service = s3Service;
         }
 
-        [Authorize(Roles = UserRoles.Admin)]
+        //[Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Brand.GetAll, Name = "GetBrandsAsync")]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -96,7 +98,7 @@ namespace SmartMenu.Controllers
         {
             try
             {
-                var url = await _s3Service.GetPreSignedURL(fileName);
+                var url = _s3Service.GetPreSignedURL(fileName);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
@@ -117,6 +119,45 @@ namespace SmartMenu.Controllers
             }
         }
 
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpPut(APIRoutes.Brand.Update, Name = "UpdateAsync")]
+        public async Task<IActionResult> UpdateAsync(int id, IFormFile image, string brandName)
+        {
+            try
+            {
+                var result = await _s3Service.UploadItemAsync(image);
+                var imageName = image.FileName;
+                var imageUrl = _s3Service.GetPreSignedURL(imageName);
+                var updatedBrand = await _unitOfWork.BrandRepository.UpdateAsync(id, brandName, imageUrl, imageName);
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Update Successful!",
+                    Data = updatedBrand,
+                    IsSuccess = true
+                });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = $"Update failed! Error: {ex.Message}",
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
         //public override async Task<bool> DeleteEntity(int id)
 
 

@@ -13,7 +13,7 @@ using System.Reflection;
 
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("c634ab81-34a1-44c6-80ee-9c88d5c7143c")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartMenu")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+706dc5b602b9da29a12db39d2763a59b372046b9")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartMenu")]

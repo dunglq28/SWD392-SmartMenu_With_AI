@@ -29,6 +29,9 @@
             public const string UploadImage = Base + "/brands/uploadImageTest";
 
             public const string GetImage = Base + "/brands/GetImageTest";
+
+            public const string Update = Base + "/brands/Update";
+
         }
 
         public static class Authentication
