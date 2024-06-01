@@ -10,6 +10,9 @@
 /Backend/.vs/SmartMenu/v17/
 /Backend/.vs/ProjectEvaluation/
 /Backend/SmartMenu/obj/Debug/net8.0/
+/Backend/SmartMenu/obj/Debug/net8.0/SmartMenu.AssemblyInfo.cs
+/Backend/SmartMenu/obj/Debug/net8.0/SmartMenu.AssemblyInfoInputs.cache
+/Backend/SmartMenu/obj/Debug/net8.0/SmartMenu.sourcelink.json
 *.vsidx
 /Backend/.vs/SmartMenu/FileContentIndex/587547da-5e21-4659-8308-55c995908672.vsidx
 /Backend/.vs/SmartMenu/FileContentIndex/7d90925d-16b6-43f2-ae61-9b608bd68e1c.vsidx
@@ -18,6 +21,7 @@
 /Backend/.vs/SmartMenu/FileContentIndex/e332e1d0-8302-4c69-bd22-87d883c1cdbd.vsidx
 /Backend/.vs/SmartMenu/v17/.futdcache.v2
 /Backend/.vs/SmartMenu/v17/.suo
+/Backend/.vs/ProjectEvaluation/smartmenu.metadata.v7.bin
 /Backend/SmartMenu/bin/Debug/net8.0/SmartMenu.dll
 /Backend/SmartMenu/bin/Debug/net8.0/SmartMenu.pdb
 /Backend/SmartMenu/obj/Debug/net8.0/ref/SmartMenu.dll
