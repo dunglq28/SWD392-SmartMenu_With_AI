@@ -1,35 +1,37 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SmartMenu.Common.Constants;
-using SmartMenu.DTOs;
 using SmartMenu.Interfaces;
-using SmartMenu.Payloads;
 using SmartMenu.Payloads.Requests;
 using SmartMenu.Payloads.Responses;
+using SmartMenu.Payloads;
 using SmartMenu.Utils;
 using SmartMenu.Validations;
+using SmartMenu.DTOs;
 
 namespace SmartMenu.Controllers
 {
-    public class AppUserController : Controller
+    //[Route("api/[controller]")]
+    [ApiController]
+    public class StoreController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly AddAppUserValidation _AddUserValidation;
+        private readonly AddStoreValidation _AddStoreValidation;
+        private readonly updateStoreValidation _updateStoreValidation;
 
-        public AppUserController(IUnitOfWork unitOfWork)
+        public StoreController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _AddUserValidation = new AddAppUserValidation();
+            _AddStoreValidation = new AddStoreValidation();
+            _updateStoreValidation = new updateStoreValidation();
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPost(APIRoutes.AppUser.Add, Name = "AddUserAsync")]
-        public async Task<IActionResult> AddAsync([FromBody] AddAppUserRequest reqObj)
+        [HttpPost(APIRoutes.Store.Add, Name = "AddStoreAsync")]
+        public async Task<IActionResult> AddAsync([FromBody] AddStoreRequest reqObj)
         {
             try
             {
-                var validation = await _AddUserValidation.ValidateAsync(reqObj);
+                var validation = await _AddStoreValidation.ValidateAsync(reqObj);
                 if (!validation.IsValid)
                 {
                     return BadRequest(new BaseResponse
@@ -40,11 +42,11 @@ namespace SmartMenu.Controllers
                         IsSuccess = false
                     });
                 }
-                var UserAdd = await _unitOfWork.AccountRepository.AddAsync(reqObj.UserName, reqObj.Password, reqObj.RoleId, reqObj.IsActive);
+                var UserAdd = await _unitOfWork.StoreRepository.AddAsync(reqObj);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "New user successfully",
+                    Message = "Thêm cửa hàng thành công",
                     Data = UserAdd,
                     IsSuccess = true
                 });
@@ -64,18 +66,18 @@ namespace SmartMenu.Controllers
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpDelete(APIRoutes.AppUser.Delete, Name = "DeleteUserAsync")]
+        [HttpDelete(APIRoutes.Store.Delete, Name = "DeleteStoreAsync")]
         public async Task<IActionResult> DeleteAsynce([FromQuery] int id)
         {
             try
             {
-                var result = await _unitOfWork.AccountRepository.DeleteAsync(id);
+                var result = await _unitOfWork.StoreRepository.DeleteAsync(id);
                 if (!result)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "không tìm thấy người dùng",
+                        Message = "Cửa hàng không tồn tại",
                         Data = null,
                         IsSuccess = false
                     });
@@ -83,7 +85,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "xoá người dùng thành công",
+                    Message = "Xoá thành công",
                     Data = null,
                     IsSuccess = true
                 });
@@ -101,19 +103,30 @@ namespace SmartMenu.Controllers
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPut(APIRoutes.AppUser.Update, Name = "UpdateUserAsync")]
-        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateAppUserRequest reqObj)
+        [HttpPut(APIRoutes.Store.Update, Name = "UpdateStoreAsync")]
+        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateStoreRequest reqObj)
         {
             try
             {
-                var result = await _unitOfWork.AccountRepository
-                    .UpdateAsync(id, reqObj.Password, reqObj.RoleId, reqObj.IsActive, reqObj.Status);
+                var validation = _updateStoreValidation.Validate(reqObj);
+                if(!validation.IsValid)
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "Thông tin của bạn chưa chính xác",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                var result = await _unitOfWork.StoreRepository
+                    .UpdateAsync(id, reqObj);
                 if (result == null)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Không tìm thấy người dùng",
+                        Message = "Không tìm thấy thông tin cửa hàng",
                         Data = null,
                         IsSuccess = false
                     });
@@ -121,7 +134,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Cập nhật người dùng thành công",
+                    Message = "Cập nhật thành công",
                     Data = result,
                     IsSuccess = true
                 });
@@ -139,18 +152,18 @@ namespace SmartMenu.Controllers
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpGet(APIRoutes.AppUser.GetAll, Name = "GetUsersAsync")]
-        public async Task<IActionResult> GetAllAsync([FromQuery]  int currIdLoginID, string searchKey, int pageNumber = 1, int PageSize =5)
+        [HttpGet(APIRoutes.Store.GetAll, Name = "GetStoreAsync")]
+        public async Task<IActionResult> GetAllAsync([FromQuery] int brandID, string? searchKey, int pageNumber = 1, int PageSize = 5)
         {
             try
             {
-                var allAccount = await _unitOfWork.AccountRepository.GetAllAsync(currIdLoginID, searchKey);
-                var paging = PaginationHelper.PaginationAsync(pageNumber, allAccount, PageSize);
+                var brands = await _unitOfWork.StoreRepository.GetAllAsync(searchKey, brandID);
+                var paging = PaginationHelper.PaginationAsync(pageNumber, brands, PageSize);
 
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Tải dữ liệu thành công",
+                    Message = "Lấy thông tin thành công",
                     Data = paging,
                     IsSuccess = true
                 });
@@ -168,19 +181,19 @@ namespace SmartMenu.Controllers
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpGet(APIRoutes.AppUser.GetByID, Name = "GetUserByID")]
-        public async Task<IActionResult> GetAsync([FromQuery] int Id, int currIdLoginID)
+        [HttpGet(APIRoutes.Store.GetByID, Name = "GetStoreByID")]
+        public async Task<IActionResult> GetAsync([FromQuery] int Id)
         {
             try
             {
-                var user = await _unitOfWork.AccountRepository.GetAsync(Id, currIdLoginID);
+                var user = await _unitOfWork.StoreRepository.GetAsync(Id);
 
                 if (user == null)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Không tìm thấy người dùng",
+                        Message = "Không tìm thấy thông tin",
                         Data = null,
                         IsSuccess = false
                     });
@@ -188,7 +201,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Tìm người dùng thành công",
+                    Message = "Lấy thông tin thành công",
                     Data = user,
                     IsSuccess = true
                 });
