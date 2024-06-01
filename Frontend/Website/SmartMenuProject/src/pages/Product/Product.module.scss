@@ -1,13 +1,13 @@
-.User {
+.Product {
   width: 100%;
   padding: 20px;
   user-select: none;
   justify-content: center;
-  .UserTbl {
+  .ProductTbl {
     border-radius: 7px;
     border: 1px solid #ccc;
     background-color: #b9d7d5;
-    .SettingUser {
+    .SettingProduct {
       width: 100%;
       height: 25px;
       justify-content: center;
@@ -25,7 +25,7 @@
         height: 20px;
       }
     }
-    .UserItem {
+    .ProductItem {
       transition: 0.3s;
       &:hover {
         background-color: #a0c4c3;
@@ -54,6 +54,7 @@
       background-color: #a0c4c3;
     }
   }
+
   .HeaderTbl {
     color: black;
     font-size: 15px;

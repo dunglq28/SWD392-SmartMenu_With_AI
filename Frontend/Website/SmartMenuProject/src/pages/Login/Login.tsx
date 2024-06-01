@@ -1,83 +1,85 @@
 import {
+  Avatar,
+  Box,
   Button,
   Divider,
   Flex,
+  FormControl,
+  FormHelperText,
+  Heading,
   Image,
   Input,
   InputGroup,
+  InputLeftElement,
   InputRightElement,
+  Stack,
   Text,
+  Link,
 } from "@chakra-ui/react";
 import bg from "../../assets/images/bg.svg";
 import avatar from "../../assets/images/avatar.svg";
 import wave from "../../assets/images/wave.png";
 import style from "./Login.module.scss";
-import { FaUser, FaLock } from "react-icons/fa";
+import { TfiEmail } from "react-icons/tfi";
+import { RiLockPasswordLine } from "react-icons/ri";
 import { useState } from "react";
 
 function Login() {
-  const [show, setShow] = useState(false);
-  const handleClick = () => setShow(!show);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleShowClick = () => setShowPassword(!showPassword);
 
   return (
     <Flex className={style.Login}>
-      <Flex w="40%">
+      <Flex className={style.LeftContainer}>
         <Image src={wave} className={style.Wave} />
         <Image src={bg} className={style.Bg} />
       </Flex>
-      <Flex width="60%" justifyContent="center" alignItems="center">
-        <Flex flexDir="column" w="40%" rowGap="10px">
-          <Flex justifyContent="center" alignItems="center" flexDir="column">
+      <Flex className={style.RightContainer}>
+        <Flex className={style.FormContainer}>
+          <Flex className={style.HeaderContainer}>
             <Image src={avatar} className={style.Avatar} />
-            <Text fontSize="50px" as="b">
-              WELCOME
-            </Text>
+            <Text className={style.WelcomeText}>WELCOME</Text>
           </Flex>
-          <Flex flexDir="column" rowGap="10px">
-            <Text color="#ccc" as="b">
-              Username
-            </Text>
-
-            <InputGroup w="119%">
-              <FaUser
-                style={{ height: "20px", width: "20px", marginRight: "4px" }}
-              />
-              <Input pr="4.5rem" variant="unstyled" />
-            </InputGroup>
-            <Divider />
-
-            <Text color="#ccc" as="b">
-              Password
-            </Text>
-
-            <InputGroup w="8    0%">
-              <FaLock
-                style={{ height: "20px", width: "20px", marginRight: "4px" }}
-              />
-              <Input
-                pr="4.5rem"
-                type={show ? "text" : "password"}
-                variant="unstyled"
-              />
-              <InputRightElement width="4.5rem">
-                <Button
-                  h="1.75rem"
-                  size="sm"
-                  onClick={handleClick}
-                  marginBottom="15px"
-                >
-                  {show ? "Hide" : "Show"}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-            <Divider />
+          <Flex className={style.InputContainer}>
+            <FormControl>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none" color="gray.300">
+                  <TfiEmail />
+                </InputLeftElement>
+                <Input type="email" placeholder="email address" />
+              </InputGroup>
+            </FormControl>
+            <FormControl>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none" color="gray.300">
+                  <RiLockPasswordLine />
+                </InputLeftElement>
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                />
+                <InputRightElement className={style.ShowPasswordContainer}>
+                  <Button
+                    className={style.ShowPasswordButton}
+                    onClick={handleShowClick}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+              <FormHelperText className={style.ForgotPasswordLink}>
+                <Link>forgot password?</Link>
+              </FormHelperText>
+            </FormControl>
           </Flex>
-          <Flex justifyContent="flex-end">
-            <Text fontSize="13px" color="#ccc">
-              Don't have account? Contact us
-            </Text>
-          </Flex>
-          <Button bg="#b9d7d5">LOGIN</Button>
+          <Button className={style.LoginButton}>LOGIN</Button>
+          <Box className={style.SignupPrompt}>
+            Don't have account?{" "}
+            <Link className={style.ContactLink} href="#">
+              Contact us
+            </Link>
+          </Box>
         </Flex>
       </Flex>
     </Flex>

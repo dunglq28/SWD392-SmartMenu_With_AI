@@ -1,4 +1,11 @@
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
   Divider,
   Flex,
   Popover,
@@ -16,110 +23,64 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
-import { RiSettings3Line } from "react-icons/ri";
-import React, { useRef } from "react";
 import style from "./User.module.scss";
 
+import { RiSettings3Line } from "react-icons/ri";
+import { userList } from "../../mock/data";
+import React, { MutableRefObject } from "react";
+
 function User() {
-  const { isOpen, onToggle, onClose } = useDisclosure();
-  const initRef = useRef<HTMLButtonElement>(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
 
   return (
     <Flex className={style.User}>
       <TableContainer className={style.UserTbl}>
-        <Table variant="striped">
+        <Table>
           <TableCaption>Bảng quản lý user</TableCaption>
           <Thead>
             <Tr>
-              <Th>User code</Th>
-              <Th>User name</Th>
-              <Th>Role id</Th>
-              <Th>Created date</Th>
-              <Th>Is active</Th>
-              <Th>Settings</Th>
+              <Th className={style.HeaderTbl}>User code</Th>
+              <Th className={style.HeaderTbl}>User name</Th>
+              <Th className={style.HeaderTbl}>Role id</Th>
+              <Th className={style.HeaderTbl}>Created date</Th>
+              <Th className={style.HeaderTbl}>Is active</Th>
+              <Th className={style.HeaderTbl}>Settings</Th>
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td>inches</Td>
-              <Td>inches</Td>
-              <Td>millimetres (mm)</Td>
-              <Td>millimetres (mm)</Td>
-              <Td>millimetres (mm)</Td>
-              <Td>
-                <Flex className={style.SettingUser}>
-                  <Popover initialFocusRef={initRef} closeOnBlur>
-                    <PopoverTrigger>
-                      {/* Thẻ Flex để PopoverTrigger ăn nếu không thì nó hiện sai chỗ */}
-                      <Flex>
-                        <RiSettings3Line className={style.SettingsIcon} />
-                      </Flex>
-                    </PopoverTrigger>
-                    <PopoverContent width="auto">
-                      <PopoverBody>
-                        <Flex
-                          // Phải dùng css inline vì className={style.PopupButton} không ăn
-                          className={style.PopupButton}
-                          width="100px"
-                          height="40px"
-                          justifyContent="center"
-                          alignItems="center"
-                          cursor="pointer"
-                          userSelect="none"
-                          transition="0.3s"
-                          _hover={{
-                            backgroundColor: "brand.100",
-                          }}
-                        >
-                          <Text>Edit User</Text>
+            {userList.map((user) => (
+              <Tr key={user.userCode} className={style.UserItem}>
+                <Td>{user.userCode}</Td>
+                <Td>{user.userName}</Td>
+                <Td>{user.roleId}</Td>
+                <Td>{user.createdDate}</Td>
+                <Td>{user.isActive ? "Yes" : "No"}</Td>
+                <Td>
+                  <Flex className={style.SettingUser}>
+                    <Popover>
+                      <PopoverTrigger>
+                        {/* Thẻ Flex để PopoverTrigger ăn nếu không thì nó hiện sai chỗ */}
+                        <Flex>
+                          <RiSettings3Line className={style.SettingsIcon} />
                         </Flex>
-                        <Divider />
-                        <Flex
-                          // Phải dùng css inline vì className={style.PopupButton} không ăn
-                          className={style.PopupButton}
-                          width="100px"
-                          height="40px"
-                          justifyContent="center"
-                          alignItems="center"
-                          cursor="pointer"
-                          userSelect="none"
-                          transition="0.3s"
-                          _hover={{
-                            backgroundColor: "brand.100",
-                          }}
-                        >
-                          <Text>Delete User</Text>
-                        </Flex>
-                      </PopoverBody>
-                    </PopoverContent>
-                  </Popover>
-                </Flex>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>feet</Td>
-              <Td>feet</Td>
-              <Td>centimetres (cm)</Td>
-              <Td>millimetres (mm)</Td>
-              <Td>millimetres (mm)</Td>
-              <Td>
-                <Flex className={style.SettingUser}>
-                  <RiSettings3Line className={style.SettingsIcon} />
-                </Flex>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>yards</Td>
-              <Td>yards</Td>
-              <Td>metres (m)</Td>
-              <Td>metres (m)</Td>
-              <Td>metres (m)</Td>
-              <Td>
-                <Flex className={style.SettingUser}>
-                  <RiSettings3Line className={style.SettingsIcon} />
-                </Flex>
-              </Td>
-            </Tr>
+                      </PopoverTrigger>
+                      <PopoverContent width="auto">
+                        <PopoverBody>
+                          <Flex className={style.PopupButton}>
+                            <Text>Edit User</Text>
+                          </Flex>
+                          <Divider />
+                          <Flex className={style.PopupButton} onClick={onOpen}>
+                            <Text>Delete User</Text>
+                          </Flex>
+                        </PopoverBody>
+                      </PopoverContent>
+                    </Popover>
+                  </Flex>
+                </Td>
+              </Tr>
+            ))}
           </Tbody>
           {/* <Tfoot>
             <Tr>
@@ -129,6 +90,32 @@ function User() {
           </Tfoot> */}
         </Table>
       </TableContainer>
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Customer
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Are you sure? You can't undo this action afterwards.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button colorScheme="red" onClick={onClose} ml={3}>
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Flex>
   );
 }

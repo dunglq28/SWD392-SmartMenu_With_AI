@@ -4,6 +4,8 @@
     {
         public IAccountRepository AccountRepository { get; }
         public IBrandRepository BrandRepository { get; }
+        public ICategoryRepository CategoryRepository { get; }
+        public IStoreRepository StoreRepository { get; }
         public IRefreshTokenRepository RefreshTokenRepository { get; }
 
     }
