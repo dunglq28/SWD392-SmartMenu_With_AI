@@ -1,54 +1,50 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SmartMenu.Common.Constants;
 using SmartMenu.Interfaces;
 using SmartMenu.Payloads.Requests;
 using SmartMenu.Payloads.Responses;
 using SmartMenu.Payloads;
 using SmartMenu.Utils;
 using SmartMenu.Validations;
-using SmartMenu.DTOs;
-using Microsoft.IdentityModel.Tokens;
 
 namespace SmartMenu.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class MenuController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly AddCategoriesValidation _validations;
+        private readonly AddMenuValidation _AddMenuValidation;
 
-        public CategoryController(IUnitOfWork unitOfWork)
+        public MenuController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _validations = new AddCategoriesValidation();
+            _AddMenuValidation = new AddMenuValidation();
         }
 
-        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager)]
-        [HttpPost(APIRoutes.Category.Add, Name = "AddCategoryAsync")]
-        public async Task<IActionResult> AddAsync([FromBody] AddCagetoryRequest reqObj)
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpPost(APIRoutes.Menu.Add, Name = "AddMenuAsync")]
+        public async Task<IActionResult> AddAsync([FromBody] AddMenuRequest reqObj)
         {
             try
             {
-                var validation = await _validations.ValidateAsync(reqObj);
+                var validation = await _AddMenuValidation.ValidateAsync(reqObj);
                 if (!validation.IsValid)
                 {
                     return BadRequest(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Your information are not suitable",
+                        Message = "Thông tin của bạn chưa chính xác",
                         Data = null,
                         IsSuccess = false
                     });
                 }
-                var category = await _unitOfWork.CategoryRepository.AddAsync(reqObj);
+                var UserAdd = await _unitOfWork.MenuRepository.AddAsync(reqObj);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "New category successfully",
-                    Data = category,
+                    Message = "Thêm Menu thành công",
+                    Data = UserAdd,
                     IsSuccess = true
                 });
 
@@ -66,19 +62,19 @@ namespace SmartMenu.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager)]
-        [HttpDelete(APIRoutes.Category.Delete, Name = "DeleteCategoryAsync")]
-        public async Task<IActionResult> DeleteAsync([FromQuery] int id)
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpDelete(APIRoutes.Menu.Delete, Name = "DeleteMenuAsync")]
+        public async Task<IActionResult> DeleteAsynce([FromQuery] int id)
         {
             try
             {
-                var result = await _unitOfWork.CategoryRepository.DeleteAsync(id);
+                var result = await _unitOfWork.MenuRepository.DeleteAsync(id);
                 if (!result)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Can not delete this category",
+                        Message = "Menu không tồn tại",
                         Data = null,
                         IsSuccess = false
                     });
@@ -86,7 +82,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Delete category successfully",
+                    Message = "Xoá thành công",
                     Data = null,
                     IsSuccess = true
                 });
@@ -103,31 +99,21 @@ namespace SmartMenu.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager)]
-        [HttpPut(APIRoutes.Category.Update, Name = "UpdateCategoryAsync")]
-        public async Task<IActionResult> UpdateCategoryAsync(int id, [FromBody] string cagetoryName)
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpPut(APIRoutes.Menu.Update, Name = "UpdateMenuAsync")]
+        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] bool isActive)
         {
             try
             {
-               
-                if (cagetoryName.IsNullOrEmpty())
-                {
-                    return BadRequest(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Thông tin không được để trống",
-                        Data = null,
-                        IsSuccess = false
-                    });
-                }
-                var result = await _unitOfWork.CategoryRepository.UpdateAsync(id, cagetoryName);
-                    
+                
+                var result = await _unitOfWork.MenuRepository
+                    .UpdateAsync(id, isActive);
                 if (result == null)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Can not update this category",
+                        Message = "Không tìm thấy thông tin menu",
                         Data = null,
                         IsSuccess = false
                     });
@@ -135,7 +121,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Update category successfully",
+                    Message = "Cập nhật thành công",
                     Data = result,
                     IsSuccess = true
                 });
@@ -152,19 +138,19 @@ namespace SmartMenu.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager + UserRoles.Store)]
-        [HttpGet(APIRoutes.Category.GetAll, Name = "GetCategoriesAsync")]
-        public async Task<IActionResult> GetAllAsync([FromQuery]  string? searchKey = null, int brandID = 0, int pageNumber = 1, int PageSize = 5)
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpGet(APIRoutes.Menu.GetAll, Name = "GetMenuAsync")]
+        public async Task<IActionResult> GetAllAsync([FromQuery] int brandID, int pageNumber = 1, int PageSize = 5)
         {
             try
             {
-                var allAccount = await _unitOfWork.CategoryRepository.GetAllAsync( searchKey!, brandID);
-                var paging = PaginationHelper.PaginationAsync(pageNumber, allAccount!, PageSize);
+                var brands = await _unitOfWork.MenuRepository.GetAllByBrandIDAsync( brandID);
+                var paging = PaginationHelper.PaginationAsync(pageNumber, brands!, PageSize);
 
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Update cagetory successfully",
+                    Message = "Lấy thông tin thành công",
                     Data = paging,
                     IsSuccess = true
                 });
@@ -181,20 +167,20 @@ namespace SmartMenu.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager + UserRoles.Store)]
-        [HttpGet(APIRoutes.Category.GetByID, Name = "GetCategoryByID")]
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpGet(APIRoutes.Menu.GetByID, Name = "GetMenuByID")]
         public async Task<IActionResult> GetAsync([FromQuery] int Id)
         {
             try
             {
-                var category = await _unitOfWork.CategoryRepository.GetAsync(Id);
+                var user = await _unitOfWork.MenuRepository.GetAsync(Id);
 
-                if (category == null)
+                if (user == null)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Can not find this category",
+                        Message = "Không tìm thấy thông tin",
                         Data = null,
                         IsSuccess = false
                     });
@@ -202,8 +188,8 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "get category successfully",
-                    Data = category,
+                    Message = "Lấy thông tin thành công",
+                    Data = user,
                     IsSuccess = true
                 });
             }
@@ -220,3 +206,4 @@ namespace SmartMenu.Controllers
         }
     }
 }
+

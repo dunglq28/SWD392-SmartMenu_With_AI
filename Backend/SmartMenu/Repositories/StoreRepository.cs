@@ -54,24 +54,71 @@ namespace SmartMenu.Repositories
 
         public async Task<IEnumerable<StoreDTo>?> GetAllAsync(string searchKey, int brandID)
         {
-            var entities = new List<Store>();
+            var entities = new List<StoreDTo>();
             if (!string.IsNullOrEmpty(searchKey))
             {
                 entities = await _context.Stores
+                    .Include(x => x.Brand)
                     .Where(x => x.BrandId == brandID && x.Address.ToLower().Contains(searchKey.ToLower()))
-                    .OrderBy(x => x.StoreId).ToListAsync();
+                    .Select(x => new StoreDTo
+                    {
+                        StoreId = x.StoreId,
+                        StoreCode = x.StoreCode,
+                        UserId = x.UserId,
+                        CreateDate = x.CreateDate,
+                        IsActive = x.IsActive,
+                        UpdateDate = x.UpdateDate,
+                        Status = x.Status,
+                        Address = x.Address,
+                        City = x.City,
+                        BrandId = x.BrandId,
+                        BrandName = x.Brand.BrandName
+                    })
+                    .OrderBy(x => x.StoreId)
+                    .ToListAsync();
             }
             else
             {
-                entities = await _context.Stores.Where(x => x.BrandId == brandID).ToListAsync();
+                entities = await _context.Stores
+                    .Include(x => x.Brand)
+                    .Where(x => x.BrandId == brandID)
+                    .Select(x => new StoreDTo
+                    {
+                        StoreId = x.StoreId,
+                        StoreCode = x.StoreCode,
+                        UserId = x.UserId,
+                        CreateDate = x.CreateDate,
+                        IsActive = x.IsActive,
+                        UpdateDate = x.UpdateDate,
+                        Status = x.Status,
+                        Address = x.Address,
+                        City = x.City,
+                        BrandId = x.BrandId,
+                        BrandName = x.Brand.BrandName
+                    })
+                    .OrderBy(x => x.StoreId)
+                    .ToListAsync();
             }
 
-            return _mapper.Map<IEnumerable<StoreDTo>>(entities);
+            return entities;
         }
 
         public async Task<StoreDTo?> GetAsync(int id)
         {
-            var entities = await _context.Stores.FirstOrDefaultAsync(x => x.StoreId == id);
+            var entities = await _context.Stores.Select(x => new StoreDTo
+            {
+                StoreId = x.StoreId,
+                StoreCode = x.StoreCode,
+                UserId = x.UserId,
+                CreateDate = x.CreateDate,
+                IsActive = x.IsActive,
+                UpdateDate = x.UpdateDate,
+                Status = x.Status,
+                Address = x.Address,
+                City = x.City,
+                BrandId = x.BrandId,
+                BrandName = x.Brand.BrandName
+            }).FirstOrDefaultAsync(x => x.StoreId == id);
             return _mapper.Map<StoreDTo>(entities);
         }
 

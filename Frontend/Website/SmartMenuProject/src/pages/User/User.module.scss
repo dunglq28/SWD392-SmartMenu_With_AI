@@ -7,24 +7,31 @@
     border-radius: 7px;
     border: 1px solid #ccc;
     background-color: #b9d7d5;
+    width: 100%;
     .SettingUser {
       width: 100%;
       height: 25px;
       justify-content: center;
     }
-    .SettingsIcon {
-      transition: 0.3s;
-      width: 25px;
+    .SettingsIconBtn {
+      width: 0px;
       height: 25px;
-      cursor: pointer;
-      &:hover {
-        rotate: 180deg;
-      }
-      &:active {
-        width: 20px;
-        height: 20px;
+      background-color: transparent;
+      .SettingsIcon {
+        transition: 0.3s;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        &:hover {
+          rotate: 180deg;
+        }
+        &:active {
+          width: 20px;
+          height: 20px;
+        }
       }
     }
+
     .UserItem {
       transition: 0.3s;
       &:hover {
@@ -39,23 +46,27 @@
       }
     }
   }
-  .PopupButton {
-    width: 150px;
-    height: 40px;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-    transition: 0.3s;
-    &:hover {
-      background-color: #b9d7d5;
-    }
-    &:active {
-      background-color: #a0c4c3;
+  .PopoverContent {
+    width: 100%;
+    .PopupButton {
+      width: 150px;
+      height: 40px;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      transition: 0.3s;
+      &:hover {
+        background-color: #b9d7d5;
+      }
+      &:active {
+        background-color: #a0c4c3;
+      }
     }
   }
   .HeaderTbl {
     color: black;
     font-size: 15px;
+    text-align: center;
   }
 }

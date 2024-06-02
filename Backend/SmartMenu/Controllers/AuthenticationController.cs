@@ -65,7 +65,12 @@ namespace SmartMenu.Controllers
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Đăng nhập thành công",
-                    Data = token,
+                    Data = new
+                    {
+                        token,
+                        userDto.UserId,
+                        userDto.RoleId
+                    },
                     IsSuccess = true
                 });
             }

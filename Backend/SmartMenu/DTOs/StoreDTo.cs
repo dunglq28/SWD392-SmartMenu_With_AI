@@ -21,5 +21,6 @@
         public string? City { get; set; } = null!;
 
         public int? BrandId { get; set; }
+        public string? BrandName { get; set; }
     }
 }

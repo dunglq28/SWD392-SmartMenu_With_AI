@@ -9,6 +9,13 @@
             public const string GetAll = Base + "/weatherforecast/";
         }
 
+        public static class Authentication
+        {
+            public const string Login = Base + "/authentication/login";
+
+            public const string RefreshToken = Base + "/authentication/refreshtoken";
+        }
+
         public static class AppUser
         {
             public const string GetAll = Base + "/appusers/";
@@ -51,6 +58,7 @@
 
             public const string Add = Base + "/stores/";
         }
+
         public static class Category
         {
             public const string GetAll = Base + "/categories/";
@@ -64,11 +72,17 @@
             public const string Add = Base + "/categories/";
         }
 
-        public static class Authentication
+        public static class Menu
         {
-            public const string Login = Base + "/authentication/login";
+            public const string GetAll = Base + "/menus/";
 
-            public const string RefreshToken = Base + "/authentication/refreshtoken";
+            public const string GetByID = Base + "/menus/get-by-id";
+
+            public const string Update = Base + "/menus/";
+
+            public const string Delete = Base + "/menus/";
+
+            public const string Add = Base + "/menus/";
         }
 
     }
