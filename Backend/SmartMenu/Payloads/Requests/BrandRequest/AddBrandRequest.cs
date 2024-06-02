@@ -6,6 +6,6 @@
 
         public int UserId { get; set; }
 
-        public IFormFile image { get; set; }
+        public IFormFile image { get; set; } = null!;
     }
 }

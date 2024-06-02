@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartMenu.Common.Constants;
+using SmartMenu.Common.Enums;
 using SmartMenu.DTOs;
 using SmartMenu.Entities;
 using SmartMenu.Interfaces;
@@ -22,13 +23,14 @@ namespace SmartMenu.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IS3Service _s3Service;
         private readonly AddBrandValidation _addBrandValidation;
-
+        private readonly ImageFileValidator _imageFileValidator;
 
         public BrandController(IUnitOfWork unitOfWork, IS3Service s3Service)
         {
             _unitOfWork = unitOfWork;
             _s3Service = s3Service;
             _addBrandValidation = new AddBrandValidation();
+            _imageFileValidator = new ImageFileValidator();
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
@@ -56,75 +58,8 @@ namespace SmartMenu.Controllers
                 });
             }
         }
-
-        [HttpPost(APIRoutes.Brand.UploadImage, Name = "UploadImageTest")]
-        public async Task<IActionResult> UploadImageTest(IFormFile image)
-        {
-            try
-            {
-                var uploadResult = await _s3Service.UploadItemAsync(image);
-
-                if (uploadResult.HttpStatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    return Ok(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status200OK,
-                        Message = "Upload Image Successful!",
-                        Data = null,
-                        IsSuccess = true
-                    });
-                }
-                else
-                {
-                    return BadRequest(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Upload failed!",
-                        Data = null,
-                        IsSuccess = true
-                    });
-                }
-
-            }
-            catch
-            {
-                return BadRequest(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Some thing went wrong!",
-                    Data = null,
-                    IsSuccess = false
-                });
-            }
-        }
-
-        [HttpGet(APIRoutes.Brand.GetImage, Name = "GetImageTest")]
-        public async Task<IActionResult> GetImageTest(string fileName)
-        {
-            try
-            {
-                var url = _s3Service.GetPreSignedURL(fileName);
-                return Ok(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status200OK,
-                    Message = "Successfully generated pre-signed URL.",
-                    Data = url,
-                    IsSuccess = true
-                });
-            }
-            catch (Exception)
-            {
-                return BadRequest(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Some thing went wrong!",
-                    Data = null,
-                    IsSuccess = false
-                });
-            }
-        }
-
-        [Authorize(Roles = UserRoles.Admin)]
+       
+        //[Authorize(Roles = UserRoles.Admin)]
         [HttpPost(APIRoutes.Brand.Add, Name = "AddBrandAsync")]
         public async Task<IActionResult> AddAsync(AddBrandRequest reqObj)
         {
@@ -151,11 +86,9 @@ namespace SmartMenu.Controllers
                         IsSuccess = false
                     });
                 }
-
+                var validationResult = await _imageFileValidator.ValidateAsync(reqObj.image);
                 // Kiểm tra phần mở rộng của tệp tin
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
-                var extension = Path.GetExtension(reqObj.image.FileName).ToLowerInvariant();
-                if (!allowedExtensions.Contains(extension))
+                if (!validationResult.IsValid)
                 {
                     return BadRequest(new BaseResponse
                     {
@@ -166,8 +99,8 @@ namespace SmartMenu.Controllers
                     });
                 }
 
-                string imageUrl = null;
-                string imageName = null;
+                string imageUrl = null!;
+                string imageName = null!;
 
                 if (reqObj.image != null)
                 {
@@ -176,11 +109,22 @@ namespace SmartMenu.Controllers
                     imageName = reqObj.image.FileName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName);
                 }
+                var existBrand = await _unitOfWork.BrandRepository.GetByNameAsync(reqObj.BrandName);
+                if (existBrand != null)
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "Tên thương hiệu đã tồn tại.",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
                 var BrandAdd = await _unitOfWork.BrandRepository.AddAsync(reqObj.BrandName, reqObj.UserId, imageUrl, imageName);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "New brand successfully",
+                    Message = "Tạo thương hiệu mới thành công.",
                     Data = BrandAdd,
                     IsSuccess = true
                 });
@@ -199,14 +143,14 @@ namespace SmartMenu.Controllers
             }
         }
 
-        [Authorize(Roles = UserRoles.Admin)]
+        //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Brand.Update, Name = "UpdateAsync")]
         public async Task<IActionResult> UpdateAsync(int id, IFormFile image, string brandName, int status)
         {
             try
             {
-                string imageUrl = null;
-                string imageName = null;
+                string imageUrl = null!;
+                string imageName = null!;
 
                 if (image != null)
                 {
@@ -215,38 +159,54 @@ namespace SmartMenu.Controllers
                     imageName = image.FileName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName);
                 }
+                var existBrand = await _unitOfWork.BrandRepository.GetByIdAsync(id);
+                if (brandName != existBrand.BrandName)
+                {
+                    var existBrandName = await _unitOfWork.BrandRepository.GetByNameAsync(brandName);
+                    if (existBrand != null)
+                    {
+                        return BadRequest(new BaseResponse
+                        {
+                            StatusCode = StatusCodes.Status400BadRequest,
+                            Message = "Tên thương hiệu đã tồn tại.",
+                            Data = null,
+                            IsSuccess = false
+                        });
+                    }
+                }
                 var updatedBrand = await _unitOfWork.BrandRepository.UpdateAsync(id, brandName, imageUrl, imageName, status);
+                if (updatedBrand == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy thương hiệu để cập nhật!",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Update Successful!",
+                    Message = "cập nhật thành công!",
                     Data = updatedBrand,
                     IsSuccess = true
                 });
             }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status404NotFound,
-                    Message = ex.Message,
-                    Data = null,
-                    IsSuccess = false
-                });
-            }
+
             catch (Exception ex)
             {
                 return BadRequest(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Message = $"Update failed! Error: {ex.Message}",
+                    Message = $"cập nhật lỗi! Error: {ex.Message}",
                     Data = null,
                     IsSuccess = false
                 });
             }
         }
 
-        [Authorize(Roles = UserRoles.Admin)]
+        //[Authorize(Roles = UserRoles.Admin)]
         [HttpDelete(APIRoutes.Brand.Delete, Name = "DeleteBrandAsync")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
@@ -259,20 +219,18 @@ namespace SmartMenu.Controllers
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Brand not found",
+                        Message = "Không tìm thấy thương hiệu để xóa",
                         Data = null,
                         IsSuccess = false
                     });
                 }
-
-                // Cập nhật trạng thái của thương hiệu thành 0 để xóa
-                existingBrand.Status = 0;
+                // Cập nhật trạng thái của thương hiệu thành 2 để xóa
+                existingBrand.Status = (int) Status.Deleted;
                 await _unitOfWork.BrandRepository.UpdateAsync(id, existingBrand);
-
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Brand deleted successfully",
+                    Message = "Xóa thương hiệu thành công.",
                     Data = null,
                     IsSuccess = true
                 });
@@ -282,12 +240,50 @@ namespace SmartMenu.Controllers
                 return BadRequest(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Message = $"Delete failed! Error: {ex.Message}",
+                    Message = $"Xóa thất bại! Error: {ex.Message}",
                     Data = null,
                     IsSuccess = false
                 });
             }
         }
 
+        //[Authorize(Roles = UserRoles.Admin+","+UserRoles.BrandManager)]
+        [HttpPut(APIRoutes.Brand.GetByUserID, Name = "GetByUserIDAsync")]
+        public async Task<IActionResult> GetByUserID(int userID)
+        {
+            try
+            {
+                var brand = await _unitOfWork.BrandRepository.GetByUserIDAsync(userID);
+
+                if (brand == null || !brand.Any())
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy bất kì thương hiệu nào!",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Thành công!",
+                    Data = brand,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError,
+                    Message = $"Đã có lỗi xảy ra! {ex.Message}",
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
     }
 }
