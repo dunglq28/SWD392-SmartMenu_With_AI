@@ -19,9 +19,9 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
         <Flex className={style.Container}>
           <Header />
           <Flex className={style.Children}>{children}</Flex>
+          <Footer />
         </Flex>
       </Flex>
-      <Footer />
     </Flex>
   );
 };

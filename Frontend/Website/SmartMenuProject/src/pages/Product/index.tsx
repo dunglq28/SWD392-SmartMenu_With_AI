@@ -1,7 +1,15 @@
 import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
   Divider,
   Flex,
   Popover,
+  PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
@@ -14,14 +22,18 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import style from "./Product.module.scss";
 
 import { RiSettings3Line } from "react-icons/ri";
 import { productList } from "../../mock/data";
+import React from "react";
 
 function Product() {
-  // const { isOpen, onToggle, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
+
   return (
     <Flex className={style.Product}>
       <TableContainer className={style.ProductTbl}>
@@ -59,45 +71,21 @@ function Product() {
                   <Flex className={style.SettingProduct}>
                     <Popover>
                       <PopoverTrigger>
-                        {/* Thẻ Flex để PopoverTrigger ăn nếu kh thì nó hiện sai chỗ */}
-                        <Flex>
-                          <RiSettings3Line className={style.SettingsIcon} />
-                        </Flex>
+                        <Button className={style.SettingsIconBtn}>
+                          <Flex>
+                            <RiSettings3Line className={style.SettingsIcon} />
+                          </Flex>
+                        </Button>
                       </PopoverTrigger>
-                      <PopoverContent width="auto">
+                      <PopoverContent className={style.PopoverContent}>
+                        <PopoverArrow />
                         <PopoverBody>
-                          <Flex
-                            //Phải dùng css inline vì className = {style.PopupButton} không ăn
-                            className={style.PopupButton}
-                            width="100px"
-                            height="40px"
-                            justifyContent="center"
-                            alignItems="center"
-                            cursor="pointer"
-                            userSelect="none"
-                            transition="0.3s"
-                            _hover={{
-                              backgroundColor: "brand.100",
-                            }}
-                          >
-                            <Text>Edit Product</Text>
+                          <Flex className={style.PopupButton}>
+                            <Text>Edit User</Text>
                           </Flex>
                           <Divider />
-                          <Flex
-                            //Phải dùng css inline vì className = {style.PopupButton} không ăn
-                            className={style.PopupButton}
-                            width="100px"
-                            height="40px"
-                            justifyContent="center"
-                            alignItems="center"
-                            cursor="pointer"
-                            userSelect="none"
-                            transition="0.3s"
-                            _hover={{
-                              backgroundColor: "brand.100",
-                            }}
-                          >
-                            <Text>Delete Product</Text>
+                          <Flex className={style.PopupButton} onClick={onOpen}>
+                            <Text>Delete User</Text>
                           </Flex>
                         </PopoverBody>
                       </PopoverContent>
@@ -109,6 +97,32 @@ function Product() {
           </Tbody>
         </Table>
       </TableContainer>
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Customer
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Are you sure? You can't undo this action afterwards.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button colorScheme="red" onClick={onClose} ml={3}>
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Flex>
   );
 }
