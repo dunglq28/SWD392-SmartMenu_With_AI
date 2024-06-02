@@ -231,30 +231,30 @@ INSERT INTO Role (RoleName) VALUES ('Store');
 
 -- Thông tin ảo cho bảng AppUser
 INSERT INTO AppUser (UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) VALUES 
-('9e2a9c0a-3f94-4b6a-8ef2-123456789012', 'admin', 'password123', 1, '2024-01-01', 1, 1),
-('e3c3d1f1-8b8f-4b6a-bc2e-234567890123', 'brand manager', 'password232', 2, '2024-01-02', 1, 1),
-('f3a5c4d7-9d8e-4e4b-bd3f-345678901234', 'brand manager', 'hello123', 2, '2024-01-03', 1, 1),
-('d6e6f7c5-6e7a-4e9b-af4d-456789012345', 'brand manager', 'sailamcuocdoi', 2, '2024-01-04', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'bed48823-e8ce-4ab6-b214-80ca034fefd0', 'Desmond', 'tiLAMHIhdta6KiuWwJTOow==', 1, '4/9/2024', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '02eab8bf-add5-4a44-a283-d143fcea2e37', 'Yovonnda', 'tiLAMHIhdta6KiuWwJTOow==', 2, '2/29/2024', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ('6ae6ed51-bcff-4aeb-b6af-c6c6d4007ffd', 'Tomlin', 'tiLAMHIhdta6KiuWwJTOow==', 3, '4/24/2024', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'ce064125-f8fb-4247-86ee-3d63e3111b03', 'Bogart', 'tiLAMHIhdta6KiuWwJTOow==', 2, '8/31/2023', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'b4286bcf-8b6f-4449-85e8-05e0f4920202', 'Claudius', 'tiLAMHIhdta6KiuWwJTOow==', 3, '3/31/2024', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '91115ec9-4190-41ba-97b5-ea0b7da73c05', 'Ethan', 'tiLAMHIhdta6KiuWwJTOow==', 3, '9/1/2023', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ('d88a3a67-9bf8-4a5c-9aa9-567ff46d4879', 'Audy', 'tiLAMHIhdta6KiuWwJTOow==', 3, '3/1/2024', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'c3bb300a-f1fe-4cad-886a-65530e484394', 'Joey', 'tiLAMHIhdta6KiuWwJTOow==', 3, '10/4/2023', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ('1601e8e8-8b63-4058-9789-e673d5de548f', 'Heinrick', 'tiLAMHIhdta6KiuWwJTOow==', 3, '7/22/2023', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '9d9749ed-d2cc-44ac-b661-cea513e15ee5', 'Wilbert', 'tiLAMHIhdta6KiuWwJTOow==', 3, '11/22/2023', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '1df2d80a-c01a-447a-985a-e96590184c22', 'Birgitta', 'tiLAMHIhdta6KiuWwJTOow==', 3, '4/15/2024', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'eec2f545-7dc0-4e7f-b74c-be69beb900eb', 'Bent', 'tiLAMHIhdta6KiuWwJTOow==', 3, '11/15/2023', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'bf6b881b-d930-4feb-aad5-354075dc959c', 'Ira', 'tiLAMHIhdta6KiuWwJTOow==', 3, '4/20/2024', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '491196fc-ff18-43e7-a831-d3066ae508ab', 'Husein', 'tiLAMHIhdta6KiuWwJTOow==', 3, '2/23/2024', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'e506d7fa-be8d-44cb-88c3-5e292572c32f', 'Jasun', 'tiLAMHIhdta6KiuWwJTOow==', 3, '3/26/2024', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '2c2e613d-3753-449e-9744-16369b2ff0c2', 'Perceval', 'tiLAMHIhdta6KiuWwJTOow==', 3, '10/11/2023', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '95a2e6b3-4827-40a5-9d96-89faf5025e38', 'Abramo', 'tiLAMHIhdta6KiuWwJTOow==', 3, '6/21/2023', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'bdb28209-13c4-4de2-b77f-b36a54891210', 'Misty', 'tiLAMHIhdta6KiuWwJTOow==', 3, '5/10/2024', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'b0dea5a7-cd92-43f5-9a37-8ef1af0a6982', 'Sylvan', 'tiLAMHIhdta6KiuWwJTOow==', 3, '6/14/2023', 1, 1);
-insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '005436bb-f7d8-43ad-bd71-cf2f3b429392', 'Paule', 'tiLAMHIhdta6KiuWwJTOow==', 3, '6/20/2023', 1, 1);
+('9e2a9c0a-3f94-4b6a-8ef2-123456789012', 'admin', 'YeE2JKedsIRzqg6yRuJXIw==', 1, '2024-01-01', 1, 1),
+('e3c3d1f1-8b8f-4b6a-bc2e-234567890123', 'brand manager', 'YeE2JKedsIRzqg6yRuJXIw==', 2, '2024-01-02', 1, 1),
+('f3a5c4d7-9d8e-4e4b-bd3f-345678901234', 'brand manager', 'YeE2JKedsIRzqg6yRuJXIw==', 2, '2024-01-03', 1, 1),
+('d6e6f7c5-6e7a-4e9b-af4d-456789012345', 'brand manager', 'YeE2JKedsIRzqg6yRuJXIw==', 2, '2024-01-04', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'bed48823-e8ce-4ab6-b214-80ca034fefd0', 'Desmond', 'YeE2JKedsIRzqg6yRuJXIw==', 1, '4/9/2024', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '02eab8bf-add5-4a44-a283-d143fcea2e37', 'Yovonnda', 'YeE2JKedsIRzqg6yRuJXIw==', 2, '2/29/2024', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ('6ae6ed51-bcff-4aeb-b6af-c6c6d4007ffd', 'Tomlin', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '4/24/2024', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'ce064125-f8fb-4247-86ee-3d63e3111b03', 'Bogart', 'YeE2JKedsIRzqg6yRuJXIw==', 2, '8/31/2023', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'b4286bcf-8b6f-4449-85e8-05e0f4920202', 'Claudius', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '3/31/2024', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '91115ec9-4190-41ba-97b5-ea0b7da73c05', 'Ethan', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '9/1/2023', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ('d88a3a67-9bf8-4a5c-9aa9-567ff46d4879', 'Audy', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '3/1/2024', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'c3bb300a-f1fe-4cad-886a-65530e484394', 'Joey', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '10/4/2023', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ('1601e8e8-8b63-4058-9789-e673d5de548f', 'Heinrick', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '7/22/2023', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '9d9749ed-d2cc-44ac-b661-cea513e15ee5', 'Wilbert', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '11/22/2023', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '1df2d80a-c01a-447a-985a-e96590184c22', 'Birgitta', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '4/15/2024', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'eec2f545-7dc0-4e7f-b74c-be69beb900eb', 'Bent', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '11/15/2023', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'bf6b881b-d930-4feb-aad5-354075dc959c', 'Ira', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '4/20/2024', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '491196fc-ff18-43e7-a831-d3066ae508ab', 'Husein', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '2/23/2024', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'e506d7fa-be8d-44cb-88c3-5e292572c32f', 'Jasun', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '3/26/2024', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '2c2e613d-3753-449e-9744-16369b2ff0c2', 'Perceval', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '10/11/2023', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '95a2e6b3-4827-40a5-9d96-89faf5025e38', 'Abramo', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '6/21/2023', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'bdb28209-13c4-4de2-b77f-b36a54891210', 'Misty', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '5/10/2024', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( 'b0dea5a7-cd92-43f5-9a37-8ef1af0a6982', 'Sylvan', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '6/14/2023', 1, 1);
+insert into AppUser ( UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status) values ( '005436bb-f7d8-43ad-bd71-cf2f3b429392', 'Paule', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '6/20/2023', 1, 1);
 
 
 
