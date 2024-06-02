@@ -9,9 +9,11 @@ import {
   Divider,
   Flex,
   Popover,
+  PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Portal,
   Table,
   TableCaption,
   TableContainer,
@@ -27,7 +29,7 @@ import style from "./User.module.scss";
 
 import { RiSettings3Line } from "react-icons/ri";
 import { userList } from "../../mock/data";
-import React, { MutableRefObject } from "react";
+import React, { useState } from "react";
 
 function User() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -60,12 +62,14 @@ function User() {
                   <Flex className={style.SettingUser}>
                     <Popover>
                       <PopoverTrigger>
-                        {/* Thẻ Flex để PopoverTrigger ăn nếu không thì nó hiện sai chỗ */}
-                        <Flex>
-                          <RiSettings3Line className={style.SettingsIcon} />
-                        </Flex>
+                        <Button className={style.SettingsIconBtn}>
+                          <Flex>
+                            <RiSettings3Line className={style.SettingsIcon} />
+                          </Flex>
+                        </Button>
                       </PopoverTrigger>
-                      <PopoverContent width="auto">
+                      <PopoverContent className={style.PopoverContent}>
+                        <PopoverArrow />
                         <PopoverBody>
                           <Flex className={style.PopupButton}>
                             <Text>Edit User</Text>

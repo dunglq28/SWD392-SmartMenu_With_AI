@@ -8,6 +8,7 @@ const baseStyle = definePartsStyle({
   // define the part you're going to style
   td: {
     fontSize: '15px',
+    textAlign:'center'
   },
 })
 

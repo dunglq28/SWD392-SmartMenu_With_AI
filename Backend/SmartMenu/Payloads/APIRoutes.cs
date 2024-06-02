@@ -36,6 +36,13 @@
             public const string UploadImage = Base + "/brands/uploadImageTest";
 
             public const string GetImage = Base + "/brands/GetImageTest";
+
+            public const string Add = Base + "/brands/add";
+
+            public const string Update = Base + "/brands/Update";
+
+            public const string Delete = Base + "/brands/Delete";
+
         }
 
         public static class Store
