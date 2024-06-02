@@ -6,18 +6,9 @@ namespace SmartMenu.Utils
 {
     public class PasswordHelper
     {
-        private static readonly byte[] _key;
-        private static readonly byte[] _iv;
+        private static readonly byte[] _key = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10 };
+        private static readonly byte[] _iv = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10 };
 
-        static PasswordHelper()
-        {
-            // Tạo key và iv ngẫu nhiên
-            using (var aes = Aes.Create())
-            {
-                _key = aes.Key;
-                _iv = aes.IV;
-            }
-        }
 
         public static string ConvertToEncrypt(string password)
         {
