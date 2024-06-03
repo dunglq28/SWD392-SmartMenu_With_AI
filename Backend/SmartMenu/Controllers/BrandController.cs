@@ -42,7 +42,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Successful!",
+                    Message = "Thành công!",
                     Data = await _unitOfWork.BrandRepository.GetAllAsync(),
                     IsSuccess = true
                 });
@@ -52,7 +52,7 @@ namespace SmartMenu.Controllers
                 return NotFound(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status404NotFound,
-                    Message = "Not found any brand!",
+                    Message = "Không tìm thấy!",
                     Data = null,
                     IsSuccess = false
                 });

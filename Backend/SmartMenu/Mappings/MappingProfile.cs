@@ -15,6 +15,7 @@ namespace SmartMenu.Mappings
             CreateMap<Category, CategoryDTo>().ReverseMap();
             CreateMap<Store, StoreDTo>().ReverseMap();
             CreateMap<Menu, MenuDTo>().ReverseMap();
+            CreateMap<GroupAttribute, GroupAttributeDto>().ReverseMap();
 
         }
     }

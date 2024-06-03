@@ -84,6 +84,15 @@
 
             public const string Add = Base + "/menus/";
         }
+        public static class GroupAttribute
+        {
+            public const string GetAll = Base + "/attributes/";
 
+            public const string Add = Base + "/attributes/add";
+
+            public const string Update = Base + "/attributes/update";
+
+            public const string Delete = Base + "/attributes/delete";
+        }
     }
 }

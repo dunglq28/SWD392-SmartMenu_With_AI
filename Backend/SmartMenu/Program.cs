@@ -73,6 +73,7 @@ builder.Services.AddScoped<IStoreRepository, StoreRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<IGroupAttributeRepository, GroupAttributeRepository>();
 
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
