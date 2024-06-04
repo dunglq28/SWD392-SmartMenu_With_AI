@@ -1,4 +1,5 @@
-﻿namespace SmartMenu.DTOs
+﻿
+namespace SmartMenu.DTOs
 {
     public class AppUserDto
     {
@@ -11,6 +12,7 @@
         public string Password { get; set; } = null!;
 
         public int RoleId { get; set; }
+        public string RoleName { get; set; }
 
         public DateOnly CreateDate { get; set; }
 

@@ -99,7 +99,7 @@ namespace SmartMenu.Controllers
         }
 
         [HttpGet(APIRoutes.Brand.GetImage, Name = "GetImageTest")]
-        public async Task<IActionResult> GetImageTest(string fileName)
+        public  IActionResult GetImageTest(string fileName)
         {
             try
             {
@@ -166,8 +166,8 @@ namespace SmartMenu.Controllers
                     });
                 }
 
-                string imageUrl = null;
-                string imageName = null;
+                string imageUrl = null!;
+                string imageName = null!;
 
                 if (reqObj.image != null)
                 {
@@ -205,8 +205,8 @@ namespace SmartMenu.Controllers
         {
             try
             {
-                string imageUrl = null;
-                string imageName = null;
+                string imageUrl = null!;
+                string imageName = null!;
 
                 if (image != null)
                 {

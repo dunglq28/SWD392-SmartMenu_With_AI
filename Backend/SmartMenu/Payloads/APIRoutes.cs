@@ -33,15 +33,15 @@
         {
             public const string GetAll = Base + "/brands/";
 
-            public const string UploadImage = Base + "/brands/uploadImageTest";
+            //public const string UploadImage = Base + "/brands/uploadImageTest";
 
-            public const string GetImage = Base + "/brands/GetImageTest";
+            //public const string GetImage = Base + "/brands/get-image-test";
 
             public const string Add = Base + "/brands/add";
 
-            public const string Update = Base + "/brands/Update";
+            public const string Update = Base + "/brands/update";
 
-            public const string Delete = Base + "/brands/Delete";
+            public const string Delete = Base + "/brands/delete";
 
         }
 
