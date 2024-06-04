@@ -11,6 +11,8 @@ namespace SmartMenu.Repositories
         private readonly IBrandRepository _brandRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMenuRepository _menuRepository;
+        private readonly IGroupAttributeRepository _groupAttributeRepository;
+
         public IStoreRepository _storeRepository;
 
         private readonly IRefreshTokenRepository _refreshTokenRepository;
@@ -21,7 +23,8 @@ namespace SmartMenu.Repositories
             ICategoryRepository categoryRepository,
             IStoreRepository storeRepository,
             IMenuRepository menuRepository,
-            IRefreshTokenRepository refreshTokenRepository)
+            IRefreshTokenRepository refreshTokenRepository,
+            IGroupAttributeRepository groupAttributeRepository)
         {
             _dbContext = dbContext;
             _accountRepository = accountRepository;
@@ -30,6 +33,7 @@ namespace SmartMenu.Repositories
             _storeRepository = storeRepository;
             _menuRepository = menuRepository;
             _refreshTokenRepository = refreshTokenRepository;
+            _groupAttributeRepository = groupAttributeRepository;
         }
         public IAccountRepository AccountRepository => _accountRepository;
 
@@ -37,6 +41,8 @@ namespace SmartMenu.Repositories
         public IStoreRepository StoreRepository => _storeRepository;
         public ICategoryRepository CategoryRepository => _categoryRepository;
         public IMenuRepository MenuRepository => _menuRepository;
+
+        public IGroupAttributeRepository GroupAttributeRepository => _groupAttributeRepository;
         public IRefreshTokenRepository RefreshTokenRepository =>  _refreshTokenRepository;
 
         public async Task<int> SaveChangeAsync()

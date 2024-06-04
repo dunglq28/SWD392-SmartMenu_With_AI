@@ -8,7 +8,7 @@
         public ICategoryRepository CategoryRepository { get; }
         public IStoreRepository StoreRepository { get; }
         public IMenuRepository MenuRepository { get; }
-
+        public IGroupAttributeRepository GroupAttributeRepository { get; }
 
     }
 }

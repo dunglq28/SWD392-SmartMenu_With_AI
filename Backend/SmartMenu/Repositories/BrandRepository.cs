@@ -40,7 +40,7 @@ namespace SmartMenu.Repositories
             var entity = await _context.Brands.FindAsync(id);
             if (entity == null)
             {
-                return default(BrandDto);
+                return null!;
             }
             else
             {
@@ -66,6 +66,25 @@ namespace SmartMenu.Repositories
         {
             var brand = await _context.Brands.FindAsync(id);
             return _mapper.Map<BrandDto>(brand);
+        }
+
+        public async Task<BrandDto> GetByNameAsync(string name)
+        {
+            var brand = await _context.Brands.FirstOrDefaultAsync(b => b.BrandName == name);
+            if (brand == null)
+            {
+                return null!;
+            }
+            return _mapper.Map<BrandDto>(brand);
+        }
+        public async Task<IEnumerable<BrandDto>> GetByUserIDAsync(int userID)
+        {
+            var brands = await _context.Brands.Where(b => b.UserId == userID).ToListAsync();
+            if (brands == null || !brands.Any())
+            {
+                return Enumerable.Empty<BrandDto>();
+            }
+            return _mapper.Map<IEnumerable<BrandDto>>(brands);
         }
     }
 }

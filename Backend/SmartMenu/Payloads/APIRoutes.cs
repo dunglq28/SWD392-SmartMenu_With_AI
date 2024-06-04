@@ -33,16 +33,13 @@
         {
             public const string GetAll = Base + "/brands/";
 
-            public const string UploadImage = Base + "/brands/uploadImageTest";
-
-            public const string GetImage = Base + "/brands/get-image-test";
-
             public const string Add = Base + "/brands/add";
 
             public const string Update = Base + "/brands/update";
 
             public const string Delete = Base + "/brands/delete";
 
+            public const string GetByUserID = Base + "/brands/get-by-userid";
         }
 
         public static class Store
@@ -83,6 +80,15 @@
 
             public const string Add = Base + "/menus/";
         }
+        public static class GroupAttribute
+        {
+            public const string GetAll = Base + "/attributes/";
 
+            public const string Add = Base + "/attributes/add";
+
+            public const string Update = Base + "/attributes/update";
+
+            public const string Delete = Base + "/attributes/delete";
+        }
     }
 }
