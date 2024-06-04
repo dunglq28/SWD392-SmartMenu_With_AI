@@ -7,11 +7,11 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import style from "./Sidebar.module.scss";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CgAddR } from "react-icons/cg";
 import { MdLogout } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
-import { Link as ReactRouterLink } from "react-router-dom";
+import { Link as ReactRouterLink, useLocation } from "react-router-dom";
 import Logo from "../../assets/images/Logo.jpeg";
 import { AiOutlineProduct } from "react-icons/ai";
 import { GoHome } from "react-icons/go";
@@ -20,9 +20,13 @@ import { IoGitBranchOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdListAlt } from "react-icons/md";
 
+import { useTranslation } from "react-i18next";
+
 function Sidebar() {
+  const { t } = useTranslation();
+  const location = useLocation();
   const [isExpanded, setIsExpanded] = useState(true);
-  const [item, setItem] = useState("Dashboard");
+  const [item, setItem] = useState("");
 
   const changeItem = (label: string) => {
     setItem(label);
@@ -31,19 +35,33 @@ function Sidebar() {
   const toggleSidebar = () => setIsExpanded(!isExpanded);
 
   const menuItems = [
-    { icon: GoHome, label: "Dashboard", to: "/dashboard" },
-    { icon: AiOutlineUser, label: "User", to: "/user" },
-    { icon: IoGitBranchOutline, label: "Branch", divider: true, to: "/branch" },
-    { icon: AiOutlineProduct, label: "Product", to: "/product" },
-    { icon: MdListAlt, label: "Menu", to: "/menu" },
+    { icon: GoHome, label: t("dashboard"), to: "/dashboard" },
+    { icon: AiOutlineUser, label: t("user"), to: "/user" },
+    {
+      icon: IoGitBranchOutline,
+      label: t("branch"),
+      divider: true,
+      to: "/branch",
+    },
+    { icon: AiOutlineProduct, label: t("product"), to: "/product" },
+    { icon: MdListAlt, label: t("menu"), to: "/menu" },
     {
       icon: IoSettingsOutline,
-      label: "Settings",
+      label: t("setting"),
       divider: true,
       to: "/setting",
     },
-    { icon: CgAddR, label: "New Product", to: "/new" },
+    { icon: CgAddR, label: t("new product"), to: "/new" },
   ];
+
+  useEffect(() => {
+    const currentItem = menuItems.find(
+      (menuItem) => menuItem.to === location.pathname
+    );
+    if (currentItem) {
+      setItem(currentItem.label);
+    }
+  }, [location.pathname, menuItems]);
 
   return (
     <Flex
@@ -73,11 +91,11 @@ function Sidebar() {
               style={{ textDecoration: "none" }}
               onClick={() => changeItem(menuItem.label)}
               border={
-                item == menuItem.label
+                item === menuItem.label
                   ? "1px solid #19d1c4"
                   : "1px solid #F4F7F6"
               }
-              backgroundColor={item == menuItem.label ? "#b9d7d5" : "#f4f7f6"}
+              backgroundColor={item === menuItem.label ? "#b9d7d5" : "#f4f7f6"}
             >
               <Icon as={menuItem.icon} className={style.MenuIcon} />
               {isExpanded && (

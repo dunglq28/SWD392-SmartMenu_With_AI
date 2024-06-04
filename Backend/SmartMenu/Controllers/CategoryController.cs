@@ -158,8 +158,8 @@ namespace SmartMenu.Controllers
         {
             try
             {
-                var allAccount = await _unitOfWork.CategoryRepository.GetAllAsync( searchKey, brandID);
-                var paging = PaginationHelper.PaginationAsync(pageNumber, allAccount, PageSize);
+                var allAccount = await _unitOfWork.CategoryRepository.GetAllAsync( searchKey!, brandID);
+                var paging = PaginationHelper.PaginationAsync(pageNumber, allAccount!, PageSize);
 
                 return Ok(new BaseResponse
                 {

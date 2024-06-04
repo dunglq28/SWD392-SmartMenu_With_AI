@@ -3,12 +3,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartMenu.Common.Constants;
+using SmartMenu.Common.Enums;
+using SmartMenu.DTOs;
 using SmartMenu.Entities;
 using SmartMenu.Interfaces;
 using SmartMenu.Payloads;
+using SmartMenu.Payloads.Requests;
+using SmartMenu.Payloads.Requests.BrandRequest;
 using SmartMenu.Payloads.Responses;
 using SmartMenu.Repositories;
 using SmartMenu.Services;
+using SmartMenu.Validations;
 
 namespace SmartMenu.Controllers
 {
@@ -17,14 +22,18 @@ namespace SmartMenu.Controllers
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IS3Service _s3Service;
+        private readonly AddBrandValidation _addBrandValidation;
+        private readonly ImageFileValidator _imageFileValidator;
 
         public BrandController(IUnitOfWork unitOfWork, IS3Service s3Service)
         {
             _unitOfWork = unitOfWork;
             _s3Service = s3Service;
+            _addBrandValidation = new AddBrandValidation();
+            _imageFileValidator = new ImageFileValidator();
         }
 
-        [Authorize(Roles = UserRoles.Admin)]
+        //[Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Brand.GetAll, Name = "GetBrandsAsync")]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -33,7 +42,7 @@ namespace SmartMenu.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Successful!",
+                    Message = "Thành công!",
                     Data = await _unitOfWork.BrandRepository.GetAllAsync(),
                     IsSuccess = true
                 });
@@ -43,84 +52,238 @@ namespace SmartMenu.Controllers
                 return NotFound(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status404NotFound,
-                    Message = "Not found any brand!",
+                    Message = "Không tìm thấy!",
                     Data = null,
                     IsSuccess = false
                 });
             }
         }
-
-        [HttpPost(APIRoutes.Brand.UploadImage, Name = "UploadImageTest")]
-        public async Task<IActionResult> UploadImageTest(IFormFile image)
+       
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpPost(APIRoutes.Brand.Add, Name = "AddBrandAsync")]
+        public async Task<IActionResult> AddAsync(AddBrandRequest reqObj)
         {
             try
             {
-                var uploadResult = await _s3Service.UploadItemAsync(image);
-
-                if (uploadResult.HttpStatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    return Ok(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status200OK,
-                        Message = "Upload Image Successful!",
-                        Data = null,
-                        IsSuccess = true
-                    });
-                }
-                else
+                var validation = await _addBrandValidation.ValidateAsync(reqObj);
+                if (!validation.IsValid)
                 {
                     return BadRequest(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Upload failed!",
+                        Message = "Nhập đầy đủ và hợp lệ các trường",
                         Data = null,
-                        IsSuccess = true
+                        IsSuccess = false
+                    });
+                }
+                if (reqObj.image == null || reqObj.image.Length == 0)
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "Cần có hình ảnh",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                var validationResult = await _imageFileValidator.ValidateAsync(reqObj.image);
+                // Kiểm tra phần mở rộng của tệp tin
+                if (!validationResult.IsValid)
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "File không phải là hình ảnh hợp lệ",
+                        Data = null,
+                        IsSuccess = false
                     });
                 }
 
-            }
-            catch
-            {
-                return BadRequest(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Some thing went wrong!",
-                    Data = null,
-                    IsSuccess = false
-                });
-            }
-        }
+                string imageUrl = null!;
+                string imageName = null!;
 
-        [HttpGet(APIRoutes.Brand.GetImage, Name = "GetImageTest")]
-        public async Task<IActionResult> GetImageTest(string fileName)
-        {
-            try
-            {
-                var url = await _s3Service.GetPreSignedURL(fileName);
+                if (reqObj.image != null)
+                {
+                    // Upload the image to S3 and get the URL
+                    var result = await _s3Service.UploadItemAsync(reqObj.image);
+                    imageName = reqObj.image.FileName;
+                    imageUrl = _s3Service.GetPreSignedURL(imageName);
+                }
+                var existBrand = await _unitOfWork.BrandRepository.GetByNameAsync(reqObj.BrandName);
+                if (existBrand != null)
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "Tên thương hiệu đã tồn tại.",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                var BrandAdd = await _unitOfWork.BrandRepository.AddAsync(reqObj.BrandName, reqObj.UserId, imageUrl, imageName);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Successfully generated pre-signed URL.",
-                    Data = url,
+                    Message = "Tạo thương hiệu mới thành công.",
+                    Data = BrandAdd,
                     IsSuccess = true
                 });
+
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return BadRequest(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Some thing went wrong!",
+                    Message = ex.Message,
                     Data = null,
                     IsSuccess = false
                 });
             }
         }
 
-        //public override async Task<bool> DeleteEntity(int id)
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpPut(APIRoutes.Brand.Update, Name = "UpdateAsync")]
+        public async Task<IActionResult> UpdateAsync(int id, IFormFile image, string brandName, int status)
+        {
+            try
+            {
+                string imageUrl = null!;
+                string imageName = null!;
 
+                if (image != null)
+                {
+                    // Upload the image to S3 and get the URL
+                    var result = await _s3Service.UploadItemAsync(image);
+                    imageName = image.FileName;
+                    imageUrl = _s3Service.GetPreSignedURL(imageName);
+                }
+                var existBrand = await _unitOfWork.BrandRepository.GetByIdAsync(id);
+                if (brandName != existBrand.BrandName)
+                {
+                    var existBrandName = await _unitOfWork.BrandRepository.GetByNameAsync(brandName);
+                    if (existBrand != null)
+                    {
+                        return BadRequest(new BaseResponse
+                        {
+                            StatusCode = StatusCodes.Status400BadRequest,
+                            Message = "Tên thương hiệu đã tồn tại.",
+                            Data = null,
+                            IsSuccess = false
+                        });
+                    }
+                }
+                var updatedBrand = await _unitOfWork.BrandRepository.UpdateAsync(id, brandName, imageUrl, imageName, status);
+                if (updatedBrand == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy thương hiệu để cập nhật!",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "cập nhật thành công!",
+                    Data = updatedBrand,
+                    IsSuccess = true
+                });
+            }
 
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = $"cập nhật lỗi! Error: {ex.Message}",
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
 
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpDelete(APIRoutes.Brand.Delete, Name = "DeleteBrandAsync")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            try
+            {
+                // Kiểm tra xem thương hiệu có tồn tại không
+                var existingBrand = await _unitOfWork.BrandRepository.GetByIdAsync(id);
+                if (existingBrand == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy thương hiệu để xóa",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                // Cập nhật trạng thái của thương hiệu thành 2 để xóa
+                existingBrand.Status = (int) Status.Deleted;
+                await _unitOfWork.BrandRepository.UpdateAsync(id, existingBrand);
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Xóa thương hiệu thành công.",
+                    Data = null,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = $"Xóa thất bại! Error: {ex.Message}",
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
 
+        //[Authorize(Roles = UserRoles.Admin+","+UserRoles.BrandManager)]
+        [HttpPut(APIRoutes.Brand.GetByUserID, Name = "GetByUserIDAsync")]
+        public async Task<IActionResult> GetByUserID(int userID)
+        {
+            try
+            {
+                var brand = await _unitOfWork.BrandRepository.GetByUserIDAsync(userID);
+
+                if (brand == null || !brand.Any())
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy bất kì thương hiệu nào!",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Thành công!",
+                    Data = brand,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError,
+                    Message = $"Đã có lỗi xảy ra! {ex.Message}",
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
     }
 }

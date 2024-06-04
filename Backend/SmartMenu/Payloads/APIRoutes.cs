@@ -9,6 +9,13 @@
             public const string GetAll = Base + "/weatherforecast/";
         }
 
+        public static class Authentication
+        {
+            public const string Login = Base + "/authentication/login";
+
+            public const string RefreshToken = Base + "/authentication/refreshtoken";
+        }
+
         public static class AppUser
         {
             public const string GetAll = Base + "/appusers/";
@@ -29,6 +36,14 @@
             public const string UploadImage = Base + "/brands/uploadImageTest";
 
             public const string GetImage = Base + "/brands/GetImageTest";
+
+            public const string Add = Base + "/brands/add";
+
+            public const string Update = Base + "/brands/Update";
+
+            public const string Delete = Base + "/brands/Delete";
+
+            public const string GetByUserID = Base + "/brands/GetByUserID";
         }
 
         public static class Store
@@ -43,6 +58,7 @@
 
             public const string Add = Base + "/stores/";
         }
+
         public static class Category
         {
             public const string GetAll = Base + "/categories/";
@@ -56,12 +72,27 @@
             public const string Add = Base + "/categories/";
         }
 
-        public static class Authentication
+        public static class Menu
         {
-            public const string Login = Base + "/authentication/login";
+            public const string GetAll = Base + "/menus/";
 
-            public const string RefreshToken = Base + "/authentication/refreshtoken";
+            public const string GetByID = Base + "/menus/get-by-id";
+
+            public const string Update = Base + "/menus/";
+
+            public const string Delete = Base + "/menus/";
+
+            public const string Add = Base + "/menus/";
         }
+        public static class GroupAttribute
+        {
+            public const string GetAll = Base + "/attributes/";
 
+            public const string Add = Base + "/attributes/add";
+
+            public const string Update = Base + "/attributes/update";
+
+            public const string Delete = Base + "/attributes/delete";
+        }
     }
 }
