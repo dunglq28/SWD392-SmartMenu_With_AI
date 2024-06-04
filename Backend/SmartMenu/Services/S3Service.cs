@@ -12,7 +12,7 @@ namespace SmartMenu.Services
         Task<bool> DirectoryExistAsync(string directoryPath);
         Task CreateDirectoryAsync(string directoryPath);
         Task<GetObjectResponse?> GetItemAsync(Guid id, string directoryPath);
-        Task<PutObjectResponse> UploadItemAsync(IFormFile file);
+        Task<PutObjectResponse> UploadItemAsync(IFormFile file, string folderRoot);
         Task<DeleteObjectResponse> DeleteItemAsync(Guid id, string directoryPath);
         string GetPreSignedURL(string fileName);
     }
@@ -88,7 +88,7 @@ namespace SmartMenu.Services
 
         }
 
-        public async Task<PutObjectResponse> UploadItemAsync(IFormFile file)
+        public async Task<PutObjectResponse> UploadItemAsync(IFormFile file, string folderRoot)
         {
             // Create directory Path if not exist
             //await CreateDirectoryAsync(directoryPath);
@@ -102,7 +102,7 @@ namespace SmartMenu.Services
                     BucketName = BucketName,
                     ContentType = file.ContentType,
                     InputStream = file.OpenReadStream(),
-                    Key = "products" + "/" + file.FileName,
+                    Key = folderRoot + "/" + file.FileName,
                     Metadata =
                 {
                     ["x-amz-meta-originalname"] = ConvertToAscii(file.FileName),

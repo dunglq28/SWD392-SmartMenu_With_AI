@@ -20,7 +20,10 @@ import { IoGitBranchOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdListAlt } from "react-icons/md";
 
+import { useTranslation } from "react-i18next";
+
 function Sidebar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(true);
@@ -33,18 +36,23 @@ function Sidebar() {
   const toggleSidebar = () => setIsExpanded(!isExpanded);
 
   const menuItems = [
-    { icon: GoHome, label: "Dashboard", to: "/dashboard" },
-    { icon: AiOutlineUser, label: "User", to: "/users" },
-    { icon: IoGitBranchOutline, label: "Branch", divider: true, to: "/branch" },
-    { icon: AiOutlineProduct, label: "Products", to: "/products" },
-    { icon: MdListAlt, label: "Menu", to: "/menu" },
+    { icon: GoHome, label: t("dashboard"), to: "/dashboard" },
+    { icon: AiOutlineUser, label: t("user"), to: "/users" },
+    {
+      icon: IoGitBranchOutline,
+      label: t("branch"),
+      divider: true,
+      to: "/branchs",
+    },
+    { icon: AiOutlineProduct, label: t("product"), to: "/products" },
+    { icon: MdListAlt, label: t("menu"), to: "/menu" },
     {
       icon: IoSettingsOutline,
-      label: "Settings",
+      label: t("setting"),
       divider: true,
-      to: "/setting",
+      to: "/settings",
     },
-    { icon: CgAddR, label: "New Product", to: "/new" },
+    { icon: CgAddR, label: t("new product"), to: "/new" },
   ];
 
   useEffect(() => {
