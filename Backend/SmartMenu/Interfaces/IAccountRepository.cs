@@ -11,7 +11,7 @@ namespace SmartMenu.Interfaces
         Task<TokenDto?> GenerateAccessTokenAsync(int id);
         Task<AppUserDto> AddAsync(string username, string password, int roleID, bool isActive);
         Task<IEnumerable<AppUserDto>> GetAllAsync(int currIdLoginID, string searchKey);
-        Task<AppUserDto> GetAsync(int id, int currIdLoginID);
+        Task<AppUserDto?> GetAsync(int id, int currIdLoginID);
         Task<AppUserDto> UpdateAsync(int id, string password, int RoleId, bool IsActive, int status);
     }
 }
