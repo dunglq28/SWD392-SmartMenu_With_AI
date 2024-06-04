@@ -31,7 +31,7 @@ namespace SmartMenu.Controllers
             _addBrandValidation = new AddBrandValidation();
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Brand.GetAll, Name = "GetBrandsAsync")]
         public async Task<IActionResult> GetAllAsync()
         {

@@ -87,7 +87,7 @@ namespace SmartMenu.Controllers
         }
 
         [HttpPost(APIRoutes.Authentication.RefreshToken, Name = "RefreshTokenAsync")]
-        public async Task<IActionResult> RefreshToken(TokenDto token)
+        public async Task<IActionResult> RefreshToken([FromBody] TokenDto token)
         {
             try
             {

@@ -11,7 +11,7 @@ import React, { useState, useEffect } from "react";
 import { CgAddR } from "react-icons/cg";
 import { MdLogout } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
-import { Link as ReactRouterLink, useLocation } from "react-router-dom";
+import { Link as ReactRouterLink, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/Logo.jpeg";
 import { AiOutlineProduct } from "react-icons/ai";
 import { GoHome } from "react-icons/go";
@@ -22,6 +22,7 @@ import { MdListAlt } from "react-icons/md";
 
 function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(true);
   const [item, setItem] = useState("");
 
@@ -33,9 +34,9 @@ function Sidebar() {
 
   const menuItems = [
     { icon: GoHome, label: "Dashboard", to: "/dashboard" },
-    { icon: AiOutlineUser, label: "User", to: "/user" },
+    { icon: AiOutlineUser, label: "User", to: "/users" },
     { icon: IoGitBranchOutline, label: "Branch", divider: true, to: "/branch" },
-    { icon: AiOutlineProduct, label: "Products", to: "/product" },
+    { icon: AiOutlineProduct, label: "Products", to: "/products" },
     { icon: MdListAlt, label: "Menu", to: "/menu" },
     {
       icon: IoSettingsOutline,
@@ -54,6 +55,12 @@ function Sidebar() {
       setItem(currentItem.label);
     }
   }, [location.pathname, menuItems]);
+
+  function logoutHandler() {
+    localStorage.removeItem("AccessToken");
+    localStorage.removeItem("RefreshToken");
+    navigate("/login");
+  }
 
   return (
     <Flex
@@ -101,7 +108,11 @@ function Sidebar() {
 
       <Flex className={style.Profile}>
         <MdLogout className={style.LogoutIcon} />
-        {isExpanded && <Text className={style.LogoutText}>Logout</Text>}
+        {isExpanded && (
+          <Text className={style.LogoutText} onClick={logoutHandler}>
+            Logout
+          </Text>
+        )}
       </Flex>
     </Flex>
   );
