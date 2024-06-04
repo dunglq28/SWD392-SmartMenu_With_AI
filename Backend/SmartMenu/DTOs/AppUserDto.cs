@@ -12,7 +12,7 @@ namespace SmartMenu.DTOs
         public string Password { get; set; } = null!;
 
         public int RoleId { get; set; }
-        public string RoleName { get; set; }
+        public string RoleName { get; set; } = null!;
 
         public DateOnly CreateDate { get; set; }
 
