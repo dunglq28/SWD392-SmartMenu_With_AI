@@ -33,9 +33,9 @@
         {
             public const string GetAll = Base + "/brands/";
 
-            //public const string UploadImage = Base + "/brands/uploadImageTest";
+            public const string UploadImage = Base + "/brands/uploadImageTest";
 
-            //public const string GetImage = Base + "/brands/get-image-test";
+            public const string GetImage = Base + "/brands/get-image-test";
 
             public const string Add = Base + "/brands/add";
 
