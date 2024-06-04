@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartMenu")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+706dc5b602b9da29a12db39d2763a59b372046b9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b7bd4414eed6a7d4b5ad37322371d8ff00c8f0a5")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartMenu")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartMenu")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
