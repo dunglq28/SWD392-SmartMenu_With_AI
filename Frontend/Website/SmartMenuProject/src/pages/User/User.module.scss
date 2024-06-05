@@ -3,6 +3,7 @@
   padding: 20px;
   user-select: none;
   justify-content: center;
+  
   .UserTbl {
     border-radius: 7px;
     border: 1px solid #ccc;
@@ -68,5 +69,13 @@
     color: black;
     font-size: 15px;
     text-align: center;
+  }
+
+  .ButtonContainer {
+    align-self: flex-end;
+  }
+
+  .Button {
+    margin-bottom: 10px;
   }
 }
