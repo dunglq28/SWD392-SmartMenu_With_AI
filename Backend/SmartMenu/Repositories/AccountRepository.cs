@@ -67,21 +67,59 @@ namespace SmartMenu.Repositories
 
         public async Task<IEnumerable<AppUserDto>> GetAllAsync(int currIdLoginID, string searchKey)
         {
-            var entities = new List<AppUser>();
-            if(!string.IsNullOrEmpty(searchKey))
+            var entities = new List<AppUserDto>();
+            if (!string.IsNullOrEmpty(searchKey))
             {
-                entities = await _context.AppUsers.Where(x => x.UserName.Contains(searchKey)).OrderBy( x=> x.UserId).ToListAsync();
-            } else
-            {
-                entities = await _context.AppUsers.Where(x => x.UserId != currIdLoginID).ToListAsync();
+                entities = await _context.AppUsers.Include(x => x.Role)
+                    .Where(x => x.UserName.Contains(searchKey))
+                    .Select(x => new AppUserDto
+                    {
+                        UserId = x.UserId,
+                        UserName = x.UserName,
+                        Status = x.Status,
+                        CreateDate = x.CreateDate,
+                        IsActive = x.IsActive,
+                        RoleId = x.RoleId,
+                        RoleName = x.Role.RoleName,
+                        UserCode = x.UserCode,
+
+                    })
+                    .OrderBy(x => x.UserId).ToListAsync();
             }
-            
+            else
+            {
+                entities = await _context.AppUsers.Include(x => x.Role)
+                    .Where(x => x.UserId != currIdLoginID)
+                    .Select(x => new AppUserDto
+                    {
+                        UserId = x.UserId,
+                        UserName = x.UserName,
+                        Status = x.Status,
+                        CreateDate = x.CreateDate,
+                        IsActive = x.IsActive,
+                        RoleId = x.RoleId,
+                        RoleName = x.Role.RoleName,
+                        UserCode = x.UserCode,
+                    }).ToListAsync();
+            }
+
             return _mapper.Map<IEnumerable<AppUserDto>>(entities);
         }
 
         public async Task<AppUserDto?> GetAsync(int id, int currIdLoginID)
         {
-            var entities = await _context.AppUsers.FirstOrDefaultAsync(x => x.UserId != currIdLoginID && x.UserId == id);
+            var entities = await _context.AppUsers.Include(x => x.Role)
+                .Select(x => new AppUserDto
+                {
+                    UserId = x.UserId,
+                    UserName = x.UserName,
+                    Status = x.Status,
+                    CreateDate = x.CreateDate,
+                    IsActive = x.IsActive,
+                    RoleId = x.RoleId,
+                    RoleName = x.Role.RoleName,
+                    UserCode = x.UserCode,
+                }).FirstOrDefaultAsync(x => x.UserId != currIdLoginID && x.UserId == id);
             return _mapper.Map<AppUserDto>(entities);
         }
 
@@ -90,7 +128,7 @@ namespace SmartMenu.Repositories
             var entity = await _context.AppUsers.FindAsync(id);
             if (entity == null)
             {
-                return default(AppUserDto);
+                return default(AppUserDto)!;
             }
             entity.Password = PasswordHelper.ConvertToEncrypt(password);
             entity.RoleId = RoleId;
