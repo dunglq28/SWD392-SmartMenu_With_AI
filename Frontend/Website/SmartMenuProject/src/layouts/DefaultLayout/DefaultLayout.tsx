@@ -11,18 +11,17 @@ interface DefaultLayoutProps {
 }
 
 const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
-  const isLoggedIn =
-    localStorage.getItem("AccessToken") !== null &&
-    localStorage.getItem("RefreshToken") !== null;
-  const navigate = useNavigate();
+  // const isLoggedIn =
+  //   localStorage.getItem("AccessToken") !== null &&
+  //   localStorage.getItem("RefreshToken") !== null;
+  // const navigate = useNavigate();
 
-  useEffect(() => {    
-    if (!isLoggedIn && location.pathname !== "/login" && location.pathname !== "/") {
-      const toastMessage = "Vui lòng đăng nhập để truy cập trang.";
-      navigate("/login", { state: { toastMessage } });
-    } 
-  }, [isLoggedIn, navigate, location.pathname]);
-
+  // useEffect(() => {
+  //   if (!isLoggedIn && location.pathname !== "/login" && location.pathname !== "/") {
+  //     const toastMessage = "Vui lòng đăng nhập để truy cập trang.";
+  //     navigate("/login", { state: { toastMessage } });
+  //   }
+  // }, [isLoggedIn, navigate, location.pathname]);
 
   return (
     // wrapper
