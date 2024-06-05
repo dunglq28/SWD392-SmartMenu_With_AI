@@ -3,11 +3,11 @@
   padding: 20px;
   user-select: none;
   justify-content: center;
-  
+
   .UserTbl {
     border-radius: 7px;
-    border: 1px solid #ccc;
-    background-color: #b9d7d5;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    background-color: #fff;
     width: 100%;
     .SettingUser {
       width: 100%;
@@ -36,10 +36,9 @@
     .UserItem {
       transition: 0.3s;
       &:hover {
-        background-color: #a0c4c3;
+        background-color: #f9fafb;
         cursor: pointer;
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-          rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
       }
       &:active {
         transition: 0.1s;
@@ -57,11 +56,15 @@
       cursor: pointer;
       user-select: none;
       transition: 0.3s;
+      border-radius: 8px;
+      font-weight: bold;
+
       &:hover {
-        background-color: #b9d7d5;
+        background-color: #5d5fef;
+        color: #fff;
       }
       &:active {
-        background-color: #a0c4c3;
+        background-color: #4d4ff0;
       }
     }
   }

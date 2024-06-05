@@ -6,11 +6,11 @@ const resources = {
         //đây là namespace
       translation: {
         "dashboard": "Dashboard",
-        "user":"User",
-        "branch":"Branch",
-        "product":"Product",
+        "users":"Users",
+        "branchs":"Branchs",
+        "products":"Products",
         "menu":"Menu",
-        "setting": "Setting",
+        "settings": "Settings",
         "new product":"New Product",
         "new":"New Product",
         "newBranch":"New Branch"
@@ -19,11 +19,11 @@ const resources = {
     vi: {
       translation: {
         "dashboard": "Bảng Thống Kê",
-        "user":"Người Dùng",
-        "branch":"Chi Nhánh",
-        "product":"Sản Phẩm",
+        "users":"Người Dùng",
+        "branchs":"Chi Nhánh",
+        "products":"Sản Phẩm",
         "menu":"Thực Đơn",
-        "setting": "Cài Đặt",
+        "settings": "Cài Đặt",
         "new product":"Sản Phẩm Mới",
         "new":"Sản Phẩm Mới",
         "new branch":"Thương Hiệu Mới"

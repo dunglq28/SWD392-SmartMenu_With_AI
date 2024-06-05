@@ -3,10 +3,11 @@
   padding: 20px;
   user-select: none;
   justify-content: center;
+
   .ProductTbl {
     border-radius: 7px;
     border: 1px solid #ccc;
-    background-color: #b9d7d5;
+    background-color: #fff;
     .SettingProduct {
       width: 100%;
       height: 25px;
@@ -34,10 +35,9 @@
     .ProductItem {
       transition: 0.3s;
       &:hover {
-        background-color: #a0c4c3;
+        background-color: #f9fafb;
         cursor: pointer;
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-          rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
       }
       &:active {
         transition: 0.1s;
@@ -64,6 +64,8 @@
   .PopoverContent {
     width: 100%;
     .PopupButton {
+      font-weight: bold;
+      border-radius: 10px;
       width: 150px;
       height: 40px;
       justify-content: center;
@@ -72,10 +74,11 @@
       user-select: none;
       transition: 0.3s;
       &:hover {
-        background-color: #b9d7d5;
+        background-color: #5d5fef;
+        color: #fff;
       }
       &:active {
-        background-color: #a0c4c3;
+        background-color: #4d4ff0;
       }
     }
   }

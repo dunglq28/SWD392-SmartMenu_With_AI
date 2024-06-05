@@ -1,12 +1,12 @@
 .Sidebar {
-  background-color: #f4f7f6;
+  background-color: #fff;
   color: #2c2c2e;
   height: 100vh;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em,
     rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
     rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
   user-select: none;
-  transition: width 0.3s;
+  transition: 0.3s;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -35,7 +35,7 @@
     position: absolute;
     right: -9px;
     top: 34px;
-    background-color: #b9d7d5;
+    background-color: #5d5fef;
     color: #2c2c2e;
     border-radius: 10px;
     cursor: pointer;
@@ -58,28 +58,27 @@
       width: 90%;
       border-radius: 7px;
       transition: background-color 0.3s;
-      color: #2c2c2e;
       font-weight: 500;
 
       &:hover {
-        background-color: #b9d7d5;
+        background-color: #5d5fef;
+        color: #fff;
       }
       &:active {
-        background-color: #a0c4c3;
+        background-color: #5d5fef;
       }
 
       .MenuIcon {
         font-size: 25px;
         margin-right: 20px;
         margin-left: -4px;
-        color: #2c2c2e;
       }
 
       .MenuText {
         white-space: nowrap;
         font-size: 16px;
         overflow: hidden;
-        color: #2c2c2e;
+        // color: #2c2c2e;
       }
     }
   }

@@ -68,7 +68,7 @@ function Product() {
                 <Td>{product.categoryId}</Td>
                 <Td>{product.brandId}</Td>
                 <Td>
-                  <Flex className={style.SettingProduct}>
+                  <Flex className={style.SettingProduct} overflow="hidden">
                     <Popover>
                       <PopoverTrigger>
                         <Button className={style.SettingsIconBtn}>
