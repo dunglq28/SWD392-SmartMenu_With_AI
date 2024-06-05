@@ -100,12 +100,22 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Add CORS
+builder.Services.AddCors(p => p.AddPolicy("Cors", policy =>
+{
+    policy.WithOrigins("*")
+          .AllowAnyHeader()
+          .AllowAnyMethod();
+}));
+
 
 var app = builder.Build();
 
+app.UseCors("Cors");
+
 // Config Middleware
 app.UseMiddleware<AccountStatusMiddleware>();
-
+app.UseMiddleware<TokenValidationMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

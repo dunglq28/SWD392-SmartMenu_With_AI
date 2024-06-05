@@ -38,6 +38,9 @@ namespace SmartMenu.Controllers
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Brand.GetAll, Name = "get-brands-async")]
         public async Task<IActionResult> GetAllAsync(int pageNumber = 1 , int PageSize = 5)
+        [Authorize(Roles = UserRoles.Admin)]
+        [HttpGet(APIRoutes.Brand.GetAll, Name = "GetBrandsAsync")]
+        public async Task<IActionResult> GetAllAsync()
         {
             try
             {
