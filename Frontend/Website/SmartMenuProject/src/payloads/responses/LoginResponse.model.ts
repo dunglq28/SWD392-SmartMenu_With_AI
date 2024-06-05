@@ -1,3 +1,5 @@
+import { UserData } from "../../models/UserData.model";
+
 interface IDictionary<T> {
   [key: string]: T;
 }
