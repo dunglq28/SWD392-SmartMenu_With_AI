@@ -5,23 +5,14 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
-  Box,
   Button,
   Divider,
   Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  ModalBody,
-  ModalCloseButton,
-  ModalFooter,
-  ModalHeader,
   Popover,
   PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
-  Select,
   Table,
   TableCaption,
   TableContainer,
@@ -43,8 +34,7 @@ import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { themeColors } from "../../constants/GlobalStyles";
-import { IoMdCloseCircleOutline } from "react-icons/io";
-import ModalForm from "../../components/ModalForm/ModalForm";
+import ModalFormUser from "../../components/ModalFormUser/ModalFormUser";
 
 function User() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,6 +43,7 @@ function User() {
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
   const [totalPages, setTotalPages] = useState<number>(10);
+  const [status, setStatus] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
@@ -86,12 +77,25 @@ function User() {
       <Flex className={style.ButtonContainer}>
         <CustomButton
           styleAdd={style.Button}
-          text="Add New"
+          text="New Brach"
           icon={IoAddCircleOutline}
           color={themeColors.buttonColor}
+          title="Add New Brand"
           modalContent={
             <>
-             
+              <ModalFormUser />
+            </>
+          }
+        />
+        <CustomButton
+          styleAdd={style.Button}
+          text="New Store"
+          icon={IoAddCircleOutline}
+          color={themeColors.buttonColor}
+          title="Add New Store"
+          modalContent={
+            <>
+              <ModalFormUser />
             </>
           }
         />

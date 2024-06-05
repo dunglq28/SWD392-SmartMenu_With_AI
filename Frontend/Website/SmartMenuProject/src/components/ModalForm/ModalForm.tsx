@@ -15,16 +15,17 @@ interface ModalFormProps {
   isOpen: boolean;
   onClose: () => void;
   formBody: React.ReactNode;
+  title: string;
 }
 
-const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose, formBody }) => {
+const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose, formBody, title }) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay onClick={onClose} />
       <ModalContent borderRadius="23px" maxW="40%">
         <ModalHeader className={styles["modal-header"]}>
-          Add New User
+          {title}
           <Button
             bg="none"
             p={0}

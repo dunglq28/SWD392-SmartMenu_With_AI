@@ -73,9 +73,16 @@
 
   .ButtonContainer {
     align-self: flex-end;
+
+    .Button {
+      margin-bottom: 10px;
+    }
+
+    .Button:nth-child(1) {
+      margin-bottom: 10px;
+      margin-left: 20px;
+    }
   }
 
-  .Button {
-    margin-bottom: 10px;
-  }
+  
 }
