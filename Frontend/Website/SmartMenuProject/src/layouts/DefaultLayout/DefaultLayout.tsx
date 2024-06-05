@@ -24,7 +24,6 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
   }, [isLoggedIn, navigate, location.pathname]);
 
 
-
   return (
     // wrapper
     <Flex className={style.Wrapper}>

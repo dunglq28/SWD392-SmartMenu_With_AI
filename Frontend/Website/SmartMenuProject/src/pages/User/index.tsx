@@ -5,15 +5,23 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
+  Box,
   Button,
   Divider,
   Flex,
+  FormControl,
+  FormLabel,
+  Input,
+  ModalBody,
+  ModalCloseButton,
+  ModalFooter,
+  ModalHeader,
   Popover,
   PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
-  Portal,
+  Select,
   Table,
   TableCaption,
   TableContainer,
@@ -31,12 +39,20 @@ import { RiSettings3Line } from "react-icons/ri";
 import { userList } from "../../mock/data";
 import React, { useCallback, useEffect, useState } from "react";
 import { getUsers } from "../../services/UserService";
+import NavigationDot from "../../components/NavigationDot/NavigationDot";
+import CustomButton from "../../components/CustomButton/CustomButton";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { themeColors } from "../../constants/GlobalStyles";
+import { IoMdCloseCircleOutline } from "react-icons/io";
+import ModalForm from "../../components/ModalForm/ModalForm";
 
 function User() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+  const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
+  const [totalPages, setTotalPages] = useState<number>(10);
 
   const fetchData = useCallback(async () => {
     try {
@@ -46,12 +62,40 @@ function User() {
     } catch (err) {}
   }, [currentPage, rowsPerPage]);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [fetchData]);
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      setCurrentPage(page);
+    },
+    [setCurrentPage]
+  );
+
+  const handleRowsPerPageChange = useCallback(
+    (newRowsPerPage: number) => {
+      setCurrentPage(1);
+      setRowsPerPage(newRowsPerPage);
+    },
+    [setCurrentPage, setRowsPerPage]
+  );
 
   return (
-    <Flex className={style.User}>
+    <Flex className={style.User} flexDirection="column">
+      <Flex className={style.ButtonContainer}>
+        <CustomButton
+          styleAdd={style.Button}
+          text="Add New"
+          icon={IoAddCircleOutline}
+          color={themeColors.buttonColor}
+          modalContent={
+            <>
+             
+            </>
+          }
+        />
+      </Flex>
       <TableContainer className={style.UserTbl}>
         <Table>
           <TableCaption>Bảng quản lý user</TableCaption>
@@ -102,13 +146,14 @@ function User() {
             ))}
           </Tbody>
           {/* <Tfoot>
-            <Tr>
-              <Th></Th>
-              <Th></Th>
-            </Tr>
-          </Tfoot> */}
+                <Tr>
+                  <Th></Th>
+                  <Th></Th>
+                </Tr>
+              </Tfoot> */}
         </Table>
       </TableContainer>
+
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
@@ -135,6 +180,13 @@ function User() {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
+      <NavigationDot
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+        rowsPerPageOptions={rowsPerPageOption}
+        onRowsPerPageChange={handleRowsPerPageChange}
+      />
     </Flex>
   );
 }
