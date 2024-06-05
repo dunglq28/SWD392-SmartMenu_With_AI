@@ -79,6 +79,7 @@ namespace SmartMenu.Controllers
                 });
             }
         }
+
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.GroupAttribute.Update, Name = "UpdateGroupAttributeAsync")]
         public async Task<IActionResult> UpdateAsync(int id,string name)
