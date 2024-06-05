@@ -15,13 +15,16 @@ interface RouteItem {
 
 export const publicRoutes: RouteItem[] = [
   { path: "/", component: Login, layout: null },
+  { path: "/login", component: Login, layout: null },
   { path: "/dashboard", component: Dashboard },
-  { path: "/user", component: User },
+  { path: "/users", component: User },
   { path: "/branch", component: Branch },
-  { path: "/product", component: Products },
+  { path: "/products", component: Products },
   { path: "/menu", component: Menu },
   { path: "/setting", component: Settings },
   { path: "/new", component: New },
 ];
 
-export const privateRoutes = [];
+export const privateRoutes: RouteItem[] = [
+
+];

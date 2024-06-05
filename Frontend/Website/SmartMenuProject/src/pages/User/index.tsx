@@ -29,11 +29,26 @@ import style from "./User.module.scss";
 
 import { RiSettings3Line } from "react-icons/ri";
 import { userList } from "../../mock/data";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { getUsers } from "../../services/UserService";
 
 function User() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+
+  const fetchData = useCallback(async () => {
+    try {
+      let result;
+      result = await getUsers();
+      console.log(result);
+    } catch (err) {}
+  }, [currentPage, rowsPerPage]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
     <Flex className={style.User}>

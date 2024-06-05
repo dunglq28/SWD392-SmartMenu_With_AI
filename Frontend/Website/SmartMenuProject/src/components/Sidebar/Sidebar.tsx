@@ -11,7 +11,7 @@ import React, { useState, useEffect } from "react";
 import { CgAddR } from "react-icons/cg";
 import { MdLogout } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
-import { Link as ReactRouterLink, useLocation } from "react-router-dom";
+import { Link as ReactRouterLink, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/Logo.jpeg";
 import { AiOutlineProduct } from "react-icons/ai";
 import { GoHome } from "react-icons/go";
@@ -25,6 +25,7 @@ import { useTranslation } from "react-i18next";
 function Sidebar() {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(true);
   const [item, setItem] = useState("");
 
@@ -36,20 +37,20 @@ function Sidebar() {
 
   const menuItems = [
     { icon: GoHome, label: t("dashboard"), to: "/dashboard" },
-    { icon: AiOutlineUser, label: t("user"), to: "/user" },
+    { icon: AiOutlineUser, label: t("user"), to: "/users" },
     {
       icon: IoGitBranchOutline,
       label: t("branch"),
       divider: true,
-      to: "/branch",
+      to: "/branchs",
     },
-    { icon: AiOutlineProduct, label: t("product"), to: "/product" },
+    { icon: AiOutlineProduct, label: t("product"), to: "/products" },
     { icon: MdListAlt, label: t("menu"), to: "/menu" },
     {
       icon: IoSettingsOutline,
       label: t("setting"),
       divider: true,
-      to: "/setting",
+      to: "/settings",
     },
     { icon: CgAddR, label: t("new product"), to: "/new" },
   ];
@@ -62,6 +63,12 @@ function Sidebar() {
       setItem(currentItem.label);
     }
   }, [location.pathname, menuItems]);
+
+  function logoutHandler() {
+    localStorage.removeItem("AccessToken");
+    localStorage.removeItem("RefreshToken");
+    navigate("/login");
+  }
 
   return (
     <Flex
@@ -109,7 +116,11 @@ function Sidebar() {
 
       <Flex className={style.Profile}>
         <MdLogout className={style.LogoutIcon} />
-        {isExpanded && <Text className={style.LogoutText}>Logout</Text>}
+        {isExpanded && (
+          <Text className={style.LogoutText} onClick={logoutHandler}>
+            Logout
+          </Text>
+        )}
       </Flex>
     </Flex>
   );

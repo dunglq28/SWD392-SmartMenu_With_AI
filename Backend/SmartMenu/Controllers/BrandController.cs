@@ -33,7 +33,7 @@ namespace SmartMenu.Controllers
             _imageFileValidator = new ImageFileValidator();
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Brand.GetAll, Name = "GetBrandsAsync")]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -60,7 +60,7 @@ namespace SmartMenu.Controllers
         }
        
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPost(APIRoutes.Brand.Add, Name = "AddBrandAsync")]
+        [HttpPost(APIRoutes.Brand.Add, Name = "add-brand-async")]
         public async Task<IActionResult> AddAsync(AddBrandRequest reqObj)
         {
             try
@@ -105,7 +105,7 @@ namespace SmartMenu.Controllers
                 if (reqObj.image != null)
                 {
                     // Upload the image to S3 and get the URL
-                    var result = await _s3Service.UploadItemAsync(reqObj.image);
+                    var result = await _s3Service.UploadItemAsync(reqObj.image, "brands");
                     imageName = reqObj.image.FileName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName);
                 }
@@ -155,7 +155,7 @@ namespace SmartMenu.Controllers
                 if (image != null)
                 {
                     // Upload the image to S3 and get the URL
-                    var result = await _s3Service.UploadItemAsync(image);
+                    var result = await _s3Service.UploadItemAsync(image,"brands");
                     imageName = image.FileName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName);
                 }

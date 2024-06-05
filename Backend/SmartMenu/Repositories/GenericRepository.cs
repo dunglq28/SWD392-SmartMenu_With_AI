@@ -56,7 +56,7 @@ namespace SmartMenu.Repositories
             var entity = await _dbSet.FindAsync(id);
             if (entity == null)
             {
-                return default(TDto);
+                return default(TDto)!;
             }
 
             _mapper.Map(dto, entity);
