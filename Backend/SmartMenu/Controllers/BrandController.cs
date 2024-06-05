@@ -13,7 +13,9 @@ using SmartMenu.Payloads.Requests.BrandRequest;
 using SmartMenu.Payloads.Responses;
 using SmartMenu.Repositories;
 using SmartMenu.Services;
+using SmartMenu.Utils;
 using SmartMenu.Validations;
+using System.Drawing.Printing;
 
 namespace SmartMenu.Controllers
 {
@@ -35,15 +37,17 @@ namespace SmartMenu.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Brand.GetAll, Name = "get-brands-async")]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync(int pageNumber = 1 , int PageSize = 5)
         {
             try
             {
+                var allBrands = await _unitOfWork.BrandRepository.GetAllAsync();
+                var paging = PaginationHelper.PaginationAsync(pageNumber, allBrands, PageSize);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Thành công!",
-                    Data = await _unitOfWork.BrandRepository.GetAllAsync(),
+                    Data = paging,
                     IsSuccess = true
                 });
             }
@@ -249,13 +253,13 @@ namespace SmartMenu.Controllers
 
         //[Authorize(Roles = UserRoles.Admin+","+UserRoles.BrandManager)]
         [HttpPut(APIRoutes.Brand.GetByUserID, Name = "GetByUserIDAsync")]
-        public async Task<IActionResult> GetByUserID(int userID)
+        public async Task<IActionResult> GetByUserID(int userID, int pageNumber = 1, int PageSize = 5)
         {
             try
             {
-                var brand = await _unitOfWork.BrandRepository.GetByUserIDAsync(userID);
+                var brands = await _unitOfWork.BrandRepository.GetByUserIDAsync(userID);
 
-                if (brand == null || !brand.Any())
+                if (brands == null || !brands.Any())
                 {
                     return NotFound(new BaseResponse
                     {
@@ -266,11 +270,12 @@ namespace SmartMenu.Controllers
                     });
                 }
 
+                var paging = PaginationHelper.PaginationAsync(pageNumber, brands, PageSize);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Thành công!",
-                    Data = brand,
+                    Data = paging,
                     IsSuccess = true
                 });
             }
