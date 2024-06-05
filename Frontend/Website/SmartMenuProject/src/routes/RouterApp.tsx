@@ -18,10 +18,10 @@ export const publicRoutes: RouteItem[] = [
   { path: "/login", component: Login, layout: null },
   { path: "/dashboard", component: Dashboard },
   { path: "/users", component: User },
-  { path: "/branch", component: Branch },
+  { path: "/branchs", component: Branch },
   { path: "/products", component: Products },
   { path: "/menu", component: Menu },
-  { path: "/setting", component: Settings },
+  { path: "/settings", component: Settings },
   { path: "/new", component: New },
 ];
 

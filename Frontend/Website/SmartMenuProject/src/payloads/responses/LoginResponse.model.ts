@@ -4,7 +4,7 @@ interface IDictionary<T> {
   [key: string]: T;
 }
 
-interface LoginResponse {
+export interface LoginResponse {
   data: UserData;
   errors: IDictionary<string[]>;
   isSuccess: boolean;
