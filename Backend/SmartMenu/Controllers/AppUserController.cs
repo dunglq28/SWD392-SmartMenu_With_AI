@@ -138,7 +138,7 @@ namespace SmartMenu.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.AppUser.GetAll, Name = "GetUsersAsync")]
         public async Task<IActionResult> GetAllAsync([FromQuery]  int currIdLoginID, string searchKey, int pageNumber = 1, int PageSize =5)
         {
