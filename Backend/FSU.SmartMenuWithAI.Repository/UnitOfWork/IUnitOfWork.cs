@@ -12,5 +12,6 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         public GenericRepository<Category> CategoryRepository { get; }
         public AccountRepository AccountRepository { get; }
         public RefreshTokenRepository RefreshTokenRepository { get; }
+        public BrandRepository BrandRepository { get; }
     }
 }
