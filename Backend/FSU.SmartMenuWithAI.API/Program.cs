@@ -78,9 +78,11 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAppUserRepository,AppUserRepository>();
+builder.Services.AddScoped<IBrandRepository,  BrandRepository>();
 // Register servicies
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAppUserService, AppUserService>();
+builder.Services.AddScoped<IBrandService, BrandService>();
 
 
 //Config Jwt Token

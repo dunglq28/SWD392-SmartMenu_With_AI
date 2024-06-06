@@ -16,7 +16,7 @@ namespace SmartMenu.Services
         Task<GetObjectResponse?> GetItemAsync(Guid id, string directoryPath);
         Task<PutObjectResponse> UploadItemAsync(IFormFile file, string folderRoot);
         Task<DeleteObjectResponse> DeleteItemAsync(Guid id, string directoryPath);
-        string GetPreSignedURL(string fileName);
+        string GetPreSignedURL(string fileName, string folderRoot);
     }
 
     public class S3Service : IS3Service
@@ -82,12 +82,11 @@ namespace SmartMenu.Services
             throw new NotImplementedException();
         }
 
-        public string GetPreSignedURL(string fileName)
+        public string GetPreSignedURL(string fileName, string folderRoot)
         {
-            var preIamge = "https://" + "smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/";
+            var preIamge = "https://" + "smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/"+folderRoot+"/";
             string url = preIamge + fileName;
             return url;
-
         }
 
         public async Task<PutObjectResponse> UploadItemAsync(IFormFile file, string folderRoot)

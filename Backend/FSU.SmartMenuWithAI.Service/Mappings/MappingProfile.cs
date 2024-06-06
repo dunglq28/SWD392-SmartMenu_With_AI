@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
+using FSU.SmartMenuWithAI.BussinessObject.DTOs.Brand;
 using FSU.SmartMenuWithAI.BussinessObject.Entitites;
 using System.Security.Claims;
 
@@ -11,7 +12,7 @@ namespace SmartMenu.Mappings
         {
             // Mapping classes
             CreateMap<AppUser, AppUserDTO>().ReverseMap();
-
+            CreateMap<Brand, BrandDTO>().ReverseMap();
         }
     }
 }
