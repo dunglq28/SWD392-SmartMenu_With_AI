@@ -5,6 +5,7 @@ import {
   Icon,
   Divider,
   Link as ChakraLink,
+  useDisclosure,
 } from "@chakra-ui/react";
 import style from "./Sidebar.module.scss";
 import React, { useState, useEffect } from "react";
@@ -25,6 +26,10 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { MdListAlt } from "react-icons/md";
 
 import { useTranslation } from "react-i18next";
+import { themeColors } from "../../constants/GlobalStyles";
+import CustomButton from "../CustomButton/CustomButton";
+import ModalFormUser from "../ModalFormUser/ModalFormUser";
+import ModalForm from "../ModalForm/ModalForm";
 
 function Sidebar() {
   const { t } = useTranslation();
@@ -32,6 +37,7 @@ function Sidebar() {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(true);
   const [item, setItem] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const changeItem = (label: string) => {
     setItem(label);
@@ -57,7 +63,11 @@ function Sidebar() {
       to: "/settings",
     },
     { icon: CgAddR, label: t("new product"), to: "/new" },
-    { icon: CgAddR, label: t("new branch"), to: "/newBranch" },
+    {
+      icon: CgAddR,
+      label: t("new branch"),
+      onclick: onOpen,
+    },
   ];
 
   useEffect(() => {
@@ -100,11 +110,15 @@ function Sidebar() {
         {menuItems.map((menuItem, index) => (
           <React.Fragment key={index}>
             <ChakraLink
-              as={ReactRouterLink}
-              to={menuItem.to}
+              as={menuItem.to ? ReactRouterLink : "button"}
+              {...(menuItem.to ? { to: menuItem.to } : {})}
               className={style.MenuItem}
               style={{ textDecoration: "none" }}
-              onClick={() => changeItem(menuItem.label)}
+              onClick={
+                menuItem.to
+                  ? () => changeItem(menuItem.label)
+                  : menuItem.onclick
+              }
               backgroundColor={item === menuItem.label ? "#5D5FEF" : "#fff"}
               color={item === menuItem.label ? "#fff" : "black"}
             >
@@ -124,6 +138,13 @@ function Sidebar() {
         <MdLogout className={style.LogoutIcon} />
         {isExpanded && <Text className={style.LogoutText}>Logout</Text>}
       </Flex>
+
+      <ModalForm
+        formBody={<ModalFormUser />}
+        onClose={onClose}
+        isOpen={isOpen}
+        title={t("Add New Branch")}
+      />
     </Flex>
   );
 }
