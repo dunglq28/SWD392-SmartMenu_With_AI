@@ -22,7 +22,7 @@ public partial class SmartMenuContext : DbContext
 
     public virtual DbSet<Brand> Brands { get; set; }
 
-    public virtual DbSet<Category> Categories { get; set; }
+    public virtual DbSet<Menu> Categories { get; set; }
 
     public virtual DbSet<CustomerSegment> CustomerSegments { get; set; }
 
@@ -135,7 +135,7 @@ public partial class SmartMenuContext : DbContext
                 .HasConstraintName("FK__Brand__UserID__4222D4EF");
         });
 
-        modelBuilder.Entity<Category>(entity =>
+        modelBuilder.Entity<Menu>(entity =>
         {
             entity.HasKey(e => e.CategoryId).HasName("PK__Category__19093A2B1F0791B3");
 

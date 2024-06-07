@@ -5,7 +5,7 @@ namespace FSU.SmartMenuWithAI.Repository.Interfaces
 {
     public interface IAppUserRepository
     {
-        Task<IEnumerable<AppUser>> Get(
+        IEnumerable<AppUser> Get(
             int currentIDLogin,
             Expression<Func<AppUser, bool>> filter = null!,
             Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = null!,

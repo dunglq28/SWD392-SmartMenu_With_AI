@@ -27,7 +27,7 @@ public partial class Product
 
     public int BrandId { get; set; }
 
-    public virtual Category Category { get; set; } = null!;
+    public virtual Menu Category { get; set; } = null!;
 
     public virtual ICollection<ProductMenu> ProductMenus { get; set; } = new List<ProductMenu>();
 }

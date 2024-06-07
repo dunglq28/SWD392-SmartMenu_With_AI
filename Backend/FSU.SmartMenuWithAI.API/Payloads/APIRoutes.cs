@@ -90,5 +90,17 @@
 
             public const string Delete = Base + "/attributes/delete";
         }
+        public static class Product
+        {
+            public const string GetAll = Base + "/products/";
+
+            public const string Add = Base + "/products/";
+
+            public const string Update = Base + "/products/";
+
+            public const string Delete = Base + "/products/";
+
+            public const string GetByUserID = Base + "/products/get-by-userid";
+        }
     }
 }

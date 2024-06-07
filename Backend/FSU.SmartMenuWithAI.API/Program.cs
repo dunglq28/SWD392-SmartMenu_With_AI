@@ -3,7 +3,6 @@ using Amazon;
 using Microsoft.OpenApi.Models;
 using SmartMenu.Services;
 using AutoMapper;
-using SmartMenu.Mappings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using FSU.SmartMenuWithAI.API.Middlewares;
@@ -16,6 +15,7 @@ using FSU.SmartMenuWithAI.BussinessObject.Entitites;
 using FSU.SmartMenuWithAI.Repository.Interfaces;
 using FSU.SmartMenuWithAI.Repository.Repositories;
 using FSU.SmartMenuWithAI.API.Payloads.Responses;
+using FSU.SmartMenuWithAI.BussinessObject.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,6 +81,9 @@ builder.Services.AddScoped<IAppUserRepository,AppUserRepository>();
 // Register servicies
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAppUserService, AppUserService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IStoreService, StoreService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 
 //Config Jwt Token
