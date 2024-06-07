@@ -23,9 +23,7 @@ export const publicRoutes: RouteItem[] = [
   { path: "/menu", component: Menu },
   { path: "/settings", component: Settings },
   { path: "/new", component: New },
-  { path: "/newBranch", component: New },
+  // { path: "/newBranch", component: New },
 ];
 
-export const privateRoutes: RouteItem[] = [
-
-];
+export const privateRoutes: RouteItem[] = [];

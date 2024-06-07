@@ -29,7 +29,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
       {/* container */}
       <Flex w="100%">
         <Sidebar />
-        <Flex className={style.Container}>
+        <Flex className={style.Container} overflow="hidden">
           <Header />
           <Flex className={style.Children}>{children}</Flex>
           <Footer />

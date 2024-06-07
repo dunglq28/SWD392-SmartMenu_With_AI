@@ -8,10 +8,9 @@
     width: 100%;
     flex-direction: column;
     flex: 1;
-    flex-direction: column;
+    // overflow: hidden;
     .Children {
       padding-top: 10px;
-      overflow: auto;
     }
   }
 }

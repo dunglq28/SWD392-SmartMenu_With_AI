@@ -1,4 +1,12 @@
-import { Text, Flex, Button, useDisclosure, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
+import {
+  Text,
+  Flex,
+  Button,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+} from "@chakra-ui/react";
 import React from "react";
 import { IconType } from "react-icons";
 import ModalForm from "../ModalForm/ModalForm";
@@ -18,7 +26,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   icon,
   color,
   modalContent,
-  title
+  title,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -42,7 +50,12 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         </Button>
       </Flex>
 
-      <ModalForm formBody={modalContent} onClose={onClose} isOpen={isOpen} title={title}/>
+      <ModalForm
+        formBody={modalContent}
+        onClose={onClose}
+        isOpen={isOpen}
+        title={title}
+      />
     </>
   );
 };
