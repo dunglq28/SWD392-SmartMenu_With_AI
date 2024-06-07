@@ -12,6 +12,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         private AppUserRepository _appUserRepo;
         private AccountRepository _accountRepo;
         private RefreshTokenRepository _refreshTokenRepo;
+        public BrandRepository _brandRepo;
         private readonly IConfiguration _configuration;
 
         public UnitOfWork(SmartMenuContext context, IConfiguration configuration)
@@ -95,6 +96,17 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
                     this._refreshTokenRepo = new RefreshTokenRepository(_context, _configuration);
                 }
                 return _refreshTokenRepo;
+            }
+        }
+        BrandRepository IUnitOfWork.BrandRepository
+        {
+            get
+            {
+                if (_brandRepo == null)
+                {
+                    this._brandRepo = new BrandRepository(_context, _configuration);
+                }
+                return _brandRepo;
             }
         }
     }
