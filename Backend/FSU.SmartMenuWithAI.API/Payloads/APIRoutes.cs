@@ -100,7 +100,7 @@
 
             public const string Delete = Base + "/products/";
 
-            public const string GetByUserID = Base + "/products/get-by-userid";
+            public const string GetByID = Base + "/products/get-by-id";
         }
     }
 }

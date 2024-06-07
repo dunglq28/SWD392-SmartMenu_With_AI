@@ -17,6 +17,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         private GenericRepository<Store> _storeRepo;
         private GenericRepository<Menu> _menuRepo;
         private GenericRepository<Product> _productRepo;
+        private BrandRepository _brandRepo;
 
         public UnitOfWork(SmartMenuContext context, IConfiguration configuration)
         {
@@ -131,6 +132,17 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
                     this._refreshTokenRepo = new RefreshTokenRepository(_context, _configuration);
                 }
                 return _refreshTokenRepo;
+            }
+        }
+        BrandRepository IUnitOfWork.BrandRepository
+        {
+            get
+            {
+                if (_brandRepo == null)
+                {
+                    this._brandRepo = new BrandRepository(_context, _configuration);
+                }
+                return _brandRepo;
             }
         }
     }

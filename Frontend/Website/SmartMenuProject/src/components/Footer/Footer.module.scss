@@ -4,7 +4,7 @@
   padding: 20px;
   flex-direction: column;
   row-gap: 20px;
-  background-color: #b9d7d5;
+  background-color: #f9fafb;
   user-select: none;
   .LeftFooter {
     width: 50%;
@@ -40,9 +40,10 @@
     .InputRightFooter {
       width: 50%;
       border: 1px solid black;
+      background-color: #fff;
     }
     .ContactBtn {
-      background-color: #b9d7d5;
+      background-color: #fff;
       border: 1px solid black;
       transition: transform 0.3s; // Thêm hiệu ứng chuyển động cho transform
       &:hover {
@@ -52,7 +53,7 @@
       }
       &:active {
         transition: 0.1s;
-        background-color: #a0c4c3;
+        background-color: #fff;
         box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
           rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
         transform: translateY(1px); // Di chuyển nút xuống 2px khi active

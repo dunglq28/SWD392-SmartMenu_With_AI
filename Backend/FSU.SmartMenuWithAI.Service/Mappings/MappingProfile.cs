@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
+using FSU.SmartMenuWithAI.BussinessObject.DTOs.Brand;
 using FSU.SmartMenuWithAI.BussinessObject.DTOs.Category;
 using FSU.SmartMenuWithAI.BussinessObject.DTOs.Menu;
 using FSU.SmartMenuWithAI.BussinessObject.DTOs.Product;
@@ -18,6 +19,7 @@ namespace FSU.SmartMenuWithAI.BussinessObject.Mappings
             CreateMap<Store, StoreDTO>().ReverseMap();
             CreateMap<Menu, MenuDTO>().ReverseMap();
             CreateMap<Product, ProductDTO>().ReverseMap();
+            CreateMap<Brand, BrandDTO>().ReverseMap();
         }
     }
 }

@@ -41,18 +41,18 @@ function Sidebar() {
 
   const menuItems = [
     { icon: GoHome, label: t("dashboard"), to: "/dashboard" },
-    { icon: AiOutlineUser, label: t("user"), to: "/users" },
+    { icon: AiOutlineUser, label: t("users"), to: "/users" },
     {
       icon: IoGitBranchOutline,
-      label: t("branch"),
+      label: t("branchs"),
       divider: true,
       to: "/branchs",
     },
-    { icon: AiOutlineProduct, label: t("product"), to: "/products" },
+    { icon: AiOutlineProduct, label: t("products"), to: "/products" },
     { icon: MdListAlt, label: t("menu"), to: "/menu" },
     {
       icon: IoSettingsOutline,
-      label: t("setting"),
+      label: t("settings"),
       divider: true,
       to: "/settings",
     },
@@ -88,7 +88,10 @@ function Sidebar() {
         <IoIosArrowForward
           className={style.ArrowSidebar}
           onClick={toggleSidebar}
-          style={{ transform: `rotate(${isExpanded ? 180 : 0}deg)` }}
+          style={{
+            transform: `rotate(${isExpanded ? 180 : 0}deg)`,
+            color: "#fff",
+          }}
         />
       </Flex>
 
@@ -101,17 +104,15 @@ function Sidebar() {
               className={style.MenuItem}
               style={{ textDecoration: "none" }}
               onClick={() => changeItem(menuItem.label)}
-              border={
-                item === menuItem.label
-                  ? "1px solid #19d1c4"
-                  : "1px solid #F4F7F6"
-              }
-              backgroundColor={item === menuItem.label ? "#b9d7d5" : "#f4f7f6"}
+              backgroundColor={item === menuItem.label ? "#5D5FEF" : "#fff"}
+              color={item === menuItem.label ? "#fff" : "black"}
             >
-              <Icon as={menuItem.icon} className={style.MenuIcon} />
-              {isExpanded && (
-                <Text className={style.MenuText}>{menuItem.label}</Text>
-              )}
+              <Flex>
+                <Icon as={menuItem.icon} className={style.MenuIcon} />
+                {isExpanded && (
+                  <Text className={style.MenuText}>{menuItem.label}</Text>
+                )}
+              </Flex>
             </ChakraLink>
             {menuItem.divider && <Divider />}
           </React.Fragment>
