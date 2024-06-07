@@ -7,7 +7,7 @@ export const login = async (
   password: string
 ): Promise<LoginResponse> => {
   const res = await axiosLogin.post("authentication/login", {
-    username: username,
+    userName: username,
     password: password,
   });
   const apiResponse = res.data as LoginResponse;
@@ -23,9 +23,9 @@ export const refreshToken = async (): Promise<string | undefined> => {
       return undefined;
     }
 
-    const res = await axiosLogin.post("authentication/refreshtoken", {
-      AccessToken: accessToken,
-      RefreshToken: refreshToken,
+    const res = await axiosLogin.post("authentication/refresh-token", {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     });
 
     if (res.status === 200) {

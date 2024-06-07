@@ -5,14 +5,21 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
+  Box,
   Button,
   Divider,
   Flex,
+  Input,
+  ModalBody,
   Popover,
   PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Radio,
+  RadioGroup,
+  Select,
+  Stack,
   Table,
   TableCaption,
   TableContainer,
@@ -75,11 +82,11 @@ function User() {
   return (
     <Flex className={style.User} flexDirection="column">
       <Flex className={style.ButtonContainer}>
-        <CustomButton
+      <CustomButton
           styleAdd={style.Button}
-          text="New Brach"
+          text="New Brand"
           icon={IoAddCircleOutline}
-          color={themeColors.buttonColor}
+          color={themeColors.primaryButton}
           title="Add New Brand"
           modalContent={
             <>
@@ -91,7 +98,7 @@ function User() {
           styleAdd={style.Button}
           text="New Store"
           icon={IoAddCircleOutline}
-          color={themeColors.buttonColor}
+          color={themeColors.primaryButton}
           title="Add New Store"
           modalContent={
             <>

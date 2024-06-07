@@ -24,7 +24,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose, formBody, title 
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay onClick={onClose} />
       <ModalContent borderRadius="23px" maxW="40%">
-        <ModalHeader className={styles["modal-header"]}>
+        <ModalHeader className={styles["modal-header"]} backgroundColor={themeColors.primaryButton}>
           {title}
           <Button
             bg="none"
