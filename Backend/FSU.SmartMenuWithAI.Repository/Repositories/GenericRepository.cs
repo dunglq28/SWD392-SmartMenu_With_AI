@@ -1,9 +1,9 @@
 ﻿
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
 using Microsoft.EntityFrameworkCore;
 using FSU.SmartMenuWithAI.Repository.Interfaces;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using FSU.SmartMenuWithAI.Repository.Entities;
 
 namespace FSU.SmartMenuWithAI.Repository.Repositories
 {

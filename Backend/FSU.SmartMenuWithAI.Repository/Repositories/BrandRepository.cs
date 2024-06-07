@@ -1,5 +1,5 @@
-﻿using FSU.SmartMenuWithAI.BussinessObject.DTOs.Brand;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
+﻿
+using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

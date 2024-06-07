@@ -1,5 +1,4 @@
-﻿using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Brand;
+﻿using FSU.SmartMenuWithAI.Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +11,8 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
     {
         Task<BrandDTO> GetByID(int id);
         Task<BrandDTO> GetByNameAsync(string brandName);
-        Task<BrandDTO> Insert(string brandName, int userID, string imgUrl, string imgName);
+        Task<bool> Insert(string brandName, int userID, string imgUrl, string imgName);
         Task<bool> Delete(int id);
-        Task<BrandDTO> Update(int brandID, string brandName, string imgUrl, string imgName);
+        Task<bool> Update(int brandID, string brandName, string imgUrl, string imgName);
     }
 }

@@ -1,5 +1,5 @@
-﻿using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
+﻿
+using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +21,7 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<AppUser>> Get(
+        public  IEnumerable<AppUser> Get(
             int currentIDLogin,
             Expression<Func<AppUser, bool>> filter = null!,
             Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = null!,

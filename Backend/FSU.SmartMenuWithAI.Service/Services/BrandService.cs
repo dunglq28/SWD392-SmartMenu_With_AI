@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
-using FSU.SmartMenuWithAI.BussinessObject.Common.Enums;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Brand;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
-using FSU.SmartMenuWithAI.BussinessObject.Utils;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
+using FSU.SmartMenuWithAI.Repository.Entities;
+using FSU.SmartMenuWithAI.Service.Common.Enums;
 using FSU.SmartMenuWithAI.Service.ISerivice;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FSU.SmartMenuWithAI.Service.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FSU.SmartMenuWithAI.Service.Services
 {
@@ -50,52 +44,66 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return _mapper?.Map<BrandDTO>(entity)!;
         }
 
-        public async Task<BrandDTO> Insert(string brandName, int userID, string imgUrl, string imgName)
+        public async Task<bool> Insert(string brandName, int userID, string imgUrl, string imgName)
         {
-            var brand = new Brand();
-            brand.BrandCode = Guid.NewGuid().ToString();
-            brand.BrandName = brandName;
-            brand.UserId = userID;
-            brand.CreateDate = DateOnly.FromDateTime(DateTime.Now);
-            brand.Status = 1;
-            brand.ImageName = imgName;
-            brand.ImageUrl = imgUrl;
-
-            await _unitOfWork.BrandRepository.Insert(brand);
-            if (await _unitOfWork.SaveAsync() < 1)
+            try
             {
-                return null!;
+
+                var brand = new Brand();
+                brand.BrandCode = Guid.NewGuid().ToString();
+                brand.BrandName = brandName;
+                brand.UserId = userID;
+                brand.CreateDate = DateOnly.FromDateTime(DateTime.Now);
+                brand.Status = 1;
+                brand.ImageName = imgName;
+                brand.ImageUrl = imgUrl;
+
+                await _unitOfWork.BrandRepository.Insert(brand);
+                var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+                return result;
             }
-            return _mapper.Map<BrandDTO>(brand);
+            catch (DbUpdateException ex)
+            {
+                // Kiểm tra nếu lỗi là do vi phạm ràng buộc unique
+                return false;
+
+            }
         }
-        public async Task<BrandDTO> Update(int id, string brandName, string imgUrl, string imgName)
+        public async Task<bool> Update(int id, string brandName, string imgUrl, string imgName)
         {
-            var brandToUpdate = await _unitOfWork.BrandRepository.GetByID(id);
-            if (brandToUpdate == null)
+            try
             {
-                return null!;
-            }
+                var brandToUpdate = await _unitOfWork.BrandRepository.GetByID(id);
+                if (brandToUpdate == null)
+                {
+                    return false!;
+                }
 
-            if (!string.IsNullOrEmpty(brandName))
+                if (!string.IsNullOrEmpty(brandName))
+                {
+                    brandToUpdate.BrandName = brandName;
+                }
+
+                if (!string.IsNullOrEmpty(imgUrl))
+                {
+                    brandToUpdate.ImageUrl = imgUrl;
+                }
+
+                if (!string.IsNullOrEmpty(imgName))
+                {
+                    brandToUpdate.ImageName = imgName;
+                }
+
+                _unitOfWork.BrandRepository.Update(brandToUpdate);
+                var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+                return result;
+            }
+            catch (DbUpdateException ex)
             {
-                brandToUpdate.BrandName = brandName;
+                // Kiểm tra nếu lỗi là do vi phạm ràng buộc unique
+                throw new Exception($"Trùng tên thương hiệu: {ex.Message}", ex);
+
             }
-
-            if (!string.IsNullOrEmpty(imgUrl))
-            {
-                brandToUpdate.ImageUrl = imgUrl;
-            }
-
-            if (!string.IsNullOrEmpty(imgName))
-            {
-                brandToUpdate.ImageName = imgName;
-            }
-
-            _unitOfWork.BrandRepository.Update(brandToUpdate);
-            await _unitOfWork.SaveAsync();
-
-            var mapDTO = _mapper.Map<BrandDTO>(brandToUpdate);
-            return mapDTO;
         }
 
     }

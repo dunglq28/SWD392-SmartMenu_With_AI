@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Brand;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
-using System.Security.Claims;
+using FSU.SmartMenuWithAI.Repository.Entities;
+using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.Token;
 
-namespace SmartMenu.Mappings
+
+namespace FSU.SmartMenuWithAI.API.Mappings
 {
     public class MappingProfile : Profile
     {
@@ -12,6 +12,11 @@ namespace SmartMenu.Mappings
         {
             // Mapping classes
             CreateMap<AppUser, AppUserDTO>().ReverseMap();
+            CreateMap<Token, TokenDto>().ReverseMap();
+            CreateMap<Menu, CategoryDTO>().ReverseMap();
+            CreateMap<Store, StoreDTO>().ReverseMap();
+            CreateMap<Menu, MenuDTO>().ReverseMap();
+            CreateMap<Product, ProductDTO>().ReverseMap();
             CreateMap<Brand, BrandDTO>().ReverseMap();
         }
     }

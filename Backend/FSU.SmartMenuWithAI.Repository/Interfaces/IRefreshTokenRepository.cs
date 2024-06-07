@@ -1,5 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
+﻿using FSU.SmartMenuWithAI.Repository.Entities;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FSU.SmartMenuWithAI.Repository.Interfaces
 {

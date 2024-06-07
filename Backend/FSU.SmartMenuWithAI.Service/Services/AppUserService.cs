@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using FSU.SmartMenuWithAI.BussinessObject.Common.Constants;
-using FSU.SmartMenuWithAI.BussinessObject.Common.Enums;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Pagination;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
-using FSU.SmartMenuWithAI.BussinessObject.Utils;
+using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
+using FSU.SmartMenuWithAI.Service.Common.Enums;
 using FSU.SmartMenuWithAI.Service.ISerivice;
+using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.Pagination;
+using FSU.SmartMenuWithAI.Service.Utils;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -54,7 +53,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = q => q.OrderBy(x => x.UserId);
             string includeProperties = "Role";
 
-            var entities = await _unitOfWork.AppUserRepository.Get( currentIDLogin, filter: filter, orderBy: orderBy, includeProperties: includeProperties ,pageIndex: pageIndex, pageSize: pageSize);
+            var entities = _unitOfWork.AppUserRepository.Get( currentIDLogin, filter: filter, orderBy: orderBy, includeProperties: includeProperties ,pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<AppUserDTO>();
             pagin.List = _mapper.Map<IEnumerable<AppUserDTO>>(entities).ToList();
             pagin.TotalRecord = await _unitOfWork.AppUserRepository.Count();
@@ -68,39 +67,67 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return _mapper?.Map<AppUserDTO?>(entity);
         }
 
-        public async Task<AppUserDTO> Insert(CreateAppUserDTO dto)
+        public async Task<bool> Insert(AppUserDTO dto)
         {
-            var user = new AppUser();
+            var user = _mapper.Map<AppUser>(dto);
             user.UserCode = Guid.NewGuid().ToString();
-            user.IsActive = dto.IsActive;
             user.Status = (int) Status.Exist;
-            user.RoleId = dto.RoleId;
             user.CreateDate = DateOnly.FromDateTime(DateTime.Now);
-            user.UserName = dto.UserName;
             user.Password = dto.Password.IsNullOrEmpty() ? PasswordHelper.ConvertToEncrypt(dto.Password!) : PasswordHelper.ConvertToEncrypt("123456");
+
             await _unitOfWork.AppUserRepository.Insert(user);
-            if(await _unitOfWork.SaveAsync() < 1)
-            {
-                return null!;
-            }
-            return _mapper.Map<AppUserDTO>(user);
+            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            return result;
         }
 
-        public async Task<AppUserDTO> Update(int id, UpdateAppUserDTO entityToUpdate)
+        public async Task<bool> Update(int id, AppUserDTO entityToUpdate)
         {
             var updateAppUser = await _unitOfWork.AppUserRepository.GetByID(id);
             if (updateAppUser == null)
             {
-                return null!;
+                return false;
             }
-            updateAppUser.Password = PasswordHelper.ConvertToEncrypt(entityToUpdate.Password!);
-            updateAppUser.IsActive = entityToUpdate.IsActive;
-            updateAppUser.Status = entityToUpdate.Status;
+
+            if (!string.IsNullOrEmpty(entityToUpdate.Password))
+            {
+                updateAppUser.Password = PasswordHelper.ConvertToEncrypt(entityToUpdate.Password);
+            }
+
+            if (entityToUpdate.Status != default)
+            {
+                updateAppUser.Status = entityToUpdate.Status;
+            }
+
+            if (!string.IsNullOrEmpty(entityToUpdate.Fullname))
+            {
+                updateAppUser.Fullname = entityToUpdate.Fullname;
+            }
+
+            if (!string.IsNullOrEmpty(entityToUpdate.Phone))
+            {
+                updateAppUser.Phone = entityToUpdate.Phone;
+            }
+
+            if (entityToUpdate.Dob.HasValue)
+            {
+                updateAppUser.Dob = entityToUpdate.Dob.Value;
+            }
+
+            if (!string.IsNullOrEmpty(entityToUpdate.Gender))
+            {
+                updateAppUser.Gender = entityToUpdate.Gender;
+            }
+
+            if (entityToUpdate.UpdateBy != default)
+            {
+                updateAppUser.UpdateBy = entityToUpdate.UpdateBy;
+            }
+
+            updateAppUser.UpdateDate = DateOnly.FromDateTime(DateTime.Now);
 
             _unitOfWork.AppUserRepository.Update(updateAppUser);
-            await _unitOfWork.SaveAsync();
-            var mapDTO = _mapper.Map<AppUserDTO>(updateAppUser);
-            return mapDTO;
+            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            return result;
         }
     }
 }

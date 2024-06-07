@@ -1,4 +1,4 @@
-﻿using FSU.SmartMenuWithAI.BussinessObject.Entitites;
+﻿using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.Repositories;
 using Microsoft.Extensions.Configuration;
 
@@ -7,13 +7,17 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
+        private readonly IConfiguration _configuration;
+        private RefreshTokenRepository _refreshTokenRepo;
         private SmartMenuContext _context;
-        private GenericRepository<Category> _categoryRepo;
+
         private AppUserRepository _appUserRepo;
         private AccountRepository _accountRepo;
-        private RefreshTokenRepository _refreshTokenRepo;
-        public BrandRepository _brandRepo;
-        private readonly IConfiguration _configuration;
+        private GenericRepository<Category> _categoryRepo;
+        private GenericRepository<Store> _storeRepo;
+        private GenericRepository<Menu> _menuRepo;
+        private GenericRepository<Product> _productRepo;
+        private BrandRepository _brandRepo;
 
         public UnitOfWork(SmartMenuContext context, IConfiguration configuration)
         {
@@ -86,7 +90,39 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
             }
         }
 
-
+        GenericRepository<Store> IUnitOfWork.StoreRepository
+        {
+            get
+            {
+                if (_storeRepo == null)
+                {
+                    this._storeRepo = new GenericRepository<Store>(_context);
+                }
+                return _storeRepo;
+            }
+        }
+        GenericRepository<Menu> IUnitOfWork.MenuRepository
+        {
+            get
+            {
+                if (_menuRepo == null)
+                {
+                    this._menuRepo = new GenericRepository<Menu>(_context);
+                }
+                return _menuRepo;
+            }
+        }
+        GenericRepository<Product> IUnitOfWork.ProductRepository
+        {
+            get
+            {
+                if (_productRepo == null)
+                {
+                    this._productRepo = new GenericRepository<Product>(_context);
+                }
+                return _productRepo;
+            }
+        }
         RefreshTokenRepository IUnitOfWork.RefreshTokenRepository
         {
             get

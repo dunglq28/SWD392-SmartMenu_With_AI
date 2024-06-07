@@ -2,7 +2,7 @@
 using FSU.SmartMenuWithAI.API.Payloads.Responses;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
+using FSU.SmartMenuWithAI.Repository.Entities;
 
 namespace FSU.SmartMenuWithAI.API.Middlewares
 {
