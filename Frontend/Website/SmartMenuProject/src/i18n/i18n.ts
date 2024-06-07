@@ -12,7 +12,8 @@ const resources = {
         "menu":"Menu",
         "settings": "Settings",
         "new product":"New Product",
-        "new":"New Product"
+        "new":"New Product",
+        "newBranch":"New Branch"
       }
     },
     vi: {
@@ -24,7 +25,8 @@ const resources = {
         "menu":"Thực Đơn",
         "settings": "Cài Đặt",
         "new product":"Sản Phẩm Mới",
-        "new":"Sản Phẩm Mới"
+        "new":"Sản Phẩm Mới",
+        "new branch":"Thương Hiệu Mới"
       }
     }
   };

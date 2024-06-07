@@ -57,6 +57,7 @@ function Sidebar() {
       to: "/settings",
     },
     { icon: CgAddR, label: t("new product"), to: "/new" },
+    { icon: CgAddR, label: t("new branch"), to: "/newBranch" },
   ];
 
   useEffect(() => {

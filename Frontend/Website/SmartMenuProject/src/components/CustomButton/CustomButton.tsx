@@ -8,7 +8,8 @@ interface CustomButtonProps {
   text: string;
   icon: IconType;
   color: string;
-  modalContent: React.ReactNode;
+  modalContent?: React.ReactNode;
+  title: string;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -17,6 +18,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   icon,
   color,
   modalContent,
+  title
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -40,7 +42,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         </Button>
       </Flex>
 
-      <ModalForm formBody={modalContent} onClose={onClose} isOpen={isOpen}/>
+      <ModalForm formBody={modalContent} onClose={onClose} isOpen={isOpen} title={title}/>
     </>
   );
 };

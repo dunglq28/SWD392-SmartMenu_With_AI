@@ -1,19 +1,20 @@
-import { TokenData } from './../models/TokenData.model';
-import { refreshToken } from './../services/AuthenticationService';
-// @ts-nocheck
+import { refreshToken } from "./../services/AuthenticationService";
 import axios, {
   AxiosInstance,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
 import { toast } from "react-toastify";
-
+import { kebabCase } from "change-case";
+import {
+  convertKeysToCamelCase,
+  convertKeysToKebabCase,
+} from "../utils/keyCaseConverter";
 
 const API_HOST = import.meta.env.VITE_API_HOST;
 const API_PORT = import.meta.env.VITE_API_PORT;
 
 const BASE_URL = `${API_HOST}:${API_PORT}/api`;
-
 
 const axiosAuth: AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -33,6 +34,10 @@ axiosAuth.interceptors.request.use(
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
+    if (config.data) {
+      config.data = convertKeysToKebabCase(config.data);
+    }
+
     return config;
   },
   function (error) {
@@ -43,6 +48,9 @@ axiosAuth.interceptors.request.use(
 // Add Response interceptor
 axiosAuth.interceptors.response.use(
   function (response: AxiosResponse) {
+    if (response.data) {
+      response.data = convertKeysToCamelCase(response.data);
+    }
     return response;
   },
 
@@ -59,9 +67,8 @@ axiosAuth.interceptors.response.use(
 
     if (error.response && error.response.status === 401) {
       const authMessage = error.response.data.Message;
-      
-      if (authMessage && authMessage.includes("Token đã hết hạn!")) {
 
+      if (authMessage && authMessage.includes("Token đã hết hạn!")) {
         const newAccessToken = await refreshToken();
 
         if (newAccessToken) {
@@ -71,7 +78,6 @@ axiosAuth.interceptors.response.use(
           toast.error("Token đã hết hạn. Vui lòng đăng nhập lại.");
           window.location.href = "/login";
         }
-
       } else {
         toast.error("Bạn không được phép truy cập trang này");
       }

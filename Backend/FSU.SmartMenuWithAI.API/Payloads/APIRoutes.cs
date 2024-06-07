@@ -13,7 +13,7 @@
         {
             public const string Login = Base + "/authentication/login";
 
-            public const string RefreshToken = Base + "/authentication/refreshtoken";
+            public const string RefreshToken = Base + "/authentication/refresh-token";
         }
 
         public static class AppUser

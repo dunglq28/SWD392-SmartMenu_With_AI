@@ -1,6 +1,10 @@
-// @ts-nocheck
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, {
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
 import { toast } from "react-toastify";
+import { convertKeysToCamelCase, convertKeysToKebabCase } from "../utils/keyCaseConverter";
 
 const API_HOST = import.meta.env.VITE_API_HOST;
 const API_PORT = import.meta.env.VITE_API_PORT;
@@ -14,13 +18,31 @@ const axiosLogin: AxiosInstance = axios.create({
   },
 });
 
+
+axiosLogin.interceptors.request.use(
+  function (config: InternalAxiosRequestConfig) {
+    if (config.data) {
+      config.data = convertKeysToKebabCase(config.data);
+    }
+
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
+
 // Add Response interceptor
 axiosLogin.interceptors.response.use(
   function (response: AxiosResponse) {
+    if (response.data) {
+      response.data = convertKeysToCamelCase(response.data);
+    }
     return response;
   },
 
-  function (error) {        
+  function (error) {
+    
     if (error.message === "Network Error" && !error.response) {
       toast.error("Lỗi mạng, vui lòng kiểm tra kết nối!");
     }
@@ -29,6 +51,9 @@ axiosLogin.interceptors.response.use(
     }
     if (error.response && error.response.status === 401) {
       toast.error(error.response.data.message);
+    }
+    if (error.response && error.response.status === 400) {
+      toast.error("Đăng nhập thất bại");
     }
     return Promise.reject(error);
   }

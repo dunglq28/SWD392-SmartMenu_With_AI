@@ -8,16 +8,16 @@ export const GlobalStyles = {
 };
 
 export const themeColors = {
-  buttonColor: "#466d6b",
+  primaryButton: "#466d6b",
   secondaryColor: "#E2E8F0",
   primary: "#b8d7d5",
-  primaryButton: "#127973",
   lighten10: "#d3e7e6",
   lighten20: "#e0f1f0",
   darken10: "#a0bfbf",
   darken20: "#8eb1b0",
   darken30: "#769d9b",
   darken40: "#5e8583", 
+  darken50: "#466d6b",
   darken60: "#2e5553",
   darken70: "#163d3b",
   darken80: "#002524",
