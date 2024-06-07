@@ -1,4 +1,4 @@
-﻿using FSU.SmartMenuWithAI.BussinessObject.Entitites;
+﻿using FSU.SmartMenuWithAI.Repository.Entities;
 using System.Linq.Expressions;
 
 namespace FSU.SmartMenuWithAI.Repository.Interfaces

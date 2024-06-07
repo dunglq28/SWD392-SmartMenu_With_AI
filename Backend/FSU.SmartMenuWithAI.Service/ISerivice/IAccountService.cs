@@ -1,12 +1,11 @@
-﻿using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Token;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
+﻿using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.Token;
 
 namespace FSU.SmartMenuWithAI.Service.ISerivice
 {
     public interface IAccountService
     {
-        public  Task<AppUserDTO?> CheckLoginAsync(LoginDTO reqObj);
+        public  Task<AppUserDTO?> CheckLoginAsync(string userName, string password);
         public  Task<TokenDto> GenerateAccessTokenAsync(int id);
     }
 }

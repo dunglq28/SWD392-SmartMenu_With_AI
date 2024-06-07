@@ -1,6 +1,5 @@
-﻿using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Pagination;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
+﻿using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.Pagination;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,11 +21,11 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
 
         Task<AppUserDTO?> GetByID(int id);
 
-        Task<AppUserDTO> Insert(CreateAppUserDTO entity);
+        Task<bool> Insert(AppUserDTO entity);
 
         Task<bool> Delete(int id);
 
-        Task<AppUserDTO> Update(int id, UpdateAppUserDTO entityToUpdate);
+        Task<bool> Update(int id, AppUserDTO entityToUpdate);
 
         Task<int> Count();
         

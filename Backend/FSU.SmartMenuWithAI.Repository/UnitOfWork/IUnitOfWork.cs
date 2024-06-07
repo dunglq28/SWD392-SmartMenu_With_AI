@@ -1,4 +1,4 @@
-﻿using FSU.SmartMenuWithAI.BussinessObject.Entitites;
+﻿using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.Repositories;
 
 
@@ -8,7 +8,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
     {
         void Save();
         Task<int> SaveAsync();
-        public GenericRepository<Menu> CategoryRepository { get; }
+        public GenericRepository<Category> CategoryRepository { get; }
         public RefreshTokenRepository RefreshTokenRepository { get; }
         public AppUserRepository AppUserRepository { get; }
         public AccountRepository AccountRepository { get; }

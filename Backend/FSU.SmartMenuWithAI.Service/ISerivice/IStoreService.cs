@@ -1,6 +1,6 @@
-﻿using FSU.SmartMenuWithAI.BussinessObject.DTOs.Category;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Pagination;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Store;
+﻿
+using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +15,11 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
 
         Task<StoreDTO?> GetAsync(int id);
 
-        Task<StoreDTO> Insert(AddStoreDTO entity);
+        Task<bool> Insert(StoreDTO entity);
 
         Task<bool> Delete(int id);
 
-        Task<StoreDTO> UpdateAsync(int id, UpdateStoreDTO entityToUpdate);
+        Task<bool> UpdateAsync(int id, StoreDTO entityToUpdate);
 
     }
 }

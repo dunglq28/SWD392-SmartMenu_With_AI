@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using FSU.SmartMenuWithAI.BussinessObject.Common.Enums;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Menu;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Pagination;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
-using FSU.SmartMenuWithAI.BussinessObject.Utils;
+using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
 using FSU.SmartMenuWithAI.Service.ISerivice;
+using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.Pagination;
+using FSU.SmartMenuWithAI.Service.Utils;
 using System.Linq.Expressions;
 
 namespace FSU.SmartMenuWithAI.Service.Services
@@ -56,35 +55,30 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return mapDTO;
         }
 
-        public async Task<MenuDTO> Insert(AddMenuDTO reqObj)
+        public async Task<bool> Insert(MenuDTO reqObj)
         {
             var menu = new Menu();
             menu.MenuCode = Guid.NewGuid().ToString();
             menu.CreateDate = DateOnly.FromDateTime(DateTime.Now);
-            menu.IsActive = reqObj.IsActive;
-            menu.BrandId = reqObj.BrandId;
+            menu.IsActive = reqObj.IsActive!.Value;
+            menu.BrandId = reqObj.BrandId!.Value;
 
             await _unitOfWork.MenuRepository.Insert(menu);
-            if (await _unitOfWork.SaveAsync() < 1)
-            {
-                return null!;
-            }
-            var mapDTO = _mapper.Map<MenuDTO>(menu);
-            return mapDTO;
+            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            return result;
         }
 
-        public async Task<MenuDTO?> UpdateAsync(int id, bool isActive)
+        public async Task<bool> UpdateAsync(int id, bool isActive)
         {
             var menu = await _unitOfWork.MenuRepository.GetByID(id);
             if (menu == null)
             {
-                return default(MenuDTO);
+                return false;
             }
             menu.IsActive = isActive;
             _unitOfWork.MenuRepository.Update(menu);
-            await _unitOfWork.SaveAsync();
-            var mapDTO = _mapper.Map<MenuDTO>(menu);
-            return mapDTO;
+            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            return result;
         }
     }
 }

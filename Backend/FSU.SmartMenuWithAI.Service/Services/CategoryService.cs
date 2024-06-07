@@ -1,19 +1,12 @@
 ﻿using AutoMapper;
-using FSU.SmartMenuWithAI.BussinessObject.Common.Enums;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Category;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Pagination;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
-using FSU.SmartMenuWithAI.BussinessObject.Utils;
+using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
+using FSU.SmartMenuWithAI.Service.Common.Enums;
 using FSU.SmartMenuWithAI.Service.ISerivice;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.Pagination;
+using FSU.SmartMenuWithAI.Service.Utils;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FSU.SmartMenuWithAI.Service.Services
 {
@@ -27,9 +20,9 @@ namespace FSU.SmartMenuWithAI.Service.Services
             _mapper = mapper;
         }
 
-        public async Task<CategoryDTO> Insert(AddCagetoryDTO reqObj)
+        public async Task<bool> Insert(CategoryDTO reqObj)
         {
-            var category = new Menu();
+            var category = new Category();
             category.CategoryCode = Guid.NewGuid().ToString();
             category.CategoryName = reqObj.CategoryName;
             category.UpdateDate = DateOnly.FromDateTime(DateTime.Now);
@@ -37,36 +30,35 @@ namespace FSU.SmartMenuWithAI.Service.Services
             category.Status = (int)Status.Exist;
             category.BrandId = reqObj.BrandId;
             await _unitOfWork.CategoryRepository.Insert(category);
-            if (await _unitOfWork.SaveAsync() < 1)
-            {
-                return null!;
-            }
-            var mapDTO = _mapper.Map<CategoryDTO>(category);
-            return mapDTO;
+            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            return result;
         }
 
-        public async Task<CategoryDTO?> UpdateAsync(int id, string cagetoryName)
+        public async Task<bool> UpdateAsync(int id, string cagetoryName)
         {
             var category = await _unitOfWork.CategoryRepository.GetByID(id);
             if (category == null)
             {
-                return default(CategoryDTO);
+                return false;
             }
+            if (!string.IsNullOrEmpty(category.CategoryName))
+            {
             category.CategoryName = cagetoryName;
+
+            }
             category.UpdateDate = DateOnly.FromDateTime(DateTime.Now);
 
+
             _unitOfWork.CategoryRepository.Update(category);
-            await _unitOfWork.SaveAsync();
-            var mapDTO = _mapper.Map<CategoryDTO>(category);
-            mapDTO.BrandName = category.Brand.BrandName;
-            return mapDTO;
+            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            return result;
         }
 
         public async Task<PageEntity<CategoryDTO>?> GetAllAsync(string? searchKey, int brandID, int? pageIndex , int? pageSize)
         {
-            Expression<Func<Menu, bool>> filter = searchKey != null ? x => x.CategoryName.Contains(searchKey) && x.BrandId == brandID : x => x.BrandId == brandID;
+            Expression<Func<Category, bool>> filter = searchKey != null ? x => x.CategoryName.Contains(searchKey) && x.BrandId == brandID : x => x.BrandId == brandID;
 
-            Func<IQueryable<Menu>, IOrderedQueryable<Menu>> orderBy = q => q.OrderBy(x => x.CategoryId);
+            Func<IQueryable<Category>, IOrderedQueryable<Category>> orderBy = q => q.OrderBy(x => x.CategoryId);
             string includeProperties = "Brand";
 
             var entities = await _unitOfWork.CategoryRepository

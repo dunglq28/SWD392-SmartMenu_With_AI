@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSU.SmartMenuWithAI.API", "FSU.SmartMenuWithAI.API\FSU.SmartMenuWithAI.API.csproj", "{E4FB6312-25D1-4E7F-968E-5726B14DACFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSU.SmartMenuWithAI.API", "FSU.SmartMenuWithAI.API\FSU.SmartMenuWithAI.API.csproj", "{E4FB6312-25D1-4E7F-968E-5726B14DACFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSU.SmartMenuWithAI.Repository", "FSU.SmartMenuWithAI.Repository\FSU.SmartMenuWithAI.Repository.csproj", "{4B4EC070-3B6E-48AD-9A7C-04EE3E6DEC27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSU.SmartMenuWithAI.Repository", "FSU.SmartMenuWithAI.Repository\FSU.SmartMenuWithAI.Repository.csproj", "{4B4EC070-3B6E-48AD-9A7C-04EE3E6DEC27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSU.SmartMenuWithAI.Service", "FSU.SmartMenuWithAI.Service\FSU.SmartMenuWithAI.Service.csproj", "{9AD54E84-FAB6-4571-AEE1-504E2DF982B4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSU.SmartMenuWithAI.BussinessObject", "FSU.SmartMenuWithAI.BussinessObject\FSU.SmartMenuWithAI.BussinessObject.csproj", "{6A412A31-E83B-40CD-84EA-707990355B64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSU.SmartMenuWithAI.Service", "FSU.SmartMenuWithAI.Service\FSU.SmartMenuWithAI.Service.csproj", "{9AD54E84-FAB6-4571-AEE1-504E2DF982B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{9AD54E84-FAB6-4571-AEE1-504E2DF982B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AD54E84-FAB6-4571-AEE1-504E2DF982B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AD54E84-FAB6-4571-AEE1-504E2DF982B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6A412A31-E83B-40CD-84EA-707990355B64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A412A31-E83B-40CD-84EA-707990355B64}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A412A31-E83B-40CD-84EA-707990355B64}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A412A31-E83B-40CD-84EA-707990355B64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

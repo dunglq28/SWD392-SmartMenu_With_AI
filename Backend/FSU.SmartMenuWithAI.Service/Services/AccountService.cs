@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Token;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
 using FSU.SmartMenuWithAI.Service.ISerivice;
+using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.Token;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -23,10 +23,10 @@ namespace FSU.SmartMenuWithAI.Service.Services
             _mapper = mapper;
         }
 
-        public async Task<AppUserDTO?> CheckLoginAsync(LoginDTO reqObj)
+        public async Task<AppUserDTO?> CheckLoginAsync(string userName, string password)
         {
             var user = await _unitOfWork.AccountRepository
-                .CheckLoginAsync(reqObj.UserName, reqObj.Password);
+                .CheckLoginAsync(userName, password);
 
             var userDTO = _mapper.Map<AppUserDTO>(user);
             return userDTO;
@@ -35,7 +35,8 @@ namespace FSU.SmartMenuWithAI.Service.Services
         public async Task<TokenDto> GenerateAccessTokenAsync(int id)
         {
             var token = await _unitOfWork.AccountRepository.GenerateAccessTokenAsync(id);
-            return token;
+            var tokentDTO = _mapper.Map<TokenDto>(token);
+            return tokentDTO;
         }
     }
 }

@@ -1,56 +1,89 @@
 ﻿using FSU.SmartMenuWithAI.API.Payloads.Responses;
 using FSU.SmartMenuWithAI.API.Payloads;
 using FSU.SmartMenuWithAI.API.Validations;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Menu;
 using FSU.SmartMenuWithAI.Service.ISerivice;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Product;
-using FSU.SmartMenuWithAI.BussinessObject.Common.Constants;
+using FSU.SmartMenuWithAI.API.Common.Constants;
+using FSU.SmartMenuWithAI.API.Payloads.Request.Product;
+using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Services;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
-        private readonly AddProductValidation _addProductValidation;
-        private readonly ImageFileValidator _imageValidation;
+        private readonly ImageFileValidator _imageFileValidator;
+        private readonly IS3Service _s3Service;
         private readonly VideoValidator _videoValidation;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, IS3Service s3Service)
         {
             _productService = productService;
-            _addProductValidation = new AddProductValidation();
-            _imageValidation = new ImageFileValidator();
+            _imageFileValidator = new ImageFileValidator();
             _videoValidation = new VideoValidator();
+            _s3Service = s3Service;
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPost(APIRoutes.Product.Add, Name = "AddProductAsync")]
-        public async Task<IActionResult> AddAsync([FromBody] AddProductDTO reqObj)
+        public async Task<IActionResult> AddAsync([FromBody] AddProductRequest reqObj)
         {
             try
             {
-                var validation = await _addProductValidation.ValidateAsync(reqObj);
-                if (!validation.IsValid)
+                var validationImg = await _imageFileValidator.ValidateAsync(reqObj.Image);
+                if (!validationImg.IsValid)
                 {
                     return BadRequest(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Thông tin của bạn chưa chính xác",
+                        Message = "File không phải là hình ảnh hợp lệ",
                         Data = null,
                         IsSuccess = false
                     });
                 }
-                var UserAdd = await _productService.Insert(reqObj);
+                var validationvideo = await _videoValidation.ValidateAsync(reqObj.SpotlightVideo);
+                if (!validationImg.IsValid)
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "File không phải là video hợp lệ",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                var dto = new ProductDTO
+                {
+                    ProductName = reqObj.ProductName,
+                    SpotlightVideoImageName = reqObj.SpotlightVideo.FileName,
+                    SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.SpotlightVideo.FileName, FolderRootImg.Product),
+                    ImageName = reqObj.Image.FileName,
+                    ImageUrl = _s3Service.GetPreSignedURL(reqObj.Image.FileName, FolderRootImg.Product),
+                    Description = reqObj.Description,
+                    CategoryId = reqObj.CategoryId,
+                    BrandId = reqObj.BrandId,
+                };
+
+                var result = await _productService.Insert(dto);
+
+                if (!result)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Sản phẩm không tồn tại",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Thêm sản phẩm thành công",
-                    Data = UserAdd,
+                    Data = result,
                     IsSuccess = true
                 });
 
@@ -107,19 +140,35 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Product.Update, Name = "UpdateProductAsync")]
-        public async Task<IActionResult> UpdateUserAsync(int id, UpdateProductDTO reqObj)
+        public async Task<IActionResult> UpdateUserAsync(int id, UpdateProductRequest reqObj)
         {
             try
             {
+                var dto = new ProductDTO();
+                dto.ProductName = reqObj.ProductName!;
+                if (reqObj.SpotlightVideo != null)
+                {
 
-                var result = await _productService.UpdateAsync(id, reqObj);
+                    dto.SpotlightVideoImageName = reqObj.SpotlightVideo!.FileName;
+                    dto.SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.SpotlightVideo.FileName, FolderRootImg.Product);
+                }
+                if (reqObj.Image != null)
+                {
+                    dto.ImageName = reqObj.Image!.FileName;
+                    dto.ImageUrl = _s3Service.GetPreSignedURL(reqObj.Image.FileName, FolderRootImg.Product);
+                }
 
-                if (result == null)
+                dto.Description = reqObj.Description;
+
+
+                var result = await _productService.UpdateAsync(id, dto);
+
+                if (!result )
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Không tìm thấy thông tin menu",
+                        Message = "Cập nhật thất bại",
                         Data = null,
                         IsSuccess = false
                     });
@@ -146,11 +195,11 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Product.GetAll, Name = "GetProductAsync")]
-        public async Task<IActionResult> GetAllAsync([FromQuery] string? searchKey ,int brandID, int? categoryID, int pageNumber = Page.DefaultPageIndex, int PageSize = Page.DefaultPageSize)
+        public async Task<IActionResult> GetAllAsync([FromQuery] string? searchKey, int brandID, int? categoryID, int pageNumber = Page.DefaultPageIndex, int PageSize = Page.DefaultPageSize)
         {
             try
             {
-                var menus = await _productService.GetAllAsync(searchKey: searchKey,categoryID: categoryID,brandID: brandID, pageIndex: pageNumber, pageSize: PageSize);
+                var menus = await _productService.GetAllAsync(searchKey: searchKey, categoryID: categoryID, brandID: brandID, pageIndex: pageNumber, pageSize: PageSize);
 
                 return Ok(new BaseResponse
                 {

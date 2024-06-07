@@ -1,4 +1,4 @@
-﻿using FSU.SmartMenuWithAI.BussinessObject.Entitites;
+﻿using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.Repositories;
 using Microsoft.Extensions.Configuration;
 
@@ -13,7 +13,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
 
         private AppUserRepository _appUserRepo;
         private AccountRepository _accountRepo;
-        private GenericRepository<Menu> _categoryRepo;
+        private GenericRepository<Category> _categoryRepo;
         private GenericRepository<Store> _storeRepo;
         private GenericRepository<Menu> _menuRepo;
         private GenericRepository<Product> _productRepo;
@@ -54,13 +54,13 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
             GC.SuppressFinalize(this);
         }
 
-        GenericRepository<Menu> IUnitOfWork.CategoryRepository
+        GenericRepository<Category> IUnitOfWork.CategoryRepository
         {
             get
             {
                 if (_categoryRepo == null)
                 {
-                    this._categoryRepo = new GenericRepository<Menu>(_context);
+                    this._categoryRepo = new GenericRepository<Category>(_context);
                 }
                 return _categoryRepo;
             }

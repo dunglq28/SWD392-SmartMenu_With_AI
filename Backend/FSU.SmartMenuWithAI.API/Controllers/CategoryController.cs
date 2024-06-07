@@ -2,12 +2,11 @@
 using FSU.SmartMenuWithAI.API.Payloads;
 using FSU.SmartMenuWithAI.API.Validations;
 using FSU.SmartMenuWithAI.Service.ISerivice;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Category;
-using FSU.SmartMenuWithAI.BussinessObject.Common.Constants;
+using FSU.SmartMenuWithAI.API.Common.Constants;
+using FSU.SmartMenuWithAI.API.Payloads.Request.Category;
+using FSU.SmartMenuWithAI.Service.Models;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -16,35 +15,35 @@ namespace FSU.SmartMenuWithAI.API.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-        private readonly AddCategoriesValidation _addCategoryValidation;
 
         public CategoryController(ICategoryService appUserService)
         {
             _categoryService = appUserService;
-            _addCategoryValidation = new AddCategoriesValidation();
         }
         [HttpPost(APIRoutes.Category.Add, Name = "AddCategoryAsync")]
-        public async Task<IActionResult> AddAsync([FromBody] AddCagetoryDTO reqObj)
+        public async Task<IActionResult> AddAsync([FromBody] AddCagetoryRequest reqObj)
         {
             try
             {
-                var validation = await _addCategoryValidation.ValidateAsync(reqObj);
-                if (!validation.IsValid)
+                var category = new CategoryDTO();
+                category.CategoryName = reqObj.CategoryName;
+                category.BrandId = reqObj.BrandId;
+                var result = await _categoryService.Insert(category); 
+                if (!result)
                 {
-                    return BadRequest(new BaseResponse
+                    return NotFound(new BaseResponse
                     {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Your information are not suitable",
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Can not delete this category",
                         Data = null,
                         IsSuccess = false
                     });
                 }
-                var category = await _categoryService.Insert(reqObj);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "New category successfully",
-                    Data = category,
+                    Data = result,
                     IsSuccess = true
                 });
 
@@ -118,7 +117,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 }
                 var result = await _categoryService.UpdateAsync(id, cagetoryName);
 
-                if (result == null)
+                if (!result)
                 {
                     return NotFound(new BaseResponse
                     {

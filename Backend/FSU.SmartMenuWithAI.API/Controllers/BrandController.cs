@@ -1,14 +1,12 @@
 ﻿using FSU.SmartMenuWithAI.API.Payloads.Responses;
 using FSU.SmartMenuWithAI.API.Payloads;
 using FSU.SmartMenuWithAI.API.Validations;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
 using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using FSU.SmartMenuWithAI.BussinessObject.Common.Constants;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Brand;
-using SmartMenu.Services;
+using FSU.SmartMenuWithAI.API.Common.Constants;
+using FSU.SmartMenuWithAI.API.Payloads.Request.Brand;
+using Microsoft.EntityFrameworkCore;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -17,34 +15,21 @@ namespace FSU.SmartMenuWithAI.API.Controllers
     {
         private readonly IBrandService _brandService;
         private readonly IS3Service _s3Service;
-        private readonly AddBrandValidation _addBrandValidation;
         private readonly ImageFileValidator _imageFileValidator;
 
         public BrandController(IBrandService brandService, IS3Service s3Service)
         {
             _brandService = brandService;
             _s3Service = s3Service;
-            _addBrandValidation = new AddBrandValidation();
             _imageFileValidator = new ImageFileValidator();
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPost(APIRoutes.Brand.Add, Name = "AddBrandAsync")]
-        public async Task<IActionResult> AddAsync(CreateBrandDTO reqObj)
+        public async Task<IActionResult> AddAsync(CreateBrandRequest reqObj)
         {
             try
             {
-                var validation = await _addBrandValidation.ValidateAsync(reqObj);
-                if (!validation.IsValid)
-                {
-                    return BadRequest(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Điền đầy đủ và hợp lệ thông tin",
-                        Data = null,
-                        IsSuccess = false
-                    });
-                }
                 var validationImg = await _imageFileValidator.ValidateAsync(reqObj.Image);
                 if (!validationImg.IsValid)
                 {
@@ -52,17 +37,6 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Message = "File không phải là hình ảnh hợp lệ",
-                        Data = null,
-                        IsSuccess = false
-                    });
-                }
-                var existBrand = await _brandService.GetByNameAsync(reqObj.BrandName);
-                if (existBrand != null)
-                {
-                    return BadRequest(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Tên thương hiệu đã tồn tại.",
                         Data = null,
                         IsSuccess = false
                     });
@@ -86,7 +60,16 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     IsSuccess = true
                 });
             }
-
+            catch (DbUpdateException ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Tên thương hiệu đã tồn tại",
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
             catch (Exception ex)
             {
                 return BadRequest(new BaseResponse
@@ -137,36 +120,10 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Brand.Update, Name = "UpdatebrandAsync")]
-        public async Task<IActionResult> UpdateUserAsync(int id, UpdateBrandDTO reqObj)
+        public async Task<IActionResult> UpdateUserAsync(int id, UpdateBrandRequest reqObj)
         {
             try
             {
-                var brandToUpdate = await _brandService.GetByID(id);
-                if (brandToUpdate == null)
-                {
-                    return NotFound(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Không tìm thấy người dùng",
-                        Data = null,
-                        IsSuccess = false
-                    });
-                }
-                if (reqObj.BrandName != brandToUpdate.BrandName)
-                {
-
-                    var existNameBrand = await _brandService.GetByNameAsync(reqObj.BrandName);
-                    if (existNameBrand != null)
-                    {
-                        return BadRequest(new BaseResponse
-                        {
-                            StatusCode = StatusCodes.Status400BadRequest,
-                            Message = "Tên thương hiệu đã tồn tại.",
-                            Data = null,
-                            IsSuccess = false
-                        });
-                    }
-                }
 
                 string imageUrl = null!;
                 string imageName = null!;
@@ -190,6 +147,17 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 }
 
                 var result = await _brandService.Update(id, reqObj.BrandName, imageUrl, imageName);
+                if(!result)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "không tìm thấy thương hiệu",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
@@ -208,6 +176,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     IsSuccess = false
                 });
             }
+            
         }
     }
 }

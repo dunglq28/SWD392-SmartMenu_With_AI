@@ -1,14 +1,14 @@
-﻿using FSU.SmartMenuWithAI.BussinessObject.DTOs.Token;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using FSU.SmartMenuWithAI.API.Payloads.Responses;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
 using System.IdentityModel.Tokens.Jwt;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
-using FSU.SmartMenuWithAI.BussinessObject.Utils;
 using FSU.SmartMenuWithAI.Repository.Interfaces;
 using FSU.SmartMenuWithAI.API.Payloads;
+using FSU.SmartMenuWithAI.API.Payloads.Request.AppUser;
+using FSU.SmartMenuWithAI.Service.Models.Token;
+using FSU.SmartMenuWithAI.Service.Utils;
+using FSU.SmartMenuWithAI.Service.ISerivice;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -16,22 +16,22 @@ namespace FSU.SmartMenuWithAI.API.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAccountService _accountService;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
 
-        public AuthenticationController(IUnitOfWork unitOfWork, IRefreshTokenRepository refreshTokenRepository)
+        public AuthenticationController(IAccountService accountService, IRefreshTokenRepository refreshTokenRepository)
         {
-            _unitOfWork = unitOfWork;
+            _accountService = accountService;
             _refreshTokenRepository = refreshTokenRepository;
         }
 
         [HttpPost(APIRoutes.Authentication.Login, Name = "LoginAsync")]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginDTO reqObj)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest reqObj)
         {
             try
             {
-                var userDto = await _unitOfWork.AccountRepository
-                    .CheckLoginAsync(reqObj.UserName, reqObj.Password);
+                var userDto = await _accountService.CheckLoginAsync(reqObj.UserName, reqObj.Password);
+                    
                 if (userDto == null)
                 {
                     return Unauthorized(new BaseResponse
@@ -59,7 +59,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     };
                 }
                 var tokenExist = await _refreshTokenRepository
-                    .CheckRefreshTokenByUserIdAsync(userDto.UserId);
+                    .CheckRefreshTokenByUserIdAsync(userDto.UserId.Value);
 
                 if (tokenExist != null)
                 {
@@ -67,8 +67,8 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         .RemoveRefreshTokenAsync(tokenExist);
                 }
 
-                var token = await _unitOfWork.AccountRepository
-                    .GenerateAccessTokenAsync(userDto.UserId);
+                var token = await _accountService.GenerateAccessTokenAsync(userDto.UserId.Value);
+                    
 
                 return Ok(new BaseResponse
                 {
@@ -137,7 +137,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     });
                 }
 
-                var refreshToken = await _refreshTokenRepository.GetRefreshTokenAsync(token.RefreshToken);
+                var refreshToken = await _refreshTokenRepository.GetRefreshTokenAsync(token.RefreshToken!);
 
                 if (refreshToken == null)
                 {

@@ -1,17 +1,11 @@
 ﻿using AutoMapper;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Menu;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Pagination;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Product;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
-using FSU.SmartMenuWithAI.BussinessObject.Utils;
+using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
 using FSU.SmartMenuWithAI.Service.ISerivice;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.Pagination;
+using FSU.SmartMenuWithAI.Service.Utils;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FSU.SmartMenuWithAI.Service.Services
 {
@@ -64,7 +58,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return mapDTO;
         }
 
-        public async Task<ProductDTO> Insert(AddProductDTO reqObj)
+        public async Task<bool> Insert(ProductDTO reqObj)
         {
             var product = new Product();
             product.ProductCode = Guid.NewGuid().ToString();
@@ -81,30 +75,53 @@ namespace FSU.SmartMenuWithAI.Service.Services
             await _unitOfWork.ProductRepository.Insert(product);
             if (await _unitOfWork.SaveAsync() < 1)
             {
-                return null!;
+                return false!;
             }
-            var mapDTO = _mapper.Map<ProductDTO>(product);
-            return mapDTO;
+            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            return result;
         }
 
-        public async Task<ProductDTO?> UpdateAsync(int id, UpdateProductDTO reqObj)
+        public async Task<bool> UpdateAsync(int id, ProductDTO reqObj)
         {
             var product = await _unitOfWork.ProductRepository.GetByID(id);
             if (product == null)
             {
-                return default(ProductDTO);
+                return false;
             }
-            product.ProductName = reqObj.ProductName;
-            product.SpotlightVideoImageName = reqObj.SpotlightVideoImageName;
-            product.SpotlightVideoImageUrl = reqObj.SpotlightVideoImageUrl;
-            product.ImageUrl = reqObj.ImageUrl;
-            product.ImageName = reqObj.ImageName;
-            product.Description = reqObj.Description;
+
+            if (!string.IsNullOrEmpty(reqObj.ProductName))
+            {
+                product.ProductName = reqObj.ProductName;
+            }
+
+            if (!string.IsNullOrEmpty(reqObj.SpotlightVideoImageName))
+            {
+                product.SpotlightVideoImageName = reqObj.SpotlightVideoImageName;
+            }
+
+            if (!string.IsNullOrEmpty(reqObj.SpotlightVideoImageUrl))
+            {
+                product.SpotlightVideoImageUrl = reqObj.SpotlightVideoImageUrl;
+            }
+
+            if (!string.IsNullOrEmpty(reqObj.ImageUrl))
+            {
+                product.ImageUrl = reqObj.ImageUrl;
+            }
+
+            if (!string.IsNullOrEmpty(reqObj.ImageName))
+            {
+                product.ImageName = reqObj.ImageName;
+            }
+
+            if (!string.IsNullOrEmpty(reqObj.Description))
+            {
+                product.Description = reqObj.Description;
+            }
 
             _unitOfWork.ProductRepository.Update(product);
-            await _unitOfWork.SaveAsync();
-            var mapDTO = _mapper.Map<ProductDTO>(product);
-            return mapDTO;
+            var result = await _unitOfWork.SaveAsync() > 0;
+            return result;
         }
     }
 }

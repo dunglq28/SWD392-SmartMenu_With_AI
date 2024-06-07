@@ -1,14 +1,11 @@
 ﻿using FSU.SmartMenuWithAI.API.Payloads.Responses;
-using FSU.SmartMenuWithAI.API.Validations;
-using FSU.SmartMenuWithAI.BussinessObject.Common.Constants;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
-using FSU.SmartMenuWithAI.Repository.UnitOfWork;
+using FSU.SmartMenuWithAI.API.Common.Constants;
 using FSU.SmartMenuWithAI.Service.ISerivice;
-using FSU.SmartMenuWithAI.Service.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using FSU.SmartMenuWithAI.API.Payloads;
+using FSU.SmartMenuWithAI.API.Payloads.Request.AppUser;
+using FSU.SmartMenuWithAI.Repository.Entities;
+using FSU.SmartMenuWithAI.Service.Models;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -18,32 +15,39 @@ namespace FSU.SmartMenuWithAI.API.Controllers
     {
 
         private readonly IAppUserService _appUserService;
-        private readonly AddAppUserValidation _AddUserValidation;
 
         public AppUserController(IAppUserService appUserService)
         {
             _appUserService = appUserService;
-            _AddUserValidation = new AddAppUserValidation();
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPost(APIRoutes.AppUser.Add, Name = "AddUserAsync")]
-        public async Task<IActionResult> AddAsync([FromBody] CreateAppUserDTO reqObj)
+        public async Task<IActionResult> AddAsync([FromBody] AddUserRequest reqObj)
         {
             try
             {
-                var validation = await _AddUserValidation.ValidateAsync(reqObj);
-                if (!validation.IsValid)
+                var dto = new AppUserDTO();
+                dto.UserName = reqObj.UserName;
+                dto.Password = reqObj.Password;
+                dto.IsActive = reqObj.IsActive;
+                dto.RoleId = reqObj.RoleId;
+                dto.Phone = reqObj.Phone;
+                dto.Gender = reqObj.Gender;
+                dto.Fullname = reqObj.Fullname;
+                dto.Dob = reqObj.Dob;
+                dto.UpdateBy = reqObj.UpdateBy;
+                var UserAdd = await _appUserService.Insert(dto);
+                if (!UserAdd)
                 {
-                    return BadRequest(new BaseResponse
+                    return NotFound(new BaseResponse
                     {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Thông tin của bạn chưa chính xác",
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Thêm không thành công",
                         Data = null,
                         IsSuccess = false
                     });
                 }
-                var UserAdd = await _appUserService.Insert(reqObj);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
@@ -105,12 +109,21 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.AppUser.Update, Name = "UpdateUserAsync")]
-        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateAppUserDTO reqObj)
+        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateAppUserRequest reqObj)
         {
             try
             {
-                var result = await _appUserService.Update(id, reqObj);
-                if (result == null)
+                var dto = new AppUserDTO();
+                dto.Password = reqObj.Password;
+                dto.IsActive = reqObj.IsActive;
+                dto.Phone = reqObj.Phone;
+                dto.Gender = reqObj.Gender;
+                dto.Fullname = reqObj.Fullname;
+                dto.Dob = reqObj.Dob;
+                dto.UpdateBy = reqObj.UpdateBy;
+
+                var result = await _appUserService.Update(id, dto);
+                if (!result)
                 {
                     return NotFound(new BaseResponse
                     {

@@ -235,8 +235,7 @@ INSERT INTO Role (RoleName) VALUES ('Admin');
 INSERT INTO Role (RoleName) VALUES ('Brand Manager');
 INSERT INTO Role (RoleName) VALUES ('Store');
 
--- Thông tin ảo cho bảng AppUser
--- Thông tin ảo cho bảng AppUser
+
 -- Thông tin ảo cho bảng AppUser
 INSERT INTO AppUser (UserCode, UserName, Password, RoleID, CreateDate, IsActive, Status, Fullname, Phone, Dob, Gender, UpdateBy, UpdateDate) VALUES 
 ('9e2a9c0a-3f94-4b6a-8ef2-123456789012', 'admin', 'YeE2JKedsIRzqg6yRuJXIw==', 1, '2024-01-01', 1, 1, 'Admin User', '1234567890', '1970-01-01', 'M', '1', '2024-01-01'),

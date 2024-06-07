@@ -1,7 +1,6 @@
 using Amazon.S3;
 using Amazon;
 using Microsoft.OpenApi.Models;
-using SmartMenu.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -11,11 +10,11 @@ using FSU.SmartMenuWithAI.Repository.UnitOfWork;
 using FSU.SmartMenuWithAI.Service.Services;
 using FSU.SmartMenuWithAI.Service.ISerivice;
 using Microsoft.EntityFrameworkCore;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
 using FSU.SmartMenuWithAI.Repository.Interfaces;
 using FSU.SmartMenuWithAI.Repository.Repositories;
 using FSU.SmartMenuWithAI.API.Payloads.Responses;
-using FSU.SmartMenuWithAI.BussinessObject.Mappings;
+using FSU.SmartMenuWithAI.API.Mappings;
+using FSU.SmartMenuWithAI.Repository.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 

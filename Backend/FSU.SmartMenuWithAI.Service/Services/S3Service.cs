@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 
-namespace SmartMenu.Services
+namespace FSU.SmartMenuWithAI.Service.Services
 {
     public interface IS3Service
     {
@@ -84,7 +84,7 @@ namespace SmartMenu.Services
 
         public string GetPreSignedURL(string fileName, string folderRoot)
         {
-            var preIamge = "https://" + "smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/"+folderRoot+"/";
+            var preIamge = "https://" + "smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/"  +folderRoot + "/";
             string url = preIamge + fileName;
             return url;
         }

@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FSU.SmartMenuWithAI.BussinessObject\FSU.SmartMenuWithAI.BussinessObject.csproj" />
     <ProjectReference Include="..\FSU.SmartMenuWithAI.Repository\FSU.SmartMenuWithAI.Repository.csproj" />
   </ItemGroup>
 

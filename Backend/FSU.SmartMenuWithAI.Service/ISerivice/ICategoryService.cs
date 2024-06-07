@@ -1,6 +1,5 @@
-﻿using FSU.SmartMenuWithAI.BussinessObject.DTOs.AppUser;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Category;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Pagination;
+﻿using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +10,9 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
 {
     public interface ICategoryService
     {
-        Task<CategoryDTO> Insert(AddCagetoryDTO reqObj);
+        Task<bool> Insert(CategoryDTO reqObj);
 
-        Task<CategoryDTO?> UpdateAsync(int id, string cagetoryName);
+        Task<bool> UpdateAsync(int id, string cagetoryName);
 
         Task<PageEntity<CategoryDTO>?> GetAllAsync(string? searchKey, int brandID, int? pageIndex, int? pageSize);
 

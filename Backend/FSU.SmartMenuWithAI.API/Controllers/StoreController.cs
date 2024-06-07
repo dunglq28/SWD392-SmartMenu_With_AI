@@ -2,10 +2,12 @@
 using FSU.SmartMenuWithAI.API.Payloads;
 using FSU.SmartMenuWithAI.API.Validations;
 using FSU.SmartMenuWithAI.Service.ISerivice;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Store;
-using FSU.SmartMenuWithAI.BussinessObject.Common.Constants;
+using FSU.SmartMenuWithAI.API.Common.Constants;
+using FSU.SmartMenuWithAI.API.Payloads.Request.Store;
+using FSU.SmartMenuWithAI.Service.Models;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -14,40 +16,43 @@ namespace FSU.SmartMenuWithAI.API.Controllers
     public class StoreController : ControllerBase
     {
         private readonly IStoreService _storeService;
-        private readonly AddStoreValidation _addStoreValidation;
-        private readonly updateStoreValidation _updateStoreValidation;
 
 
         public StoreController(IStoreService storeService)
         {
             _storeService = storeService;
-            _addStoreValidation = new AddStoreValidation();
-            _updateStoreValidation = new updateStoreValidation();
 
         }
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPost(APIRoutes.Store.Add, Name = "AddStoreAsync")]
-        public async Task<IActionResult> AddAsync([FromBody] AddStoreDTO reqObj)
+        public async Task<IActionResult> AddAsync([FromBody] AddStoreRequest reqObj)
         {
             try
             {
-                var validation = await _addStoreValidation.ValidateAsync(reqObj);
-                if (!validation.IsValid)
+                var dto = new StoreDTO
                 {
-                    return BadRequest(new BaseResponse
+                    UserId = reqObj.UserId,
+                    Address = reqObj.Address,
+                    City = reqObj.City,
+                    BrandId = reqObj.BrandId
+                };
+                var result = await _storeService.Insert(dto);
+
+                if (!result)
+                {
+                    return NotFound(new BaseResponse
                     {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Thông tin của bạn chưa chính xác",
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Cửa hàng không tồn tại",
                         Data = null,
                         IsSuccess = false
                     });
                 }
-                var UserAdd = await _storeService.Insert(reqObj);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Thêm cửa hàng thành công",
-                    Data = UserAdd,
+                    Data = result,
                     IsSuccess = true
                 });
 
@@ -104,24 +109,19 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Store.Update, Name = "UpdateStoreAsync")]
-        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateStoreDTO reqObj)
+        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateStoreRequest reqObj)
         {
             try
             {
-                var validation = _updateStoreValidation.Validate(reqObj);
-                if (!validation.IsValid)
+                var dto = new StoreDTO
                 {
-                    return BadRequest(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Thông tin của bạn chưa chính xác",
-                        Data = null,
-                        IsSuccess = false
-                    });
-                }
-                var result = await _storeService.UpdateAsync(id, reqObj);
-                    
-                if (result == null)
+                    IsActive = reqObj.IsActive,
+                    Address = reqObj.Address,
+                    City   = reqObj.City,
+                };
+                var result = await _storeService.UpdateAsync(id, dto);
+
+                if (!result)
                 {
                     return NotFound(new BaseResponse
                     {

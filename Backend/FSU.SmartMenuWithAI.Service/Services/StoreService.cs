@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using FSU.SmartMenuWithAI.BussinessObject.Common.Enums;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Pagination;
-using FSU.SmartMenuWithAI.BussinessObject.DTOs.Store;
-using FSU.SmartMenuWithAI.BussinessObject.Entitites;
-using FSU.SmartMenuWithAI.BussinessObject.Utils;
+using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
+using FSU.SmartMenuWithAI.Service.Common.Enums;
 using FSU.SmartMenuWithAI.Service.ISerivice;
+using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.Pagination;
+using FSU.SmartMenuWithAI.Service.Utils;
 using System.Linq.Expressions;
 
 namespace FSU.SmartMenuWithAI.Service.Services
@@ -60,44 +60,49 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return mapDTO;
         }
 
-        public async Task<StoreDTO> Insert(AddStoreDTO entity)
+        public async Task<bool> Insert(StoreDTO entity)
         {
             var store = new Store();
             store.StoreCode = Guid.NewGuid().ToString();
-            store.Address = entity.Address;
-            store.UserId = entity.UserId;
+            store.Address = entity.Address!;
+            store.UserId = entity.UserId!.Value;
             store.UpdateDate = DateOnly.FromDateTime(DateTime.Now);
             store.CreateDate = DateOnly.FromDateTime(DateTime.Now);
             store.IsActive = true;
-            store.City = entity.City;
+            store.City = entity.City!;
             store.Status = (int)Status.Exist;
-            store.BrandId = entity.BrandId;
+            store.BrandId = entity.BrandId!.Value;
 
             await _unitOfWork.StoreRepository.Insert(store);
-            if (await _unitOfWork.SaveAsync() < 1)
-            {
-                return null!;
-            }
-            var mapDTO = _mapper.Map<StoreDTO>(store);
-            return mapDTO;
+            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            return result;
         }
 
-        public async Task<StoreDTO> UpdateAsync(int id, UpdateStoreDTO entityToUpdate)
+        public async Task<bool> UpdateAsync(int id, StoreDTO entityToUpdate)
         {
             var store = await _unitOfWork.StoreRepository.GetByID(id);
             if (store == null)
             {
-                return default(StoreDTO)!;
+                return false!;
             }
             store.IsActive = entityToUpdate.IsActive;
-            store.Address = entityToUpdate.Address;
-            store.City = entityToUpdate.City;
+
+            if (!string.IsNullOrEmpty(entityToUpdate.Address))
+            {
+                store.Address = entityToUpdate.Address;
+            }
+
+            if (!string.IsNullOrEmpty(entityToUpdate.City))
+            {
+                store.City = entityToUpdate.City;
+            }
+
             store.UpdateDate = DateOnly.FromDateTime(DateTime.Now);
 
             _unitOfWork.StoreRepository.Update(store);
-            await _unitOfWork.SaveAsync();
-            var mapDTO = _mapper.Map<StoreDTO>(store);
-            return mapDTO;
+            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            return result;
         }
     }
 }
+
