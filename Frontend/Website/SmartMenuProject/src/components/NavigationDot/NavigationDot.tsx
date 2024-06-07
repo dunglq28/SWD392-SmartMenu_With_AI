@@ -19,7 +19,7 @@ const NavigationDot: React.FC<NavigationDotProps> = ({
   onRowsPerPageChange,
 }) => {
   const Colors = {
-    primaryColor: themeColors.buttonColor,
+    primaryColor: themeColors.primaryButton,
     secondaryColor: themeColors.secondaryColor,
     whiteColor: "#fff",
   };
