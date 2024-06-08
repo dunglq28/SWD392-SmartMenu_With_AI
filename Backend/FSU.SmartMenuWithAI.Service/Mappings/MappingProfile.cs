@@ -4,7 +4,7 @@ using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Token;
 
 
-namespace FSU.SmartMenuWithAI.API.Mappings
+namespace FSU.SmartMenuWithAI.Service.Mappings
 {
     public class MappingProfile : Profile
     {

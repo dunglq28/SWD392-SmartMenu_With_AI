@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using FSU.SmartMenuWithAI.Repository.Interfaces;
 using FSU.SmartMenuWithAI.Repository.Repositories;
 using FSU.SmartMenuWithAI.API.Payloads.Responses;
-using FSU.SmartMenuWithAI.API.Mappings;
+using FSU.SmartMenuWithAI.Service.Mappings;
 using FSU.SmartMenuWithAI.Repository.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
