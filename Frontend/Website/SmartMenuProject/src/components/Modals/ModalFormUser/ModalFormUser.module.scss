@@ -1,0 +1,27 @@
+.containerForm {
+  .roleId,
+  .status {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    color: #1c1c1c !important;
+  }
+
+  ::placeholder {
+    font-style: italic;
+    color: #949494;
+    font-size: 1em;
+  }
+
+  input[type="text"],
+  select {
+    border-color: #466d6b;
+  }
+
+  .textFontWeight {
+    font-weight: 600;
+  }
+
+  .genderText {
+    font-weight: 600;
+  }
+
+}

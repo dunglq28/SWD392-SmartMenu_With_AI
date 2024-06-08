@@ -1,4 +1,4 @@
-import { UserData } from "../../models/UserData.model";
+import { UserData } from "./UserData.model";
 
 interface IDictionary<T> {
   [key: string]: T;

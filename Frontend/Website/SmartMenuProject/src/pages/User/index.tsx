@@ -38,10 +38,6 @@ import { userList } from "../../mock/data";
 import React, { useCallback, useEffect, useState } from "react";
 import { getUsers } from "../../services/UserService";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
-import CustomButton from "../../components/CustomButton/CustomButton";
-import { IoAddCircleOutline } from "react-icons/io5";
-import { themeColors } from "../../constants/GlobalStyles";
-import ModalFormUser from "../../components/ModalFormUser/ModalFormUser";
 
 function User() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -82,30 +78,6 @@ function User() {
   return (
     <Flex className={style.User} flexDirection="column">
       <Flex className={style.ButtonContainer}>
-      <CustomButton
-          styleAdd={style.Button}
-          text="New Brand"
-          icon={IoAddCircleOutline}
-          color={themeColors.primaryButton}
-          title="Add New Brand"
-          modalContent={
-            <>
-              <ModalFormUser />
-            </>
-          }
-        />
-        <CustomButton
-          styleAdd={style.Button}
-          text="New Store"
-          icon={IoAddCircleOutline}
-          color={themeColors.primaryButton}
-          title="Add New Store"
-          modalContent={
-            <>
-              <ModalFormUser />
-            </>
-          }
-        />
       </Flex>
       <TableContainer className={style.UserTbl}>
         <Table>

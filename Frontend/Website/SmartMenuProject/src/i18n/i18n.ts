@@ -26,7 +26,8 @@ const resources = {
         "settings": "Cài Đặt",
         "new product":"Sản Phẩm Mới",
         "new":"Sản Phẩm Mới",
-        "new branch":"Thương Hiệu Mới"
+        "new branch":"Thương Hiệu Mới",
+        "new store":"Chi Nhánh Mới"
       }
     }
   };
