@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { IconType } from "react-icons";
-import ModalForm from "../ModalForm/ModalForm";
 
 interface CustomButtonProps {
   styleAdd?: string;
@@ -50,12 +49,6 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         </Button>
       </Flex>
 
-      <ModalForm
-        formBody={modalContent}
-        onClose={onClose}
-        isOpen={isOpen}
-        title={title}
-      />
     </>
   );
 };

@@ -24,12 +24,15 @@ import { AiOutlineUser } from "react-icons/ai";
 import { IoGitBranchOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdListAlt } from "react-icons/md";
-
 import { useTranslation } from "react-i18next";
-import { themeColors } from "../../constants/GlobalStyles";
-import CustomButton from "../CustomButton/CustomButton";
-import ModalFormUser from "../ModalFormUser/ModalFormUser";
-import ModalForm from "../ModalForm/ModalForm";
+
+import ModalForm from "../Modals/ModalForm/ModalForm";
+import ModalFormBrand from "../Modals/ModalFormBrand/ModalFormBrand";
+import ModalFormUser from "../Modals/ModalFormUser/ModalFormUser";
+import ModalFormStore from "../Modals/ModalFormStore/ModalFormStore";
+import { CurrentForm } from "../../constants/Enum";
+import { BrandData } from "../../models/Brand.model";
+import { UserData } from "../../models/User.model";
 
 function Sidebar() {
   const { t } = useTranslation();
@@ -37,7 +40,67 @@ function Sidebar() {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(true);
   const [item, setItem] = useState("");
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [formPrevious, setFormPrevious] = useState(CurrentForm.BRAND);
+
+  //BRAND DATA
+  const [brandData, setBrandData] = useState<BrandData>({
+    brandName: {
+      value: "",
+      errorMessage: "",
+    },
+    image: {
+      value: null,
+      errorMessage: "",
+    },
+    imageName: {
+      value: "",
+      errorMessage: "",
+    },
+  });
+
+  // USER DATA
+  const [userData, setUserData] = useState<UserData>({
+    fullName: {
+      value: "",
+      errorMessage: "",
+    },
+    userName: {
+      value: "",
+      errorMessage: "",
+    },
+    phoneNumber: {
+      value: "",
+      errorMessage: "",
+    },
+    DOB: {
+      value: null,
+      errorMessage: "",
+    },
+    gender: {
+      value: "",
+      errorMessage: "",
+    },
+    status: {
+      value: 0,
+      errorMessage: "",
+    },
+  });
+
+  const {
+    isOpen: isOpenBrand,
+    onOpen: onOpenBrand,
+    onClose: onCloseBrand,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenStore,
+    onOpen: onOpenStore,
+    onClose: onCloseStore,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenUser,
+    onOpen: onOpenUser,
+    onClose: onCloseUser,
+  } = useDisclosure();
 
   const changeItem = (label: string) => {
     setItem(label);
@@ -66,7 +129,12 @@ function Sidebar() {
     {
       icon: CgAddR,
       label: t("new branch"),
-      onclick: onOpen,
+      onclick: onOpenBrand,
+    },
+    {
+      icon: CgAddR,
+      label: t("new store"),
+      onclick: onOpenStore,
     },
   ];
 
@@ -83,6 +151,32 @@ function Sidebar() {
     localStorage.removeItem("AccessToken");
     localStorage.removeItem("RefreshToken");
     navigate("/login");
+  }
+
+  function nextHandler(currentForm: CurrentForm) {
+    if (currentForm === CurrentForm.BRAND) {
+      onCloseBrand();
+      setFormPrevious(CurrentForm.BRAND);
+    } else {
+      onCloseStore();
+      setFormPrevious(CurrentForm.STORE);
+    }
+    setTimeout(() => {
+      onOpenUser();
+    }, 350);
+  }
+
+  const updateBrandData = (data: BrandData) => {
+    setBrandData(data);
+  };
+
+  const updateUserData = (data: UserData) => {
+  };
+
+  function saveBrandHandle(data: UserData) {
+    setUserData(data);
+    console.log(brandData);
+    console.log(data);
   }
 
   return (
@@ -140,10 +234,50 @@ function Sidebar() {
       </Flex>
 
       <ModalForm
-        formBody={<ModalFormUser />}
-        onClose={onClose}
-        isOpen={isOpen}
+        formBody={
+          <ModalFormBrand
+            brandData={brandData}
+            onClose={onCloseBrand}
+            updateBrandData={updateBrandData}
+            nextHandler={() => nextHandler(CurrentForm.BRAND)}
+          />
+        }
+        onClose={onCloseBrand}
+        isOpen={isOpenBrand}
         title={t("Add New Branch")}
+        updateBrandData={updateBrandData}
+      />
+
+      <ModalForm
+        formBody={
+          <ModalFormStore
+            onClose={onCloseStore}
+            updateBrandData={updateBrandData}
+            nextHandler={() => nextHandler(CurrentForm.STORE)}
+          />
+        }
+        onClose={onCloseStore}
+        isOpen={isOpenStore}
+        title={t("Add New Store")}
+      />
+
+      <ModalForm
+        formBody={
+          <ModalFormUser
+            onClose={onCloseUser}
+            formPrevious={formPrevious}
+            onOpenStore={onOpenStore}
+            onOpenBrand={onOpenBrand}
+            updateBrandData={updateBrandData}
+            updateUserData={updateUserData}
+            saveBrandHandle={saveBrandHandle}
+            brandName={brandData.brandName.value}
+          />
+        }
+        onClose={onCloseUser}
+        isOpen={isOpenUser}
+        title={t("Add New User")}
+        updateBrandData={updateBrandData}
       />
     </Flex>
   );
