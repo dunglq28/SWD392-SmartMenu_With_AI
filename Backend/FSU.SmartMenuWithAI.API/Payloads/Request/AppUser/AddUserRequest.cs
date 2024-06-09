@@ -31,7 +31,7 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.AppUser
         [StringLength(10)]
         public string? Gender { get; set; }
 
-        public int? UpdateBy { get; set; }
+        public int? UpdateBy { get; set; } = 0;
 
     }
     

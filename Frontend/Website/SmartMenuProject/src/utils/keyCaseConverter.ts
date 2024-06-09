@@ -27,3 +27,13 @@ export const convertKeysToCamelCase = (obj: any): any => {
     return acc;
   }, {} as any);
 };
+
+export const convertQueryParamsToKebabCase = (params: Record<string, any>): Record<string, any> => {
+  const newParams: Record<string, any> = {};
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      newParams[kebabCase(key)] = params[key];
+    }
+  }
+  return newParams;
+};
