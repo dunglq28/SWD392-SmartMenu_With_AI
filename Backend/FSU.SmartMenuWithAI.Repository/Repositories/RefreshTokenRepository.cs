@@ -20,12 +20,12 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
         }
         public async Task<RefreshToken?> GetRefreshTokenAsync(string refreshTokenValue)
         {
-            return await _context.RefreshTokens.FirstOrDefaultAsync(x => x.RefreshTokenValue == refreshTokenValue);
+            return await _context.RefreshTokens.AsNoTracking().FirstOrDefaultAsync(x => x.RefreshTokenValue.Equals(refreshTokenValue));
         }
 
         public async Task<RefreshToken?> CheckRefreshTokenByUserIdAsync(int userId)
         {
-            return await _context.RefreshTokens.FirstOrDefaultAsync(x => x.UserId == userId);
+            return await _context.RefreshTokens.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == userId);
         }
 
         public TokenValidationParameters GetTokenValidationParameters()
