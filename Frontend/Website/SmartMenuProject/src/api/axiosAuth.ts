@@ -75,8 +75,8 @@ axiosAuth.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return axiosAuth(originalRequest);
         } else {
-          toast.error("Token đã hết hạn. Vui lòng đăng nhập lại.");
-          window.location.href = "/login";
+          // toast.error("Token đã hết hạn. Vui lòng đăng nhập lại.");
+          // window.location.href = "/login";
         }
       } else {
         toast.error("Bạn không được phép truy cập trang này");

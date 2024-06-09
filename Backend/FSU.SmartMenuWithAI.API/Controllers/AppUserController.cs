@@ -6,6 +6,7 @@ using FSU.SmartMenuWithAI.API.Payloads;
 using FSU.SmartMenuWithAI.API.Payloads.Request.AppUser;
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Service.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
