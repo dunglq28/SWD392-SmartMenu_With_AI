@@ -98,7 +98,7 @@ function Setting() {
               />
             </Flex>
           </Flex>
-          {/* <Flex className={style.CardNav}>
+          <Flex className={style.CardNav}>
             <Text className={style.CardNavText}>Sticky header:</Text>
             <Flex className={style.CardSubNav}>
               <Switch
@@ -108,7 +108,7 @@ function Setting() {
                 onChange={toggleHeaderPosition}
               />
             </Flex>
-          </Flex> */}
+          </Flex>
         </Flex>
       </Card>
 
