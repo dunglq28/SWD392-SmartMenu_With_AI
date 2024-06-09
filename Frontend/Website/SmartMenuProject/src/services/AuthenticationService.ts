@@ -1,5 +1,4 @@
 import axiosLogin from "../api/axiosLogin";
-import { TokenData } from "../payloads/responses/TokenData.model";
 import { LoginResponse } from "../payloads/responses/LoginResponse.model";
 
 export const login = async (
