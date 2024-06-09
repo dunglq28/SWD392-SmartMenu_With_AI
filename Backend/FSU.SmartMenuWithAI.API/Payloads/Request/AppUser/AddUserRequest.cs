@@ -14,10 +14,6 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.AppUser
         [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Chỉ được chứa chữ cái và số")]
         public string UserName { get; set; } = null!;
 
-        [StringLength(50, MinimumLength = 8)]
-        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Chỉ được chứa chữ cái và số")]
-        public string? Password { get; set; } = null!;
-
         [Range(1, 3)]
         public int RoleId { get; set; }
 
@@ -29,7 +25,7 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.AppUser
 
         [Phone]
         public string? Phone { get; set; }
-
+        [Required]
         public DateOnly? Dob { get; set; }
 
         [StringLength(10)]

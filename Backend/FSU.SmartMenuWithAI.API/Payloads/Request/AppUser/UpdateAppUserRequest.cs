@@ -18,12 +18,11 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.AppUser
 
         [Phone]
         public string? Phone { get; set; }
-
         public DateOnly? Dob { get; set; }
 
         [StringLength(10)]
         public string? Gender { get; set; }
-
+        [Required]
         public int? UpdateBy { get; set; }
 
     }
