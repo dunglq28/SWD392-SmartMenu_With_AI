@@ -29,7 +29,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPost(APIRoutes.Product.Add, Name = "AddProductAsync")]
-        public async Task<IActionResult> AddAsync([FromBody] AddProductRequest reqObj)
+        public async Task<IActionResult> AddAsync([FromForm] AddProductRequest reqObj)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Product.Update, Name = "UpdateProductAsync")]
-        public async Task<IActionResult> UpdateUserAsync(int id, UpdateProductRequest reqObj)
+        public async Task<IActionResult> UpdateUserAsync([FromQuery(Name = "product-id")] int id,[FromForm] UpdateProductRequest reqObj)
         {
             try
             {
@@ -195,7 +195,11 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Product.GetAll, Name = "GetProductAsync")]
-        public async Task<IActionResult> GetAllAsync([FromQuery] string? searchKey, int brandID, int? categoryID, int pageNumber = Page.DefaultPageIndex, int PageSize = Page.DefaultPageSize)
+        public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search-key")] string? searchKey
+            , [FromQuery(Name = "brand-id")] int brandID
+            , [FromQuery(Name = "category-id")] int? categoryID
+            , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
+            , [FromQuery(Name = "page-size")] int PageSize = Page.DefaultPageSize)
         {
             try
             {

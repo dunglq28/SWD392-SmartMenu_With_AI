@@ -4,7 +4,6 @@ using FSU.SmartMenuWithAI.Service.ISerivice;
 using Microsoft.AspNetCore.Mvc;
 using FSU.SmartMenuWithAI.API.Payloads;
 using FSU.SmartMenuWithAI.API.Payloads.Request.AppUser;
-using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Service.Models;
 using Microsoft.AspNetCore.Authorization;
 
@@ -30,13 +29,12 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             {
                 var dto = new AppUserDTO();
                 dto.UserName = reqObj.UserName;
-                dto.Password = reqObj.Password;
                 dto.IsActive = reqObj.IsActive;
                 dto.RoleId = reqObj.RoleId;
                 dto.Phone = reqObj.Phone;
                 dto.Gender = reqObj.Gender;
                 dto.Fullname = reqObj.Fullname;
-                dto.Dob = reqObj.Dob;
+                dto.Dob = reqObj.Dob!.Value;
                 dto.UpdateBy = reqObj.UpdateBy;
                 var UserAdd = await _appUserService.Insert(dto);
                 if (!UserAdd)
@@ -156,7 +154,10 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.AppUser.GetAll, Name = "GetUsersAsync")]
-        public async Task<IActionResult> GetAllAsync([FromQuery] int currIdLoginID, string? searchKey, int pageNumber = Page.DefaultPageIndex, int PageSize = Page.DefaultPageSize)
+        public async Task<IActionResult> GetAllAsync([FromQuery(Name = "curr-id-login")] int currIdLoginID
+            , [FromQuery(Name = "search-key")] string? searchKey
+            , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
+            , [FromQuery(Name = "page-size")] int PageSize = Page.DefaultPageSize)
         {
             try
             {

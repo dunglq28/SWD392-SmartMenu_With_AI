@@ -149,7 +149,10 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager + UserRoles.Store)]
         [HttpGet(APIRoutes.Category.GetAll, Name = "GetCategoriesAsync")]
-        public async Task<IActionResult> GetAllAsync([FromQuery] int brandID, string? searchKey = null, int pageNumber = Page.DefaultPageIndex, int PageSize = Page.DefaultPageSize)
+        public async Task<IActionResult> GetAllAsync([FromQuery(Name = "brand-id")] int brandID
+            , [FromQuery(Name = "search-key")] string? searchKey = null
+            , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
+            , [FromQuery(Name = "page-size")] int PageSize = Page.DefaultPageSize)
         {
             try
             {
