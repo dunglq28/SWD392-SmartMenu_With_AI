@@ -47,8 +47,8 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 if (reqObj.Image != null)
                 {
                     // Upload the image to S3 and get the URL
-                    await _s3Service.UploadItemAsync(reqObj.Image, FolderRootImg.Brand);
-                    imageName = reqObj.Image.FileName;
+                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.ImageName, FolderRootImg.Brand);
+                    imageName = reqObj.ImageName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName, FolderRootImg.Brand);
                 }
                 var brandAdd = await _brandService.Insert(reqObj.BrandName, reqObj.UserId, imageUrl, imageName);
@@ -141,13 +141,13 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         });
                     }
                     // Upload the image to S3 and get the URL
-                    await _s3Service.UploadItemAsync(reqObj.Image, FolderRootImg.Brand);
-                    imageName = reqObj.Image.FileName;
+                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.ImageName, FolderRootImg.Brand);
+                    imageName = reqObj.ImageName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName, FolderRootImg.Brand);
                 }
 
                 var result = await _brandService.Update(id, reqObj.BrandName, imageUrl, imageName);
-                if(!result)
+                if(result == null)
                 {
                     return NotFound(new BaseResponse
                     {
