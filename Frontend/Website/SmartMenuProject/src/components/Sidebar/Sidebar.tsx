@@ -32,7 +32,9 @@ import ModalFormUser from "../Modals/ModalFormUser/ModalFormUser";
 import ModalFormStore from "../Modals/ModalFormStore/ModalFormStore";
 import { CurrentForm } from "../../constants/Enum";
 import { BrandData } from "../../models/Brand.model";
-import { UserData } from "../../models/User.model";
+import { UserForm } from "../../models/User.model";
+import { createUser } from "../../services/UserService";
+import { UserData } from "../../payloads/responses/UserData.model";
 
 function Sidebar() {
   const { t } = useTranslation();
@@ -59,7 +61,7 @@ function Sidebar() {
   });
 
   // USER DATA
-  const [userData, setUserData] = useState<UserData>({
+  const [userData, setUserData] = useState<UserForm>({
     fullName: {
       value: "",
       errorMessage: "",
@@ -80,7 +82,7 @@ function Sidebar() {
       value: "",
       errorMessage: "",
     },
-    status: {
+    isActive: {
       value: 0,
       errorMessage: "",
     },
@@ -170,13 +172,18 @@ function Sidebar() {
     setBrandData(data);
   };
 
-  const updateUserData = (data: UserData) => {
+  const updateUserData = (data: UserForm) => {
   };
 
-  function saveBrandHandle(data: UserData) {
+  async function saveBrandHandle(data: UserForm) {
     setUserData(data);
-    console.log(brandData);
+    // console.log(brandData);
+    const brandForm = new FormData();
+    // brandForm.append("BrandName", )
     console.log(data);
+    var result = await createUser(data, 2);
+    console.log(result);
+    
   }
 
   return (

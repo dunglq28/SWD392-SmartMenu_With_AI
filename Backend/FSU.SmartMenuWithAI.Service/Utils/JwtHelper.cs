@@ -40,7 +40,7 @@ namespace FSU.SmartMenuWithAI.Service.Utils
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.UtcNow.AddSeconds(30),
+                expires: DateTime.UtcNow.AddMinutes(30),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha512Signature)
             );
@@ -57,7 +57,7 @@ namespace FSU.SmartMenuWithAI.Service.Utils
                 IsUsed = false,
                 IsRevoked = false,
                 CreatedAt = DateTime.UtcNow,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(5),
+                ExpiresAt = DateTime.UtcNow.AddHours(1),
             };
             await _context.AddAsync(refreshTokenEntity);
             await _context.SaveChangesAsync();

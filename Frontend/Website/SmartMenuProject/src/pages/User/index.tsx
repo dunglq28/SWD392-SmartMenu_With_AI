@@ -5,14 +5,12 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
 import style from "./User.module.scss";
 
-// import { userList } from "../../mock/data";
 import React, { useCallback, useEffect, useState } from "react";
 import { getUsers } from "../../services/UserService";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
@@ -22,8 +20,11 @@ import moment from "moment";
 import { UserRole } from "../../constants/Enum";
 import { toast } from "react-toastify";
 import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
+import Loading from "../../components/Loading";
 
 function User() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
   const [data, setData] = useState<UserData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
@@ -33,15 +34,28 @@ function User() {
 
   const fetchData = useCallback(async () => {
     try {
+      setIsLoading(true);
       let result;
-      result = await getUsers(currentPage, rowsPerPage);
-      setData(result.list);
-      setTotalPages(result.totalPage);
-      setRowsPerPageOption(getOptions(result.totalRecord));
+
+      const loadData = async () => {
+        result = await getUsers(currentPage, rowsPerPage);
+        setData(result.list);
+        setTotalPages(result.totalPage);
+        setRowsPerPageOption(getOptions(result.totalRecord));
+        setIsLoading(false);
+        setIsInitialLoad(false);
+      };
+
+      if (isInitialLoad) {
+        setTimeout(loadData, 500);
+      } else {
+        await loadData();
+      }
     } catch (err) {
       toast.error("Lỗi khi lấy dữ liệu");
+      setIsLoading(false);
     }
-  }, [currentPage, rowsPerPage]);
+  }, [currentPage, rowsPerPage, isInitialLoad]);
 
   useEffect(() => {
     fetchData();
@@ -100,29 +114,35 @@ function User() {
             </Tr>
           </Thead>
           <Tbody>
-            {data.map((user) => (
-              <Tr key={user.userCode} className={style.UserItem}>
-                <Td>{user.userId}</Td>
-                <Td>{user.fullname}</Td>
-                <Td>{user.userName}</Td>
-                <Td>{moment(user.dob).format("DD/MM/YYYY")}</Td>
-                <Td>{user.gender}</Td>
-                <Td>{user.phone}</Td>
-                <Td>{getRoleName(user.roleId)}</Td>
-                <Td>{moment(user.createDate).format("DD/MM/YYYY")}</Td>
-                <Td>{user.isActive ? "Yes" : "No"}</Td>
-                <Td>
-                  <ActionMenu id={user.userId} onDelete={handleDelete} onEdit={handleEdit}/>
+            {isLoading && isInitialLoad ? (
+              <Tr>
+                <Td colSpan={10} className={style.LoadingCell}>
+                  <Loading />
                 </Td>
               </Tr>
-            ))}
-          </Tbody>
-          {/* <Tfoot>
-                <Tr>
-                  <Th></Th>
-                  <Th></Th>
+            ) : (
+              data.map((user) => (
+                <Tr key={user.userCode} className={style.UserItem}>
+                  <Td>{user.userId}</Td>
+                  <Td>{user.fullname}</Td>
+                  <Td>{user.userName}</Td>
+                  <Td>{moment(user.dob).format("DD/MM/YYYY")}</Td>
+                  <Td>{user.gender}</Td>
+                  <Td>{user.phone}</Td>
+                  <Td>{getRoleName(user.roleId)}</Td>
+                  <Td>{moment(user.createDate).format("DD/MM/YYYY")}</Td>
+                  <Td>{user.isActive ? "Yes" : "No"}</Td>
+                  <Td>
+                    <ActionMenu
+                      id={user.userId}
+                      onDelete={handleDelete}
+                      onEdit={handleEdit}
+                    />
+                  </Td>
                 </Tr>
-              </Tfoot> */}
+              ))
+            )}
+          </Tbody>
         </Table>
       </TableContainer>
 
