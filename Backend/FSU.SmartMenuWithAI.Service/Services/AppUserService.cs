@@ -28,7 +28,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         }
         public async Task<int> Count()
         {
-           return await _unitOfWork.AppUserRepository.Count();
+            return await _unitOfWork.AppUserRepository.Count();
         }
 
         public async Task<bool> Delete(int id)
@@ -41,29 +41,35 @@ namespace FSU.SmartMenuWithAI.Service.Services
             deleteAppUser.Status = (int)Status.Deleted;
 
             _unitOfWork.AppUserRepository.Update(deleteAppUser);
-             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             return result;
         }
 
         public async Task<PageEntity<AppUserDTO>> Get(int currentIDLogin, string? searchKey, int? pageIndex = null, int? pageSize = null)
         {
 
-            Expression<Func<AppUser, bool>> filter  = searchKey != null ? x => x.UserName.Contains(searchKey) && x.RoleId != (int)UserRole.Admin : x => x.RoleId != (int)UserRole.Admin;
+            Expression<Func<AppUser, bool>> filter = searchKey != null
+                ? x => x.UserName.Contains(searchKey) && x.RoleId != (int)UserRole.Admin && !(x.Status == (int)Status.Deleted)
+                : x => x.RoleId != (int)UserRole.Admin && !(x.Status == (int)Status.Deleted);
 
             Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = q => q.OrderBy(x => x.UserId);
             string includeProperties = "Role";
 
-            var entities = _unitOfWork.AppUserRepository.Get( currentIDLogin, filter: filter, orderBy: orderBy, includeProperties: includeProperties ,pageIndex: pageIndex, pageSize: pageSize);
+            var entities = _unitOfWork.AppUserRepository.Get(currentIDLogin, filter: filter, orderBy: orderBy, includeProperties: includeProperties, pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<AppUserDTO>();
             pagin.List = _mapper.Map<IEnumerable<AppUserDTO>>(entities).ToList();
             pagin.TotalRecord = await _unitOfWork.AppUserRepository.Count();
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
-            return pagin ;
+            return pagin;
         }
 
         public async Task<AppUserDTO?> GetByID(int id)
         {
             var entity = await _unitOfWork.AppUserRepository.GetByID(id);
+            if (entity == null || !(entity.Status == (int)Status.Deleted))
+            {
+                return null!;
+            }
             return _mapper?.Map<AppUserDTO?>(entity);
         }
 
@@ -71,7 +77,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         {
             var user = _mapper.Map<AppUser>(dto);
             user.UserCode = Guid.NewGuid().ToString();
-            user.Status = (int) Status.Exist;
+            user.Status = (int)Status.Exist;
             user.CreateDate = DateOnly.FromDateTime(DateTime.Now);
             user.Password = PasswordHelper.ConvertToEncrypt("123456");
 

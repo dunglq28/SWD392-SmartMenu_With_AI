@@ -23,6 +23,10 @@ namespace FSU.SmartMenuWithAI.Service.Services
         public async Task<BrandDTO> GetByID(int id)
         {
             var entity = await _unitOfWork.BrandRepository.GetByID(id);
+            if (entity == null || !(entity.Status == (int)Status.Deleted))
+            {
+                return null!;
+            }
             return _mapper?.Map<BrandDTO?>(entity)!;
         }
         public async Task<bool> Delete(int id)
@@ -61,20 +65,20 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
                 await _unitOfWork.BrandRepository.Insert(brand);
                 var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
-                if (result) { }
+                if (!result) { return null; }
                 return _mapper?.Map<BrandDTO>(brand)!;
             }
             catch (DbUpdateException ex)
             {
                 // Kiểm tra nếu lỗi là do vi phạm ràng buộc unique
-                return null;
+                return null!;
 
             }
         }
         public async Task<BrandDTO> Update(int id, string brandName, string imgUrl, string imgName)
         {
             var brandToUpdate = await _unitOfWork.BrandRepository.GetByID(id);
-            if (brandToUpdate == null)
+            if (brandToUpdate == null || (brandToUpdate.Status == (int) Status.Deleted))
             {
                 return null!;
             }

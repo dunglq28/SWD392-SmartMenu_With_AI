@@ -149,7 +149,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             try
             {
                 var existProduct = await _productService.GetAsync(id);
-                if (existProduct == null)
+                if (existProduct == null )
                 {
                     return NotFound(new BaseResponse
                     {

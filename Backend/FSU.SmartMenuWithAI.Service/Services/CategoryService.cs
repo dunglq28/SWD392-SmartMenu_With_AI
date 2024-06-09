@@ -7,6 +7,7 @@ using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
 using FSU.SmartMenuWithAI.Service.Utils;
 using System.Linq.Expressions;
+using static Amazon.S3.Util.S3EventNotification;
 
 namespace FSU.SmartMenuWithAI.Service.Services
 {
@@ -37,7 +38,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         public async Task<bool> UpdateAsync(int id, string cagetoryName)
         {
             var category = await _unitOfWork.CategoryRepository.GetByID(id);
-            if (category == null)
+            if (category == null || (category.Status == (int)Status.Deleted))
             {
                 return false;
             }
@@ -56,7 +57,9 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<PageEntity<CategoryDTO>?> GetAllAsync(string? searchKey, int brandID, int? pageIndex , int? pageSize)
         {
-            Expression<Func<Category, bool>> filter = searchKey != null ? x => x.CategoryName.Contains(searchKey) && x.BrandId == brandID : x => x.BrandId == brandID;
+            Expression<Func<Category, bool>> filter = searchKey != null 
+                ? x => x.CategoryName.Contains(searchKey) && x.BrandId == brandID  && (x.Status == (int)Status.Deleted)
+                : x => x.BrandId == brandID && (x.Status == (int)Status.Deleted);
 
             Func<IQueryable<Category>, IOrderedQueryable<Category>> orderBy = q => q.OrderBy(x => x.CategoryId);
             string includeProperties = "Brand";
@@ -73,6 +76,10 @@ namespace FSU.SmartMenuWithAI.Service.Services
         public async Task<CategoryDTO?> GetAsync(int id)
         {
             var category = await _unitOfWork.CategoryRepository.GetByID(id);
+            if (category == null || !(category.Status == (int)Status.Deleted))
+            {
+                return null!;
+            }
             var mapDTO = _mapper.Map<CategoryDTO>(category);
             mapDTO.BrandName = category.Brand.BrandName;
             return mapDTO;
