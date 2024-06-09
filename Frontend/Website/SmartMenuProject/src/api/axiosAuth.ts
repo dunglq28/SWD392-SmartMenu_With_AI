@@ -9,6 +9,7 @@ import { kebabCase } from "change-case";
 import {
   convertKeysToCamelCase,
   convertKeysToKebabCase,
+  convertQueryParamsToKebabCase,
 } from "../utils/keyCaseConverter";
 
 const API_HOST = import.meta.env.VITE_API_HOST;
@@ -36,6 +37,10 @@ axiosAuth.interceptors.request.use(
 
     if (config.data) {
       config.data = convertKeysToKebabCase(config.data);
+    }
+
+    if (config.params) {
+      config.params = convertQueryParamsToKebabCase(config.params);
     }
 
     return config;

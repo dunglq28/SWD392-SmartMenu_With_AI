@@ -11,7 +11,7 @@ export const getUsers = async (
   const res = await axiosAuth.get("app-users", {
     params: {
       pageNumber: currentPage,
-      PageSize: rowsPerPage,
+      pageSize: rowsPerPage,
     },
   });
   const apiResponse = res.data as ApiResponse<Object>;
@@ -26,11 +26,21 @@ export const createUser = async (
     userName: user.userName.value,
     fullname: user.fullName.value,
     phone: user.phoneNumber.value,
-    dob: user.DOB.value ? user.DOB.value.toISOString().split('T')[0] : '',
+    dob: user.DOB.value ? user.DOB.value.toISOString().split("T")[0] : "",
     gender: user.gender.value,
     roleId: roleId,
     isActive: user.isActive.value === 1 ? true : false,
   });
   const apiResponse = res.data as ApiResponse<Object>;
-  return apiResponse
+  return apiResponse;
+};
+
+export const deleteUser = async (id: number): Promise<ApiResponse<Object>> => {
+  const res = await axiosAuth.delete("app-users", {
+    params: {
+      id: id,
+    },
+  });
+  const apiResponse = res.data as ApiResponse<Object>;
+  return apiResponse;
 };

@@ -54,10 +54,6 @@ function Sidebar() {
       value: null,
       errorMessage: "",
     },
-    imageName: {
-      value: "",
-      errorMessage: "",
-    },
   });
 
   // USER DATA
@@ -172,8 +168,7 @@ function Sidebar() {
     setBrandData(data);
   };
 
-  const updateUserData = (data: UserForm) => {
-  };
+  const updateUserData = (data: UserForm) => {};
 
   async function saveBrandHandle(data: UserForm) {
     setUserData(data);
@@ -183,7 +178,6 @@ function Sidebar() {
     console.log(data);
     var result = await createUser(data, 2);
     console.log(result);
-    
   }
 
   return (

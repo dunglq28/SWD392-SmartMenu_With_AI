@@ -12,7 +12,7 @@ import {
 import style from "./User.module.scss";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { getUsers } from "../../services/UserService";
+import { deleteUser, getUsers } from "../../services/UserService";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import { getOptions } from "../../utils/getRowPerPage";
 import { UserData } from "../../payloads/responses/UserData.model";
@@ -85,8 +85,15 @@ function User() {
     return UserRole[roleId] || "Unknown Role";
   };
 
-  function handleDelete(id: number) {
-    console.log(id);
+  async function handleDelete(id: number) {
+    try {
+      var result = await deleteUser(id);      
+      if (result.statusCode === 200) {
+        toast.success("Xoá người dùng thành công");
+      }
+    } catch (e) {
+      toast.error("Xoá người dùng thất bại");
+    }
   }
 
   function handleEdit(id: number) {
