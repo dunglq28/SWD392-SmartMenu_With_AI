@@ -48,7 +48,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         public async Task<PageEntity<AppUserDTO>> Get(int currentIDLogin, string? searchKey, int? pageIndex = null, int? pageSize = null)
         {
 
-            Expression<Func<AppUser, bool>> filter  = searchKey != null ? x => x.UserName.Contains(searchKey) && x.RoleId != (int)UserRole.Admin : null!;
+            Expression<Func<AppUser, bool>> filter  = searchKey != null ? x => x.UserName.Contains(searchKey) && x.RoleId != (int)UserRole.Admin : x => x.RoleId != (int)UserRole.Admin;
 
             Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = q => q.OrderBy(x => x.UserId);
             string includeProperties = "Role";
@@ -73,7 +73,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             user.UserCode = Guid.NewGuid().ToString();
             user.Status = (int) Status.Exist;
             user.CreateDate = DateOnly.FromDateTime(DateTime.Now);
-            user.Password = dto.Password.IsNullOrEmpty() ? PasswordHelper.ConvertToEncrypt(dto.Password!) : PasswordHelper.ConvertToEncrypt("123456");
+            user.Password = PasswordHelper.ConvertToEncrypt("123456");
 
             await _unitOfWork.AppUserRepository.Insert(user);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
