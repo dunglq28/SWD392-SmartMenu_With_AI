@@ -14,7 +14,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         Task<bool> DirectoryExistAsync(string directoryPath);
         Task CreateDirectoryAsync(string directoryPath);
         Task<GetObjectResponse?> GetItemAsync(Guid id, string directoryPath);
-        Task<PutObjectResponse> UploadItemAsync(IFormFile file, string folderRoot);
+        Task<PutObjectResponse> UploadItemAsync(IFormFile file, string fileName, string folderRoot);
         Task<DeleteObjectResponse> DeleteItemAsync(Guid id, string directoryPath);
         string GetPreSignedURL(string fileName, string folderRoot);
     }
@@ -89,7 +89,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return url;
         }
 
-        public async Task<PutObjectResponse> UploadItemAsync(IFormFile file, string folderRoot)
+        public async Task<PutObjectResponse> UploadItemAsync(IFormFile file, string fileName, string folderRoot)
         {
             // Create directory Path if not exist
             //await CreateDirectoryAsync(directoryPath);
@@ -103,7 +103,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                     BucketName = BucketName,
                     ContentType = file.ContentType,
                     InputStream = file.OpenReadStream(),
-                    Key = folderRoot + "/" + file.FileName,
+                    Key = folderRoot + "/" + fileName,
                     Metadata =
                 {
                     ["x-amz-meta-originalname"] = ConvertToAscii(file.FileName),

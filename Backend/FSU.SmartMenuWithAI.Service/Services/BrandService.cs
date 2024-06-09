@@ -5,6 +5,7 @@ using FSU.SmartMenuWithAI.Service.Common.Enums;
 using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
 using Microsoft.EntityFrameworkCore;
+using static Amazon.S3.Util.S3EventNotification;
 
 namespace FSU.SmartMenuWithAI.Service.Services
 {
@@ -44,7 +45,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return _mapper?.Map<BrandDTO>(entity)!;
         }
 
-        public async Task<bool> Insert(string brandName, int userID, string imgUrl, string imgName)
+        public async Task<BrandDTO> Insert(string brandName, int userID, string imgUrl, string imgName)
         {
             try
             {
@@ -60,51 +61,42 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
                 await _unitOfWork.BrandRepository.Insert(brand);
                 var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
-                return result;
+                if (result) { }
+                return _mapper?.Map<BrandDTO>(brand)!;
             }
             catch (DbUpdateException ex)
             {
                 // Kiểm tra nếu lỗi là do vi phạm ràng buộc unique
-                return false;
+                return null;
 
             }
         }
-        public async Task<bool> Update(int id, string brandName, string imgUrl, string imgName)
+        public async Task<BrandDTO> Update(int id, string brandName, string imgUrl, string imgName)
         {
-            try
+            var brandToUpdate = await _unitOfWork.BrandRepository.GetByID(id);
+            if (brandToUpdate == null)
             {
-                var brandToUpdate = await _unitOfWork.BrandRepository.GetByID(id);
-                if (brandToUpdate == null)
-                {
-                    return false!;
-                }
-
-                if (!string.IsNullOrEmpty(brandName))
-                {
-                    brandToUpdate.BrandName = brandName;
-                }
-
-                if (!string.IsNullOrEmpty(imgUrl))
-                {
-                    brandToUpdate.ImageUrl = imgUrl;
-                }
-
-                if (!string.IsNullOrEmpty(imgName))
-                {
-                    brandToUpdate.ImageName = imgName;
-                }
-
-                _unitOfWork.BrandRepository.Update(brandToUpdate);
-                var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
-                return result;
+                return null!;
             }
-            catch (DbUpdateException ex)
+
+            if (!string.IsNullOrEmpty(brandName))
             {
-                // Kiểm tra nếu lỗi là do vi phạm ràng buộc unique
-                throw new Exception($"Trùng tên thương hiệu: {ex.Message}", ex);
-
+                brandToUpdate.BrandName = brandName;
             }
+
+            if (!string.IsNullOrEmpty(imgUrl))
+            {
+                brandToUpdate.ImageUrl = imgUrl;
+            }
+
+            if (!string.IsNullOrEmpty(imgName))
+            {
+                brandToUpdate.ImageName = imgName;
+            }
+
+            _unitOfWork.BrandRepository.Update(brandToUpdate);
+            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            return _mapper?.Map<BrandDTO>(brandToUpdate)!;
         }
-
     }
 }
