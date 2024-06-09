@@ -1,13 +1,19 @@
-// @ts-nocheck
 import axios, {
   AxiosInstance,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
-import { WEB_API_URL } from "../config";
 import { toast } from "react-toastify";
+import {
+  convertKeysToCamelCase,
+  convertKeysToKebabCase,
+} from "../utils/keyCaseConverter";
+import { refreshToken } from "../services/AuthenticationService";
 
-const BASE_URL = WEB_API_URL + "/api";
+const API_HOST = import.meta.env.VITE_API_HOST;
+const API_PORT = import.meta.env.VITE_API_PORT;
+
+const BASE_URL = `${API_HOST}:${API_PORT}/api`;
 
 const axiosMultipartForm: AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -22,9 +28,13 @@ axiosMultipartForm.interceptors.request.use(
     // Initialize header if not already defined
     config.headers = config.headers || {};
 
-    const accessToken = localStorage.getItem("token");
+    const accessToken = localStorage.getItem("AccessToken");
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    if (config.data) {
+      config.data = convertKeysToKebabCase(config.data);
     }
 
     return config;
@@ -37,15 +47,39 @@ axiosMultipartForm.interceptors.request.use(
 // Add Response interceptor
 axiosMultipartForm.interceptors.response.use(
   function (response: AxiosResponse) {
+    if (response.data) {
+      response.data = convertKeysToCamelCase(response.data);
+    }
     return response;
   },
 
-  function (error) {
+  async function (error) {
     if (error.message === "Network Error" && !error.response) {
-      toast.error("Network Error, Please check connection!");
+      toast.error("Lỗi mạng, vui lòng kiểm tra kết nối!");
     }
+
+    const originalRequest = error.config;
+
+    if (error.response && error.response.status === 403) {
+      toast.error(error.response.data.message);
+    }
+
     if (error.response && error.response.status === 401) {
-      toast.error("You not allow to access this page");
+      const authMessage = error.response.data.Message;
+
+      if (authMessage && authMessage.includes("Token đã hết hạn!")) {
+        const newAccessToken = await refreshToken();
+
+        if (newAccessToken) {
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return axiosMultipartForm(originalRequest);
+        } else {
+          toast.error("Token đã hết hạn. Vui lòng đăng nhập lại.");
+          window.location.href = "/login";
+        }
+      } else {
+        toast.error("Bạn không được phép truy cập trang này");
+      }
     }
     return Promise.reject(error);
   }

@@ -16,7 +16,7 @@ import styles from "./ModalFormUser.module.scss";
 import { themeColors } from "../../../constants/GlobalStyles";
 import { CurrentForm } from "../../../constants/Enum";
 import { BrandData } from "../../../models/Brand.model";
-import { UserData } from "../../../models/User.model";
+import { UserForm } from "../../../models/User.model";
 import { isValidPhoneNumber } from "../../../utils/validation";
 import { generateUsername } from "../../../utils/createBrandName";
 
@@ -26,8 +26,8 @@ interface ModalFormBrandProps {
   onOpenStore: () => void;
   onOpenBrand: () => void;
   updateBrandData: (data: BrandData) => void;
-  updateUserData: (data: UserData) => void;
-  saveBrandHandle: (data: UserData) => void;
+  updateUserData: (data: UserForm) => void;
+  saveBrandHandle: (data: UserForm) => void;
   brandName: string;
 }
 
@@ -41,23 +41,23 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
   saveBrandHandle,
   brandName,
 }) => {
-  const [formData, setFormData] = useState<UserData>({
+  const [formData, setFormData] = useState<UserForm>({
     fullName: { value: "", errorMessage: "" },
     userName: { value: generateUsername(brandName), errorMessage: "" },
     phoneNumber: { value: "", errorMessage: "" },
     DOB: { value: null, errorMessage: "" },
     gender: { value: "Male", errorMessage: "" },
-    status: { value: null, errorMessage: "" },
+    isActive: { value: null, errorMessage: "" },
   });
 
-  const handleInputChange = (field: keyof UserData, value: string) => {
+  const handleInputChange = (field: keyof UserForm, value: string) => {
     setFormData((prevData) => ({
       ...prevData,
       [field]: { value, errorMessage: "" },
     }));
   };
 
-  const handleDateChange = (field: keyof UserData, value: string) => {
+  const handleDateChange = (field: keyof UserForm, value: string) => {
     setFormData((prevData) => ({
       ...prevData,
       [field]: { value: new Date(value), errorMessage: "" },
@@ -71,10 +71,10 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
     }));
   };
 
-  const handleStatusChange = (value: string) => {
+  const handleIsActiveChange = (value: string) => {
     setFormData((prevData) => ({
       ...prevData,
-      status: { value: Number(value), errorMessage: "" },
+      isActive: { value: Number(value), errorMessage: "" },
     }));
   };
 
@@ -92,7 +92,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       phoneNumber: { value: "", errorMessage: "" },
       DOB: { value: null, errorMessage: "" },
       gender: { value: "", errorMessage: "" },
-      status: { value: null, errorMessage: "" },
+      isActive: { value: null, errorMessage: "" },
     });
     onClose();
   };
@@ -173,21 +173,21 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       hasError = true;
     }
 
-    if (formData.status.value === null) {
+    if (formData.isActive.value === null) {
       setFormData((prevData) => ({
         ...prevData,
-        status: {
-          ...prevData.status,
-          errorMessage: "Status is required",
+        isActive: {
+          ...prevData.isActive,
+          errorMessage: "isActive is required",
         },
       }));
       hasError = true;
     }
 
-    if (!hasError) {    
+    if (!hasError) {
       // console.log(formData);
       // updateUserData(formData);
-      
+
       saveBrandHandle(formData);
     }
   };
@@ -293,24 +293,22 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
             </Box>
             <Box flex="1" ml={3}>
               <Text className={styles.textFontWeight} py={3} pr={3}>
-                Status
+                isActive
               </Text>
               <Select
-                id="status"
-                className={styles.status}
-                value={formData.status.value ?? ""}
-                onChange={(e) => handleStatusChange(e.target.value)}
+                id="isActive"
+                className={styles.isActive}
+                value={formData.isActive.value ?? ""}
+                onChange={(e) => handleIsActiveChange(e.target.value)}
               >
                 <option disabled hidden value="">
                   Select one
                 </option>
-                <option value="1">
-                  Active
-                </option>
+                <option value="1">Active</option>
                 <option value="0">Inactive</option>
               </Select>
-              {formData.status.errorMessage && (
-                <Text color="red.500">{formData.status.errorMessage}</Text>
+              {formData.isActive.errorMessage && (
+                <Text color="red.500">{formData.isActive.errorMessage}</Text>
               )}
             </Box>
           </Flex>

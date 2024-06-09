@@ -31,7 +31,6 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
   const [formData, setFormData] = useState<BrandData>({
     brandName: { value: brandData.brandName.value, errorMessage: "" },
     image: { value: brandData.image.value, errorMessage: "" },
-    imageName: { value: brandData.imageName.value, errorMessage: "" },
   });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +80,6 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
     updateBrandData({
       brandName: { value: "", errorMessage: "" },
       image: { value: null, errorMessage: "" },
-      imageName: { value: "", errorMessage: "" },
     });
     onClose();
   };
@@ -106,19 +104,6 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
         image: {
           ...prevData.image,
           errorMessage: "Image is required",
-        },
-      }));
-      hasError = true;
-    }
-
-    const fileNameValid = isValidImageFileName(formData.imageName.value);
-
-    if (!fileNameValid) {
-      setFormData((prevData) => ({
-        ...prevData,
-        imageName: {
-          ...prevData.imageName,
-          errorMessage: "Invalid image name",
         },
       }));
       hasError = true;
@@ -172,19 +157,6 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
                     </Button>
                   )}
                 </Flex>
-                {formData.image.value && (
-                  <Box mt={2}>
-                    <Input
-                      pl={3}
-                      value={formData.imageName.value}
-                      onChange={handleFileNameChange}
-                      placeholder="File Name"
-                    />
-                    {formData.imageName.errorMessage && (
-                      <Text color="red.500">{formData.imageName.errorMessage}</Text>
-                    )}
-                  </Box>
-                )}
                 {formData.image.value && (
                   <Image
                     src={URL.createObjectURL(formData.image.value)}

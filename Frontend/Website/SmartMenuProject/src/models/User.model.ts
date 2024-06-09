@@ -1,4 +1,4 @@
-export interface UserData {
+export interface UserForm {
   fullName: {
     value: string;
     errorMessage: string;
@@ -19,7 +19,7 @@ export interface UserData {
     value: string;
     errorMessage: string;
   };
-  status: {
+  isActive: {
     value: number | null;
     errorMessage: string;
   };

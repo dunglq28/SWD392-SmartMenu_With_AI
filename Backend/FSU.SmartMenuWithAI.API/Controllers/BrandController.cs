@@ -26,7 +26,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPost(APIRoutes.Brand.Add, Name = "AddBrandAsync")]
-        public async Task<IActionResult> AddAsync(CreateBrandRequest reqObj)
+        public async Task<IActionResult> AddAsync([FromForm] CreateBrandRequest reqObj)
         {
             try
             {
