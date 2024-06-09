@@ -17,12 +17,14 @@ namespace FSU.SmartMenuWithAI.API.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly IAppUserService _appUserService;
+        private readonly IRefreshTokenService _refreshTokenService;
 
-        public AuthenticationController(IAccountService accountService, IRefreshTokenRepository refreshTokenRepository)
+        public AuthenticationController(IAccountService accountService, IRefreshTokenService refreshTokenService, IAppUserService appUserService)
         {
             _accountService = accountService;
-            _refreshTokenRepository = refreshTokenRepository;
+            _refreshTokenService = refreshTokenService;
+            _appUserService = appUserService;
         }
 
         [HttpPost(APIRoutes.Authentication.Login, Name = "LoginAsync")]
@@ -31,7 +33,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             try
             {
                 var userDto = await _accountService.CheckLoginAsync(reqObj.UserName, reqObj.Password);
-                    
+
                 if (userDto == null)
                 {
                     return Unauthorized(new BaseResponse
@@ -58,17 +60,17 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         StatusCode = StatusCodes.Status403Forbidden
                     };
                 }
-                var tokenExist = await _refreshTokenRepository
-                    .CheckRefreshTokenByUserIdAsync(userDto.UserId.Value);
+                var tokenExist = await _refreshTokenService
+                    .CheckRefreshTokenByUserIdAsync(userDto.UserId!.Value);
 
                 if (tokenExist != null)
                 {
-                    var reuslt = await _refreshTokenRepository
+                    var reuslt = await _refreshTokenService
                         .RemoveRefreshTokenAsync(tokenExist);
                 }
 
                 var token = await _accountService.GenerateAccessTokenAsync(userDto.UserId.Value);
-                    
+
 
                 return Ok(new BaseResponse
                 {
@@ -101,7 +103,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             try
             {
                 var jwtTokenHandler = new JwtSecurityTokenHandler();
-                var tokenValidateParam = _refreshTokenRepository.GetTokenValidationParameters();
+                var tokenValidateParam = _refreshTokenService.GetTokenValidationParameters();
 
                 //check: AccessToken valid format
                 var tokenInVerification = jwtTokenHandler.ValidateToken(token.AccessToken, tokenValidateParam, out var validatedToken);
@@ -123,7 +125,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 }
 
                 //check: Check accessToken expire?
-                var utcExpireDate = long.Parse(tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+                var utcExpireDate = long.Parse(tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp)!.Value);
                 var expireDate = DateHelper.ConvertUnixTimeToDateTime(utcExpireDate);
 
                 if (expireDate > DateTime.UtcNow)
@@ -137,7 +139,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     });
                 }
 
-                var refreshToken = await _refreshTokenRepository.GetRefreshTokenAsync(token.RefreshToken!);
+                var refreshToken = await _refreshTokenService.GetRefreshTokenAsync(token.RefreshToken!);
 
                 if (refreshToken == null)
                 {
@@ -162,18 +164,22 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     });
                 }
 
-                //if (await _refreshTokenRepository.RemoveRefreshTokenAsync(refreshToken))
-                //{
-                //    var user = await _unitOfWork.AccountRepository.GetAsync(refreshToken.UserId);
-                //    var newToken = await _unitOfWork.AccountRepository.GenerateAccessTokenAsync(user.UserId);
-                //    return Ok(new BaseResponse
-                //    {
-                //        StatusCode = StatusCodes.Status200OK,
-                //        IsSuccess = true,
-                //        Message = "Renew token success",
-                //        Data = newToken
-                //    });
-                //}
+                if (await _refreshTokenService.RemoveRefreshTokenAsync(refreshToken))
+                {
+                    var user = await _appUserService.GetByID(refreshToken.UserId);
+                    if (user != null)
+                    {
+
+                        var newToken = await _accountService.GenerateAccessTokenAsync(user!.UserId.Value);
+                        return Ok(new BaseResponse
+                        {
+                            StatusCode = StatusCodes.Status200OK,
+                            IsSuccess = true,
+                            Message = "Renew token success",
+                            Data = newToken
+                        });
+                    } 
+                }
 
                 return BadRequest(new BaseResponse
                 {

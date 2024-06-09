@@ -86,6 +86,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IStoreService, StoreService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 
 //Config Jwt Token
