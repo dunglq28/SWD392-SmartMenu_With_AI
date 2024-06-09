@@ -3,7 +3,6 @@
     public class UpdateBrandRequest
     {
         public string BrandName { get; set; } = null!;
-        public string ImageName { get; set; } = null!;
         public IFormFile Image { get; set; } = null!;
     }
 }
