@@ -22,6 +22,7 @@ import { GoPerson } from "react-icons/go";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BsShield } from "react-icons/bs";
 import { LuBell, LuCreditCard } from "react-icons/lu";
+import PasswordInput from "../../components/PasswordInput";
 
 function Profile() {
   const [locationString, setLocationString] = useState<string>("");
@@ -154,7 +155,7 @@ function Profile() {
                   </Text>
                 </Flex>
                 <Flex>
-                  <Button className={style.btn_content}>Delete Account</Button>
+                  <Button className={style.btn_delete}>Delete Account</Button>
                 </Flex>
               </Flex>
             </TabPanel>
@@ -170,9 +171,12 @@ function Profile() {
                   <Text className={style.text_title_content}>
                     Change Password
                   </Text>
-                  <Input placeholder="Enter your old password" />
-                  <Input placeholder="New password" />
-                  <Input placeholder="Confirm new password" />
+                  <PasswordInput placeholder="Enter your old password" />
+                  <PasswordInput placeholder="New password" />
+                  <PasswordInput placeholder="Confirm new password" />
+                  <Flex>
+                    <Button className={style.btn_content}>Save change</Button>
+                  </Flex>
                 </Flex>
 
                 <Divider />
@@ -211,7 +215,7 @@ function Profile() {
               </Flex>
             </TabPanel>
             <TabPanel userSelect="none">
-              <Flex flexDir="column" rowGap="15px">
+              <Flex className={style.tab_panels_container}>
                 <Text className={style.tab_panels_container_title}>
                   NOTIFICATION SETTINGS
                 </Text>
@@ -263,7 +267,7 @@ function Profile() {
               </Flex>
             </TabPanel>
             <TabPanel>
-              <Flex flexDir="column" rowGap="15px">
+              <Flex className={style.tab_panels_container}>
                 <Text className={style.tab_panels_container_title}>
                   BILLING SETTINGS
                 </Text>

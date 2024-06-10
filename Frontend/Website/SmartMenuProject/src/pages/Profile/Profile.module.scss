@@ -72,4 +72,14 @@
       background-color: #3c3ff2;
     }
   }
+  .btn_delete {
+    background-color: #ff0000b4;
+    color: #fff;
+    &:hover {
+      background-color: #ff0000d3;
+    }
+    &:active {
+      background-color: #ff0000;
+    }
+  }
 }
