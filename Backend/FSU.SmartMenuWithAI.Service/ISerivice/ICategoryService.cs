@@ -12,7 +12,7 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
     {
         Task<bool> Insert(CategoryDTO reqObj);
 
-        Task<bool> UpdateAsync(int id, string cagetoryName);
+        Task<bool> UpdateAsync(int id, string cagetoryName, int brandId);
 
         Task<PageEntity<CategoryDTO>?> GetAllAsync(string? searchKey, int brandID, int? pageIndex, int? pageSize);
 

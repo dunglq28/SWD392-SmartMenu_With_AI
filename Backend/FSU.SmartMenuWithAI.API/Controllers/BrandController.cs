@@ -47,8 +47,8 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 if (reqObj.Image != null)
                 {
                     // Upload the image to S3 and get the URL
-                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.ImageName, FolderRootImg.Brand);
-                    imageName = reqObj.ImageName;
+                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.Image.FileName + reqObj.BrandName, FolderRootImg.Brand);
+                    imageName = reqObj.Image.FileName + reqObj.BrandName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName, FolderRootImg.Brand);
                 }
                 var brandAdd = await _brandService.Insert(reqObj.BrandName, reqObj.UserId, imageUrl, imageName);
@@ -124,7 +124,17 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         {
             try
             {
-
+                var existBrand = await _brandService.GetByID(id);
+                if(existBrand == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy thương hiệu.",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
                 string imageUrl = null!;
                 string imageName = null!;
                 if (reqObj.Image != null)
@@ -141,18 +151,18 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         });
                     }
                     // Upload the image to S3 and get the URL
-                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.ImageName, FolderRootImg.Brand);
-                    imageName = reqObj.ImageName;
+                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.Image.FileName + existBrand.BrandName, FolderRootImg.Brand);
+                    imageName = reqObj.Image.FileName + existBrand.BrandName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName, FolderRootImg.Brand);
                 }
 
                 var result = await _brandService.Update(id, reqObj.BrandName, imageUrl, imageName);
-                if(result == null)
+                if (result == null)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "không tìm thấy thương hiệu",
+                        Message = "Cập nhật không thành công",
                         Data = null,
                         IsSuccess = false
                     });
@@ -176,7 +186,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     IsSuccess = false
                 });
             }
-            
+
         }
     }
 }

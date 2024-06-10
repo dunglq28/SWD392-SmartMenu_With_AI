@@ -55,17 +55,21 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         IsSuccess = false
                     });
                 }
+
                 var dto = new ProductDTO
                 {
                     ProductName = reqObj.ProductName,
-                    SpotlightVideoImageName = reqObj.SpotlightVideo.FileName,
-                    SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.SpotlightVideo.FileName, FolderRootImg.Product),
-                    ImageName = reqObj.Image.FileName,
-                    ImageUrl = _s3Service.GetPreSignedURL(reqObj.Image.FileName, FolderRootImg.Product),
+                    SpotlightVideoImageName = reqObj.SpotlightVideo.FileName + reqObj.BrandId,
+                    SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.SpotlightVideo.FileName + reqObj.BrandId, FolderRootImg.Product),
+                    ImageName = reqObj.Image.FileName + reqObj.BrandId,
+                    ImageUrl = _s3Service.GetPreSignedURL(reqObj.Image.FileName + reqObj.BrandId, FolderRootImg.Product),
                     Description = reqObj.Description,
                     CategoryId = reqObj.CategoryId,
                     BrandId = reqObj.BrandId,
                 };
+
+                await _s3Service.UploadItemAsync(reqObj.SpotlightVideo, dto.SpotlightVideoImageName, FolderRootImg.Product);
+                await _s3Service.UploadItemAsync(reqObj.Image, dto.ImageName, FolderRootImg.Product);
 
                 var result = await _productService.Insert(dto);
 
@@ -140,22 +144,33 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Product.Update, Name = "UpdateProductAsync")]
-        public async Task<IActionResult> UpdateUserAsync([FromQuery(Name = "product-id")] int id,[FromForm] UpdateProductRequest reqObj)
+        public async Task<IActionResult> UpdateUserAsync([FromQuery(Name = "product-id")] int id, [FromForm] UpdateProductRequest reqObj)
         {
             try
             {
+                var existProduct = await _productService.GetAsync(id);
+                if (existProduct == null )
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy sản phẩm",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
                 var dto = new ProductDTO();
                 dto.ProductName = reqObj.ProductName!;
                 if (reqObj.SpotlightVideo != null)
                 {
 
-                    dto.SpotlightVideoImageName = reqObj.SpotlightVideo!.FileName;
-                    dto.SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.SpotlightVideo.FileName, FolderRootImg.Product);
+                    dto.SpotlightVideoImageName = reqObj.SpotlightVideo.FileName + existProduct.BrandId;
+                    dto.SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.SpotlightVideo.FileName + existProduct.BrandId, FolderRootImg.Product);
                 }
                 if (reqObj.Image != null)
                 {
-                    dto.ImageName = reqObj.Image!.FileName;
-                    dto.ImageUrl = _s3Service.GetPreSignedURL(reqObj.Image.FileName, FolderRootImg.Product);
+                    dto.ImageName = reqObj.Image.FileName + existProduct.BrandId;
+                    dto.ImageUrl = _s3Service.GetPreSignedURL(reqObj.Image.FileName + existProduct.BrandId, FolderRootImg.Product);
                 }
 
                 dto.Description = reqObj.Description;
@@ -163,7 +178,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
                 var result = await _productService.UpdateAsync(id, dto);
 
-                if (!result )
+                if (!result)
                 {
                     return NotFound(new BaseResponse
                     {

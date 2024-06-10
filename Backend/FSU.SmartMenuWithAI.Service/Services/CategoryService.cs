@@ -6,7 +6,9 @@ using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
 using FSU.SmartMenuWithAI.Service.Utils;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using static Amazon.S3.Util.S3EventNotification;
 
 namespace FSU.SmartMenuWithAI.Service.Services
 {
@@ -29,15 +31,31 @@ namespace FSU.SmartMenuWithAI.Service.Services
             category.CreateDate = DateOnly.FromDateTime(DateTime.Now);
             category.Status = (int)Status.Exist;
             category.BrandId = reqObj.BrandId;
+
+            Expression<Func<Category, bool>> duplicateName = x => x.BrandId == reqObj.BrandId && x.CategoryName.Equals(category.CategoryName) && (x.Status != (int)Status.Deleted);
+            var exist = _unitOfWork.CategoryRepository.GetByCondition(duplicateName);
+            if (exist != null)
+            {
+                throw new DbUpdateException("Tên đã tồn tại");
+            }
             await _unitOfWork.CategoryRepository.Insert(category);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             return result;
         }
 
-        public async Task<bool> UpdateAsync(int id, string cagetoryName)
+        public async Task<bool> UpdateAsync(int id, string cagetoryName, int brandId)
         {
+            Expression<Func<Category, bool>> condition = x => 
+            !x.CategoryName.Equals(cagetoryName)
+            && x.BrandId == brandId
+            && (x.Status != (int)Status.Deleted);
+            var exist = _unitOfWork.CategoryRepository.GetByCondition(condition);
+            if (exist != null)
+            {
+                throw new Exception("Tên đã tồn tại");
+            }
             var category = await _unitOfWork.CategoryRepository.GetByID(id);
-            if (category == null)
+            if (category == null )
             {
                 return false;
             }
@@ -56,25 +74,34 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<PageEntity<CategoryDTO>?> GetAllAsync(string? searchKey, int brandID, int? pageIndex , int? pageSize)
         {
-            Expression<Func<Category, bool>> filter = searchKey != null ? x => x.CategoryName.Contains(searchKey) && x.BrandId == brandID : x => x.BrandId == brandID;
-
-            Func<IQueryable<Category>, IOrderedQueryable<Category>> orderBy = q => q.OrderBy(x => x.CategoryId);
+            Expression<Func<Category, bool>> filter = searchKey != null 
+                ? x => x.CategoryName.Contains(searchKey) && x.BrandId == brandID  && (x.Status != (int)Status.Deleted)
+                : x => x.BrandId == brandID && (x.Status != (int)Status.Deleted);
+            Expression<Func<Category, bool>> filterRecord =  x =>  (x.Status != (int)Status.Deleted);
+               
+               
+            Func<IQueryable<Category>, IOrderedQueryable<Category>> orderBy = q => q.OrderByDescending(x => x.CategoryId);
             string includeProperties = "Brand";
 
             var entities = await _unitOfWork.CategoryRepository
                 .Get(filter: filter, orderBy: orderBy, includeProperties: includeProperties, pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<CategoryDTO>();
             pagin.List = _mapper.Map<IEnumerable<CategoryDTO>>(entities).ToList();
-            pagin.TotalRecord = await _unitOfWork.CategoryRepository.Count();
+            pagin.TotalRecord = await _unitOfWork.CategoryRepository.Count(filterRecord);
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
         }
 
         public async Task<CategoryDTO?> GetAsync(int id)
         {
-            var category = await _unitOfWork.CategoryRepository.GetByID(id);
+            Expression<Func<Category, bool>> condition = x => x.CategoryId == id && (x.Status != (int)Status.Deleted);
+
+            var category = await _unitOfWork.CategoryRepository.GetByCondition(condition);
+            if (category == null)
+            {
+                return null!;
+            }
             var mapDTO = _mapper.Map<CategoryDTO>(category);
-            mapDTO.BrandName = category.Brand.BrandName;
             return mapDTO;
         }
 

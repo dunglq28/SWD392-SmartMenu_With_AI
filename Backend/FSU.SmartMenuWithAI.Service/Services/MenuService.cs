@@ -35,7 +35,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         {
             Expression<Func<Menu, bool>> filter = brandID > 0 ? x => x.BrandId == brandID : null!;
 
-            Func<IQueryable<Menu>, IOrderedQueryable<Menu>> orderBy = q => q.OrderBy(x => x.MenuId);
+            Func<IQueryable<Menu>, IOrderedQueryable<Menu>> orderBy = q => q.OrderByDescending(x => x.MenuId);
             string includeProperties = "Brand";
 
             var entities = await _unitOfWork.MenuRepository

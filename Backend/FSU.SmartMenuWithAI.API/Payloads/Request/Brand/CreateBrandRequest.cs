@@ -18,10 +18,6 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Brand
         [Required]
         public int UserId { get; set; }
         public IFormFile Image { get; set; } = null!;
-        [Required]
-        public string ImageName { get; set; } = null!;
 
     }
-
-
 }
