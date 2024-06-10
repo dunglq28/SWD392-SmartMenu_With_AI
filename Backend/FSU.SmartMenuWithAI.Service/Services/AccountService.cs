@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
 using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +23,29 @@ namespace FSU.SmartMenuWithAI.Service.Services
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+        }
+
+        public async Task<AppUserDTO> BanAccount(int id)
+        {
+            var checkExist = await _unitOfWork.AppUserRepository.GetByID(id);
+            if (checkExist == null)
+            {
+                return null!;
+            }
+            checkExist.IsActive = false;
+            _unitOfWork.AppUserRepository.Update(checkExist);
+            var result = _mapper.Map<AppUserDTO>(checkExist);
+            return result;
+        }
+        public async Task<bool> checkCorrectPassword(int id, string password)
+        {
+            Expression<Func<AppUser, bool>> filter = x => x.Password.Equals(password) && x.UserId == id;
+            var rightPass = await _unitOfWork.AppUserRepository.GetByCondition(filter);
+            if (rightPass == null)
+            {
+                return false;
+            }
+            return true;
         }
 
         public async Task<AppUserDTO?> CheckLoginAsync(string userName, string password)
