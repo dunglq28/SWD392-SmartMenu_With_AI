@@ -33,11 +33,12 @@ axiosMultipartForm.interceptors.request.use(
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
-    if (config.data) {
-      config.data = convertKeysToKebabCase(config.data);
-    }
+    // if (config.data) {
+    //   config.data = convertKeysToKebabCase(config.data);
+    // }
 
     return config;
+    
   },
   function (error) {
     return Promise.reject(error);
@@ -54,6 +55,7 @@ axiosMultipartForm.interceptors.response.use(
   },
 
   async function (error) {
+    
     if (error.message === "Network Error" && !error.response) {
       toast.error("Lỗi mạng, vui lòng kiểm tra kết nối!");
     }

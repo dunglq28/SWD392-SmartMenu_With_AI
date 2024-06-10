@@ -37,7 +37,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 dto.Dob = reqObj.Dob!.Value;
                 dto.UpdateBy = reqObj.UpdateBy;
                 var UserAdd = await _appUserService.Insert(dto);
-                if (!UserAdd)
+                if (UserAdd == 0)
                 {
                     return NotFound(new BaseResponse
                     {
@@ -50,7 +50,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "New user successfully",
+                    Message = "Thêm người dùng thành công",
                     Data = UserAdd,
                     IsSuccess = true
                 });
@@ -81,7 +81,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "không tìm thấy người dùng",
+                        Message = "Không tìm thấy người dùng",
                         Data = null,
                         IsSuccess = false
                     });
@@ -89,7 +89,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "xoá người dùng thành công",
+                    Message = "Xoá người dùng thành công",
                     Data = null,
                     IsSuccess = true
                 });

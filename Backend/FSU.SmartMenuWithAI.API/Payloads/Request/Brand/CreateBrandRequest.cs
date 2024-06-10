@@ -16,7 +16,7 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Brand
         public string BrandName { get; set; } = null!;
 
         [Required(ErrorMessage = "Cần có id người dùng")]
-        public int UserId { get; set; }
+        public string UserId { get; set; } = null!;
         public IFormFile Image { get; set; } = null!;
 
     }

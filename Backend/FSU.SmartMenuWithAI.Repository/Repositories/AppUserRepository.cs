@@ -2,6 +2,7 @@
 using FSU.SmartMenuWithAI.Repository.Common.Enums;
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.Interfaces;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -22,7 +23,7 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
             _context = context;
         }
 
-        public  IEnumerable<AppUser> Get(
+        public IEnumerable<AppUser> Get(
             int currentIDLogin,
             Expression<Func<AppUser, bool>> filter = null!,
             Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = null!,
@@ -60,5 +61,14 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
 
             return query.Where(x => x.UserId != currentIDLogin);
         }
+
+        public override async Task<AppUser> Insert(AppUser user)
+        {
+            await _context.AppUsers.AddAsync(user);
+
+            return user;
+
+        }
+
     }
 }
