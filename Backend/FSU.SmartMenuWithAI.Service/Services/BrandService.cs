@@ -25,13 +25,18 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<BrandDTO> GetByID(int id)
         {
-            var entity = await _unitOfWork.BrandRepository.GetByID(id);
+            Expression<Func<Brand, bool>> condition = x => x.BrandId == id && (x.Status != (int)Status.Deleted);
+            var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
+            if (entity == null )
+            {
+                return null!;
+            }
             return _mapper?.Map<BrandDTO?>(entity)!;
         }
         public async Task<bool> Delete(int id)
         {
             var brandDelete = await _unitOfWork.BrandRepository.GetByID(id);
-            if (brandDelete == null)
+            if (brandDelete == null || brandDelete.Status == (int)Status.Deleted)
             {
                 return false;
             }
@@ -59,6 +64,12 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 brand.ImageName = imgName;
                 brand.ImageUrl = imgUrl;
 
+                Expression<Func<Brand, bool>> condition = x => x.BrandId == brand.BrandId && (x.Status != (int)Status.Deleted);
+                var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
+                if (entity != null)
+                {
+                    throw new Exception("Tên đã tồn tại");
+                }
                 await _unitOfWork.BrandRepository.Insert(brand);
                 var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
                 if (result) 
@@ -69,8 +80,15 @@ namespace FSU.SmartMenuWithAI.Service.Services
         }
         public async Task<BrandDTO> Update(int id, string brandName, string imgUrl, string imgName)
         {
+            Expression<Func<Brand, bool>> condition = x => x.BrandName == brandName && (x.Status != (int)Status.Deleted);
+            var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
+            if (entity != null)
+            {
+                throw new Exception("Tên đã tồn tại");
+            }
+
             var brandToUpdate = await _unitOfWork.BrandRepository.GetByID(id);
-            if (brandToUpdate == null)
+            if (brandToUpdate == null || (brandToUpdate.Status == (int) Status.Deleted))
             {
                 return null!;
             }

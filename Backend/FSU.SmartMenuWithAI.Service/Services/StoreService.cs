@@ -6,7 +6,9 @@ using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
 using FSU.SmartMenuWithAI.Service.Utils;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using static Amazon.S3.Util.S3EventNotification;
 
 namespace FSU.SmartMenuWithAI.Service.Services
 {
@@ -24,7 +26,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         public async Task<bool> Delete(int id)
         {
             var deleteStore = await _unitOfWork.StoreRepository.GetByID(id);
-            if (deleteStore == null)
+            if (deleteStore == null || (deleteStore.Status == (int)Status.Deleted))
             {
                 return false;
             }
@@ -38,8 +40,12 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<PageEntity<StoreDTO>?> GetAllAsync(string? searchKey, int brandID, int? pageIndex = null, int? pageSize = null)
         {
-            Expression<Func<Store, bool>> filter = searchKey != null ? x => x.Address.Contains(searchKey) && x.BrandId == brandID : x => x.BrandId == brandID;
-            Func<IQueryable<Store>, IOrderedQueryable<Store>> orderBy = q => q.OrderBy(x => x.StoreId);
+            Expression<Func<Store, bool>> filter = searchKey != null 
+                ? x => x.Address.Contains(searchKey) && x.BrandId == brandID  && (x.Status != (int)Status.Deleted)
+                : x => x.BrandId == brandID && (x.Status != (int)Status.Deleted);
+            Expression<Func<Store, bool>> filterRecord = x => x.Status != (int)Status.Deleted;
+
+            Func<IQueryable<Store>, IOrderedQueryable<Store>> orderBy = q => q.OrderByDescending(x => x.StoreId) ;
             string includeProperties = "Brand,User";
 
             var entities = await _unitOfWork.StoreRepository
@@ -47,7 +53,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
             var pagin = new PageEntity<StoreDTO>();
             pagin.List = _mapper.Map<IEnumerable<StoreDTO>>(entities).ToList();
-            pagin.TotalRecord = await _unitOfWork.StoreRepository.Count();
+            pagin.TotalRecord = await _unitOfWork.StoreRepository.Count(filterRecord);
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
         }
@@ -55,6 +61,10 @@ namespace FSU.SmartMenuWithAI.Service.Services
         public async Task<StoreDTO?> GetAsync(int id)
         {
             var store = await _unitOfWork.StoreRepository.GetByID(id);
+            if (store == null || (store.Status == (int)Status.Deleted))
+            {
+                return null!;
+            }
             var mapDTO = _mapper.Map<StoreDTO>(store);
 
             return mapDTO;
@@ -80,10 +90,11 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<bool> UpdateAsync(int id, StoreDTO entityToUpdate)
         {
-            var store = await _unitOfWork.StoreRepository.GetByID(id);
+            Expression<Func<Store, bool>> condition = x => x.BrandId == id && (x.Status != (int)Status.Deleted);
+            var store = await _unitOfWork.StoreRepository.GetByCondition(condition);
             if (store == null)
             {
-                return false!;
+                return false;
             }
             store.IsActive = entityToUpdate.IsActive;
 

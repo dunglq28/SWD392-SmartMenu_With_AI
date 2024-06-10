@@ -1,38 +1,92 @@
+import React from "react";
 import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  Button,
-  Divider,
   Flex,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
   Table,
   TableCaption,
   TableContainer,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr,
-  useDisclosure,
 } from "@chakra-ui/react";
 import style from "./Product.module.scss";
+import { useCallback, useEffect, useState } from "react";
+import { ProductData } from "../../payloads/responses/ProductData.model";
+import { getProduct } from "../../services/ProductService";
+import { getOptions } from "../../utils/getRowPerPage";
+import { toast } from "react-toastify";
+import moment from "moment";
+import NavigationDot from "../../components/NavigationDot/NavigationDot";
+import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
+import Loading from "../../components/Loading";
 
-import { RiSettings3Line } from "react-icons/ri";
-import { productList } from "../../mock/data";
-import React from "react";
+function truncateText(text: string | undefined, maxLength: number): string {
+  if (!text || text.length <= maxLength) return text || "";
+  return text.substring(0, maxLength) + "...";
+}
 
 function Product() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
+  const [data, setData] = useState<ProductData[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+  const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
+  const [totalPages, setTotalPages] = useState<number>(10);
+  const [status, setStatus] = useState(false);
+
+  const fetchData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      let result;
+
+      const loadData = async () => {
+        result = await getProduct(currentPage, rowsPerPage);
+        setData(result.list);
+        setTotalPages(result.totalPage);
+        setRowsPerPageOption(getOptions(result.totalRecord));
+        setIsLoading(false);
+        setIsInitialLoad(false);
+      };
+
+      if (isInitialLoad) {
+        setTimeout(loadData, 500);
+      } else {
+        await loadData();
+      }
+    } catch (err) {
+      toast.error("Lỗi khi lấy dữ liệu");
+      setIsLoading(false);
+    }
+  }, [currentPage, rowsPerPage, isInitialLoad]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      setCurrentPage(page);
+    },
+    [setCurrentPage]
+  );
+
+  const handleRowsPerPageChange = useCallback(
+    (newRowsPerPage: number) => {
+      setCurrentPage(1);
+      setRowsPerPage(newRowsPerPage);
+    },
+    [setCurrentPage, setRowsPerPage]
+  );
+
+  function handleDelete(id: number) {
+    console.log(id);
+  }
+
+  function handleEdit(id: number) {
+    console.log(id);
+  }
 
   return (
     <Flex className={style.Product}>
@@ -49,80 +103,56 @@ function Product() {
               <Th className={style.HeaderTbl}>Image url</Th>
               <Th className={style.HeaderTbl}>Image name</Th>
               <Th className={style.HeaderTbl}>Description</Th>
-              <Th className={style.HeaderTbl}>Category</Th>
-              <Th className={style.HeaderTbl}>Brand</Th>
+              <Th className={style.HeaderTbl}>Category ID</Th>
+              <Th className={style.HeaderTbl}>Brand ID</Th>
               <Th className={style.HeaderTbl}>Settings</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {productList.map((product) => (
-              <Tr key={product.productCode} className={style.ProductItem}>
-                <Td>{product.productCode}</Td>
-                <Td>{product.createdDate}</Td>
-                <Td>{product.productName}</Td>
-                <Td>{product.spotlightUrl}</Td>
-                <Td>{product.spotlightName}</Td>
-                <Td>{product.imageUrl}</Td>
-                <Td>{product.imageName}</Td>
-                <Td>{product.description}</Td>
-                <Td>{product.categoryId}</Td>
-                <Td>{product.brandId}</Td>
-                <Td>
-                  <Flex className={style.SettingProduct} overflow="hidden">
-                    <Popover>
-                      <PopoverTrigger>
-                        <Button className={style.SettingsIconBtn}>
-                          <Flex>
-                            <RiSettings3Line className={style.SettingsIcon} />
-                          </Flex>
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className={style.PopoverContent}>
-                        <PopoverArrow />
-                        <PopoverBody>
-                          <Flex className={style.PopupButton}>
-                            <Text>Edit User</Text>
-                          </Flex>
-                          <Divider />
-                          <Flex className={style.PopupButton} onClick={onOpen}>
-                            <Text>Delete User</Text>
-                          </Flex>
-                        </PopoverBody>
-                      </PopoverContent>
-                    </Popover>
-                  </Flex>
+            {isLoading && isInitialLoad ? (
+              <Tr>
+                <Td colSpan={10} className={style.LoadingCell}>
+                  <Loading />
                 </Td>
               </Tr>
-            ))}
+            ) : (
+              data.map((product) => (
+                <Tr key={product.productCode} className={style.ProductItem}>
+                  <Td>{product.productId}</Td>
+                  <Td>{moment(product.createDate).format("DD/MM/YYYY")}</Td>
+                  <Td title={product.productName}>
+                    {truncateText(product.productName, 10)}
+                  </Td>
+                  <Td>{truncateText(product.spotlightVideoImageUrl, 10)}</Td>
+                  <Td>{truncateText(product.spotlightVideoImageName, 10)}</Td>
+                  <Td>{truncateText(product.imageUrl, 10)}</Td>
+                  <Td>{truncateText(product.imageName, 10)}</Td>
+                  <Td title={product.description}>
+                    {truncateText(product.description, 10)}
+                  </Td>
+                  <Td>{product.categoryId}</Td>
+                  <Td>{product.brandId}</Td>
+                  <Td>
+                    <ActionMenu
+                      id={product.productId}
+                      onDelete={handleDelete}
+                      onEdit={handleEdit}
+                    />
+                  </Td>
+                </Tr>
+              ))
+            )}
           </Tbody>
         </Table>
       </TableContainer>
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Customer
-            </AlertDialogHeader>
 
-            <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
-            </AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button colorScheme="red" onClick={onClose} ml={3}>
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+      <NavigationDot
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+        rowsPerPageOptions={rowsPerPageOption}
+        onRowsPerPageChange={handleRowsPerPageChange}
+      />
     </Flex>
   );
 }

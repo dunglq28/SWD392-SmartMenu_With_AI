@@ -1,4 +1,5 @@
 ﻿
+using FSU.SmartMenuWithAI.Repository.Common.Enums;
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;

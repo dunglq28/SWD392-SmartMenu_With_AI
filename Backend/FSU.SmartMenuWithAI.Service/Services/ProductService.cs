@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using Amazon.Auth.AccessControlPolicy;
+using AutoMapper;
+using FSU.SmartMenuWithAI.Repository.Common.Enums;
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
 using FSU.SmartMenuWithAI.Service.ISerivice;
@@ -39,8 +41,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 x.BrandId == brandID 
                 && x.CategoryId == categoryID 
                 && x.ProductName.ToLower().Contains(searchKey.ToLower()) : null!;
-
-            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = q => q.OrderBy(x => x.ProductId);
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = q => q.OrderByDescending(x => x.ProductId);
 
             var entities = await _unitOfWork.ProductRepository
                 .Get(filter: filter, orderBy: orderBy, pageIndex: pageIndex, pageSize: pageSize);
@@ -83,6 +84,12 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<bool> UpdateAsync(int id, ProductDTO reqObj)
         {
+            Expression<Func<Product, bool>> condition = x => x.ProductName.ToLower().Equals(reqObj.ProductName.ToLower());
+            var existName = _unitOfWork.ProductRepository.GetByCondition(condition);
+            if (existName != null)
+            {
+                throw new Exception("Tên đã tồn tại");
+            }
             var product = await _unitOfWork.ProductRepository.GetByID(id);
             if (product == null)
             {
