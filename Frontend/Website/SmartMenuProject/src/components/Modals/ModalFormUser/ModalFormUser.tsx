@@ -29,6 +29,7 @@ interface ModalFormBrandProps {
   updateUserData: (data: UserForm) => void;
   saveBrandHandle: (data: UserForm) => void;
   brandName: string;
+  userData: UserForm;
 }
 
 const ModalFormUser: React.FC<ModalFormBrandProps> = ({
@@ -40,14 +41,15 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
   updateUserData,
   saveBrandHandle,
   brandName,
+  userData,
 }) => {
   const [formData, setFormData] = useState<UserForm>({
-    fullName: { value: "", errorMessage: "" },
+    fullName: { value: userData.fullName.value, errorMessage: "" },
     userName: { value: generateUsername(brandName), errorMessage: "" },
-    phoneNumber: { value: "", errorMessage: "" },
-    DOB: { value: null, errorMessage: "" },
-    gender: { value: "Male", errorMessage: "" },
-    isActive: { value: null, errorMessage: "" },
+    phoneNumber: { value: userData.phoneNumber.value, errorMessage: "" },
+    DOB: { value: userData.DOB.value, errorMessage: "" },
+    gender: { value: userData.gender.value || "Male", errorMessage: "" },
+    isActive: { value: userData.isActive.value || 1, errorMessage: "" },
   });
 
   const handleInputChange = (field: keyof UserForm, value: string) => {
@@ -83,7 +85,6 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       updateBrandData({
         brandName: { value: "", errorMessage: "" },
         image: { value: null, errorMessage: "" },
-        imageName: { value: "", errorMessage: "" },
       });
     }
     updateUserData({
@@ -105,6 +106,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       } else {
         onOpenStore();
       }
+      updateUserData(formData);
     }, 350);
   };
 
@@ -157,28 +159,6 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         DOB: {
           ...prevData.DOB,
           errorMessage: "Date of Birth is required",
-        },
-      }));
-      hasError = true;
-    }
-
-    if (formData.gender.value.trim() === "") {
-      setFormData((prevData) => ({
-        ...prevData,
-        gender: {
-          ...prevData.gender,
-          errorMessage: "Gender is required",
-        },
-      }));
-      hasError = true;
-    }
-
-    if (formData.isActive.value === null) {
-      setFormData((prevData) => ({
-        ...prevData,
-        isActive: {
-          ...prevData.isActive,
-          errorMessage: "isActive is required",
         },
       }));
       hasError = true;
@@ -287,13 +267,10 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
                   </Radio>
                 </Stack>
               </RadioGroup>
-              {formData.gender.errorMessage && (
-                <Text color="red.500">{formData.gender.errorMessage}</Text>
-              )}
             </Box>
             <Box flex="1" ml={3}>
               <Text className={styles.textFontWeight} py={3} pr={3}>
-                isActive
+                Is Active
               </Text>
               <Select
                 id="isActive"
@@ -307,9 +284,6 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
                 <option value="1">Active</option>
                 <option value="0">Inactive</option>
               </Select>
-              {formData.isActive.errorMessage && (
-                <Text color="red.500">{formData.isActive.errorMessage}</Text>
-              )}
             </Box>
           </Flex>
         </Flex>

@@ -50,7 +50,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     imageName = reqObj.BrandName + reqObj.Image.FileName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName, FolderRootImg.Brand);
                 }
-                var brandAdd = await _brandService.Insert(reqObj.BrandName, reqObj.UserId, imageUrl, imageName);
+                var brandAdd = await _brandService.Insert(reqObj.BrandName, Int32.Parse(reqObj.UserId), imageUrl, imageName);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,

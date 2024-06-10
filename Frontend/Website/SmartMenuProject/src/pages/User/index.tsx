@@ -89,6 +89,7 @@ function User() {
     try {
       var result = await deleteUser(id);      
       if (result.statusCode === 200) {
+        fetchData();
         toast.success("Xoá người dùng thành công");
       }
     } catch (e) {

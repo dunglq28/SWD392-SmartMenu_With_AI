@@ -21,7 +21,7 @@ export const getUsers = async (
 export const createUser = async (
   user: UserForm,
   roleId: number
-): Promise<ApiResponse<Object>> => {
+): Promise<ApiResponse<Number>> => {
   const res = await axiosAuth.post("app-users", {
     userName: user.userName.value,
     fullname: user.fullName.value,
@@ -31,7 +31,7 @@ export const createUser = async (
     roleId: roleId,
     isActive: user.isActive.value === 1 ? true : false,
   });
-  const apiResponse = res.data as ApiResponse<Object>;
+  const apiResponse = res.data as ApiResponse<Number>;
   return apiResponse;
 };
 

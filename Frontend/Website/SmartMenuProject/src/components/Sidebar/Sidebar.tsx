@@ -34,7 +34,8 @@ import { CurrentForm } from "../../constants/Enum";
 import { BrandData } from "../../models/Brand.model";
 import { UserForm } from "../../models/User.model";
 import { createUser } from "../../services/UserService";
-import { UserData } from "../../payloads/responses/UserData.model";
+import { toast } from "react-toastify";
+import { createBrand } from "../../services/BrandService";
 
 function Sidebar() {
   const { t } = useTranslation();
@@ -168,16 +169,36 @@ function Sidebar() {
     setBrandData(data);
   };
 
-  const updateUserData = (data: UserForm) => {};
+  const updateUserData = (data: UserForm) => {
+    setUserData(data);
+  };
 
   async function saveBrandHandle(data: UserForm) {
-    setUserData(data);
-    // console.log(brandData);
-    const brandForm = new FormData();
-    // brandForm.append("BrandName", )
-    console.log(data);
-    var result = await createUser(data, 2);
-    console.log(result);
+    try {
+      setUserData(data);
+      const brandForm = new FormData();
+
+      if (brandData.image.value != null && brandData.brandName.value) {
+        brandForm.append("BrandName", brandData.brandName.value);
+        brandForm.append("Image", brandData.image.value);
+      }
+
+      var userResult = await createUser(data, 2);
+
+      if (userResult.statusCode === 200) {
+        brandForm.append("UserId", userResult.data.toString());
+
+        var brandResult = await createBrand(brandForm);
+
+        if (brandResult.statusCode === 200) {
+          onCloseUser();
+          const toastMessage = "Thêm thương hiệu mới thành công";
+          navigate("/branchs", { state: { toastMessage } });
+        }
+      }
+    } catch {
+      toast.error("Tên thương hiệu đã tồn tại");
+    }
   }
 
   return (
@@ -273,6 +294,7 @@ function Sidebar() {
             updateUserData={updateUserData}
             saveBrandHandle={saveBrandHandle}
             brandName={brandData.brandName.value}
+            userData={userData}
           />
         }
         onClose={onCloseUser}
