@@ -25,7 +25,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPost(APIRoutes.Brand.Add, Name = "AddBrandAsync")]
+        [HttpPost(APIRoutes.Brand.Add, Name = "add-brand-async")]
         public async Task<IActionResult> AddAsync([FromForm] CreateBrandRequest reqObj)
         {
             try
@@ -72,7 +72,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
 
         //[Authorize(Roles = $"{UserRoles.Admin},{UserRoles.BrandManager}")]
-        [HttpDelete(APIRoutes.Brand.Delete, Name = "DeleteBrandAsync")]
+        [HttpDelete(APIRoutes.Brand.Delete, Name = "delete-brand-async")]
         public async Task<IActionResult> DeleteAsynce([FromQuery] int id)
         {
             try
@@ -108,7 +108,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPut(APIRoutes.Brand.Update, Name = "UpdatebrandAsync")]
+        [HttpPut(APIRoutes.Brand.Update, Name = "update-brand-async")]
         public async Task<IActionResult> UpdateUserAsync([FromForm] int id, [FromForm] UpdateBrandRequest reqObj)
         {
             try
@@ -176,7 +176,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpGet(APIRoutes.Brand.GetAll, Name = "GetBrandssAsync")]
+        [HttpGet(APIRoutes.Brand.GetAll, Name = "get-brands-async")]
         public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search-key")] string? searchKey
             , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
             , [FromQuery(Name = "page-size")] int PageSize = Page.DefaultPageSize)
