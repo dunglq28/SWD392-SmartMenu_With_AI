@@ -6,6 +6,8 @@ import Products from "../pages/Product";
 import Menu from "../pages/Menu";
 import Settings from "../pages/Setting";
 import New from "../pages/New";
+import Profile from "../pages/Profile";
+import { HeaderOnly } from "../layouts";
 
 interface RouteItem {
   path: string;
@@ -23,6 +25,7 @@ export const publicRoutes: RouteItem[] = [
   { path: "/menu", component: Menu },
   { path: "/settings", component: Settings },
   { path: "/new", component: New },
+  { path: "/profile", component: Profile, layout: HeaderOnly },
   // { path: "/newBranch", component: New },
 ];
 

@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { publicRoutes } from "./routes/RouterApp";
-import DefaultLayout from "./layouts/DefaultLayout/DefaultLayout";
+import { DefaultLayout } from "./layouts";
 import { ToastContainer } from "react-toastify";
-import "../node_modules/react-toastify/dist/ReactToastify.css"
+import "../node_modules/react-toastify/dist/ReactToastify.css";
 
 function App(): JSX.Element {
   return (
@@ -11,12 +11,17 @@ function App(): JSX.Element {
       <Router>
         <div className="App">
           <Routes>
-            {publicRoutes.map((route, i) => {
-              const Layout = route.layout === null ? Fragment : DefaultLayout;
+            {publicRoutes.map((route, index) => {
+              const Layout =
+                route.layout === null
+                  ? Fragment
+                  : route.layout || DefaultLayout;
+
               const Page = route.component;
+
               return (
                 <Route
-                  key={i}
+                  key={index}
                   path={route.path}
                   element={
                     <Layout>

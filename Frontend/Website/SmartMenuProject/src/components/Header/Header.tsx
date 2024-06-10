@@ -15,7 +15,9 @@ import {
   PopoverTrigger,
   ResponsiveValue,
   Text,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
+import { Link as ReactRouterLink } from "react-router-dom";
 import Select, { SingleValue } from "react-select";
 import style from "./Header.module.scss";
 import { useLocation } from "react-router-dom";
@@ -148,9 +150,15 @@ function Header() {
               <PopoverArrow />
               <PopoverBody>
                 <Flex className={style.PopupNav}>
-                  <Flex className={style.PopupSubNav}>
-                    <Text className={style.Text}>Profile</Text>
-                  </Flex>
+                  <ChakraLink
+                    as={ReactRouterLink}
+                    to="/profile"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Flex className={style.PopupSubNav}>
+                      <Text className={style.Text}>Profile</Text>
+                    </Flex>
+                  </ChakraLink>
                   <Flex className={style.PopupSubNav}>
                     <Text className={style.Text}>History</Text>
                   </Flex>
