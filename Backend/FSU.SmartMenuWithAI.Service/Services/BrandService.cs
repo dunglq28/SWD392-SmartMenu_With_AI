@@ -116,26 +116,12 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
             Func<IQueryable<Brand>, IOrderedQueryable<Brand>> orderBy = q => q.OrderByDescending(x => x.BrandId);
 
-            var entities = _unitOfWork.BrandRepository.GetBrands(filter: filter, orderBy: orderBy, pageIndex: pageIndex, pageSize: pageSize);
+            var entities = await _unitOfWork.BrandRepository.GetBrands(filter: filter, orderBy: orderBy, pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<BrandDTO>();
             pagin.List = _mapper.Map<IEnumerable<BrandDTO>>(entities).ToList();
-            pagin.TotalRecord =/* await _unitOfWork.BrandRepository.Count();*/  entities.Count();
+            pagin.TotalRecord = entities.Count();
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
-
-
-
-            //Expression<Func<Brand, bool>> filter = searchKey != null ? x =>
-
-            //   x.BrandName.Contains(searchKey.ToLower()) : null!;
-            //Func<IQueryable<Brand>, IOrderedQueryable<Brand>> orderBy = q => q.OrderByDescending(x => x.BrandId);
-
-            //var entities = await _unitOfWork.BrandRepository.GetBrands(filter: filter, orderBy: orderBy, pageIndex: pageIndex, pageSize: pageSize);
-            //var pagin = new PageEntity<BrandDTO>();
-            //pagin.List = _mapper.Map<IEnumerable<BrandDTO>>(entities).ToList();
-            //pagin.TotalRecord = await _unitOfWork.BrandRepository.Count();
-            //pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
-            //return pagin;
         }
     }
 }

@@ -46,8 +46,8 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 if (reqObj.Image != null)
                 {
                     // Upload the image to S3 and get the URL
-                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.Image.FileName + reqObj.BrandName, FolderRootImg.Brand);
-                    imageName = reqObj.Image.FileName + reqObj.BrandName;
+                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.BrandName+reqObj.Image.FileName, FolderRootImg.Brand);
+                    imageName = reqObj.BrandName + reqObj.Image.FileName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName, FolderRootImg.Brand);
                 }
                 var brandAdd = await _brandService.Insert(reqObj.BrandName, Int32.Parse(reqObj.UserId), imageUrl, imageName);
@@ -140,8 +140,8 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         });
                     }
                     // Upload the image to S3 and get the URL
-                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.Image.FileName + existBrand.BrandName, FolderRootImg.Brand);
-                    imageName = reqObj.Image.FileName + existBrand.BrandName;
+                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.BrandName + reqObj.Image.FileName, FolderRootImg.Brand);
+                    imageName = reqObj.BrandName + reqObj.Image.FileName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName, FolderRootImg.Brand);
                 }
                 var result = await _brandService.Update(id, reqObj.BrandName, imageUrl, imageName);
@@ -174,7 +174,6 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     IsSuccess = false
                 });
             }
-
         }
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Brand.GetAll, Name = "GetBrandssAsync")]
