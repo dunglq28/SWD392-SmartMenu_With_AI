@@ -11,7 +11,7 @@ namespace FSU.SmartMenuWithAI.Repository.Interfaces
     public interface IBrandRepository
     {
         Task<Brand> GetBrandByName(string name);
-        IEnumerable<Brand> GetBrands(
+        Task<IEnumerable<Brand>> GetBrands(
            Expression<Func<Brand, bool>> filter = null!,
            Func<IQueryable<Brand>, IOrderedQueryable<Brand>> orderBy = null!,
            int? pageIndex = null,
