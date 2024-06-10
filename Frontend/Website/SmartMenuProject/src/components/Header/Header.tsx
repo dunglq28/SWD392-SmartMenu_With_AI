@@ -17,21 +17,22 @@ import {
   Text,
   Link as ChakraLink,
 } from "@chakra-ui/react";
-import { Link as ReactRouterLink } from "react-router-dom";
+import { Link as ReactRouterLink, useLocation } from "react-router-dom";
 import Select, { SingleValue } from "react-select";
 import style from "./Header.module.scss";
-import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FaRegBell } from "react-icons/fa";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import i18n from "../../i18n/i18n";
 import { ChevronRightIcon } from "@chakra-ui/icons";
+import Searchbar from "../Searchbar";
 
 function Header() {
   const location = useLocation();
   const { t } = useTranslation();
   const pathname = location.pathname;
+  const [previousPathName, setPreviousPathName] = useState<string | null>(null);
 
   const formattedPathname = pathname.replace("/", "");
   const translatedPathname = t(formattedPathname).toUpperCase();
@@ -63,6 +64,18 @@ function Header() {
     changeLanguage(initialLanguage);
   }, []);
 
+  useEffect(() => {
+    const storedPreviousPath = localStorage.getItem("previousPathName");
+    if (storedPreviousPath) {
+      setPreviousPathName(storedPreviousPath);
+    }
+
+    if (formattedPathname !== "profile") {
+      setPreviousPathName(formattedPathname);
+      localStorage.setItem("previousPathName", formattedPathname);
+    }
+  }, [formattedPathname]);
+
   const languageOptions = [
     { value: "en", label: "Eng (US)" },
     { value: "vi", label: "Vi (VN)" },
@@ -89,13 +102,17 @@ function Header() {
   return (
     <Flex className={style.Header} position={headerSticky}>
       <Flex flexDirection="column">
-        <Breadcrumb
-          spacing="1px"
-          separator={<ChevronRightIcon color="gray.500" />}
-          fontSize="13px"
-        >
-          <BreadcrumbItem>
-            <BreadcrumbLink href={formattedPathname}>
+        <Breadcrumb fontSize="16px">
+          {formattedPathname === "profile" && previousPathName && (
+            <BreadcrumbItem>
+              <BreadcrumbLink as={ReactRouterLink} to={`/${previousPathName}`}>
+                {previousPathName}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          )}
+
+          <BreadcrumbItem isCurrentPage>
+            <BreadcrumbLink as={ReactRouterLink} to={`/${formattedPathname}`}>
               {formattedPathname}
             </BreadcrumbLink>
           </BreadcrumbItem>
@@ -103,10 +120,7 @@ function Header() {
         <Text className={style.PathName}>{translatedPathname}</Text>
       </Flex>
       <Flex className={style.Content}>
-        <Input
-          className={style.SearchInput}
-          placeholder={t("Search here...")}
-        />
+        <Searchbar />
         <Flex className={style.Actions}>
           <Select
             options={languageOptions}
