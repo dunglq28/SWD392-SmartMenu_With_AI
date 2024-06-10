@@ -32,7 +32,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             category.Status = (int)Status.Exist;
             category.BrandId = reqObj.BrandId;
 
-            Expression<Func<Category, bool>> duplicateName = x => x.CategoryName.Equals(category.CategoryName) && (x.Status != (int)Status.Deleted);
+            Expression<Func<Category, bool>> duplicateName = x => x.BrandId == reqObj.BrandId && x.CategoryName.Equals(category.CategoryName) && (x.Status != (int)Status.Deleted);
             var exist = _unitOfWork.CategoryRepository.GetByCondition(duplicateName);
             if (exist != null)
             {
@@ -43,10 +43,11 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return result;
         }
 
-        public async Task<bool> UpdateAsync(int id, string cagetoryName)
+        public async Task<bool> UpdateAsync(int id, string cagetoryName, int brandId)
         {
             Expression<Func<Category, bool>> condition = x => 
             !x.CategoryName.Equals(cagetoryName)
+            && x.BrandId == brandId
             && (x.Status != (int)Status.Deleted);
             var exist = _unitOfWork.CategoryRepository.GetByCondition(condition);
             if (exist != null)
