@@ -120,7 +120,9 @@ function Header() {
         <Text className={style.PathName}>{translatedPathname}</Text>
       </Flex>
       <Flex className={style.Content}>
-        <Searchbar />
+        <Flex w="50%">
+          <Searchbar />
+        </Flex>
         <Flex className={style.Actions}>
           <Select
             options={languageOptions}
