@@ -20,6 +20,8 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
             CreateMap<Brand, BrandDTO>().ReverseMap();
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<RefreshToken, RefreshTokenDTO>().ReverseMap();
+            CreateMap<GroupAttribute, GroupAttributeDTO>().ReverseMap();
+
         }
     }
 }

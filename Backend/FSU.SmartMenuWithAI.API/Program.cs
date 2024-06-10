@@ -78,6 +78,8 @@ builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAppUserRepository,AppUserRepository>();
 builder.Services.AddScoped<IBrandRepository,  BrandRepository>();
+builder.Services.AddScoped<IGroupAttributeRepository, GroupAttributeRepository>();
+
 // Register servicies
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAppUserService, AppUserService>();
@@ -87,6 +89,8 @@ builder.Services.AddScoped<IStoreService, StoreService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<IGroupAttributeService, GroupAttributeService>();
+
 
 
 //Config Jwt Token

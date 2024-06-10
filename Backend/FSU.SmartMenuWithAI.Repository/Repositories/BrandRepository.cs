@@ -29,7 +29,7 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
             return brand!;
         }
 
-        public IEnumerable<Brand> GetBrands(
+        public async Task<IEnumerable<Brand>> GetBrands(
            Expression<Func<Brand, bool>> filter = null!,
            Func<IQueryable<Brand>, IOrderedQueryable<Brand>> orderBy = null!,
            int? pageIndex = null, 
@@ -55,7 +55,7 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
                 query = query.Skip(validPageIndex * validPageSize).Take(validPageSize);
             }
 
-            return query;
+            return await query.ToListAsync();
         }
     }
 }
