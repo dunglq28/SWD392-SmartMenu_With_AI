@@ -41,15 +41,6 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         IsSuccess = false
                     });
                 }
-                var existBrandName = await _brandService.GetByNameAsync(reqObj.BrandName);
-                if (existBrandName != null)
-                    return BadRequest(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "Tên thương hiệu đã tồn tại",
-                        Data = null,
-                        IsSuccess = false
-                    });
                 string imageUrl = null!;
                 string imageName = null!;
                 if (reqObj.Image != null)
@@ -133,20 +124,6 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         IsSuccess = false
                     });
                 }
-                if (existBrand.BrandName != reqObj.BrandName)
-                {
-                    var existBrandName = await _brandService.GetByNameAsync(reqObj.BrandName);
-                    if (existBrandName != null)
-                    {
-                        return BadRequest(new BaseResponse
-                        {
-                            StatusCode = StatusCodes.Status400BadRequest,
-                            Message = "Tên thương hiệu đã tồn tại",
-                            Data = null,
-                            IsSuccess = false
-                        });
-                    }
-                }
                 string imageUrl = null!;
                 string imageName = null!;
                 if (reqObj.Image != null)
@@ -167,7 +144,6 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     imageName = reqObj.Image.FileName + existBrand.BrandName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName, FolderRootImg.Brand);
                 }
-
                 var result = await _brandService.Update(id, reqObj.BrandName, imageUrl, imageName);
                 if (result == null)
                 {
