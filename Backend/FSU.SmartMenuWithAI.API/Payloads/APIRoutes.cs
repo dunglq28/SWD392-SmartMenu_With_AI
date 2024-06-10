@@ -14,8 +14,14 @@
             public const string Login = Base + "/authentication/login";
 
             public const string RefreshToken = Base + "/authentication/refresh-token";
-        }
 
+        }
+        public static class Account
+        {
+            public const string ChangePassword = Base + "/account/change-password";
+
+            public const string BanAccount = Base + "/account/ban-account";
+        }
         public static class AppUser
         {
             public const string GetAll = Base + "/app-users/";
