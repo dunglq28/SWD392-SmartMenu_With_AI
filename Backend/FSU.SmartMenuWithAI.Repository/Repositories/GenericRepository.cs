@@ -62,6 +62,11 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
             return await dbSet.FindAsync(id)!;
         }
 
+        public virtual async Task<TEntity> GetByCondition (Expression<Func<TEntity, bool>> filter )
+        {
+            return await dbSet.FirstOrDefaultAsync(filter);
+        }
+
         public virtual async Task Insert(TEntity entity)
         {
            await dbSet.AddAsync(entity);
