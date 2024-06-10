@@ -11,11 +11,11 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Brand
     
     public class CreateBrandRequest
     {
-        [Required]
+        [Required(ErrorMessage = "Nhập tên thương hiệu")]
         [MaxLength(100)]
         public string BrandName { get; set; } = null!;
 
-        [Required]
+        [Required(ErrorMessage = "Cần có id người dùng")]
         public int UserId { get; set; }
         public IFormFile Image { get; set; } = null!;
 
