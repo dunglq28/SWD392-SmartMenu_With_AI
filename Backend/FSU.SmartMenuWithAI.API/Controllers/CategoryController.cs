@@ -100,12 +100,12 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager)]
         [HttpPut(APIRoutes.Category.Update, Name = "UpdateCategoryAsync")]
-        public async Task<IActionResult> UpdateCategoryAsync(int id, [FromBody] string cagetoryName)
+        public async Task<IActionResult> UpdateCategoryAsync(int id, [FromQuery(Name = "category-name")] string categoryName)
         {
             try
             {
 
-                if (cagetoryName.IsNullOrEmpty())
+                if (categoryName.IsNullOrEmpty())
                 {
                     return BadRequest(new BaseResponse
                     {
@@ -115,7 +115,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         IsSuccess = false
                     });
                 }
-                var result = await _categoryService.UpdateAsync(id, cagetoryName);
+                var result = await _categoryService.UpdateAsync(id, categoryName);
 
                 if (!result)
                 {

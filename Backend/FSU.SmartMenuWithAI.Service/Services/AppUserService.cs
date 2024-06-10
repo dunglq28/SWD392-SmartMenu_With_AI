@@ -6,6 +6,8 @@ using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
 using FSU.SmartMenuWithAI.Service.Utils;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -28,7 +30,8 @@ namespace FSU.SmartMenuWithAI.Service.Services
         }
         public async Task<int> Count()
         {
-            return await _unitOfWork.AppUserRepository.Count();
+            Expression<Func<AppUser, bool>> filter = x => x.Status != (int)Status.Deleted;
+            return await _unitOfWork.AppUserRepository.Count(filter: filter);
         }
 
         public async Task<bool> Delete(int id)
@@ -51,22 +54,25 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Expression<Func<AppUser, bool>> filter = searchKey != null
                 ? x => x.UserName.Contains(searchKey) && x.RoleId != (int)UserRole.Admin && !(x.Status == (int)Status.Deleted)
                 : x => x.RoleId != (int)UserRole.Admin && !(x.Status == (int)Status.Deleted);
-
-            Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = q => q.OrderBy(x => x.UserId);
+            Expression<Func<AppUser, bool>> filterRecord =  x => (x.Status != (int)Status.Deleted);
+   
+    
+            Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = q => q.OrderByDescending(x => x.UserId);
             string includeProperties = "Role";
 
             var entities = _unitOfWork.AppUserRepository.Get(currentIDLogin, filter: filter, orderBy: orderBy, includeProperties: includeProperties, pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<AppUserDTO>();
             pagin.List = _mapper.Map<IEnumerable<AppUserDTO>>(entities).ToList();
-            pagin.TotalRecord = await _unitOfWork.AppUserRepository.Count();
+            pagin.TotalRecord = await _unitOfWork.AppUserRepository.Count(filterRecord);
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
         }
 
         public async Task<AppUserDTO?> GetByID(int id)
         {
-            var entity = await _unitOfWork.AppUserRepository.GetByID(id);
-            if (entity == null || !(entity.Status == (int)Status.Deleted))
+            Expression<Func<AppUser, bool>> condition = x => x.UserId == id && (x.Status != (int)Status.Deleted);
+            var entity = await _unitOfWork.AppUserRepository.GetByCondition(condition);
+            if (entity == null)
             {
                 return null!;
             }
@@ -81,6 +87,12 @@ namespace FSU.SmartMenuWithAI.Service.Services
             user.CreateDate = DateOnly.FromDateTime(DateTime.Now);
             user.Password = PasswordHelper.ConvertToEncrypt("123456");
 
+            Expression<Func<AppUser, bool>> duplicateName = x => x.UserName.Equals(user.UserName) && (x.Status != (int)Status.Deleted);
+            var exist = await _unitOfWork.AppUserRepository.GetByCondition(duplicateName);
+            if (exist != null)
+            {
+                throw new DbUpdateException("Tên đã tồn tại");
+            }
             await _unitOfWork.AppUserRepository.Insert(user);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             return result;
@@ -88,8 +100,9 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<bool> Update(int id, AppUserDTO entityToUpdate)
         {
-            var updateAppUser = await _unitOfWork.AppUserRepository.GetByID(id);
-            if (updateAppUser == null)
+            Expression<Func<AppUser, bool>> condition = x => x.UserId == id && (x.Status != (int)Status.Deleted);
+            var updateAppUser = await _unitOfWork.AppUserRepository.GetByCondition(condition);
+            if (updateAppUser == null )
             {
                 return false;
             }
