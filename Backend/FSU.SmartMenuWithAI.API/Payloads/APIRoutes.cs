@@ -39,6 +39,8 @@
         {
             public const string GetAll = Base + "/brands/";
 
+            public const string GetByID = Base + "/brands/get-by-id";
+
             public const string Add = Base + "/brands/add";
 
             public const string Update = Base + "/brands/update";
