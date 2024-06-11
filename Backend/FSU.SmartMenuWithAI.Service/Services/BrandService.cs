@@ -119,7 +119,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             var entities = await _unitOfWork.BrandRepository.GetBrands(filter: filter, orderBy: orderBy, pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<BrandDTO>();
             pagin.List = _mapper.Map<IEnumerable<BrandDTO>>(entities).ToList();
-            pagin.TotalRecord = entities.Count();
+            pagin.TotalRecord = await _unitOfWork.BrandRepository.Count();
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
         }

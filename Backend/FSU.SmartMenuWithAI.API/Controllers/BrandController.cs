@@ -204,5 +204,42 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpGet(APIRoutes.Brand.GetByID, Name = "GetBrandByID")]
+        public async Task<IActionResult> GetAsync([FromQuery] int Id)
+        {
+            try
+            {
+                var user = await _brandService.GetByID(Id);
+
+                if (user == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy thương hiệu",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Tìm thành công",
+                    Data = user,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
     }
 }

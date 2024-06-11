@@ -21,6 +21,7 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Brand
         [JsonProperty("user-id")]
         public string UserId { get; set; } = null!;
 
+        [Required(ErrorMessage = "Cần có hình ảnh")]
         [JsonProperty("image")]
         public IFormFile Image { get; set; } = null!;
 

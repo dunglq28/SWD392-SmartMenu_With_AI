@@ -266,7 +266,7 @@ INSERT INTO AppUser (UserCode, UserName, Password, RoleID, CreateDate, IsActive,
 
 
 -- Thông tin ảo cho bảng Brand
-
+GO
 insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( '2fe9bddd-e3c9-4497-a7b2-a0bccb60b085', 'Midel', 11, '12/9/2023', 0);
 insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( '97ad401e-98d4-4a4b-b449-7c757af35d7a', 'Topicstorm', 11, '10/2/2023', 2);
 insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( '4c06b1ea-0c50-4c35-a7ac-8e42c2d96a0f', 'Jetwire', 6, '3/10/2024', 2);
@@ -291,7 +291,7 @@ INSERT INTO Brand (BrandCode, BrandName, UserID, CreateDate, Status, ImageUrl, I
 ('b1234567-89ab-cdef-0123-456789abcdef', N'Phúc Long', 2, '2024-02-01', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/phuclong.png', NULL),
 ('c2345678-9abc-def0-1234-56789abcdef0', N'Cộng', 3, '2024-02-02', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/Cong.png', NULL),
 ('d3456789-abcd-ef01-2345-6789abcdef01', N'Highlands', 4, '2024-02-03', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/highlands.png', NULL);
-
+GO
 
 -- Category
 insert into Category ( CategoryCode, CategoryName, UpdateDate, CreateDate, Status, BrandID) values ( '93763006-2814-48c2-83e8-95717b4f4860', 'Drywall & Acoustical (FED)', '3/5/2024', '7/28/2023', 2, 10);
@@ -336,6 +336,85 @@ insert into Store ( StoreCode, IsActive, UserID, CreateDate, Status, Address, Ci
 insert into Store ( StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID) values ( 'c9abf845-9147-4493-ab54-ab0cae463fd9', 1, 1, '12/7/2023', 0, 'PO Box 37989', 'Nizhnedevitsk', 7);
 insert into Store ( StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID) values ( 'b5e480b0-25c2-4fea-b191-96416eb4a046', 1, 7, '2/4/2024', 1, '17th Floor', 'Zapatero', 13);
 insert into Store ( StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID) values ( 'e5ac02d8-b540-4641-aedb-269d6d4fd10a', 0, 18, '7/30/2023', 2, '1st Floor', 'Jiangnan', 6);
+
+-- Thêm cửa hàng cho thương hiệu có tên 'Phúc Long'
+INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
+VALUES 
+('c5821d44-972e-44f2-84df-69ad5a24cb78', 1, 2, '2024-02-02', 1, '8th Floor', 'Hanoi', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('7a1b7d9c-8b46-45b1-a4e2-e94027f4b422', 1, 2, '2024-02-02', 1, '10th Floor', 'Ho Chi Minh City', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('7f90d5e9-9e8d-4df7-9fe0-f88a69d62555', 1, 2, '2024-02-02', 1, 'Room 385', 'Da Nang', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('8ff1789e-7de2-4dc5-8d64-c349cf82c8f2', 1, 2, '2024-02-02', 1, 'Apt 1219', 'Hai Phong', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('68de7ec3-3c57-4876-bdbd-030ffaa3f5cc', 1, 2, '2024-02-02', 1, 'Suite 26', 'Can Tho', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long'));
+
+-- Thêm cửa hàng cho thương hiệu có tên 'Highlands'
+INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
+VALUES 
+('1f79779c-85cf-4d0b-b5b6-29d0380a8ff9', 1, 4, '2024-02-03', 1, '5th Floor', 'Hanoi', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('a97b6a5f-3b46-4e2f-86e4-dc74a07775a4', 1, 4, '2024-02-03', 1, '7th Floor', 'Ho Chi Minh City', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('6d3cb5fb-f15f-4686-89e3-7a39c4b735f5', 1, 4, '2024-02-03', 1, 'Room 243', 'Da Nang', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('950f4e6b-2fa9-45c5-89a5-0262b83e6e7a', 1, 4, '2024-02-03', 1, 'Apt 1842', 'Hai Phong', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('44ac3b1e-7b6e-494a-8a06-0aefdcdd7a8d', 1, 4, '2024-02-03', 1, 'Suite 42', 'Can Tho', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands'));
+
+-- Thêm cửa hàng cho thương hiệu có tên 'Midel'
+INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
+VALUES 
+('243af059-61e1-4fa0-9eb8-fd1af35815af', 1, 11, '2023-12-09', 0, '8th Floor', 'Hanoi', (SELECT BrandID FROM Brand WHERE BrandName = 'Midel')),
+('ca0e69bb-3c5b-49fc-b47b-b4b9a6143809', 1, 11, '2023-12-09', 0, '10th Floor', 'Ho Chi Minh City', (SELECT BrandID FROM Brand WHERE BrandName = 'Midel')),
+('63dfcb90-b9a1-4fcf-bae7-0378a469f92d', 1, 11, '2023-12-09', 0, 'Room 385', 'Da Nang', (SELECT BrandID FROM Brand WHERE BrandName = 'Midel')),
+('d22af86f-15d3-45e8-95ae-b9641e68d067', 1, 11, '2023-12-09', 0, 'Apt 1219', 'Hai Phong', (SELECT BrandID FROM Brand WHERE BrandName = 'Midel')),
+('40e8f9f3-727d-490e-b994-9775a0e4916c', 1, 11, '2023-12-09', 0, 'Suite 26', 'Can Tho', (SELECT BrandID FROM Brand WHERE BrandName = 'Midel'));
+
+-- Thêm cửa hàng cho thương hiệu có tên 'Topicstorm'
+INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
+VALUES 
+('452e378a-1b8a-4ef7-a2ab-160d00e5b7b1', 1, 11, '2023-10-02', 2, '8th Floor', 'Hanoi', (SELECT BrandID FROM Brand WHERE BrandName = 'Topicstorm')),
+('7d9ec6e0-9642-4e2b-9dc7-446ee2de5d72', 1, 11, '2023-10-02', 2, '10th Floor', 'Ho Chi Minh City', (SELECT BrandID FROM Brand WHERE BrandName = 'Topicstorm')),
+('6663b922-2f51-4321-a906-5c72bb180eff', 1, 11, '2023-10-02', 2, 'Room 385', 'Da Nang', (SELECT BrandID FROM Brand WHERE BrandName = 'Topicstorm')),
+('d8cf4317-1c44-4b79-b1b3-b42f9e121791', 1, 11, '2023-10-02', 2, 'Apt 1219', 'Hai Phong', (SELECT BrandID FROM Brand WHERE BrandName = 'Topicstorm'));
+
+-- Thêm cửa hàng cho thương hiệu có tên 'Jetwire'
+INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
+VALUES 
+('22ec20a4-b89a-45a7-8e95-93d63e734e51', 1, 6, '2024-03-10', 2, '12th Floor', 'Hanoi', (SELECT BrandID FROM Brand WHERE BrandName = 'Jetwire')),
+('fe97245a-7c56-4a01-82db-4c3da12e7f4b', 1, 6, '2024-03-10', 2, '15th Floor', 'Ho Chi Minh City', (SELECT BrandID FROM Brand WHERE BrandName = 'Jetwire')),
+('6e0da751-52b2-4345-b3ac-bf75e820be9b', 1, 6, '2024-03-10', 2, 'Room 124', 'Da Nang', (SELECT BrandID FROM Brand WHERE BrandName = 'Jetwire')),
+('c3d0b0c0-48aa-4382-9c30-b7b9e3ab1530', 1, 6, '2024-03-10', 2, 'Apt 1728', 'Hai Phong', (SELECT BrandID FROM Brand WHERE BrandName = 'Jetwire')),
+('4ac6300e-1d08-4a1d-9d57-3d9295eef4d0', 1, 6, '2024-03-10', 2, 'Suite 36', 'Can Tho', (SELECT BrandID FROM Brand WHERE BrandName = 'Jetwire'));
+
+-- Thêm cửa hàng cho thương hiệu có tên 'Yamia'
+INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
+VALUES 
+('5a02d72f-9949-4226-8549-2c57ac9b8439', 1, 2, '2023-08-29', 2, '8th Floor', 'Hanoi', (SELECT BrandID FROM Brand WHERE BrandName = 'Yamia')),
+('10a7e196-cf67-408f-a5b7-4a6f3a156d6a', 1, 2, '2023-08-29', 2, '10th Floor', 'Ho Chi Minh City', (SELECT BrandID FROM Brand WHERE BrandName = 'Yamia')),
+('c3f274a1-54de-4649-bc16-3f4323c8b93e', 1, 2, '2023-08-29', 2, 'Room 385', 'Da Nang', (SELECT BrandID FROM Brand WHERE BrandName = 'Yamia')),
+('f28f4266-d2a9-4f49-8002-5e0c17e621fd', 1, 2, '2023-08-29', 2, 'Apt 1219', 'Hai Phong', (SELECT BrandID FROM Brand WHERE BrandName = 'Yamia')),
+('81e03d1f-689a-4379-8eef-00ebbd476a8f', 1, 2, '2023-08-29', 2, 'Suite 26', 'Can Tho', (SELECT BrandID FROM Brand WHERE BrandName = 'Yamia'));
+
+-- Thêm cửa hàng cho thương hiệu có tên 'Npath'
+INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
+VALUES 
+('f79f8c9d-2f77-4b15-a2f5-cf74e5b0364d', 1, 4, '2023-06-13', 1, '12th Floor', 'Hanoi', (SELECT BrandID FROM Brand WHERE BrandName = 'Npath')),
+('8fb2e23e-6c8a-48e2-8a2c-cd73f34d298d', 1, 4, '2023-06-13', 1, '15th Floor', 'Ho Chi Minh City', (SELECT BrandID FROM Brand WHERE BrandName = 'Npath')),
+('c0d84a1c-b373-4ff4-9b7e-3a845ce06b24', 1, 4, '2023-06-13', 1, 'Room 124', 'Da Nang', (SELECT BrandID FROM Brand WHERE BrandName = 'Npath')),
+('87c5cde6-e1c5-441a-a540-641b4d3b5a06', 1, 4, '2023-06-13', 1, 'Apt 1728', 'Hai Phong', (SELECT BrandID FROM Brand WHERE BrandName = 'Npath')),
+('7f9bcb64-dad8-4e22-9de8-bb250c2c47cd', 1, 4, '2023-06-13', 1, 'Suite 36', 'Can Tho', (SELECT BrandID FROM Brand WHERE BrandName = 'Npath'));
+
+-- Thêm cửa hàng cho thương hiệu có tên 'Pixoboo'
+INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
+VALUES 
+('cb6a522f-6594-456f-b2b7-e32f2853f7e6', 1, 2, '2023-09-22', 1, '8th Floor', 'Hanoi', (SELECT BrandID FROM Brand WHERE BrandName = 'Pixoboo')),
+('5eb0c36c-915a-44f1-83cd-eb9cd1b1073c', 1, 2, '2023-09-22', 1, '10th Floor', 'Ho Chi Minh City', (SELECT BrandID FROM Brand WHERE BrandName = 'Pixoboo')),
+('1a16aa15-0666-4345-b249-49f870ec0755', 1, 2, '2023-09-22', 1, 'Room 385', 'Da Nang', (SELECT BrandID FROM Brand WHERE BrandName = 'Pixoboo')),
+('f7db4766-cab1-4e79-84f2-3849183285e4', 1, 2, '2023-09-22', 1, 'Apt 1219', 'Hai Phong', (SELECT BrandID FROM Brand WHERE BrandName = 'Pixoboo'));
+
+-- Thêm cửa hàng cho thương hiệu có tên 'Cộng'
+INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
+VALUES 
+('b91c4a27-2915-44c7-b877-20a17442352c', 1, 3, '2024-02-02', 1, '12th Floor', 'Hanoi', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('d1e38f48-ff25-489d-8e0d-0e7bbfbd5f38', 1, 3, '2024-02-02', 1, '15th Floor', 'Ho Chi Minh City', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('e7b098e6-fd91-4cb8-8014-c4b4a2268f27', 1, 3, '2024-02-02', 1, 'Room 124', 'Da Nang', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('d11c9d53-0547-41ac-96d4-0d6f6a6d2b9e', 1, 3, '2024-02-02', 1, 'Apt 1728', 'Hai Phong', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('01e4267c-3342-4c95-a63c-69c0ddc80a6f', 1, 3, '2024-02-02', 1, 'Suite 36', 'Can Tho', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
 
 
 --Product 
