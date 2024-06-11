@@ -8,6 +8,7 @@ import Settings from "../pages/Setting";
 import New from "../pages/New";
 import Profile from "../pages/Profile";
 import { HeaderOnly } from "../layouts";
+import Branch from "../pages/Branch/Branch";
 
 interface RouteItem {
   path: string;
@@ -21,6 +22,7 @@ export const publicRoutes: RouteItem[] = [
   { path: "/dashboard", component: Dashboard },
   { path: "/users", component: User },
   { path: "/brands", component: Brand },
+  { path: "/branches/:brandName", component: Branch },
   { path: "/products", component: Products },
   { path: "/menu", component: Menu },
   { path: "/settings", component: Settings },

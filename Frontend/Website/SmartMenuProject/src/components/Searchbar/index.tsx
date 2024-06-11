@@ -9,10 +9,14 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { LuSearch } from "react-icons/lu";
-import { useState } from "react";
+import { FC, useState } from "react";
 import style from "./Searchbar.module.scss";
 
-function Searchbar() {
+interface SearchBarProps {
+  onSearch: (value: string) => void;
+}
+
+const Searchbar: FC<SearchBarProps> = ({ onSearch }) => {
   const [inputValue, setInputValue] = useState("");
   const [loadingHeader, setLoadingHeader] = useState(false);
 
@@ -26,6 +30,7 @@ function Searchbar() {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
+    onSearch(event.target.value);
   };
 
   const handleDeleteTextSearch = () => {
@@ -59,6 +64,6 @@ function Searchbar() {
       </InputRightElement>
     </InputGroup>
   );
-}
+};
 
 export default Searchbar;
