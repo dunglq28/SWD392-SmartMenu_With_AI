@@ -12,7 +12,7 @@ import {
 import style from "./User.module.scss";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { deleteUser, getUsers } from "../../services/UserService";
+import { deleteUser, getUsers, updateUser } from "../../services/UserService";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import { getOptions } from "../../utils/getRowPerPage";
 import { UserData } from "../../payloads/responses/UserData.model";
@@ -21,6 +21,7 @@ import { UserRole } from "../../constants/Enum";
 import { toast } from "react-toastify";
 import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
 import Loading from "../../components/Loading";
+import { userUpdate } from "../../payloads/requests/updateUser.model";
 
 function User() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -87,7 +88,7 @@ function User() {
 
   async function handleDelete(id: number) {
     try {
-      var result = await deleteUser(id);      
+      var result = await deleteUser(id);
       if (result.statusCode === 200) {
         fetchData();
         toast.success("Xoá người dùng thành công");
@@ -97,8 +98,18 @@ function User() {
     }
   }
 
-  function handleEdit(id: number) {
-    console.log(id);
+  async function handleEdit(id: number, user: userUpdate) {
+    console.log(user);
+
+    try {
+      var result = await updateUser(id, user);
+      if (result.statusCode === 200) {
+        fetchData();
+        toast.success("Cập nhật thành công");
+      }
+    } catch {
+      toast.error("Cập nhật thất bại");
+    }
   }
 
   return (
@@ -129,9 +140,9 @@ function User() {
                 </Td>
               </Tr>
             ) : (
-              data.map((user) => (
+              data.map((user, index) => (
                 <Tr key={user.userCode} className={style.UserItem}>
-                  <Td>{user.userId}</Td>
+                  <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
                   <Td>{user.fullname}</Td>
                   <Td>{user.userName}</Td>
                   <Td>{moment(user.dob).format("DD/MM/YYYY")}</Td>

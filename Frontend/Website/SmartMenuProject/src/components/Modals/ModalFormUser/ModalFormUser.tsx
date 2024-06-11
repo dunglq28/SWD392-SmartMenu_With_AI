@@ -21,18 +21,21 @@ import { isValidPhoneNumber } from "../../../utils/validation";
 import { generateUsername } from "../../../utils/createBrandName";
 
 interface ModalFormBrandProps {
+  isEdit: boolean;
   onClose: () => void;
-  formPrevious: CurrentForm;
-  onOpenStore: () => void;
-  onOpenBrand: () => void;
-  updateBrandData: (data: BrandData) => void;
-  updateUserData: (data: UserForm) => void;
-  saveBrandHandle: (data: UserForm) => void;
-  brandName: string;
+  formPrevious?: CurrentForm;
+  onOpenStore?: () => void;
+  onOpenBrand?: () => void;
+  updateBrandData?: (data: BrandData) => void;
+  updateUserData?: (data: UserForm) => void;
+  saveBrandHandle?: (data: UserForm) => void;
+  saveUserHandle?: (data: UserForm) => void;
+  brandName?: string;
   userData: UserForm;
 }
 
 const ModalFormUser: React.FC<ModalFormBrandProps> = ({
+  isEdit,
   onClose,
   formPrevious,
   onOpenStore,
@@ -40,12 +43,17 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
   updateBrandData,
   updateUserData,
   saveBrandHandle,
+  saveUserHandle,
   brandName,
   userData,
 }) => {
+  const initialUserNameValue = brandName ? generateUsername(brandName) : userData.userName.value;
   const [formData, setFormData] = useState<UserForm>({
     fullName: { value: userData.fullName.value, errorMessage: "" },
-    userName: { value: generateUsername(brandName), errorMessage: "" },
+    userName: {
+      value: initialUserNameValue,
+      errorMessage: "",
+    },
     phoneNumber: { value: userData.phoneNumber.value, errorMessage: "" },
     DOB: { value: userData.DOB.value, errorMessage: "" },
     gender: { value: userData.gender.value || "Male", errorMessage: "" },
@@ -82,12 +90,12 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
 
   const cancelHandler = () => {
     if (formPrevious === CurrentForm.BRAND) {
-      updateBrandData({
+      updateBrandData?.({
         brandName: { value: "", errorMessage: "" },
         image: { value: null, errorMessage: "" },
       });
     }
-    updateUserData({
+    updateUserData?.({
       fullName: { value: "", errorMessage: "" },
       userName: { value: "", errorMessage: "" },
       phoneNumber: { value: "", errorMessage: "" },
@@ -102,11 +110,11 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
     onClose();
     setTimeout(() => {
       if (formPrevious === CurrentForm.BRAND) {
-        onOpenBrand();
+        onOpenBrand?.();
       } else {
-        onOpenStore();
+        onOpenStore?.();
       }
-      updateUserData(formData);
+      updateUserData?.(formData);
     }, 350);
   };
 
@@ -167,8 +175,11 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
     if (!hasError) {
       // console.log(formData);
       // updateUserData(formData);
-
-      saveBrandHandle(formData);
+      if (isEdit) {
+        saveUserHandle?.(formData);
+      } else {
+        saveBrandHandle?.(formData);
+      }
     }
   };
 
@@ -288,14 +299,16 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
           </Flex>
         </Flex>
       </ModalBody>
-      <ModalFooter justifyContent="space-between">
-        <Button
-          backgroundColor={themeColors.primaryButton}
-          color="white"
-          onClick={openFormPreviousHandler}
-        >
-          Back
-        </Button>
+      <ModalFooter justifyContent={isEdit ? "flex-end" : "space-between"}>
+        {!isEdit && (
+          <Button
+            backgroundColor={themeColors.primaryButton}
+            color="white"
+            onClick={openFormPreviousHandler}
+          >
+            Back
+          </Button>
+        )}
 
         <Flex>
           <Button

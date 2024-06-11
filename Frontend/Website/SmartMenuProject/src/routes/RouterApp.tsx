@@ -1,7 +1,7 @@
 import Login from "../pages/Login/Login";
 import Dashboard from "../pages/Dashboard";
 import User from "../pages/User";
-import Branch from "../pages/Branch";
+import Brand from "../pages/Brand";
 import Products from "../pages/Product";
 import Menu from "../pages/Menu";
 import Settings from "../pages/Setting";
@@ -20,7 +20,7 @@ export const publicRoutes: RouteItem[] = [
   { path: "/login", component: Login, layout: null },
   { path: "/dashboard", component: Dashboard },
   { path: "/users", component: User },
-  { path: "/branchs", component: Branch },
+  { path: "/brands", component: Brand },
   { path: "/products", component: Products },
   { path: "/menu", component: Menu },
   { path: "/settings", component: Settings },

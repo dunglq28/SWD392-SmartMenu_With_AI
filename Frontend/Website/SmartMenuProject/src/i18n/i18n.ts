@@ -7,27 +7,28 @@ const resources = {
       translation: {
         "dashboard": "Dashboard",
         "users":"Users",
-        "branchs":"Branchs",
+        "brands":"Brands",
         "products":"Products",
         "menu":"Menu",
         "settings": "Settings",
         "new product":"New Product",
         "new":"New Product",
-        "newBranch":"New Branch"
+        "new brand":"New Brand",
+        "new branch":"New Branch"
       }
     },
     vi: {
       translation: {
         "dashboard": "Bảng Thống Kê",
         "users":"Người Dùng",
-        "branchs":"Chi Nhánh",
+        "brands":"Thương Hiệu",
         "products":"Sản Phẩm",
         "menu":"Thực Đơn",
         "settings": "Cài Đặt",
         "new product":"Sản Phẩm Mới",
         "new":"Sản Phẩm Mới",
-        "new branch":"Thương Hiệu Mới",
-        "new store":"Chi Nhánh Mới"
+        "new brand":"Thương Hiệu Mới",
+        "new branch":"Chi Nhánh Mới"
       }
     }
   };

@@ -141,6 +141,15 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 updateAppUser.Gender = entityToUpdate.Gender;
             }
 
+            if (!string.IsNullOrEmpty(entityToUpdate.Gender))
+            {
+                updateAppUser.Gender = entityToUpdate.Gender;
+            }
+
+
+            updateAppUser.IsActive = entityToUpdate.IsActive;
+
+
             if (entityToUpdate.UpdateBy != default)
             {
                 updateAppUser.UpdateBy = entityToUpdate.UpdateBy;

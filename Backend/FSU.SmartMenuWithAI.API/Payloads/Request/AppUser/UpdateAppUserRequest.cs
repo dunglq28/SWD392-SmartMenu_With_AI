@@ -6,11 +6,6 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.AppUser
     {
 
         [Required]
-        [StringLength(50, MinimumLength = 8)]
-        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Chỉ được chứa chữ cái và số")]
-        public string? Password { get; set; } = null!;
-
-        [Required]
         public bool IsActive { get; set; }
 
         [StringLength(50, MinimumLength = 3)]

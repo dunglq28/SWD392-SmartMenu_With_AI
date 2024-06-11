@@ -42,7 +42,7 @@ axiosAuth.interceptors.request.use(
     if (config.params) {
       config.params = convertQueryParamsToKebabCase(config.params);
     }
-
+    
     return config;
   },
   function (error) {

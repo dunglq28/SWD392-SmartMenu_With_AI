@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -20,16 +20,63 @@ import {
 import { RiSettings3Line } from "react-icons/ri";
 
 import style from "./ActionMenu.module.scss";
+import ModalForm from "../../Modals/ModalForm/ModalForm";
+import ModalFormUser from "../../Modals/ModalFormUser/ModalFormUser";
+import { useTranslation } from "react-i18next";
+import { UserForm } from "../../../models/User.model";
+import { getInitialUserData } from "../../../utils/initialUserData";
+import { getUser } from "../../../services/UserService";
+import { userUpdate } from "../../../payloads/requests/updateUser.model";
 
 interface ActionMenuProps {
   id: number;
-  onEdit: (id: number) => void;
+  onEdit: (id: number, user: userUpdate) => void;
   onDelete: (id: number) => void;
 }
 
 const ActionMenu: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
+  const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
+  const {
+    isOpen: isOpenUser,
+    onOpen: onOpenUser,
+    onClose: onCloseUser,
+  } = useDisclosure();
+  // USER DATA
+  const [userData, setUserData] = useState<UserForm>(getInitialUserData());
+
+  const handleEditClick = async () => {
+    var result = await getUser(id);
+
+    if (result.statusCode === 200) {
+      const { fullname, userName, phone, dob, gender, isActive } = result.data;
+
+      const updatedUserData: UserForm = {
+        fullName: { value: fullname, errorMessage: "" },
+        userName: { value: userName, errorMessage: "" },
+        phoneNumber: { value: phone, errorMessage: "" },
+        DOB: { value: new Date(dob), errorMessage: "" },
+        gender: { value: gender, errorMessage: "" },
+        isActive: { value: isActive ? 1 : 0, errorMessage: "" },
+      };
+      setUserData(updatedUserData);
+      onOpenUser();
+    }
+  };
+
+  const saveUserHandle = (user: UserForm) => {
+    var userUpdate: userUpdate = {
+      fullname: user.fullName.value,
+      dob: user.DOB.value ? user.DOB.value.toISOString().split("T")[0] : "",
+      gender: user.gender.value,
+      phone: user.phoneNumber.value,
+      isActive: Number(user.isActive.value) == 1 ? true : false,
+      updateBy: Number(localStorage.getItem("UserId")),
+    };
+    onCloseUser();
+    onEdit(id, userUpdate);
+  };
 
   return (
     <>
@@ -45,7 +92,7 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
           <PopoverContent className={style.PopoverContent}>
             <PopoverArrow />
             <PopoverBody>
-              <Flex className={style.PopupButton}>
+              <Flex className={style.PopupButton} onClick={handleEditClick}>
                 <Text>Edit User</Text>
               </Flex>
               <Divider />
@@ -91,6 +138,20 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
+
+      <ModalForm
+        formBody={
+          <ModalFormUser
+            onClose={onCloseUser}
+            userData={userData}
+            isEdit={true}
+            saveUserHandle={saveUserHandle}
+          />
+        }
+        onClose={onCloseUser}
+        isOpen={isOpenUser}
+        title={t("Update user")}
+      />
     </>
   );
 };
