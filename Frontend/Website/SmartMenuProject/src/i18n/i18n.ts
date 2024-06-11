@@ -1,9 +1,11 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import PROFILE_EN from '../locales/en/profile.json'
+import PROFILE_VI from '../locales/vi/profile.json'
 
 const resources = {
     en: {
-        //đây là namespace
+        profile: PROFILE_EN,
       translation: {
         "dashboard": "Dashboard",
         "users":"Users",
@@ -17,6 +19,7 @@ const resources = {
       }
     },
     vi: {
+      profile: PROFILE_VI,
       translation: {
         "dashboard": "Bảng Thống Kê",
         "users":"Người Dùng",
@@ -38,6 +41,7 @@ const resources = {
     resources,
     lng: "vi",
     fallbackLng:"vi",
+    ns:['profile','translation'],
     interpolation: {
       escapeValue: false // react already safes from xss
     }

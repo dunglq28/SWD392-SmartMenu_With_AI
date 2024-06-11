@@ -23,6 +23,7 @@
       justify-content: center;
       padding: 10px;
       row-gap: 5px;
+      user-select: none;
       .tab {
         border-radius: 7px;
         &:hover {
