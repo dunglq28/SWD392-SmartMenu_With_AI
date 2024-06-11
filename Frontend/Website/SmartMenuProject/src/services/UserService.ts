@@ -7,12 +7,14 @@ import { UserData } from "../payloads/responses/UserData.model";
 
 export const getUsers = async (
   currentPage: number,
-  rowsPerPage: number
+  rowsPerPage: number,
+  searchValue: string
 ): Promise<GetData<UserData>> => {
   const res = await axiosAuth.get("app-users", {
     params: {
       pageNumber: currentPage,
       pageSize: rowsPerPage,
+      searchKey: searchValue,
     },
   });
   const apiResponse = res.data as ApiResponse<Object>;

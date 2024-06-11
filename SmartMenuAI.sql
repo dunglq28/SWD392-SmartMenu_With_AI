@@ -266,10 +266,7 @@ INSERT INTO AppUser (UserCode, UserName, Password, RoleID, CreateDate, IsActive,
 
 
 -- Thông tin ảo cho bảng Brand
-INSERT INTO Brand (BrandCode, BrandName, UserID, CreateDate, Status, ImageUrl, ImageName) VALUES 
-('b1234567-89ab-cdef-0123-456789abcdef', N'Phúc Long', 2, '2024-02-01', 1, NULL, NULL),
-('c2345678-9abc-def0-1234-56789abcdef0', N'Cộng', 3, '2024-02-02', 1, NULL, NULL),
-('d3456789-abcd-ef01-2345-6789abcdef01', N'Highlands', 4, '2024-02-03', 1, NULL, NULL);
+
 insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( '2fe9bddd-e3c9-4497-a7b2-a0bccb60b085', 'Midel', 11, '12/9/2023', 0);
 insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( '97ad401e-98d4-4a4b-b449-7c757af35d7a', 'Topicstorm', 11, '10/2/2023', 2);
 insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( '4c06b1ea-0c50-4c35-a7ac-8e42c2d96a0f', 'Jetwire', 6, '3/10/2024', 2);
@@ -287,9 +284,13 @@ insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( '
 insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( 'addd2532-96d8-41d4-95b2-332035616c85', 'Trilia', 7, '2/29/2024', 2);
 insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( 'edbf2901-5130-4fd4-a811-3bfd36a6d8a7', 'Aibox', 18, '8/23/2023', 0);
 insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( 'd07bd21f-2ca8-4772-95ef-b88d2f0f6668', 'Quamba', 5, '11/30/2023', 1);
-insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( 'a2100d43-bac6-4330-ad90-4ba0321ee807', 'Skimia', 9, '1/23/2024', 1);
-insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( 'b0d36a44-45b7-40aa-a0f8-cb945eacfd6b', 'Viva', 20, '9/22/2023', 1);
-insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status) values ( '07e2e547-6763-4e95-8d44-10ffd019ae3d', 'Brainlounge', 14, '2/23/2024', 1);
+insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status, ImageUrl) values ( 'a2100d43-bac6-4330-ad90-4ba0321ee807', 'The Coffee House', 9, '1/23/2024', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/thecoffeehouse.png');
+insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status, ImageUrl) values ( 'b0d36a44-45b7-40aa-a0f8-cb945eacfd6b', 'Viva', 20, '9/22/2023', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/viva.png');
+insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status, ImageUrl) values ( '07e2e547-6763-4e95-8d44-10ffd019ae3d', 'Trung Nguyên Legend', 14, '2/23/2024', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/trungnguyen.png');
+INSERT INTO Brand (BrandCode, BrandName, UserID, CreateDate, Status, ImageUrl, ImageName) VALUES 
+('b1234567-89ab-cdef-0123-456789abcdef', N'Phúc Long', 2, '2024-02-01', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/phuclong.png', NULL),
+('c2345678-9abc-def0-1234-56789abcdef0', N'Cộng', 3, '2024-02-02', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/Cong.png', NULL),
+('d3456789-abcd-ef01-2345-6789abcdef01', N'Highlands', 4, '2024-02-03', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/highlands.png', NULL);
 
 
 -- Category

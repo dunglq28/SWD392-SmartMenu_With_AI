@@ -34,6 +34,7 @@ function App(): JSX.Element {
           </Routes>
         </div>
       </Router>
+
       <ToastContainer />
     </>
   );

@@ -1,0 +1,46 @@
+.Brand {
+    width: 100%;
+    padding: 20px;
+    user-select: none;
+    justify-content: center;
+  
+    .BrandTbl {
+      border-radius: 7px;
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+      background-color: #fff;
+      width: 100%;
+      overflow: hidden;
+  
+      .BrandItem {
+        transition: 0.3s;
+        &:hover {
+          background-color: #f9fafb;
+          cursor: pointer;
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+        &:active {
+          transition: 0.1s;
+          box-shadow: none;
+        }
+      }
+    }
+    .HeaderTbl {
+      color: black;
+      font-size: 15px;
+      text-align: center;
+    }
+  
+    .ButtonContainer {
+      align-self: flex-end;
+  
+      .Button {
+        margin-bottom: 10px;
+      }
+  
+      .Button:nth-child(1) {
+        margin-bottom: 10px;
+        margin-left: 20px;
+      }
+    }
+  }
+  
