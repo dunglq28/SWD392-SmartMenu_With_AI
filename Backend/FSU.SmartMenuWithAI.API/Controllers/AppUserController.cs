@@ -113,7 +113,6 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             try
             {
                 var dto = new AppUserDTO();
-                dto.Password = reqObj.Password;
                 dto.IsActive = reqObj.IsActive;
                 dto.Phone = reqObj.Phone;
                 dto.Gender = reqObj.Gender;

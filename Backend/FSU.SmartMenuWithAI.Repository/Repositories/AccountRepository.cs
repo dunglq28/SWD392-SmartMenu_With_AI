@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using FSU.SmartMenuWithAI.Repository.Interfaces;
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.Utils;
+using FSU.SmartMenuWithAI.Repository.Common.Enums;
 
 namespace FSU.SmartMenuWithAI.Repository.Repositories
 {
@@ -21,7 +22,7 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
         public async Task<AppUser?> CheckLoginAsync(string userName, string password)
         {
             password = PasswordHelper.ConvertToEncrypt(password);
-            var user = await _context.AppUsers.FirstOrDefaultAsync(u => u.UserName == userName && u.Password == password && u.Status == 1);
+            var user = await _context.AppUsers.FirstOrDefaultAsync(u => u.UserName == userName && u.Password == password && u.Status == (int)Status.Exist);
             if (user == null)
             {
                 return null;
