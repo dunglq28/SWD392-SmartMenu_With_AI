@@ -77,7 +77,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Expression<Func<Category, bool>> filter = searchKey != null 
                 ? x => x.CategoryName.Contains(searchKey) && x.BrandId == brandID  && (x.Status != (int)Status.Deleted)
                 : x => x.BrandId == brandID && (x.Status != (int)Status.Deleted);
-            Expression<Func<Category, bool>> filterRecord =  x =>  (x.Status != (int)Status.Deleted);
+            Expression<Func<Category, bool>> filterRecord =  x =>  (x.Status != (int)Status.Deleted) && x.BrandId == brandID;
                
                
             Func<IQueryable<Category>, IOrderedQueryable<Category>> orderBy = q => q.OrderByDescending(x => x.CategoryId);

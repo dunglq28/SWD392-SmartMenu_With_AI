@@ -4,6 +4,7 @@ using FSU.SmartMenuWithAI.Repository.UnitOfWork;
 using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Token;
+using FSU.SmartMenuWithAI.Service.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -39,7 +40,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         }
         public async Task<bool> checkCorrectPassword(int id, string password)
         {
-            Expression<Func<AppUser, bool>> filter = x => x.Password.Equals(password) && x.UserId == id;
+            Expression<Func<AppUser, bool>> filter = x => x.Password.Equals(PasswordHelper.ConvertToEncrypt(password)) && x.UserId == id;
             var rightPass = await _unitOfWork.AppUserRepository.GetByCondition(filter);
             if (rightPass == null)
             {

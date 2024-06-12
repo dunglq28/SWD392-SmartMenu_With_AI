@@ -14,6 +14,7 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
         Task<bool> Insert(ProductDTO reqObj);
         Task<PageEntity<ProductDTO>?> GetAllAsync(string? searchKey, int brandID, int? categoryID, int? pageIndex, int? pageSize);
         Task<ProductDTO?> GetAsync(int id);
+        Task<List<ProductDTO>?> GetAllProductInBrandAsync(int brandid);
         Task<bool> Delete(int id);
     }
 }

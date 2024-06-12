@@ -15,6 +15,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         public GenericRepository<Store> StoreRepository { get; }
         public GenericRepository<Menu> MenuRepository { get; }
         public GenericRepository<Product> ProductRepository { get; }
+        public ProductMenuRepository ProductMenuRepository { get; }
 
         public BrandRepository BrandRepository { get; }
 

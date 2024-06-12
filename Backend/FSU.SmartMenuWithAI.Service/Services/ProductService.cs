@@ -42,20 +42,32 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 && x.CategoryId == categoryID 
                 && x.ProductName.ToLower().Contains(searchKey.ToLower()) : null!;
             Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = q => q.OrderByDescending(x => x.ProductId);
+            string includeProperties = "Category";
 
             var entities = await _unitOfWork.ProductRepository
-                .Get(filter: filter, orderBy: orderBy, pageIndex: pageIndex, pageSize: pageSize);
+                .Get(filter: filter, orderBy: orderBy,includeProperties: includeProperties ,pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<ProductDTO>();
             pagin.List = _mapper.Map<IEnumerable<ProductDTO>>(entities).ToList();
-            pagin.TotalRecord = await _unitOfWork.CategoryRepository.Count();
+            Expression<Func<Product, bool>> getProductInBrand = x => x.BrandId == brandID;
+            pagin.TotalRecord = await _unitOfWork.ProductRepository.Count(getProductInBrand);
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
         }
 
+        public async Task<List<ProductDTO>?> GetAllProductInBrandAsync(int brandId)
+        {
+            Expression<Func<Product, bool>> condition = x => x.BrandId == brandId;
+            string includeProperties = "Category";
+
+            var productInBrand = await _unitOfWork.ProductRepository.GetAllNoPaging(filter: condition, includeProperties: includeProperties);
+            var dtos = _mapper.Map<List<ProductDTO>>(productInBrand.ToList());
+            return dtos;
+        }
+
         public async Task<ProductDTO?> GetAsync(int id)
         {
-            var menu = await _unitOfWork.ProductRepository.GetByID(id);
-            var mapDTO = _mapper.Map<ProductDTO>(menu);
+            var product = await _unitOfWork.ProductRepository.GetByID(id);
+            var mapDTO = _mapper.Map<ProductDTO>(product);
             return mapDTO;
         }
 

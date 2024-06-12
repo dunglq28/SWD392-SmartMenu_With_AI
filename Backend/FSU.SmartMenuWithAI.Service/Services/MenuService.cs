@@ -42,7 +42,8 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 .Get(filter: filter, orderBy: orderBy, includeProperties: includeProperties, pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<MenuDTO>();
             pagin.List = _mapper.Map<IEnumerable<MenuDTO>>(entities).ToList();
-            pagin.TotalRecord = await _unitOfWork.CategoryRepository.Count();
+            Expression<Func<Menu, bool>> countMenuInBrand = x => x.BrandId == brandID;
+            pagin.TotalRecord = await _unitOfWork.MenuRepository.Count(countMenuInBrand);
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
         }
