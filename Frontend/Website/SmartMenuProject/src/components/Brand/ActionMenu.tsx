@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -22,21 +22,56 @@ import { MdOutlineMoreHoriz } from "react-icons/md";
 import style from "./ActionMenu.module.scss";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import ModalForm from "../Modals/ModalForm/ModalForm";
+import ModalFormBrand from "../Modals/ModalFormBrand/ModalFormBrand";
+import { BrandData } from "../../models/Brand.model";
+import { brandUpdate } from "../../payloads/requests/updateBrand.model";
 
 interface ActionMenuProps {
   id: number;
   brandName: string;
   onDelete: (id: number) => void;
+  onEdit: (id: number, brand: brandUpdate) => void;
 }
 
-const ActionMenu: FC<ActionMenuProps> = ({ id, brandName, onDelete }) => {
+const ActionMenu: FC<ActionMenuProps> = ({
+  id,
+  brandName,
+  onDelete,
+  onEdit,
+}) => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenBrand,
+    onOpen: onOpenBrand,
+    onClose: onCloseBrand,
+  } = useDisclosure();
   const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
   const navigate = useNavigate();
+  //BRAND DATA
+  const [brandData, setBrandData] = useState<BrandData>({
+    brandName: {
+      value: "",
+      errorMessage: "",
+    },
+    image: {
+      value: null,
+      errorMessage: "",
+    },
+  });
+
+  const updateBrandData = (brand: BrandData) => {
+    var brandUpdate: brandUpdate = {
+      brandName: brand.brandName.value,
+      image: brand.image.value,
+    };
+    // onCloseUser();
+    onEdit(id, brandUpdate);
+  };
 
   const handleEditClick = () => {
-    // Handle edit action for brand
+    onOpenBrand();
   };
 
   const handleViewClick = () => {
@@ -106,6 +141,21 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, brandName, onDelete }) => {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
+
+      <ModalForm
+        formBody={
+          <ModalFormBrand
+            brandData={brandData}
+            onClose={onCloseBrand}
+            isEdit={true}
+            updateBrandData={updateBrandData}
+          />
+        }
+        onClose={onCloseBrand}
+        isOpen={isOpenBrand}
+        title={t("Update Brand")}
+        updateBrandData={updateBrandData}
+      />
     </>
   );
 };

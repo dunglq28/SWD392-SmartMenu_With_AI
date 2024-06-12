@@ -238,6 +238,7 @@ function Sidebar() {
             onClose={onCloseBrand}
             updateBrandData={updateBrandData}
             nextHandler={() => nextHandler(CurrentForm.BRAND)}
+            isEdit={false}
           />
         }
         onClose={onCloseBrand}

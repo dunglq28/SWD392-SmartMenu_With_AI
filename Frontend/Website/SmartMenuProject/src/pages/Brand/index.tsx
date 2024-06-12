@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 
 import style from "./Brand.module.scss";
 import { Image } from "@chakra-ui/react";
-import { GlobalStyles, themeColors } from "../../constants/GlobalStyles";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import { getBrandOptions } from "../../utils/getRowPerPage";
 import { getBrands } from "../../services/BrandService";
@@ -12,6 +11,7 @@ import { BrandData } from "../../payloads/responses/BrandData.model";
 import moment from "moment";
 import Loading from "../../components/Loading";
 import ActionMenu from "../../components/Brand/ActionMenu";
+import { brandUpdate } from "../../payloads/requests/updateBrand.model";
 
 function Brand() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -80,7 +80,12 @@ function Brand() {
   );
 
   function handleDelete(id: number) {
+    console.log(id);
+  }
 
+  async function handleEdit(id: number, brand: brandUpdate) {
+    console.log(id);
+    console.log(brand);
   }
 
   if (isLoading) {
@@ -93,35 +98,29 @@ function Brand() {
       <div className={style.cardContainer}>
         {data.map((brand) => (
           <div className={style.cardWrapper}>
-            {/* <Link to={`/branches/${brand.brandName}`} key={brand.brandCode}> */}
-              <div className={style.card}>
-                <Image
-                  boxSize="140px"
-                  objectFit="cover"
-                  borderRadius="full"
-                  src={brand.imageUrl}
-                  alt={brand.imageName}
-                />
-                <div className={style.wrapperText}>
-                  <div className={style.header}>{brand.brandName}</div>
-                  <div className={style.createDate}>
-                    Create on {moment(brand.createDate).format("DD/MM/YYYY")}
-                  </div>
-                </div>
-                <div className={style.btnContainer}>
-                  {/* <button
-                    style={{
-                      color: "white",
-                      backgroundColor: themeColors.darken60,
-                    }}
-                    className={style.button}
-                  >
-                    View
-                  </button> */}
-                  <ActionMenu id={brand.brandId} brandName={brand.brandName} onDelete={handleDelete} />
+            <div className={style.card}>
+              <Image
+                boxSize="140px"
+                objectFit="cover"
+                borderRadius="full"
+                src={brand.imageUrl}
+                alt={brand.imageName}
+              />
+              <div className={style.wrapperText}>
+                <div className={style.header}>{brand.brandName}</div>
+                <div className={style.createDate}>
+                  Create on {moment(brand.createDate).format("DD/MM/YYYY")}
                 </div>
               </div>
-            {/* </Link> */}
+              <div className={style.btnContainer}>
+                <ActionMenu
+                  id={brand.brandId}
+                  brandName={brand.brandName}
+                  onDelete={handleDelete}
+                  onEdit={handleEdit}
+                />
+              </div>
+            </div>
           </div>
         ))}
       </div>

@@ -18,8 +18,9 @@ import { isImageFile, isValidImageFileName } from "../../../utils/validation";
 interface ModalFormBrandProps {
   brandData: BrandData;
   onClose: () => void;
-  updateBrandData: (data: BrandData) => void;
+  updateBrandData: (brand: BrandData) => void;
   nextHandler?: () => void;
+  isEdit: boolean;
 }
 
 const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
@@ -27,6 +28,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
   onClose,
   updateBrandData,
   nextHandler,
+  isEdit
 }) => {
   const [formData, setFormData] = useState<BrandData>({
     brandName: { value: brandData.brandName.value, errorMessage: "" },
@@ -77,7 +79,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
   };
 
   const cancelHandler = () => {
-    updateBrandData({
+    updateBrandData?.({
       brandName: { value: "", errorMessage: "" },
       image: { value: null, errorMessage: "" },
     });
@@ -110,7 +112,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
     }
 
     if (!hasError) {
-      updateBrandData(formData);
+      updateBrandData?.(formData);
       if (nextHandler) {
         nextHandler();
       }
@@ -183,7 +185,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
             Cancel
           </Button>
           <Button variant="ghost" onClick={handleNextForm}>
-            Next
+            {isEdit ? "Save" : "Next"}
           </Button>
         </Flex>
       </ModalFooter>

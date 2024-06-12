@@ -27,9 +27,8 @@ interface ModalFormBrandProps {
   onOpenStore?: () => void;
   onOpenBrand?: () => void;
   updateBrandData?: (data: BrandData) => void;
-  updateUserData?: (data: UserForm) => void;
+  updateUserData: (data: UserForm) => void;
   saveBrandHandle?: (data: UserForm) => void;
-  saveUserHandle?: (data: UserForm) => void;
   brandName?: string;
   userData: UserForm;
 }
@@ -43,7 +42,6 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
   updateBrandData,
   updateUserData,
   saveBrandHandle,
-  saveUserHandle,
   brandName,
   userData,
 }) => {
@@ -176,7 +174,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       // console.log(formData);
       // updateUserData(formData);
       if (isEdit) {
-        saveUserHandle?.(formData);
+        updateUserData(formData);
       } else {
         saveBrandHandle?.(formData);
       }
