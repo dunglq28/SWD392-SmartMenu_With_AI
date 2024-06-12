@@ -78,6 +78,7 @@ builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAppUserRepository,AppUserRepository>();
 builder.Services.AddScoped<IBrandRepository,  BrandRepository>();
+builder.Services.AddScoped<IProductMenuRepository,  ProductMenuRepository>();
 // Register servicies
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAppUserService, AppUserService>();
@@ -86,6 +87,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IStoreService, StoreService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
+builder.Services.AddScoped<IProductMenuSerivce, ProductMenuSerivce>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 

@@ -13,12 +13,14 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
             // Mapping classes
             CreateMap<AppUser, AppUserDTO>().ReverseMap();
             CreateMap<Token, TokenDto>().ReverseMap();
-            CreateMap<Menu, CategoryDTO>().ReverseMap();
+            CreateMap<Menu, MenuDTO>().ReverseMap();
             CreateMap<Store, StoreDTO>().ReverseMap();
             CreateMap<Menu, MenuDTO>().ReverseMap();
             CreateMap<Product, ProductDTO>().ReverseMap();
             CreateMap<Brand, BrandDTO>().ReverseMap();
             CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<ProductMenu, ProductMenuDTO>().ReverseMap();
+            //CreateMap<ProductMenu, CreateProductMenuDTO>().ReverseMap();
             CreateMap<RefreshToken, RefreshTokenDTO>().ReverseMap();
         }
     }
