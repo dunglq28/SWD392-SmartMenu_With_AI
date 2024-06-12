@@ -3,6 +3,7 @@
   padding: 20px;
   user-select: none;
   justify-content: center;
+  flex-direction: column;
 
   .ProductTbl {
     border-radius: 7px;
@@ -86,5 +87,23 @@
   .HeaderTbl {
     color: black;
     font-size: 15px;
+  }
+
+  .full-text-tooltip {
+    position: relative;
+  }
+
+  .full-text-tooltip:hover::before {
+    content: attr(data-fulltext);
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    white-space: nowrap;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 999;
   }
 }

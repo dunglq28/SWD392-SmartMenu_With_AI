@@ -6,6 +6,8 @@ using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
 using Microsoft.EntityFrameworkCore;
 using static Amazon.S3.Util.S3EventNotification;
+using FSU.SmartMenuWithAI.Service.Models.Pagination;
+using FSU.SmartMenuWithAI.Service.Utils;
 using System.Linq.Expressions;
 
 namespace FSU.SmartMenuWithAI.Service.Services
@@ -25,10 +27,6 @@ namespace FSU.SmartMenuWithAI.Service.Services
         {
             Expression<Func<Brand, bool>> condition = x => x.BrandId == id && (x.Status != (int)Status.Deleted);
             var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
-            if (entity == null )
-            {
-                return null!;
-            }
             return _mapper?.Map<BrandDTO?>(entity)!;
         }
         public async Task<bool> Delete(int id)
@@ -47,45 +45,39 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<BrandDTO> GetByNameAsync(string brandName)
         {
-            var entity = await _unitOfWork.BrandRepository.GetBrandByName(brandName);
+            Expression<Func<Brand, bool>> condition = x => x.BrandName == brandName && (x.Status != (int)Status.Deleted);
+            var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
             return _mapper?.Map<BrandDTO>(entity)!;
         }
 
         public async Task<BrandDTO> Insert(string brandName, int userID, string imgUrl, string imgName)
         {
-            try
+            var brand = new Brand();
+            brand.BrandCode = Guid.NewGuid().ToString();
+            brand.BrandName = brandName;
+            brand.UserId = userID;
+            brand.CreateDate = DateOnly.FromDateTime(DateTime.Now);
+            brand.Status = 1;
+            brand.ImageName = imgName;
+            brand.ImageUrl = imgUrl;
+
+            Expression<Func<Brand, bool>> condition = x => x.BrandName == brand.BrandName && (x.Status != (int)Status.Deleted);
+            var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
+            if (entity != null)
             {
-
-                var brand = new Brand();
-                brand.BrandCode = Guid.NewGuid().ToString();
-                brand.BrandName = brandName;
-                brand.UserId = userID;
-                brand.CreateDate = DateOnly.FromDateTime(DateTime.Now);
-                brand.Status = 1;
-                brand.ImageName = imgName;
-                brand.ImageUrl = imgUrl;
-
-                Expression<Func<Brand, bool>> condition = x => x.BrandId == brand.BrandId && (x.Status != (int)Status.Deleted);
-                var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
-                if (entity != null)
-                {
-                    throw new Exception("Tên đã tồn tại");
-                }
-                await _unitOfWork.BrandRepository.Insert(brand);
-                var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
-                if (!result) { return null; }
+                throw new Exception("Tên đã tồn tại");
+            }
+            await _unitOfWork.BrandRepository.Insert(brand);
+            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            if (result)
+            {
                 return _mapper?.Map<BrandDTO>(brand)!;
             }
-            catch (DbUpdateException ex)
-            {
-                // Kiểm tra nếu lỗi là do vi phạm ràng buộc unique
-                return null!;
-
-            }
+            return null!;
         }
         public async Task<BrandDTO> Update(int id, string brandName, string imgUrl, string imgName)
         {
-            Expression<Func<Brand, bool>> condition = x => x.BrandName == brandName && (x.Status != (int)Status.Deleted);
+            Expression<Func<Brand, bool>> condition = x => x.BrandName == brandName && (x.Status != (int)Status.Deleted) && (x.BrandId != id);
             var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
             if (entity != null)
             {
@@ -93,7 +85,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             }
 
             var brandToUpdate = await _unitOfWork.BrandRepository.GetByID(id);
-            if (brandToUpdate == null || (brandToUpdate.Status == (int) Status.Deleted))
+            if (brandToUpdate == null || (brandToUpdate.Status == (int)Status.Deleted))
             {
                 return null!;
             }
@@ -116,6 +108,22 @@ namespace FSU.SmartMenuWithAI.Service.Services
             _unitOfWork.BrandRepository.Update(brandToUpdate);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             return _mapper?.Map<BrandDTO>(brandToUpdate)!;
+        }
+        public async Task<PageEntity<BrandDTO>> GetBrands(string? searchKey, int? pageIndex = null, int? pageSize = null)
+        {
+
+            Expression<Func<Brand, bool>> filter = x => (string.IsNullOrEmpty(searchKey) || x.BrandName.Contains(searchKey)) && x.Status != (int)Status.Deleted;
+
+            Expression<Func<Brand, bool>> filterRecord = x => (x.Status != (int)Status.Deleted);
+
+            Func<IQueryable<Brand>, IOrderedQueryable<Brand>> orderBy = q => q.OrderByDescending(x => x.BrandId);
+
+            var entities = await _unitOfWork.BrandRepository.GetBrands(filter: filter, orderBy: orderBy, pageIndex: pageIndex, pageSize: pageSize);
+            var pagin = new PageEntity<BrandDTO>();
+            pagin.List = _mapper.Map<IEnumerable<BrandDTO>>(entities).ToList();
+            pagin.TotalRecord = await _unitOfWork.BrandRepository.Count(filterRecord);
+            pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
+            return pagin;
         }
     }
 }

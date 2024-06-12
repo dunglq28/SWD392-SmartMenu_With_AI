@@ -34,7 +34,9 @@ import { CurrentForm } from "../../constants/Enum";
 import { BrandData } from "../../models/Brand.model";
 import { UserForm } from "../../models/User.model";
 import { createUser } from "../../services/UserService";
-import { UserData } from "../../payloads/responses/UserData.model";
+import { toast } from "react-toastify";
+import { createBrand } from "../../services/BrandService";
+import { getInitialUserData } from "../../utils/initialUserData";
 
 function Sidebar() {
   const { t } = useTranslation();
@@ -57,32 +59,7 @@ function Sidebar() {
   });
 
   // USER DATA
-  const [userData, setUserData] = useState<UserForm>({
-    fullName: {
-      value: "",
-      errorMessage: "",
-    },
-    userName: {
-      value: "",
-      errorMessage: "",
-    },
-    phoneNumber: {
-      value: "",
-      errorMessage: "",
-    },
-    DOB: {
-      value: null,
-      errorMessage: "",
-    },
-    gender: {
-      value: "",
-      errorMessage: "",
-    },
-    isActive: {
-      value: 0,
-      errorMessage: "",
-    },
-  });
+  const [userData, setUserData] = useState<UserForm>(getInitialUserData());
 
   const {
     isOpen: isOpenBrand,
@@ -111,9 +88,9 @@ function Sidebar() {
     { icon: AiOutlineUser, label: t("users"), to: "/users" },
     {
       icon: IoGitBranchOutline,
-      label: t("branchs"),
+      label: t("brands"),
       divider: true,
-      to: "/branchs",
+      to: "/brands",
     },
     { icon: AiOutlineProduct, label: t("products"), to: "/products" },
     { icon: MdListAlt, label: t("menu"), to: "/menu" },
@@ -126,12 +103,12 @@ function Sidebar() {
     { icon: CgAddR, label: t("new product"), to: "/new" },
     {
       icon: CgAddR,
-      label: t("new branch"),
+      label: t("new brand"),
       onclick: onOpenBrand,
     },
     {
       icon: CgAddR,
-      label: t("new store"),
+      label: t("new branch"),
       onclick: onOpenStore,
     },
   ];
@@ -168,16 +145,36 @@ function Sidebar() {
     setBrandData(data);
   };
 
-  const updateUserData = (data: UserForm) => {};
+  const updateUserData = (data: UserForm) => {
+    setUserData(data);
+  };
 
   async function saveBrandHandle(data: UserForm) {
-    setUserData(data);
-    // console.log(brandData);
-    const brandForm = new FormData();
-    // brandForm.append("BrandName", )
-    console.log(data);
-    var result = await createUser(data, 2);
-    console.log(result);
+    try {
+      setUserData(data);
+      const brandForm = new FormData();
+
+      if (brandData.image.value && brandData.brandName.value) {
+        brandForm.append("BrandName", brandData.brandName.value);
+        brandForm.append("Image", brandData.image.value);
+      }
+
+      const userResult = await createUser(data, 2);
+
+      if (userResult.statusCode === 200) {
+        brandForm.append("UserId", userResult.data.toString());
+
+        const brandResult = await createBrand(brandForm);
+
+        if (brandResult.statusCode === 200) {
+          await onCloseUser();
+          const toastMessage = "Thêm thương hiệu mới thành công";
+          navigate("/brands", { state: { toastMessage } });
+        }
+      }
+    } catch {
+      toast.error("Tên thương hiệu đã tồn tại");
+    }
   }
 
   return (
@@ -245,7 +242,7 @@ function Sidebar() {
         }
         onClose={onCloseBrand}
         isOpen={isOpenBrand}
-        title={t("Add New Branch")}
+        title={t("Add New Brand")}
         updateBrandData={updateBrandData}
       />
 
@@ -259,12 +256,13 @@ function Sidebar() {
         }
         onClose={onCloseStore}
         isOpen={isOpenStore}
-        title={t("Add New Store")}
+        title={t("Add New Branch")}
       />
 
       <ModalForm
         formBody={
           <ModalFormUser
+            isEdit={false}
             onClose={onCloseUser}
             formPrevious={formPrevious}
             onOpenStore={onOpenStore}
@@ -273,6 +271,7 @@ function Sidebar() {
             updateUserData={updateUserData}
             saveBrandHandle={saveBrandHandle}
             brandName={brandData.brandName.value}
+            userData={userData}
           />
         }
         onClose={onCloseUser}

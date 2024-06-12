@@ -33,7 +33,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
       updateBrandData({
         brandName: { value: "", errorMessage: "" },
         image: { value: null, errorMessage: "" },
-        imageName: { value: "", errorMessage: "" },
       });
     }
     onClose();

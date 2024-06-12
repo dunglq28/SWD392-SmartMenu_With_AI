@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,12 +12,17 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Brand
     
     public class CreateBrandRequest
     {
-        [Required]
+        [Required(ErrorMessage = "Nhập tên thương hiệu")]
         [MaxLength(100)]
+        [JsonProperty("brand-name")]
         public string BrandName { get; set; } = null!;
+        
+        [Required(ErrorMessage = "Cần có id người dùng")]
+        [JsonProperty("user-id")]
+        public string UserId { get; set; } = null!;
 
-        [Required]
-        public int UserId { get; set; }
+        [Required(ErrorMessage = "Cần có hình ảnh")]
+        [JsonProperty("image")]
         public IFormFile Image { get; set; } = null!;
 
     }

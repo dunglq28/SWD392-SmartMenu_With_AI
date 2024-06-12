@@ -25,7 +25,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPost(APIRoutes.Brand.Add, Name = "AddBrandAsync")]
+        [HttpPost(APIRoutes.Brand.Add, Name = "add-brand-async")]
         public async Task<IActionResult> AddAsync([FromForm] CreateBrandRequest reqObj)
         {
             try
@@ -41,33 +41,22 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         IsSuccess = false
                     });
                 }
-
                 string imageUrl = null!;
                 string imageName = null!;
                 if (reqObj.Image != null)
                 {
                     // Upload the image to S3 and get the URL
-                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.Image.FileName + reqObj.BrandName, FolderRootImg.Brand);
-                    imageName = reqObj.Image.FileName + reqObj.BrandName;
+                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.BrandName+reqObj.Image.FileName, FolderRootImg.Brand);
+                    imageName = reqObj.BrandName + reqObj.Image.FileName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName, FolderRootImg.Brand);
                 }
-                var brandAdd = await _brandService.Insert(reqObj.BrandName, reqObj.UserId, imageUrl, imageName);
+                var brandAdd = await _brandService.Insert(reqObj.BrandName, Int32.Parse(reqObj.UserId), imageUrl, imageName);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Tạo brand mới thành công",
+                    Message = "Tạo thương hiệu mới thành công",
                     Data = brandAdd,
                     IsSuccess = true
-                });
-            }
-            catch (DbUpdateException ex)
-            {
-                return BadRequest(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Tên thương hiệu đã tồn tại",
-                    Data = null,
-                    IsSuccess = false
                 });
             }
             catch (Exception ex)
@@ -75,7 +64,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 return BadRequest(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Message = ex.Message,
+                    Message = "Lỗi khi tạo mới thương hiệu!" +ex.Message,
                     Data = null,
                     IsSuccess = false
                 });
@@ -83,7 +72,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
 
         //[Authorize(Roles = $"{UserRoles.Admin},{UserRoles.BrandManager}")]
-        [HttpDelete(APIRoutes.Brand.Delete, Name = "DeleteBrandAsync")]
+        [HttpDelete(APIRoutes.Brand.Delete, Name = "delete-brand-async")]
         public async Task<IActionResult> DeleteAsynce([FromQuery] int id)
         {
             try
@@ -119,13 +108,13 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPut(APIRoutes.Brand.Update, Name = "UpdatebrandAsync")]
-        public async Task<IActionResult> UpdateUserAsync(int id, UpdateBrandRequest reqObj)
+        [HttpPut(APIRoutes.Brand.Update, Name = "update-brand-async")]
+        public async Task<IActionResult> UpdateUserAsync([FromForm] int id, [FromForm] UpdateBrandRequest reqObj)
         {
             try
             {
                 var existBrand = await _brandService.GetByID(id);
-                if(existBrand == null)
+                if (existBrand == null)
                 {
                     return NotFound(new BaseResponse
                     {
@@ -151,11 +140,10 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         });
                     }
                     // Upload the image to S3 and get the URL
-                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.Image.FileName + existBrand.BrandName, FolderRootImg.Brand);
-                    imageName = reqObj.Image.FileName + existBrand.BrandName;
+                    await _s3Service.UploadItemAsync(reqObj.Image, reqObj.BrandName + reqObj.Image.FileName, FolderRootImg.Brand);
+                    imageName = reqObj.BrandName + reqObj.Image.FileName;
                     imageUrl = _s3Service.GetPreSignedURL(imageName, FolderRootImg.Brand);
                 }
-
                 var result = await _brandService.Update(id, reqObj.BrandName, imageUrl, imageName);
                 if (result == null)
                 {
@@ -171,8 +159,74 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Cập nhật người dùng thành công",
+                    Message = "Cập nhật thành công",
                     Data = result,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Lỗi khi cập nhật!" + ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpGet(APIRoutes.Brand.GetAll, Name = "get-brands-async")]
+        public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search-key")] string? searchKey
+            , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
+            , [FromQuery(Name = "page-size")] int PageSize = Page.DefaultPageSize)
+        {
+            try
+            {
+                var allBrands = await _brandService.GetBrands(searchKey!, pageIndex: pageNumber, pageSize: PageSize);
+
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Tải dữ liệu thành công",
+                    Data = allBrands,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Tải dữ liệu thất bại!" +ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpGet(APIRoutes.Brand.GetByID, Name = "GetBrandByID")]
+        public async Task<IActionResult> GetAsync([FromQuery] int Id)
+        {
+            try
+            {
+                var user = await _brandService.GetByID(Id);
+
+                if (user == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy thương hiệu",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Tìm thành công",
+                    Data = user,
                     IsSuccess = true
                 });
             }
@@ -186,7 +240,6 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     IsSuccess = false
                 });
             }
-
         }
     }
 }

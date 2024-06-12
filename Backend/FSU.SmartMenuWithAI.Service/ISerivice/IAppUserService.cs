@@ -21,7 +21,7 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
 
         Task<AppUserDTO?> GetByID(int id);
 
-        Task<bool> Insert(AppUserDTO entity);
+        Task<int> Insert(AppUserDTO entity);
 
         Task<bool> Delete(int id);
 

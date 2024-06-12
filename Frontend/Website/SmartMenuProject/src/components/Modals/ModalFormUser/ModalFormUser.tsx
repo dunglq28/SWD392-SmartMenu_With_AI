@@ -21,17 +21,21 @@ import { isValidPhoneNumber } from "../../../utils/validation";
 import { generateUsername } from "../../../utils/createBrandName";
 
 interface ModalFormBrandProps {
+  isEdit: boolean;
   onClose: () => void;
-  formPrevious: CurrentForm;
-  onOpenStore: () => void;
-  onOpenBrand: () => void;
-  updateBrandData: (data: BrandData) => void;
-  updateUserData: (data: UserForm) => void;
-  saveBrandHandle: (data: UserForm) => void;
-  brandName: string;
+  formPrevious?: CurrentForm;
+  onOpenStore?: () => void;
+  onOpenBrand?: () => void;
+  updateBrandData?: (data: BrandData) => void;
+  updateUserData?: (data: UserForm) => void;
+  saveBrandHandle?: (data: UserForm) => void;
+  saveUserHandle?: (data: UserForm) => void;
+  brandName?: string;
+  userData: UserForm;
 }
 
 const ModalFormUser: React.FC<ModalFormBrandProps> = ({
+  isEdit,
   onClose,
   formPrevious,
   onOpenStore,
@@ -39,15 +43,21 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
   updateBrandData,
   updateUserData,
   saveBrandHandle,
+  saveUserHandle,
   brandName,
+  userData,
 }) => {
+  const initialUserNameValue = brandName ? generateUsername(brandName) : userData.userName.value;
   const [formData, setFormData] = useState<UserForm>({
-    fullName: { value: "", errorMessage: "" },
-    userName: { value: generateUsername(brandName), errorMessage: "" },
-    phoneNumber: { value: "", errorMessage: "" },
-    DOB: { value: null, errorMessage: "" },
-    gender: { value: "Male", errorMessage: "" },
-    isActive: { value: null, errorMessage: "" },
+    fullName: { value: userData.fullName.value, errorMessage: "" },
+    userName: {
+      value: initialUserNameValue,
+      errorMessage: "",
+    },
+    phoneNumber: { value: userData.phoneNumber.value, errorMessage: "" },
+    DOB: { value: userData.DOB.value, errorMessage: "" },
+    gender: { value: userData.gender.value || "Male", errorMessage: "" },
+    isActive: { value: userData.isActive.value || 1, errorMessage: "" },
   });
 
   const handleInputChange = (field: keyof UserForm, value: string) => {
@@ -80,13 +90,12 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
 
   const cancelHandler = () => {
     if (formPrevious === CurrentForm.BRAND) {
-      updateBrandData({
+      updateBrandData?.({
         brandName: { value: "", errorMessage: "" },
         image: { value: null, errorMessage: "" },
-        imageName: { value: "", errorMessage: "" },
       });
     }
-    updateUserData({
+    updateUserData?.({
       fullName: { value: "", errorMessage: "" },
       userName: { value: "", errorMessage: "" },
       phoneNumber: { value: "", errorMessage: "" },
@@ -101,10 +110,11 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
     onClose();
     setTimeout(() => {
       if (formPrevious === CurrentForm.BRAND) {
-        onOpenBrand();
+        onOpenBrand?.();
       } else {
-        onOpenStore();
+        onOpenStore?.();
       }
+      updateUserData?.(formData);
     }, 350);
   };
 
@@ -162,33 +172,14 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       hasError = true;
     }
 
-    if (formData.gender.value.trim() === "") {
-      setFormData((prevData) => ({
-        ...prevData,
-        gender: {
-          ...prevData.gender,
-          errorMessage: "Gender is required",
-        },
-      }));
-      hasError = true;
-    }
-
-    if (formData.isActive.value === null) {
-      setFormData((prevData) => ({
-        ...prevData,
-        isActive: {
-          ...prevData.isActive,
-          errorMessage: "isActive is required",
-        },
-      }));
-      hasError = true;
-    }
-
     if (!hasError) {
       // console.log(formData);
       // updateUserData(formData);
-
-      saveBrandHandle(formData);
+      if (isEdit) {
+        saveUserHandle?.(formData);
+      } else {
+        saveBrandHandle?.(formData);
+      }
     }
   };
 
@@ -287,13 +278,10 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
                   </Radio>
                 </Stack>
               </RadioGroup>
-              {formData.gender.errorMessage && (
-                <Text color="red.500">{formData.gender.errorMessage}</Text>
-              )}
             </Box>
             <Box flex="1" ml={3}>
               <Text className={styles.textFontWeight} py={3} pr={3}>
-                isActive
+                Is Active
               </Text>
               <Select
                 id="isActive"
@@ -307,21 +295,20 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
                 <option value="1">Active</option>
                 <option value="0">Inactive</option>
               </Select>
-              {formData.isActive.errorMessage && (
-                <Text color="red.500">{formData.isActive.errorMessage}</Text>
-              )}
             </Box>
           </Flex>
         </Flex>
       </ModalBody>
-      <ModalFooter justifyContent="space-between">
-        <Button
-          backgroundColor={themeColors.primaryButton}
-          color="white"
-          onClick={openFormPreviousHandler}
-        >
-          Back
-        </Button>
+      <ModalFooter justifyContent={isEdit ? "flex-end" : "space-between"}>
+        {!isEdit && (
+          <Button
+            backgroundColor={themeColors.primaryButton}
+            color="white"
+            onClick={openFormPreviousHandler}
+          >
+            Back
+          </Button>
+        )}
 
         <Flex>
           <Button

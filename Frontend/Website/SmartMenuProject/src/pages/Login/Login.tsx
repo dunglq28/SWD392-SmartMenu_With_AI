@@ -64,7 +64,7 @@ function Login() {
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      loginHandler(); 
+      loginHandler();
     }
   };
 
@@ -76,8 +76,9 @@ function Login() {
     try {
       setIsLoading(true);
       const response = await login(credentials.username, credentials.password);
-      
+
       if (response.statusCode === 200) {
+        localStorage.setItem("UserId", response.data.userId.toString());
         localStorage.setItem("AccessToken", response.data.token.accessToken);
         localStorage.setItem("RefreshToken", response.data.token.refreshToken);
         const toastMessage = response.message;
@@ -117,7 +118,7 @@ function Login() {
                     name="username"
                     value={credentials.username}
                     onChange={handleChange}
-                    onKeyPress={handleKeyPress} 
+                    onKeyPress={handleKeyPress}
                   />
                 </InputGroup>
               </FormControl>
@@ -132,7 +133,7 @@ function Login() {
                     name="password"
                     value={credentials.password}
                     onChange={handleChange}
-                    onKeyPress={handleKeyPress} 
+                    onKeyPress={handleKeyPress}
                   />
                   <InputRightElement className={style.ShowPasswordContainer}>
                     <Button

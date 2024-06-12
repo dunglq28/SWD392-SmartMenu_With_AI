@@ -39,6 +39,8 @@
         {
             public const string GetAll = Base + "/brands/";
 
+            public const string GetByID = Base + "/brands/get-by-id";
+
             public const string Add = Base + "/brands/add";
 
             public const string Update = Base + "/brands/update";
@@ -88,13 +90,13 @@
         }
         public static class GroupAttribute
         {
-            public const string GetAll = Base + "/attributes/";
+            public const string GetAll = Base + "/group-attributes/";
 
-            public const string Add = Base + "/attributes/add";
+            public const string Add = Base + "/group-attributes/add";
 
-            public const string Update = Base + "/attributes/update";
+            public const string Update = Base + "/group-attributes/update";
 
-            public const string Delete = Base + "/attributes/delete";
+            public const string Delete = Base + "/group-attributes/delete";
         }
         public static class Product
         {

@@ -54,9 +54,9 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Expression<Func<AppUser, bool>> filter = searchKey != null
                 ? x => x.UserName.Contains(searchKey) && x.RoleId != (int)UserRole.Admin && !(x.Status == (int)Status.Deleted)
                 : x => x.RoleId != (int)UserRole.Admin && !(x.Status == (int)Status.Deleted);
-            Expression<Func<AppUser, bool>> filterRecord =  x => (x.Status != (int)Status.Deleted);
-   
-    
+            Expression<Func<AppUser, bool>> filterRecord = x => (x.Status != (int)Status.Deleted && x.RoleId != (int)UserRole.Admin);
+
+
             Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = q => q.OrderByDescending(x => x.UserId);
             string includeProperties = "Role";
 
@@ -79,7 +79,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return _mapper?.Map<AppUserDTO?>(entity);
         }
 
-        public async Task<bool> Insert(AppUserDTO dto)
+        public async Task<int> Insert(AppUserDTO dto)
         {
             var user = _mapper.Map<AppUser>(dto);
             user.UserCode = Guid.NewGuid().ToString();
@@ -93,16 +93,20 @@ namespace FSU.SmartMenuWithAI.Service.Services
             {
                 throw new DbUpdateException("Tên đã tồn tại");
             }
-            await _unitOfWork.AppUserRepository.Insert(user);
+            var newUser = await _unitOfWork.AppUserRepository.Insert(user);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
-            return result;
+            if (result && newUser != null)
+            {
+                return newUser.UserId;
+            }
+            return 0;
         }
 
         public async Task<bool> Update(int id, AppUserDTO entityToUpdate)
         {
             Expression<Func<AppUser, bool>> condition = x => x.UserId == id && (x.Status != (int)Status.Deleted);
             var updateAppUser = await _unitOfWork.AppUserRepository.GetByCondition(condition);
-            if (updateAppUser == null )
+            if (updateAppUser == null)
             {
                 return false;
             }
@@ -136,6 +140,15 @@ namespace FSU.SmartMenuWithAI.Service.Services
             {
                 updateAppUser.Gender = entityToUpdate.Gender;
             }
+
+            if (!string.IsNullOrEmpty(entityToUpdate.Gender))
+            {
+                updateAppUser.Gender = entityToUpdate.Gender;
+            }
+
+
+            updateAppUser.IsActive = entityToUpdate.IsActive;
+
 
             if (entityToUpdate.UpdateBy != default)
             {
