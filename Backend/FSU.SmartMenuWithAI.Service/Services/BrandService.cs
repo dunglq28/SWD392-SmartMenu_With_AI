@@ -114,12 +114,14 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
             Expression<Func<Brand, bool>> filter = x => (string.IsNullOrEmpty(searchKey) || x.BrandName.Contains(searchKey)) && x.Status != (int)Status.Deleted;
 
+            Expression<Func<Brand, bool>> filterRecord = x => (x.Status != (int)Status.Deleted);
+
             Func<IQueryable<Brand>, IOrderedQueryable<Brand>> orderBy = q => q.OrderByDescending(x => x.BrandId);
 
             var entities = await _unitOfWork.BrandRepository.GetBrands(filter: filter, orderBy: orderBy, pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<BrandDTO>();
             pagin.List = _mapper.Map<IEnumerable<BrandDTO>>(entities).ToList();
-            pagin.TotalRecord = await _unitOfWork.BrandRepository.Count();
+            pagin.TotalRecord = await _unitOfWork.BrandRepository.Count(filterRecord);
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
         }
