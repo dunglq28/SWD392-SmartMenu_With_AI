@@ -23,17 +23,19 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { BsShield } from "react-icons/bs";
 import { LuBell, LuCreditCard } from "react-icons/lu";
 import PasswordInput from "../../components/PasswordInput";
+import { useTranslation } from "react-i18next";
 
 function Profile() {
   const [locationString, setLocationString] = useState<string>("");
   const [flag, setFlag] = useState<string>("");
   const apiGetLocation = import.meta.env.VITE_API_GET_LOCATION;
+  const { t } = useTranslation("profile");
   useEffect(() => {
     fetch("https://api.ipgeolocation.io/ipgeo?apiKey=" + apiGetLocation)
       .then((response) => response.json())
       .then((data) => {
         console.log("User location:", data);
-        const newLocationString = `Your current session seen in ${data.city}, ${data.state_prov}, ${data.country_name}`;
+        const newLocationString = `${data.city}, ${data.state_prov}, ${data.country_name}`;
         setFlag(data.country_flag);
         setLocationString(newLocationString);
       })
@@ -52,35 +54,35 @@ function Profile() {
               className={style.tab}
             >
               <GoPerson className={style.icon} />
-              <Text className={style.tab_text}>Profile Information</Text>
+              <Text className={style.tab_text}>{t("profile information")}</Text>
             </Tab>
             <Tab
               _selected={{ color: "white", bg: "#5D5FEF" }}
               className={style.tab}
             >
               <IoSettingsOutline className={style.icon} />
-              <Text className={style.tab_text}>Account Settings</Text>
+              <Text className={style.tab_text}>{t("account settings")}</Text>
             </Tab>
             <Tab
               _selected={{ color: "white", bg: "#5D5FEF" }}
               className={style.tab}
             >
               <BsShield className={style.icon} />
-              <Text className={style.tab_text}>Sercurity</Text>
+              <Text className={style.tab_text}>{t("sercurity")}</Text>
             </Tab>
             <Tab
               _selected={{ color: "white", bg: "#5D5FEF" }}
               className={style.tab}
             >
               <LuBell className={style.icon} />
-              <Text className={style.tab_text}>Notification</Text>
+              <Text className={style.tab_text}>{t("notification")}</Text>
             </Tab>
             <Tab
               _selected={{ color: "white", bg: "#5D5FEF" }}
               className={style.tab}
             >
               <LuCreditCard className={style.icon} />
-              <Text className={style.tab_text}>Billing</Text>
+              <Text className={style.tab_text}>{t("billing")}</Text>
             </Tab>
           </TabList>
 
@@ -88,94 +90,102 @@ function Profile() {
             <TabPanel>
               <Flex className={style.tab_panels_container}>
                 <Text className={style.tab_panels_container_title}>
-                  YOUR PROFILE INFORMATION
-                </Text>
-
-                <Divider />
-
-                <Flex className={style.tab_panels_container_content}>
-                  <Text className={style.text_title_content}>Full Name</Text>
-                  <Input />
-                  <Text className={style.text_content} color="#525252">
-                    Your name may appear around here where you are mentioned.
-                    You can change or remove it at any time.
-                  </Text>
-                </Flex>
-
-                <Flex className={style.tab_panels_container_content}>
-                  <Text className={style.text_title_content}>Your Bio</Text>
-                  <Input />
-                </Flex>
-
-                <Flex className={style.tab_panels_container_content}>
-                  <Text className={style.text_title_content}>URL</Text>
-                  <Input />
-                </Flex>
-
-                <Flex className={style.tab_panels_container_content}>
-                  <Text className={style.text_title_content}>Location</Text>
-                  <Input />
-                  <Text className={style.text_content} color="#525252">
-                    All of the fields on this page are optional and can be
-                    deleted at any time, and by filling them out, you're giving
-                    us consent to share this data wherever your user profile
-                    appears.
-                  </Text>
-                </Flex>
-                <Flex columnGap="5px">
-                  <Button className={style.btn_content}>Update Profile</Button>
-                  <Button>Reset Changes</Button>
-                </Flex>
-              </Flex>
-            </TabPanel>
-            <TabPanel>
-              <Flex className={style.tab_panels_container}>
-                <Text className={style.tab_panels_container_title}>
-                  ACCOUNT SETTINGS
-                </Text>
-
-                <Divider />
-
-                <Flex className={style.tab_panels_container_content}>
-                  <Text className={style.text_title_content}>Username</Text>
-                  <Input />
-                  <Text className={style.text_content} color="#525252">
-                    After changing your username, your old username becomes
-                    available for anyone else to claim.
-                  </Text>
-                </Flex>
-                <Divider />
-                <Flex className={style.tab_panels_container_content}>
-                  <Text className={style.text_title_content} color="red">
-                    Delete Account
-                  </Text>
-                  <Text className={style.text_title_content} color="#525252">
-                    Once you delete your account, there is no going back. Please
-                    be certain.
-                  </Text>
-                </Flex>
-                <Flex>
-                  <Button className={style.btn_delete}>Delete Account</Button>
-                </Flex>
-              </Flex>
-            </TabPanel>
-            <TabPanel>
-              <Flex className={style.tab_panels_container}>
-                <Text className={style.tab_panels_container_title}>
-                  SECURITY SETTINGS
+                  {t("profile information title")}
                 </Text>
 
                 <Divider />
 
                 <Flex className={style.tab_panels_container_content}>
                   <Text className={style.text_title_content}>
-                    Change Password
+                    {t("fullname")}
                   </Text>
-                  <PasswordInput placeholder="Enter your old password" />
-                  <PasswordInput placeholder="New password" />
-                  <PasswordInput placeholder="Confirm new password" />
+                  <Input />
+                  <Text className={style.text_content} color="#525252">
+                    {t("description of fullname")}
+                  </Text>
+                </Flex>
+
+                <Flex className={style.tab_panels_container_content}>
+                  <Text className={style.text_title_content}>
+                    {t("your bio")}
+                  </Text>
+                  <Input />
+                </Flex>
+
+                <Flex className={style.tab_panels_container_content}>
+                  <Text className={style.text_title_content}>{t("url")}</Text>
+                  <Input />
+                </Flex>
+
+                <Flex className={style.tab_panels_container_content}>
+                  <Text className={style.text_title_content}>
+                    {t("location")}
+                  </Text>
+                  <Input />
+                  <Text className={style.text_content} color="#525252">
+                    {t("description of location")}
+                  </Text>
+                </Flex>
+                <Flex columnGap="5px">
+                  <Button className={style.btn_content}>
+                    {t("update profile")}
+                  </Button>
+                  <Button>{t("reset changes")}</Button>
+                </Flex>
+              </Flex>
+            </TabPanel>
+            <TabPanel>
+              <Flex className={style.tab_panels_container}>
+                <Text className={style.tab_panels_container_title}>
+                  {t("account setting title")}
+                </Text>
+
+                <Divider />
+
+                <Flex className={style.tab_panels_container_content}>
+                  <Text className={style.text_title_content}>
+                    {t("username")}
+                  </Text>
+                  <Input />
+                  <Text className={style.text_content} color="#525252">
+                    {t("description of username")}
+                  </Text>
+                </Flex>
+                <Divider />
+                <Flex className={style.tab_panels_container_content}>
+                  <Text className={style.text_title_content} color="red">
+                    {t("delete account")}
+                  </Text>
+                  <Text className={style.text_title_content} color="#525252">
+                    {t("description of delete account")}
+                  </Text>
+                </Flex>
+                <Flex>
+                  <Button className={style.btn_delete}>
+                    {t("delete account")}
+                  </Button>
+                </Flex>
+              </Flex>
+            </TabPanel>
+            <TabPanel>
+              <Flex className={style.tab_panels_container}>
+                <Text className={style.tab_panels_container_title}>
+                  {t("sercurity title")}
+                </Text>
+
+                <Divider />
+
+                <Flex className={style.tab_panels_container_content}>
+                  <Text className={style.text_title_content}>
+                    {t("change password")}
+                  </Text>
+                  <PasswordInput placeholder={t("enter old password")} />
+                  <PasswordInput placeholder={t("new password")} />
+                  <PasswordInput placeholder={t("confirm new password")} />
                   <Flex>
-                    <Button className={style.btn_content}>Save change</Button>
+                    <Button className={style.btn_content}>
+                      {t("save change")}
+                    </Button>
                   </Flex>
                 </Flex>
 
@@ -183,32 +193,35 @@ function Profile() {
 
                 <Flex flexDir="column" rowGap="15px">
                   <Text className={style.text_title_content}>
-                    Two Factor Authentication
+                    {t("two factor authen")}
                   </Text>
                   <Flex>
                     <Button className={style.btn_content}>
-                      Enable two-factor authentication
+                      {t("enable two factor")}
                     </Button>
                   </Flex>
                   <Text className={style.text_content} color="#525252">
-                    Two-factor authentication adds an additional layer of
-                    security to your account by requiring more than just a
-                    password to log in.
+                    {t("description of two factor authen")}
                   </Text>
                 </Flex>
                 <Divider />
 
                 <Flex flexDir="column">
-                  <Text className={style.text_title_content}>Sessions</Text>
+                  <Text className={style.text_title_content}>
+                    {t("session")}
+                  </Text>
                   <Text className={style.text_title_content} color="#525252">
-                    This is a list of devices that have logged into your
-                    account. Revoke any sessions that you do not recognize.
+                    {t("description of session")}
                   </Text>
                 </Flex>
 
                 <Flex alignItems="center" columnGap="20px">
                   <Text>
-                    {locationString ? `${locationString}` : <Loading />}
+                    {locationString ? (
+                      `${t("your current session")} ${locationString}`
+                    ) : (
+                      <Loading />
+                    )}
                   </Text>
                   <Image src={flag} />
                 </Flex>
@@ -217,49 +230,43 @@ function Profile() {
             <TabPanel userSelect="none">
               <Flex className={style.tab_panels_container}>
                 <Text className={style.tab_panels_container_title}>
-                  NOTIFICATION SETTINGS
+                  {t("notification title")}
                 </Text>
                 <Divider />
                 <Flex flexDir="column">
                   <Text className={style.text_title_content}>
-                    Security Alerts
+                    {t("sercurity alert")}
                   </Text>
                   <Text className={style.text_content} color="#525252">
-                    Receive security alert notifications via email
+                    {t("description of sercurity alert")}
                   </Text>
                 </Flex>
 
                 <Flex flexDir="column">
-                  <Checkbox defaultChecked>
-                    Email each time a vulnerability is found
-                  </Checkbox>
-                  <Checkbox defaultChecked>
-                    Email a digest summary of vulnerability
-                  </Checkbox>
+                  <Checkbox defaultChecked>{t("checkbox 1")}</Checkbox>
+                  <Checkbox defaultChecked>{t("checkbox 2")}</Checkbox>
                 </Flex>
                 <Flex flexDir="column">
-                  <Text className={style.text_title_content}>
-                    SMS Notifications
-                  </Text>
+                  <Text className={style.text_title_content}>{t("sms")}</Text>
                   <Flex flexDir="column" rowGap="5px">
                     <Stack border="1px solid #ccc" padding="20px">
-                      <Text>Comments</Text>
+                      <Text>{t("cmt")}</Text>
                       <Switch size="sm" />
                     </Stack>
                     <Stack border="1px solid #ccc" padding="20px">
-                      <Text>Updates From People</Text>
+                      <Text>{t("update from people")}</Text>
                       <Switch size="sm" />
                     </Stack>
                     <Stack border="1px solid #ccc" padding="20px">
-                      <Text>Reminders</Text>
+                      <Text>{t("remind")}</Text>
                       <Switch size="sm" />
                     </Stack>
                     <Stack border="1px solid #ccc" padding="20px">
-                      <Text>Events</Text>
+                      <Text>{t("event")}</Text>
                       <Switch size="sm" />
                     </Stack>
                     <Stack border="1px solid #ccc" padding="20px">
-                      <Text>Pages You Follow</Text>
+                      <Text>{t("page you follow")}</Text>
                       <Switch size="sm" />
                     </Stack>
                   </Flex>
@@ -269,25 +276,25 @@ function Profile() {
             <TabPanel>
               <Flex className={style.tab_panels_container}>
                 <Text className={style.tab_panels_container_title}>
-                  BILLING SETTINGS
+                  {t("billing title")}
                 </Text>
                 <Divider />
                 <Flex flexDir="column">
                   <Text className={style.text_title_content}>
-                    Payment Method
+                    {t("payment method")}
                   </Text>
                   <Text className={style.text_content} color="#525252">
-                    You have not added a payment method
+                    {t("payment method not added")}
                   </Text>
                 </Flex>
                 <Flex>
                   <Button className={style.btn_content}>
-                    Add Payment Method
+                    {t("add payment")}
                   </Button>
                 </Flex>
                 <Flex flexDir="column">
                   <Text className={style.text_title_content}>
-                    Payment History
+                    {t("pay history")}
                   </Text>
                   <Flex
                     border="1px solid #ccc"
@@ -296,7 +303,7 @@ function Profile() {
                     padding="20px"
                   >
                     <Text className={style.text_title_content}>
-                      You have not added a payment method
+                      {t("payment method not added")}
                     </Text>
                   </Flex>
                 </Flex>
