@@ -43,7 +43,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Expression<Func<Store, bool>> filter = searchKey != null 
                 ? x => x.Address.Contains(searchKey) && x.BrandId == brandID  && (x.Status != (int)Status.Deleted)
                 : x => x.BrandId == brandID && (x.Status != (int)Status.Deleted);
-            Expression<Func<Store, bool>> filterRecord = x => x.Status != (int)Status.Deleted;
+            Expression<Func<Store, bool>> filterRecord = x => x.Status != (int)Status.Deleted && x.BrandId == brandID;
 
             Func<IQueryable<Store>, IOrderedQueryable<Store>> orderBy = q => q.OrderByDescending(x => x.StoreId) ;
             string includeProperties = "Brand,User";

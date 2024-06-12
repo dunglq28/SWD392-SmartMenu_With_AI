@@ -205,11 +205,11 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Account.ChangePassword, Name = "ChangePasswordAsync")]
-        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] ChangePasswordRequest reqObj)
+        public async Task<IActionResult> ChangePasswordAsync(int id, [FromBody] ChangePasswordRequest reqObj)
         {
             try
             {
-                if (reqObj.NewPassword.Equals(reqObj.Confirm))
+                if (!reqObj.NewPassword.Equals(reqObj.Confirm))
                 {
                     return BadRequest(new BaseResponse
                     {
@@ -220,7 +220,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     });
                 }
                 var checkPass = await _accountService.checkCorrectPassword(id, reqObj.OldPassword);
-                if (!checkPass)
+                if (checkPass == false)
                 {
                     return BadRequest(new BaseResponse
                     {

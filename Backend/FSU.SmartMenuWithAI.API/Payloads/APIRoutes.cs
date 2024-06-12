@@ -110,5 +110,19 @@
 
             public const string GetByID = Base + "/products/get-by-id";
         }
+        public static class ProductMenu
+        {
+            public const string GetAll = Base + "/products-menu/";
+
+            public const string GetByID = Base + "/products-menu/get-by-id";
+
+            public const string GetProductNotInMenu = Base + "/products-menu/get-product-not-in-menu";
+
+            public const string Update = Base + "/products-menu/";
+
+            public const string Delete = Base + "/products-menu/";
+
+            public const string Add = Base + "/products-menu/";
+        }
     }
 }
