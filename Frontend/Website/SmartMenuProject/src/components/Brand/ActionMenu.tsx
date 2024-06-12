@@ -26,12 +26,13 @@ import ModalForm from "../Modals/ModalForm/ModalForm";
 import ModalFormBrand from "../Modals/ModalFormBrand/ModalFormBrand";
 import { BrandData } from "../../models/Brand.model";
 import { brandUpdate } from "../../payloads/requests/updateBrand.model";
+import { getBrand } from "../../services/BrandService";
 
 interface ActionMenuProps {
   id: number;
   brandName: string;
   onDelete: (id: number) => void;
-  onEdit: (id: number, brand: brandUpdate) => void;
+  onEdit: (brand: brandUpdate) => void;
 }
 
 const ActionMenu: FC<ActionMenuProps> = ({
@@ -61,21 +62,34 @@ const ActionMenu: FC<ActionMenuProps> = ({
     },
   });
 
-  const updateBrandData = (brand: BrandData) => {
+  const updateBrandData = (brand: BrandData, isSave: boolean) => {
     var brandUpdate: brandUpdate = {
+      id: id,
       brandName: brand.brandName.value,
       image: brand.image.value,
     };
-    // onCloseUser();
-    onEdit(id, brandUpdate);
+    if (isSave) {
+      onEdit(brandUpdate);
+    }
   };
 
-  const handleEditClick = () => {
-    onOpenBrand();
+  const handleEditClick = async () => {
+    var result = await getBrand(id);
+    if (result.statusCode === 200) {
+      const { brandName, imageUrl } = result.data;
+
+      const updatedBrandData: BrandData = {
+        brandName: { value: brandName, errorMessage: "" },
+        image: { value: null, errorMessage: "" },
+        imageUrl: { value: imageUrl, errorMessage: "" },
+      };
+      setBrandData(updatedBrandData);
+      onOpenBrand();
+    }
   };
 
   const handleViewClick = () => {
-    navigate(`/branches/${brandName}`);
+    navigate(`/branches/${brandName}`, { state: { brandName, id } });
   };
 
   return (

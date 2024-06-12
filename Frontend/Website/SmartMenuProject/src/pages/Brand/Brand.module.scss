@@ -1,4 +1,6 @@
 .container {
+  text-align: center;
+  justify-content: center;
   width: 100%;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -19,7 +21,7 @@
   }
 
   .cardWrapper {
-    flex: 1 1 calc(50% - 1rem); 
+    flex: 1 1 calc(50% - 1rem);
     box-sizing: border-box;
   }
 
@@ -40,7 +42,6 @@
     padding-bottom: 0.75rem;
     margin-bottom: 0.5rem;
   }
-
 
   .wrapperText {
     display: flex;

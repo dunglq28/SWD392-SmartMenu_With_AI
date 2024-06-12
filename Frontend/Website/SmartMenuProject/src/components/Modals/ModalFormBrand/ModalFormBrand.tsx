@@ -13,12 +13,12 @@ import {
 import styles from "./ModalFormBrand.module.scss";
 import { BrandData } from "../../../models/Brand.model";
 import { themeColors } from "../../../constants/GlobalStyles";
-import { isImageFile, isValidImageFileName } from "../../../utils/validation";
+import { isImageFile } from "../../../utils/validation";
 
 interface ModalFormBrandProps {
   brandData: BrandData;
   onClose: () => void;
-  updateBrandData: (brand: BrandData) => void;
+  updateBrandData: (brand: BrandData, isSave: boolean) => void;
   nextHandler?: () => void;
   isEdit: boolean;
 }
@@ -28,12 +28,17 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
   onClose,
   updateBrandData,
   nextHandler,
-  isEdit
+  isEdit,
 }) => {
   const [formData, setFormData] = useState<BrandData>({
     brandName: { value: brandData.brandName.value, errorMessage: "" },
     image: { value: brandData.image.value, errorMessage: "" },
+    imageUrl: {
+      value: brandData.imageUrl?.value ? brandData.imageUrl?.value : "",
+      errorMessage: "",
+    },
   });
+  console.log(formData);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -60,14 +65,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
     setFormData((prevData) => ({
       ...prevData,
       image: { value: null, errorMessage: "" },
-      imageName: { value: "", errorMessage: "" },
-    }));
-  };
-
-  const handleFileNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      imageName: { value: e.target.value, errorMessage: "" },
+      imageUrl: { value: "", errorMessage: "" },
     }));
   };
 
@@ -79,10 +77,13 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
   };
 
   const cancelHandler = () => {
-    updateBrandData?.({
-      brandName: { value: "", errorMessage: "" },
-      image: { value: null, errorMessage: "" },
-    });
+    updateBrandData?.(
+      {
+        brandName: { value: "", errorMessage: "" },
+        image: { value: null, errorMessage: "" },
+      },
+      false
+    );
     onClose();
   };
 
@@ -100,7 +101,11 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
       hasError = true;
     }
 
-    if (!formData.image.value && !formData.image.errorMessage) {
+    if (
+      !formData.image.value &&
+      !formData.imageUrl?.value &&
+      !formData.image.errorMessage
+    ) {
       setFormData((prevData) => ({
         ...prevData,
         image: {
@@ -112,12 +117,17 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
     }
 
     if (!hasError) {
-      updateBrandData?.(formData);
+      updateBrandData?.(formData, true);
       if (nextHandler) {
         nextHandler();
       }
     }
   };
+
+  const imageUrl = formData.image.value
+    ? URL.createObjectURL(formData.image.value)
+    : formData.imageUrl?.value;
+  console.log(imageUrl);
 
   return (
     <>
@@ -146,22 +156,24 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
                   Upload Brand Image
                 </Text>
                 <Flex align="center">
-                  {!formData.image.value && (
+                  {!formData.image.value && !formData.imageUrl?.value && (
                     <Input
                       type="file"
                       className={styles.inputImage}
                       onChange={handleImageChange}
                     />
                   )}
-                  {formData.image.value && (
+                  {(formData.image.value ||
+                    (formData.imageUrl && formData.imageUrl.value)) && (
                     <Button onClick={handleRemoveImage} ml={3}>
                       Remove
                     </Button>
                   )}
                 </Flex>
-                {formData.image.value && (
+                {(formData.image.value ||
+                  (formData.imageUrl && formData.imageUrl.value)) && (
                   <Image
-                    src={URL.createObjectURL(formData.image.value)}
+                    src={imageUrl}
                     alt="Image Preview"
                     className={styles.imagePreview}
                   />

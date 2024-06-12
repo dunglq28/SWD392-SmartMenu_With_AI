@@ -18,7 +18,7 @@ interface ModalFormProps {
   onClose: () => void;
   formBody: React.ReactNode;
   title: string;
-  updateBrandData?: (data: BrandData) => void;
+  updateBrandData?: (data: BrandData, isSave: boolean) => void;
 }
 
 const ModalForm: React.FC<ModalFormProps> = ({
@@ -30,10 +30,13 @@ const ModalForm: React.FC<ModalFormProps> = ({
 }) => {
   function cancelHandler() {
     if (updateBrandData) {
-      updateBrandData({
-        brandName: { value: "", errorMessage: "" },
-        image: { value: null, errorMessage: "" },
-      });
+      updateBrandData(
+        {
+          brandName: { value: "", errorMessage: "" },
+          image: { value: null, errorMessage: "" },
+        },
+        false
+      );
     }
     onClose();
   }

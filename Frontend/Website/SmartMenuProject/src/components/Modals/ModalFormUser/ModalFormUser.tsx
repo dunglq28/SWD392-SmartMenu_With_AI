@@ -27,7 +27,7 @@ interface ModalFormBrandProps {
   onOpenStore?: () => void;
   onOpenBrand?: () => void;
   updateBrandData?: (data: BrandData) => void;
-  updateUserData: (data: UserForm) => void;
+  updateUserData: (data: UserForm, isSave: boolean) => void;
   saveBrandHandle?: (data: UserForm) => void;
   brandName?: string;
   userData: UserForm;
@@ -102,7 +102,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       DOB: { value: null, errorMessage: "" },
       gender: { value: "", errorMessage: "" },
       isActive: { value: null, errorMessage: "" },
-    });
+    }, false);
     onClose();
   };
 
@@ -114,7 +114,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       } else {
         onOpenStore?.();
       }
-      updateUserData?.(formData);
+      updateUserData?.(formData, true);
     }, 350);
   };
 
@@ -173,10 +173,8 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
     }
 
     if (!hasError) {
-      // console.log(formData);
-      // updateUserData(formData);
       if (isEdit) {
-        updateUserData(formData);
+        updateUserData(formData, true);
       } else {
         saveBrandHandle?.(formData);
         cancelHandler();

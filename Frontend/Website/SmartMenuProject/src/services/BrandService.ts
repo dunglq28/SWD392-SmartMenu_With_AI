@@ -19,6 +19,16 @@ export const getBrands = async (
   return apiResponse.data as GetData<BrandData>;
 };
 
+export const getBrand = async (id: number): Promise<ApiResponse<BrandData>> => {
+  const res = await axiosAuth.get("brands/get-by-id", {
+    params: {
+      id: id,
+    },
+  });
+  const apiResponse = res.data as ApiResponse<BrandData>;
+  return apiResponse;
+};
+
 export const createBrand = async (
   brandForm: FormData
 ): Promise<ApiResponse<Object>> => {
