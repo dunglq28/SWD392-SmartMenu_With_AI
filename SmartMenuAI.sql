@@ -340,20 +340,42 @@ insert into Store ( StoreCode, IsActive, UserID, CreateDate, Status, Address, Ci
 -- Thêm cửa hàng cho thương hiệu có tên 'Phúc Long'
 INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
 VALUES 
-('c5821d44-972e-44f2-84df-69ad5a24cb78', 1, 2, '2024-02-02', 1, '8th Floor', 'Hanoi', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
-('7a1b7d9c-8b46-45b1-a4e2-e94027f4b422', 1, 2, '2024-02-02', 1, '10th Floor', 'Ho Chi Minh City', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
-('7f90d5e9-9e8d-4df7-9fe0-f88a69d62555', 1, 2, '2024-02-02', 1, 'Room 385', 'Da Nang', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
-('8ff1789e-7de2-4dc5-8d64-c349cf82c8f2', 1, 2, '2024-02-02', 1, 'Apt 1219', 'Hai Phong', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
-('68de7ec3-3c57-4876-bdbd-030ffaa3f5cc', 1, 2, '2024-02-02', 1, 'Suite 26', 'Can Tho', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long'));
+('c5821d44-972e-44f2-84df-69ad5a24cb78', 1, 2, '2024-02-02', 1, N'Số 5, ngõ 30 Tạ Quang Bửu, Phường Bách Khoa, Quận Hai Bà Trưng', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('7a1b7d9c-8b46-45b1-a4e2-e94027f4b422', 1, 2, '2024-02-02', 1, N'Đường 3 Tháng 2. Số 1213 Đường 3 Tháng 2, Phường 6, Quận 11', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('7f90d5e9-9e8d-4df7-9fe0-f88a69d62555', 1, 2, '2024-02-02', 1, N'Tầng 2, LOTTE Mart, 6 Nại Nam, Phường Hòa Cường Bắc, Quận Hải Châu', N'Đà Nẵng', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('8ff1789e-7de2-4dc5-8d64-c349cf82c8f2', 1, 2, '2024-02-02', 1, N' 200 Văn Cao, Phường Đằng Giang, Quận Ngô Quyền', N'Hải Phòng', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('68de7ec3-3c57-4876-bdbd-030ffaa3f5cc', 1, 2, '2024-02-02', 1, N'384 Đường 30 tháng 4, Phường Hưng Lợi, Quận Ninh Kiều', N'Cần Thơ', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long'));
+INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
+VALUES 
+('d4f27f8e-1234-4bcb-8d88-96b8673bdf12', 1, 2, '2024-02-02', 1, N'25 Hàng Gai, Phường Hàng Gai, Quận Hoàn Kiếm', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('4e239f4b-3456-4f29-9d43-b7c912e8a657', 1, 2, '2024-02-02', 1, N'15 Cầu Gỗ, Phường Hàng Bạc, Quận Hoàn Kiếm', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('5f493b7e-5678-4a22-8f9d-81bde64f9e43', 1, 2, '2024-02-02', 1, N'193 Bà Triệu, Phường Lê Đại Hành, Quận Hai Bà Trưng', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('a6f73b9a-7890-4c67-8c9f-95d8973b7f2d', 1, 2, '2024-02-02', 1, N'35 Hồ Tùng Mậu, Phường Mai Dịch, Quận Cầu Giấy', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('b7e93d6e-9012-4d56-8d9a-24b7f1e8b6d3', 1, 2, '2024-02-02', 1, N'120 Trần Duy Hưng, Phường Trung Hòa, Quận Cầu Giấy', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('c8f27d9f-1234-4b3b-8d6d-36c7e8f8b7a4', 1, 2, '2024-02-02', 1, N'18 Lê Lợi, Phường Bến Nghé, Quận 1', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('d9f57e7c-3456-4e12-9d9e-47d9e8b9f7a5', 1, 2, '2024-02-02', 1, N'35 Nguyễn Thái Học, Phường Cầu Ông Lãnh, Quận 1', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('e0f68e5d-5678-4a2a-8e7a-57e8f8b8f6b6', 1, 2, '2024-02-02', 1, N'45 Lê Lợi, Phường Bến Nghé, Quận 1', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('f1e79d8e-7890-4d4c-8c4a-68e7f8f9f5b7', 1, 2, '2024-02-02', 1, N'12 Trần Hưng Đạo, Phường Bến Thành, Quận 1', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long')),
+('02e89f4b-9012-4d5b-8d2d-79e8f9b8f3a8', 1, 2, '2024-02-02', 1, N'56 Nguyễn Đình Chiểu, Phường Đa Kao, Quận 1', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = 'Phúc Long'));
 
 -- Thêm cửa hàng cho thương hiệu có tên 'Highlands'
 INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
 VALUES 
-('1f79779c-85cf-4d0b-b5b6-29d0380a8ff9', 1, 4, '2024-02-03', 1, '5th Floor', 'Hanoi', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
-('a97b6a5f-3b46-4e2f-86e4-dc74a07775a4', 1, 4, '2024-02-03', 1, '7th Floor', 'Ho Chi Minh City', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
-('6d3cb5fb-f15f-4686-89e3-7a39c4b735f5', 1, 4, '2024-02-03', 1, 'Room 243', 'Da Nang', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
-('950f4e6b-2fa9-45c5-89a5-0262b83e6e7a', 1, 4, '2024-02-03', 1, 'Apt 1842', 'Hai Phong', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
-('44ac3b1e-7b6e-494a-8a06-0aefdcdd7a8d', 1, 4, '2024-02-03', 1, 'Suite 42', 'Can Tho', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands'));
+('1f79779c-85cf-4d0b-b5b6-29d0380a8ff9', 1, 4, '2024-02-03', 1, N'Tầng 5, Vincom Center, Phường Bến Nghé, Quận 1', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('a97b6a5f-3b46-4e2f-86e4-dc74a07775a4', 1, 4, '2024-02-03', 1, N'Tầng 7, Diamond Plaza, Phường Bến Nghé, Quận 1', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('6d3cb5fb-f15f-4686-89e3-7a39c4b735f5', 1, 4, '2024-02-03', 1, N'Phòng 243, Indochina Riverside Towers, Phường Hải Châu 1, Quận Hải Châu', N'Đà Nẵng', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('950f4e6b-2fa9-45c5-89a5-0262b83e6e7a', 1, 4, '2024-02-03', 1, N'Căn hộ 1842, TD Plaza, Phường Đông Khê, Quận Ngô Quyền', N'Hải Phòng', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('44ac3b1e-7b6e-494a-8a06-0aefdcdd7a8d', 1, 4, '2024-02-03', 1, N'Tầng 2, Vincom Plaza Xuân Khánh, Phường Xuân Khánh, Quận Ninh Kiều', N'Cần Thơ', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('e7f2299a-1a2c-4d49-8a9b-0b4f8675a61f', 1, 4, '2024-02-03', 1, N'Số 15, Phố Cửa Nam, Phường Cửa Nam, Quận Hoàn Kiếm', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('f4e9a8a5-34bd-4a1f-8b4c-2a1b4b7d2a1d', 1, 4, '2024-02-03', 1, N'Số 200, Đường Nguyễn Trãi, Phường Thượng Đình, Quận Thanh Xuân', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('a6f2b8c4-89da-4f67-8a3b-3b5d8b9f9d4c', 1, 4, '2024-02-03', 1, N'Số 125, Đường Xuân Thủy, Phường Dịch Vọng Hậu, Quận Cầu Giấy', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('b7d4e8d2-45bc-4a1d-8a1b-4a1d8b5d2a3f', 1, 4, '2024-02-03', 1, N'Số 45, Đường Lê Lợi, Phường Bến Thành, Quận 1', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('c8f5b7e3-56dc-4c1b-8b2d-5b6d8c7d3a5e', 1, 4, '2024-02-03', 1, N'Số 100, Đường Điện Biên Phủ, Phường Đa Kao, Quận 1', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('d9e6a9f4-67bc-4a2d-8b3c-6b7d8c8d4a6f', 1, 4, '2024-02-03', 1, N'Số 250, Đường Nguyễn Văn Cừ, Phường An Hòa, Quận Ninh Kiều', N'Cần Thơ', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('e0f7c9a5-78cd-4c2e-8b4d-7c8d8c9d5a7f', 1, 4, '2024-02-03', 1, N'Số 75, Đường Hùng Vương, Phường Hải Châu 1, Quận Hải Châu', N'Đà Nẵng', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('f1e8a9c6-89de-4c3f-8b5e-8d9d8d9e6a8f', 1, 4, '2024-02-03', 1, N'Số 50, Đường Trần Phú, Phường Lộc Thọ, Quận Nha Trang', N'Khánh Hòa', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('02e9b9d7-9ade-4c4f-8b6f-9e9d9d0f7a9f', 1, 4, '2024-02-03', 1, N'Số 135, Đường Nguyễn Văn Linh, Phường Nam Dương, Quận Hải Châu', N'Đà Nẵng', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands')),
+('13e0c9e8-abcd-4d5f-8b7f-a0f9d0f8b8a9', 1, 4, '2024-02-03', 1, N'Số 180, Đường Lý Thường Kiệt, Phường 14, Quận 10', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = 'Highlands'));
 
 -- Thêm cửa hàng cho thương hiệu có tên 'Midel'
 INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
@@ -410,12 +432,21 @@ VALUES
 -- Thêm cửa hàng cho thương hiệu có tên 'Cộng'
 INSERT INTO Store (StoreCode, IsActive, UserID, CreateDate, Status, Address, City, BrandID)
 VALUES 
-('b91c4a27-2915-44c7-b877-20a17442352c', 1, 3, '2024-02-02', 1, '12th Floor', 'Hanoi', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
-('d1e38f48-ff25-489d-8e0d-0e7bbfbd5f38', 1, 3, '2024-02-02', 1, '15th Floor', 'Ho Chi Minh City', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
-('e7b098e6-fd91-4cb8-8014-c4b4a2268f27', 1, 3, '2024-02-02', 1, 'Room 124', 'Da Nang', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
-('d11c9d53-0547-41ac-96d4-0d6f6a6d2b9e', 1, 3, '2024-02-02', 1, 'Apt 1728', 'Hai Phong', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
-('01e4267c-3342-4c95-a63c-69c0ddc80a6f', 1, 3, '2024-02-02', 1, 'Suite 36', 'Can Tho', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
-
+('b91c4a27-2915-44c7-b877-20a17442352c', 1, 3, '2024-02-02', 1, N'Tầng 12, Toà nhà Cộng, Phường Cửa Nam, Quận Hoàn Kiếm', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('d1e38f48-ff25-489d-8e0d-0e7bbfbd5f38', 1, 3, '2024-02-02', 1, N'Tầng 15, Toà nhà Cộng, Phường Bến Nghé, Quận 1', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('e7b098e6-fd91-4cb8-8014-c4b4a2268f27', 1, 3, '2024-02-02', 1, N'Phòng 124, Toà nhà Cộng, Phường Hải Châu 1, Quận Hải Châu', N'Đà Nẵng', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('d11c9d53-0547-41ac-96d4-0d6f6a6d2b9e', 1, 3, '2024-02-02', 1, N'Căn hộ 1728, Toà nhà Cộng, Phường Đông Khê, Quận Ngô Quyền', N'Hải Phòng', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('01e4267c-3342-4c95-a63c-69c0ddc80a6f', 1, 3, '2024-02-02', 1, N'Tầng 3, Toà nhà Cộng, Phường Xuân Khánh, Quận Ninh Kiều', N'Cần Thơ', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('3e1a7891-44df-45fc-8b6d-3f7a5d28e7d9', 1, 3, '2024-02-02', 1, N'Số 5, Đường Trần Hưng Đạo, Phường Phan Chu Trinh, Quận Hoàn Kiếm', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('4e2b98a2-55ef-46bc-8c7e-4f8a7d39e8ea', 1, 3, '2024-02-02', 1, N'Số 17, Đường Láng Hạ, Phường Thành Công, Quận Ba Đình', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('5f3ca9b3-66fe-47cd-8d8f-5g9a8d40e9fb', 1, 3, '2024-02-02', 1, N'Số 3, Đường Hoàng Diệu, Phường Quán Thánh, Quận Ba Đình', N'Hà Nội', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('6g4dbac4-77gf-48de-8e9g-6h0b9e51f0gc', 1, 3, '2024-02-02', 1, N'Số 8, Đường Nguyễn Du, Phường Bến Thành, Quận 1', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('7h5ecbd5-88gh-49ef-8f1h-7i1c0f62g1hd', 1, 3, '2024-02-02', 1, N'Số 15, Đường Nguyễn Thái Học, Phường Phạm Ngũ Lão, Quận 1', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('8i6fdce6-99hi-4ag8-9j2i-8j2d1g73i2ie', 1, 3, '2024-02-02', 1, N'Số 4, Đường Hùng Vương, Phường Hải Châu 1, Quận Hải Châu', N'Đà Nẵng', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('9j7gfdg7-10ij-4bh9-9k3j-9k3e2h84j3jf', 1, 3, '2024-02-02', 1, N'Số 25, Đường Lê Duẩn, Phường Thạch Thang, Quận Hải Châu', N'Đà Nẵng', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('0k8hgdh8-21jk-5ci0-0l4k-0l4f3i95k4kg', 1, 3, '2024-02-02', 1, N'Số 7, Đường Trần Phú, Phường Lộc Thọ, Quận Nha Trang', N'Khánh Hòa', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('1l9ihdh9-32kl-6dj1-1m5l-1m5g4j06l5lh', 1, 3, '2024-02-02', 1, N'Số 11, Đường Nguyễn Văn Linh, Phường Nam Dương, Quận Hải Châu', N'Đà Nẵng', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng')),
+('2m0jihj0-43lm-7ek2-2n6m-2n6h5k17m6mi', 1, 3, '2024-02-02', 1, N'Số 19, Đường Hùng Vương, Phường 12, Quận 10', N'Hồ Chí Minh', (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
 
 --Product 
 insert into Product (ProductCode, ProductName, Description, CreateDate, BrandID, CategoryID) values ('c6fffd30-e27f-4a47-9bf2-e77883dec225', 'Magnificent frigate bird', 'Proin at turpis a pede posuere nonummy. Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque. Duis bibendum. Morbi non quam nec dui luctus rutrum.', '8/12/2023', 1, 8);
@@ -520,16 +551,16 @@ insert into SegmentAttribute (SegmentID, AttributeID, Value) values (9, 8, 'AS')
 
 
 --Menu
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( 'bfdd194b-0cd5-4462-914c-fb43dd86d5ec', '1/2/2024', 0, 2);
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( 'ce30468f-8d3f-4283-a69b-f4b23f71bc73', '3/25/2024', 1, 10);
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '19e388d2-cdae-4991-a486-62c1f807d95d', '8/14/2023', 1, 7);
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '3f04f7e0-ff88-4f46-8a00-2870e2fb9baf', '4/13/2024', 1, 1);
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '1d8c44a2-04c0-4215-b368-df7aae1d15de', '8/23/2023', 1, 3);
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( 'b985ad24-24a6-4e4f-b913-de8931f2ea22', '7/10/2023', 1, 2);
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '992eb6cc-6e43-42d9-9ea9-0f613094f3ec', '10/8/2023', 1, 3);
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '81bbd1c7-bb39-41c4-a2b5-2b0db6767e6d', '12/26/2023', 0, 7);
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '3ef4ac78-eed0-4f79-83dd-3b212cd5c1be', '8/18/2023', 0, 6);
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '56b32ea0-623b-4952-8256-89db4ff94010', '1/29/2024', 1, 6);
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( 'bfdd194b-0cd5-4462-914c-fb43dd86d5ec', '1/2/2024', 0, (SELECT BrandID FROM Brand WHERE BrandName = N'Phúc Long'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( 'ce30468f-8d3f-4283-a69b-f4b23f71bc73', '3/25/2024', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Phúc Long'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '19e388d2-cdae-4991-a486-62c1f807d95d', '8/14/2023', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Phúc Long'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '3f04f7e0-ff88-4f46-8a00-2870e2fb9baf', '4/13/2024', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Highlands'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '1d8c44a2-04c0-4215-b368-df7aae1d15de', '8/23/2023', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Highlands'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( 'b985ad24-24a6-4e4f-b913-de8931f2ea22', '7/10/2023', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Highlands'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '992eb6cc-6e43-42d9-9ea9-0f613094f3ec', '10/8/2023', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '81bbd1c7-bb39-41c4-a2b5-2b0db6767e6d', '12/26/2023', 0, (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '3ef4ac78-eed0-4f79-83dd-3b212cd5c1be', '8/18/2023', 0, (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '56b32ea0-623b-4952-8256-89db4ff94010', '1/29/2024', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
 
 
 --ProductMenu
