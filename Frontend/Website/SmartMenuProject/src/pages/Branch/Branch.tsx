@@ -73,7 +73,7 @@ function Branch() {
                   <Td>1</Td>
                   <Td>Highlands</Td>
                   <Td>Hồ Chí Minh</Td>
-                  <Td>135 Nguyễn Tư Giản, Quận Gò Vấp</Td>
+                  <Td>135 Nguyễn Tư Giản, Phường 12, Quận Gò Vấp</Td>
                   <Td>2/8/2024</Td>
                   <Td>Yes</Td>
                   <Td>Yes</Td>

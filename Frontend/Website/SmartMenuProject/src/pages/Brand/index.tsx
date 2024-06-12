@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -23,14 +23,14 @@ function Brand() {
   const [rowsPerPage, setRowsPerPage] = useState<number>(6);
   const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([6]);
   const [totalPages, setTotalPages] = useState<number>(10);
-  let flag = false;
+  const flagRef = useRef(false); // Use useRef to manage flag
 
   useEffect(() => {
-    if (location.state?.toastMessage && !flag) {
+    if (location.state?.toastMessage && !flagRef.current) {
       toast.success(location.state.toastMessage, {
         autoClose: 2500,
       });
-      flag = true;
+      flagRef.current = true;
       navigate(location.pathname, { replace: true });
     }
   }, [location.state, navigate]);
@@ -42,6 +42,7 @@ function Brand() {
 
       const loadData = async () => {
         result = await getBrands(currentPage, rowsPerPage);
+
         setData(result.list);
         setTotalPages(result.totalPage);
         setRowsPerPageOption(getBrandOptions(result.totalRecord));
@@ -58,10 +59,15 @@ function Brand() {
       toast.error("Lỗi khi lấy dữ liệu");
       setIsLoading(false);
     }
-  }, [currentPage, rowsPerPage, isInitialLoad]);
+  }, [currentPage, rowsPerPage]);
 
   useEffect(() => {
-    fetchData();
+    if (!flagRef.current) {
+      fetchData();
+      flagRef.current = true;
+    } else {
+      fetchData();
+    }
   }, [fetchData]);
 
   const handlePageChange = useCallback(
@@ -97,7 +103,7 @@ function Brand() {
       {/* <div className={style.title}>All Brand</div> */}
       <div className={style.cardContainer}>
         {data.map((brand) => (
-          <div className={style.cardWrapper}>
+          <div className={style.cardWrapper} key={brand.brandId}>
             <div className={style.card}>
               <Image
                 boxSize="140px"

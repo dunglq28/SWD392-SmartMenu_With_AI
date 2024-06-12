@@ -46,7 +46,7 @@ function User() {
             result = await getUsers(currentPage, rowsPerPage, searchValue);
           } else {
             result = await getUsers(currentPage, rowsPerPage, "");
-          }
+          }          
           setData(result.list);
           setTotalPages(result.totalPage);
           setRowsPerPageOption(getOptions(result.totalRecord));

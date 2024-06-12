@@ -45,7 +45,9 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
   brandName,
   userData,
 }) => {
-  const initialUserNameValue = brandName ? generateUsername(brandName) : userData.userName.value;
+  const initialUserNameValue = brandName
+    ? generateUsername(brandName)
+    : userData.userName.value;
   const [formData, setFormData] = useState<UserForm>({
     fullName: { value: userData.fullName.value, errorMessage: "" },
     userName: {
@@ -177,6 +179,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         updateUserData(formData);
       } else {
         saveBrandHandle?.(formData);
+        cancelHandler();
       }
     }
   };
