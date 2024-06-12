@@ -29,11 +29,11 @@ function User() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
   const [data, setData] = useState<UserData[]>([]);
-  const [searchValue, setSearchValue] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
   const [totalPages, setTotalPages] = useState<number>(10);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
 
   const fetchData = useCallback(
     async (searchValue?: string) => {
@@ -49,13 +49,15 @@ function User() {
           }
           setData(result.list);
           setTotalPages(result.totalPage);
+          setTotalRecords(result.totalRecord);
           setRowsPerPageOption(getOptions(result.totalRecord));
           setIsLoading(false);
-          setIsInitialLoad(false);
         };
 
         if (isInitialLoad) {
-          setTimeout(loadData, 500);
+          setTimeout(async () => {
+            setIsInitialLoad(false);
+          }, 500);
         } else {
           await loadData();
         }
@@ -69,7 +71,7 @@ function User() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, currentPage, isInitialLoad]);
 
   const handlePageChange = useCallback(
     (page: number) => {
@@ -99,7 +101,11 @@ function User() {
     try {
       var result = await deleteUser(id);
       if (result.statusCode === 200) {
-        fetchData();
+        if ((totalRecords - 1) % rowsPerPage === 0 && currentPage > 1) {
+          setCurrentPage((prevPage) => prevPage - 1);
+        } else {
+          fetchData();
+        }
         toast.success("Xoá người dùng thành công");
       }
     } catch (e) {
@@ -120,12 +126,11 @@ function User() {
   }
 
   async function handleSearch(value: string) {
-    console.log(value);
     fetchData(value);
   }
 
   return (
-    <Flex flexDirection="column">
+    <Flex className={style.container}>
       <Flex w="40%" ml="20px">
         <Searchbar onSearch={handleSearch} />
       </Flex>
@@ -157,7 +162,7 @@ function User() {
                 </Tr>
               ) : data.length === 0 ? (
                 <Tr>
-                  <Td colSpan={10}>Không có dữ liệu để hiển thị</Td>
+                  <Td colSpan={10}>Không có người dùng để hiển thị</Td>
                 </Tr>
               ) : (
                 data.map((user, index) => (

@@ -65,7 +65,7 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
     }
   };
 
-  const saveUserHandle = (user: UserForm) => {
+  const updateUserData = (user: UserForm, isSave: boolean) => {
     var userUpdate: userUpdate = {
       fullname: user.fullName.value,
       dob: user.DOB.value ? user.DOB.value.toISOString().split("T")[0] : "",
@@ -75,7 +75,9 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
       updateBy: Number(localStorage.getItem("UserId")),
     };
     onCloseUser();
-    onEdit(id, userUpdate);
+    if (isSave) {
+      onEdit(id, userUpdate);
+    }
   };
 
   return (
@@ -145,7 +147,7 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
             onClose={onCloseUser}
             userData={userData}
             isEdit={true}
-            saveUserHandle={saveUserHandle}
+            updateUserData={updateUserData}
           />
         }
         onClose={onCloseUser}

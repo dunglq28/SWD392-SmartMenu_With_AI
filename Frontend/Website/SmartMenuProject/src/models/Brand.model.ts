@@ -7,4 +7,8 @@ export interface BrandData {
     value: File | null;
     errorMessage: string;
   };
+  imageUrl?: {
+    value: string;
+    errorMessage: string;
+  };
 }

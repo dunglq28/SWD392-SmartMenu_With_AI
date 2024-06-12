@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -22,25 +22,74 @@ import { MdOutlineMoreHoriz } from "react-icons/md";
 import style from "./ActionMenu.module.scss";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import ModalForm from "../Modals/ModalForm/ModalForm";
+import ModalFormBrand from "../Modals/ModalFormBrand/ModalFormBrand";
+import { BrandData } from "../../models/Brand.model";
+import { brandUpdate } from "../../payloads/requests/updateBrand.model";
+import { getBrand } from "../../services/BrandService";
 
 interface ActionMenuProps {
   id: number;
   brandName: string;
   onDelete: (id: number) => void;
+  onEdit: (brand: brandUpdate) => void;
 }
 
-const ActionMenu: FC<ActionMenuProps> = ({ id, brandName, onDelete }) => {
+const ActionMenu: FC<ActionMenuProps> = ({
+  id,
+  brandName,
+  onDelete,
+  onEdit,
+}) => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenBrand,
+    onOpen: onOpenBrand,
+    onClose: onCloseBrand,
+  } = useDisclosure();
   const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
   const navigate = useNavigate();
+  //BRAND DATA
+  const [brandData, setBrandData] = useState<BrandData>({
+    brandName: {
+      value: "",
+      errorMessage: "",
+    },
+    image: {
+      value: null,
+      errorMessage: "",
+    },
+  });
 
-  const handleEditClick = () => {
-    // Handle edit action for brand
+  const updateBrandData = (brand: BrandData, isSave: boolean) => {
+    var brandUpdate: brandUpdate = {
+      id: id,
+      brandName: brand.brandName.value,
+      image: brand.image.value,
+    };
+    if (isSave) {
+      onEdit(brandUpdate);
+    }
+  };
+
+  const handleEditClick = async () => {
+    var result = await getBrand(id);
+    if (result.statusCode === 200) {
+      const { brandName, imageUrl } = result.data;
+
+      const updatedBrandData: BrandData = {
+        brandName: { value: brandName, errorMessage: "" },
+        image: { value: null, errorMessage: "" },
+        imageUrl: { value: imageUrl, errorMessage: "" },
+      };
+      setBrandData(updatedBrandData);
+      onOpenBrand();
+    }
   };
 
   const handleViewClick = () => {
-    navigate(`/branches/${brandName}`);
+    navigate(`/branches/${brandName}`, { state: { brandName, id } });
   };
 
   return (
@@ -106,6 +155,21 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, brandName, onDelete }) => {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
+
+      <ModalForm
+        formBody={
+          <ModalFormBrand
+            brandData={brandData}
+            onClose={onCloseBrand}
+            isEdit={true}
+            updateBrandData={updateBrandData}
+          />
+        }
+        onClose={onCloseBrand}
+        isOpen={isOpenBrand}
+        title={t("Update Brand")}
+        updateBrandData={updateBrandData}
+      />
     </>
   );
 };
