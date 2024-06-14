@@ -57,5 +57,9 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
 
             return await query.ToListAsync();
         }
+        public async Task<List<Brand>> GetAllByCondition(Expression<Func<Brand, bool>> filter)
+        {
+            return await _context.Brands.Where(filter).ToListAsync();
+        }
     }
 }

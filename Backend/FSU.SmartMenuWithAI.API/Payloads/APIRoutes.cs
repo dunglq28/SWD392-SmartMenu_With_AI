@@ -34,10 +34,24 @@
 
             public const string Add = Base + "/app-users/";
         }
+        public static class Attribute
+        {
+            public const string GetAll = Base + "/attributes/";
+
+            public const string GetByID = Base + "/attributes/get-by-id";
+
+            public const string Update = Base + "/attributes/";
+
+            public const string Delete = Base + "/attributes/";
+
+            public const string Add = Base + "/attributes/";
+        }
 
         public static class Brand
         {
             public const string GetAll = Base + "/brands/";
+
+            public const string GetAllName = Base + "/brands/get-all-name";
 
             public const string GetByID = Base + "/brands/get-by-id";
 
@@ -91,6 +105,7 @@
         public static class GroupAttribute
         {
             public const string GetAll = Base + "/group-attributes/";
+            public const string GetByID = Base + "/group-attributes/get-by-id";
 
             public const string Add = Base + "/group-attributes/add";
 

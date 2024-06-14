@@ -3,6 +3,8 @@ using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
 using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.Pagination;
+using FSU.SmartMenuWithAI.Service.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,6 +77,26 @@ namespace FSU.SmartMenuWithAI.Service.Services
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
 
             return _mapper?.Map<GroupAttributeDTO>(entityToUpdate)!;
+        }
+        public async Task<PageEntity<GroupAttributeDTO>> Get(string? searchKey, int? pageIndex = null, int? pageSize = null)
+        {
+
+            Expression<Func<GroupAttribute, bool>> filter = x => (string.IsNullOrEmpty(searchKey) || x.GroupAttributeName.Contains(searchKey));
+
+            Func<IQueryable<GroupAttribute>, IOrderedQueryable<GroupAttribute>> orderBy = q => q.OrderByDescending(x => x.GroupAttributeId);
+
+            var entities = await _unitOfWork.GroupAttributeRepository.Get(filter: filter, orderBy: orderBy, pageIndex: pageIndex, pageSize: pageSize);
+            var pagin = new PageEntity<GroupAttributeDTO>();
+            pagin.List = _mapper.Map<IEnumerable<GroupAttributeDTO>>(entities).ToList();
+            pagin.TotalRecord = await _unitOfWork.GroupAttributeRepository.Count(filter);
+            pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
+            return pagin;
+        }
+        public async Task<GroupAttributeDTO> GetByID(int id)
+        {
+            Expression<Func<GroupAttribute, bool>> condition = x => x.GroupAttributeId == id;
+            var entity = await _unitOfWork.GroupAttributeRepository.GetByCondition(condition);
+            return _mapper?.Map<GroupAttributeDTO?>(entity)!;
         }
     }
 }

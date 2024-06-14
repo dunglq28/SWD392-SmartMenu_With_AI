@@ -20,6 +20,8 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         private ProductMenuRepository _productMenuRepo;
         private BrandRepository _brandRepo;
         private GroupAttributeRepository _groupAttributeRepo;
+        private AttributeRepository _attributeRepository;
+
 
         public UnitOfWork(SmartMenuContext context, IConfiguration configuration)
         {
@@ -168,6 +170,17 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
                     this._groupAttributeRepo = new GroupAttributeRepository(_context, _configuration);
                 }
                 return _groupAttributeRepo;
+            }
+        }
+        AttributeRepository IUnitOfWork.AttributeRepository
+        {
+            get
+            {
+                if (_attributeRepository == null)
+                {
+                    this._attributeRepository = new AttributeRepository(_context);
+                }
+                return _attributeRepository;
             }
         }
     }
