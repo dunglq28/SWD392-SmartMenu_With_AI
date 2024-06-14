@@ -15,39 +15,57 @@ import {
 import styles from "./ModalFormUser.module.scss";
 import { themeColors } from "../../../constants/GlobalStyles";
 import { CurrentForm } from "../../../constants/Enum";
-import { BrandData } from "../../../models/Brand.model";
-import { UserForm } from "../../../models/User.model";
+import { BrandForm } from "../../../models/BrandForm.model";
+import { UserForm } from "../../../models/UserForm.model";
 import { isValidPhoneNumber } from "../../../utils/validation";
-import { generateUsername } from "../../../utils/createBrandName";
+import {
+  generateUsernameFromBranch,
+  generateUsernameFromBrand,
+} from "../../../utils/createUserName";
+import { BranchForm } from "../../../models/BranchForm.model";
 
 interface ModalFormBrandProps {
   isEdit: boolean;
   onClose: () => void;
   formPrevious?: CurrentForm;
-  onOpenStore?: () => void;
+  onOpenBranch?: () => void;
   onOpenBrand?: () => void;
-  updateBrandData?: (data: BrandData) => void;
+  updateBrandData?: (data: BrandForm) => void;
+  updateBranchData?: (data: BranchForm) => void;
   updateUserData: (data: UserForm, isSave: boolean) => void;
   saveBrandHandle?: (data: UserForm) => void;
+  saveBranchHandle?: (data: UserForm) => void;
   brandName?: string;
   userData: UserForm;
+  branch?: BranchForm;
 }
 
 const ModalFormUser: React.FC<ModalFormBrandProps> = ({
   isEdit,
   onClose,
   formPrevious,
-  onOpenStore,
+  onOpenBranch,
   onOpenBrand,
   updateBrandData,
+  updateBranchData,
   updateUserData,
   saveBrandHandle,
+  saveBranchHandle,
   brandName,
   userData,
+  branch,
 }) => {
-  const initialUserNameValue = brandName
-    ? generateUsername(brandName)
-    : userData.userName.value;
+  var initialUserNameValue = "";
+  if (formPrevious === CurrentForm.BRAND) {
+    initialUserNameValue = brandName
+      ? generateUsernameFromBrand(brandName)
+      : userData.userName.value;
+  } else if (formPrevious === CurrentForm.BRANCH) {
+    initialUserNameValue = branch
+      ? generateUsernameFromBranch(branch)
+      : userData.userName.value;
+  }
+
   const [formData, setFormData] = useState<UserForm>({
     fullName: { value: userData.fullName.value, errorMessage: "" },
     userName: {
@@ -68,10 +86,12 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
   };
 
   const handleDateChange = (field: keyof UserForm, value: string) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [field]: { value: new Date(value), errorMessage: "" },
-    }));
+    if (!isNaN(Date.parse(value))) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [field]: { value: new Date(value), errorMessage: "" },
+      }));
+    }
   };
 
   const handleGenderChange = (value: string) => {
@@ -94,15 +114,26 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         brandName: { value: "", errorMessage: "" },
         image: { value: null, errorMessage: "" },
       });
+    } else if (formPrevious === CurrentForm.BRANCH) {
+      updateBranchData?.({
+        brandName: { value: "", errorMessage: "" },
+        city: { id: "", name: "", errorMessage: "" },
+        district: { id: "", name: "", errorMessage: "" },
+        ward: { id: "", name: "", errorMessage: "" },
+        address: { value: "", errorMessage: "" },
+      });
     }
-    updateUserData?.({
-      fullName: { value: "", errorMessage: "" },
-      userName: { value: "", errorMessage: "" },
-      phoneNumber: { value: "", errorMessage: "" },
-      DOB: { value: null, errorMessage: "" },
-      gender: { value: "", errorMessage: "" },
-      isActive: { value: null, errorMessage: "" },
-    }, false);
+    updateUserData?.(
+      {
+        fullName: { value: "", errorMessage: "" },
+        userName: { value: "", errorMessage: "" },
+        phoneNumber: { value: "", errorMessage: "" },
+        DOB: { value: null, errorMessage: "" },
+        gender: { value: "", errorMessage: "" },
+        isActive: { value: null, errorMessage: "" },
+      },
+      false
+    );
     onClose();
   };
 
@@ -112,7 +143,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       if (formPrevious === CurrentForm.BRAND) {
         onOpenBrand?.();
       } else {
-        onOpenStore?.();
+        onOpenBranch?.();
       }
       updateUserData?.(formData, true);
     }, 350);
@@ -176,7 +207,11 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       if (isEdit) {
         updateUserData(formData, true);
       } else {
-        saveBrandHandle?.(formData);
+        if (formPrevious === CurrentForm.BRAND) {
+          saveBrandHandle?.(formData);
+        } else if (formPrevious === CurrentForm.BRANCH) {
+          saveBranchHandle?.(formData);
+        }
         cancelHandler();
       }
     }

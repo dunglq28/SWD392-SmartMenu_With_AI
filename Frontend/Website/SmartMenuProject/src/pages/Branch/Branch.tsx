@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { BranchData } from "../../payloads/responses/BranchData.model";
 import style from "./Branch.module.scss";
@@ -124,7 +124,7 @@ function Branch() {
               </Tr>
             ) : (
               branchData.map((brand, index) => (
-                <Tr className={style.BrandItem}>
+                <Tr className={style.BrandItem} key={brand.storeId}>
                   <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
                   {/* <Td>{brandName}</Td> */}
                   <Td>{brand.city}</Td>

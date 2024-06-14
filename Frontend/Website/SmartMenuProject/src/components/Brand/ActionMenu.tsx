@@ -24,14 +24,15 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import ModalForm from "../Modals/ModalForm/ModalForm";
 import ModalFormBrand from "../Modals/ModalFormBrand/ModalFormBrand";
-import { BrandData } from "../../models/Brand.model";
+import { BrandForm } from "../../models/BrandForm.model";
 import { brandUpdate } from "../../payloads/requests/updateBrand.model";
 import { getBrand } from "../../services/BrandService";
+import CustomAlertDialog from "../AlertDialog";
 
 interface ActionMenuProps {
   id: number;
   brandName: string;
-  onDelete: (id: number) => void;
+  onDelete: (id: number | undefined) => void;
   onEdit: (brand: brandUpdate) => void;
 }
 
@@ -51,7 +52,7 @@ const ActionMenu: FC<ActionMenuProps> = ({
   const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
   const navigate = useNavigate();
   //BRAND DATA
-  const [brandData, setBrandData] = useState<BrandData>({
+  const [brandData, setBrandData] = useState<BrandForm>({
     brandName: {
       value: "",
       errorMessage: "",
@@ -62,7 +63,7 @@ const ActionMenu: FC<ActionMenuProps> = ({
     },
   });
 
-  const updateBrandData = (brand: BrandData, isSave: boolean) => {
+  const updateBrandData = (brand: BrandForm, isSave: boolean) => {
     var brandUpdate: brandUpdate = {
       id: id,
       brandName: brand.brandName.value,
@@ -78,7 +79,7 @@ const ActionMenu: FC<ActionMenuProps> = ({
     if (result.statusCode === 200) {
       const { brandName, imageUrl } = result.data;
 
-      const updatedBrandData: BrandData = {
+      const updatedBrandData: BrandForm = {
         brandName: { value: brandName, errorMessage: "" },
         image: { value: null, errorMessage: "" },
         imageUrl: { value: imageUrl, errorMessage: "" },
@@ -122,39 +123,15 @@ const ActionMenu: FC<ActionMenuProps> = ({
         </Popover>
       </Flex>
 
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
+      <CustomAlertDialog
         onClose={onClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Brand
-            </AlertDialogHeader>
-
-            <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
-            </AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button
-                colorScheme="red"
-                onClick={() => {
-                  onDelete(id);
-                  onClose();
-                }}
-                ml={3}
-              >
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+        isOpen={isOpen}
+        id={id}
+        onDelete={onDelete}
+        titleHeader="Delete Brand"
+        titleBody="Are you sure? You can't undo this action afterwards."
+        btnName=" Delete"
+      />
 
       <ModalForm
         formBody={
