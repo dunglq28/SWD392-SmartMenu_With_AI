@@ -206,11 +206,11 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Brand.GetByID, Name = "GetBrandByID")]
-        public async Task<IActionResult> GetAsync([FromQuery] int Id)
+        public async Task<IActionResult> GetAsync([FromQuery] int id)
         {
             try
             {
-                var user = await _brandService.GetByID(Id);
+                var user = await _brandService.GetByID(id);
 
                 if (user == null)
                 {
@@ -227,6 +227,43 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Tìm thành công",
                     Data = user,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpGet(APIRoutes.Brand.GetAllName, Name = "GetAllBrandName")]
+        public async Task<IActionResult> GetAllBrandNameAsync()
+        {
+            try
+            {
+                var listName = await _brandService.GetAllBrandName();
+
+                if (listName == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy bất kì thương hiệu nào",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Tìm thành công",
+                    Data = listName,
                     IsSuccess = true
                 });
             }

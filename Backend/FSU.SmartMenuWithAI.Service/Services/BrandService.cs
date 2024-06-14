@@ -29,6 +29,22 @@ namespace FSU.SmartMenuWithAI.Service.Services
             var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
             return _mapper?.Map<BrandDTO?>(entity)!;
         }
+        public async Task<List<BrandNameDTO>> GetAllBrandName()
+        {
+            Expression<Func<Brand, bool>> condition = x => x.Status != (int)Status.Deleted;
+            var entities = await _unitOfWork.BrandRepository.GetAllByCondition(condition);
+
+            var brandNameDTOs = entities
+                .Select(b => new BrandNameDTO
+                {
+                    BrandId = b.BrandId,
+                    BrandName = b.BrandName
+                })
+                .OrderBy(dto => dto.BrandName)
+                .ToList();
+
+            return brandNameDTOs;
+        }
         public async Task<bool> Delete(int id)
         {
             var brandDelete = await _unitOfWork.BrandRepository.GetByID(id);

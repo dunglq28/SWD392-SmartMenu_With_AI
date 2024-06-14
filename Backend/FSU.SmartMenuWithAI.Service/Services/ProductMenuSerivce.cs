@@ -55,7 +55,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Func<IQueryable<ProductMenu>, IOrderedQueryable<ProductMenu>> orderBy = q => q.OrderByDescending(x => x.ProductId);
             string includeProperties = "Product,Menu";
 
-            var entities = _unitOfWork.ProductMenuRepository.Get(filter: filter, orderBy: orderBy, includeProperties: includeProperties, pageIndex: pageIndex, pageSize: pageSize);
+            var entities = await _unitOfWork.ProductMenuRepository.Get(filter: filter, orderBy: orderBy, includeProperties: includeProperties, pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<ProductMenuDTO>();
             pagin.List = _mapper.Map<IEnumerable<ProductMenuDTO>>(entities).ToList();
             Expression<Func<ProductMenu, bool>> countProductInMenu = x => x.MenuId == menuID;
