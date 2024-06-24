@@ -83,6 +83,8 @@
 
             public const string GetByID = Base + "/categories/get-by-id";
 
+            public const string GetByBrandID = Base + "/categories/get-by-brand-id";
+
             public const string Update = Base + "/categories/";
 
             public const string Delete = Base + "/categories/";
@@ -124,6 +126,7 @@
             public const string Delete = Base + "/products/";
 
             public const string GetByID = Base + "/products/get-by-id";
+            public const string testRecogize = Base + "/products/test-recogize";
         }
         public static class ProductMenu
         {

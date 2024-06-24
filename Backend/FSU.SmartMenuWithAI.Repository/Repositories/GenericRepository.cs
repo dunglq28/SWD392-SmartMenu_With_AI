@@ -4,6 +4,7 @@ using FSU.SmartMenuWithAI.Repository.Interfaces;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using FSU.SmartMenuWithAI.Repository.Entities;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FSU.SmartMenuWithAI.Repository.Repositories
 {
@@ -33,10 +34,13 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
                 query = query.Where(filter);
             }
 
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            if (!includeProperties.IsNullOrEmpty())
             {
-                query = query.Include(includeProperty);
+                foreach (var includeProperty in includeProperties.Split
+                    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
             }
 
             if (orderBy != null)
@@ -62,7 +66,7 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
             return await dbSet.FindAsync(id)!;
         }
 
-        public virtual async Task<TEntity> GetByCondition (Expression<Func<TEntity, bool>> filter )
+        public virtual async Task<TEntity> GetByCondition(Expression<Func<TEntity, bool>> filter)
         {
             return await dbSet.FirstOrDefaultAsync(filter);
         }
@@ -76,11 +80,14 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
             {
                 query = query.Where(filter);
             }
-
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            if (!includeProperties.IsNullOrEmpty())
             {
-                query = query.Include(includeProperty);
+
+                foreach (var includeProperty in includeProperties.Split
+                    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
             }
             return await query.ToListAsync();
 
@@ -89,7 +96,7 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
 
         public virtual async Task Insert(TEntity entity)
         {
-           await dbSet.AddAsync(entity);
+            await dbSet.AddAsync(entity);
         }
 
         public virtual void Delete(object id)
@@ -110,7 +117,7 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
         public virtual void Update(TEntity entityToUpdate)
         {
             dbSet.Attach(entityToUpdate);
-             context.Entry(entityToUpdate).State = EntityState.Modified;
+            context.Entry(entityToUpdate).State = EntityState.Modified;
         }
 
         public virtual async Task<int> Count(Expression<Func<TEntity, bool>> filter = null!)

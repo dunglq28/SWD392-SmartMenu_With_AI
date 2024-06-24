@@ -5,8 +5,10 @@ using FSU.SmartMenuWithAI.Service.Common.Enums;
 using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
+using FSU.SmartMenuWithAI.Service.Models.ViewModel;
 using FSU.SmartMenuWithAI.Service.Utils;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using static Amazon.S3.Util.S3EventNotification;
 
@@ -119,6 +121,12 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return result;
         }
 
-     
+        public async Task<List<CategoryViewModel>> GetByBrandID(int brandId)
+        {
+            Expression<Func<Category, bool>> condition = x => x.BrandId == brandId && (x.Status != (int)Status.Deleted);
+            var listCategory = await _unitOfWork.CategoryRepository.GetAllNoPaging(filter:condition, includeProperties: null!);
+            var mapDTO = _mapper.Map<IEnumerable<CategoryViewModel>>(listCategory);
+            return mapDTO.ToList();
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Product
     public class AddProductRequest
     {
         public string ProductName { get; set; } = null!;
+
         public IFormFile SpotlightVideo { get; set; } = null!;
 
         public IFormFile Image { get; set; } = null!;
@@ -20,6 +21,7 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Product
         public int CategoryId { get; set; }
 
         public int BrandId { get; set; }
+
     }
 
 }
