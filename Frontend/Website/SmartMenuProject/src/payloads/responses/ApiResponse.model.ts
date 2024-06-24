@@ -9,3 +9,11 @@ export interface ApiResponse<T> {
   errors: IDictionary<string[]>;
   data: T;
 }
+
+export interface ApiResponseNotPagin<T> {
+  statusCode: number;
+  message: string;
+  isSuccess: boolean;
+  errors: IDictionary<string[]>;
+  data: T[];
+}

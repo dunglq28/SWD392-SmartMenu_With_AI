@@ -1,11 +1,5 @@
 import React, { FC, useState } from "react";
 import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   Button,
   Divider,
   Flex,
@@ -32,7 +26,7 @@ import CustomAlertDialog from "../AlertDialog";
 interface ActionMenuProps {
   id: number;
   brandName: string;
-  onDelete: (id: number | undefined) => void;
+  onDelete: (id: number) => void;
   onEdit: (brand: brandUpdate) => void;
 }
 
@@ -90,7 +84,7 @@ const ActionMenu: FC<ActionMenuProps> = ({
   };
 
   const handleViewClick = () => {
-    navigate(`/branches/${brandName}`, { state: { brandName, id } });
+    navigate(`/branches/${brandName}`, { state: { id } });
   };
 
   return (

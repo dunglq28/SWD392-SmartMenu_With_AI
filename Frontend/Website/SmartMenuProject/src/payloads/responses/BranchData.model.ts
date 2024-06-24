@@ -1,3 +1,4 @@
+
 export interface BranchData {
   storeId: number;
   storeCode: string;

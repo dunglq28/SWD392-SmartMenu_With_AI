@@ -38,6 +38,7 @@ import { toast } from "react-toastify";
 import { createBrand } from "../../services/BrandService";
 import { getInitialUserData } from "../../utils/initialUserData";
 import { BranchForm } from "../../models/BranchForm.model";
+import { createBranch } from "../../services/BranchService";
 
 function Sidebar() {
   const { t } = useTranslation();
@@ -62,6 +63,7 @@ function Sidebar() {
   //BRANCH DATA
   const [branchData, setBranchData] = useState<BranchForm>({
     brandName: {
+      id: "",
       value: "",
       errorMessage: "",
     },
@@ -208,16 +210,13 @@ function Sidebar() {
 
         if (brandResult.statusCode === 200) {
           await onCloseUser();
+          const toastMessage = "Thêm thương hiệu mới thành công";
           const pathname = location.pathname;
           const formattedPathname = pathname.replace("/", "");
           if (formattedPathname === "brands") {
-            localStorage.setItem(
-              "toastMessage",
-              "Thêm thương hiệu mới thành công"
-            );
+            localStorage.setItem("toastMessage", toastMessage);
             window.location.reload();
           } else {
-            const toastMessage = "Thêm thương hiệu mới thành công";
             navigate("/brands", { state: { toastMessage } });
           }
         }
@@ -228,8 +227,38 @@ function Sidebar() {
   }
 
   async function saveBranchHandle(data: UserForm) {
-    console.log(data);
-    console.log(branchData);
+    try {
+      setUserData(data);
+      console.log(data);
+
+      const userResult = await createUser(data, 3);
+      console.log(userResult);
+
+      if (userResult.statusCode === 200) {
+        const branchResult = await createBranch(
+          branchData,
+          userResult.data.toString()
+        );
+        console.log(branchResult);
+
+        if (branchResult.statusCode === 200) {
+          await onCloseUser();
+          const toastMessage = "Thêm chi nhánh mới thành công";
+          const pathname = location.pathname;
+          const formattedPathname = pathname.replace("/", "");
+          const brandName = branchData.brandName.value;
+          const id = branchData.brandName.id;
+          localStorage.setItem("toastMessage", toastMessage);
+          if (formattedPathname === `/branches/${brandName}`) {
+            window.location.reload();
+          } else {
+            navigate(`/branches/${brandName}`, { state: { id } });
+          }
+        }
+      }
+    } catch {
+      toast.error("Thêm chi nhánh mới thất bại");
+    }
   }
 
   return (

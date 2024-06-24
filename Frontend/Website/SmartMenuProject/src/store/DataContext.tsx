@@ -13,6 +13,7 @@ interface DataContextProps<T> {
   rowsPerPageOption: number[];
   totalPages: number;
   totalRecords: number;
+  brandId: number;
   setData: React.Dispatch<React.SetStateAction<T[]>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
@@ -20,6 +21,7 @@ interface DataContextProps<T> {
   setRowsPerPageOption: React.Dispatch<React.SetStateAction<number[]>>;
   setTotalPages: React.Dispatch<React.SetStateAction<number>>;
   setTotalRecords: React.Dispatch<React.SetStateAction<number>>;
+  setBrandId: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const DataContext = createContext<DataContextProps<any> | undefined>(undefined);
@@ -32,6 +34,7 @@ const DataProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
   const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
   const [totalPages, setTotalPages] = useState<number>(10);
   const [totalRecords, setTotalRecords] = useState<number>(0);
+  const [brandId, setBrandId] = useState<number>(0);
 
   const contextValue = {
     data,
@@ -41,6 +44,7 @@ const DataProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     rowsPerPageOption,
     totalPages,
     totalRecords,
+    brandId,
     setData,
     setIsLoading,
     setCurrentPage,
@@ -48,6 +52,7 @@ const DataProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     setRowsPerPageOption,
     setTotalPages,
     setTotalRecords,
+    setBrandId,
   };
 
   return (

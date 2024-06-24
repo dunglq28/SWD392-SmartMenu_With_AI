@@ -161,7 +161,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
             }
         }
 
-        GroupAttributeRepository  IUnitOfWork.GroupAttributeRepository
+        GroupAttributeRepository IUnitOfWork.GroupAttributeRepository
         {
             get
             {

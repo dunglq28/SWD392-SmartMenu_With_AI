@@ -24,14 +24,18 @@ const removeVietnameseTones = (str: string): string => {
 };
 
 export const generateUsernameFromBranch = (branch: BranchForm): string => {
-  
+  const removeSpecialChars = (str: string): string => {
+    return str.replace(/[^a-zA-Z0-9]/g, '');
+  };
+
   const branchInitials = branch.brandName.value.split(" ").map(word => word[0]).join("").toLowerCase();
   const cityInitials = branch.city.name.split(" ").map(word => word[0]).join("").toLowerCase();
   const districtInitials = branch.district.name.split(" ").map(word => word[0]).join("").toLowerCase();
 
-  const addressnitials = branch.address.value.split(" ")[0].toLowerCase();
+  const addressInitials = removeSpecialChars(branch.address.value.split(" ")[0].toLowerCase());
 
   const descriptor = "SmartMenu";
 
-  return `${branchInitials}${cityInitials}${districtInitials}${addressnitials}_${descriptor}`;
+  return `${branchInitials}${cityInitials}${districtInitials}${addressInitials}${descriptor}`;
 };
+

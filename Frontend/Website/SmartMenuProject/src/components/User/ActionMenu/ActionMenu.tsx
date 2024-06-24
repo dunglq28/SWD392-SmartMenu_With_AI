@@ -32,7 +32,7 @@ import CustomAlertDialog from "../../AlertDialog";
 interface ActionMenuProps {
   id: number;
   onEdit: (id: number, user: userUpdate) => void;
-  onDelete: (id: number | undefined) => void;
+  onDelete: (id: number) => void;
 }
 
 const ActionMenu: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {

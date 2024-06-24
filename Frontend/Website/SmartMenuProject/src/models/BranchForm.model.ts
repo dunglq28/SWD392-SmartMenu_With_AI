@@ -1,5 +1,6 @@
 export interface BranchForm {
   brandName: {
+    id: string;
     value: string;
     errorMessage: string;
   };

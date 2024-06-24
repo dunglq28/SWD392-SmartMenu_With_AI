@@ -116,7 +116,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       });
     } else if (formPrevious === CurrentForm.BRANCH) {
       updateBranchData?.({
-        brandName: { value: "", errorMessage: "" },
+        brandName: { id: "", value: "", errorMessage: "" },
         city: { id: "", name: "", errorMessage: "" },
         district: { id: "", name: "", errorMessage: "" },
         ward: { id: "", name: "", errorMessage: "" },
