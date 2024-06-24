@@ -1,4 +1,4 @@
-import { UserForm } from "../models/User.model";
+import { UserForm } from "../models/UserForm.model";
 
 export const getInitialUserData = (): UserForm => ({
   fullName: {
