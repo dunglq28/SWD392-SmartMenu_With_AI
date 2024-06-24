@@ -52,11 +52,14 @@ function User() {
           setTotalRecords(result.totalRecord);
           setRowsPerPageOption(getOptions(result.totalRecord));
           setIsLoading(false);
+          if (isInitialLoad) {
+            setIsInitialLoad(false);
+          }
         };
 
         if (isInitialLoad) {
           setTimeout(async () => {
-            setIsInitialLoad(false);
+            await loadData();
           }, 500);
         } else {
           await loadData();
@@ -154,7 +157,7 @@ function User() {
               </Tr>
             </Thead>
             <Tbody>
-              {isLoading && isInitialLoad ? (
+              {isInitialLoad && isLoading ? (
                 <Tr>
                   <Td colSpan={10} className={style.LoadingCell}>
                     <Loading />

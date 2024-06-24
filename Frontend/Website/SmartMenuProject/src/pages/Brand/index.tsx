@@ -123,7 +123,6 @@ function Brand() {
 
   return (
     <div className={style.container}>
-      {/* <div className={style.title}>All Brand</div> */}
       <div className={style.cardContainer}>
         {data.length === 0 ? (
           <div>Không có thương hiệu để hiển thị</div>

@@ -1,6 +1,6 @@
 export enum CurrentForm {
   BRAND,
-  STORE,
+  BRANCH,
 }
 
 export enum UserRole {

@@ -15,6 +15,8 @@ namespace FSU.SmartMenuWithAI.Repository.Interfaces
            Expression<Func<Brand, bool>> filter = null!,
            Func<IQueryable<Brand>, IOrderedQueryable<Brand>> orderBy = null!,
            int? pageIndex = null,
-           int? pageSize = null); 
+           int? pageSize = null);
+        Task<List<Brand>> GetAllByCondition(Expression<Func<Brand, bool>> filter);
+
     }
 }

@@ -2,6 +2,7 @@
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Token;
+using Attribute = FSU.SmartMenuWithAI.Repository.Entities.Attribute;
 
 
 namespace FSU.SmartMenuWithAI.Service.Mappings
@@ -23,6 +24,7 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
             //CreateMap<ProductMenu, CreateProductMenuDTO>().ReverseMap();
             CreateMap<RefreshToken, RefreshTokenDTO>().ReverseMap();
             CreateMap<GroupAttribute, GroupAttributeDTO>().ReverseMap();
+            CreateMap<Attribute, AttributeDTO>().ReverseMap();
 
         }
     }

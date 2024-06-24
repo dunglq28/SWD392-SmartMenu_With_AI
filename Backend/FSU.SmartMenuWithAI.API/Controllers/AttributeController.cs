@@ -1,37 +1,35 @@
-﻿using FSU.SmartMenuWithAI.API.Payloads.Request.Brand;
+﻿using FSU.SmartMenuWithAI.API.Common.Constants;
+using FSU.SmartMenuWithAI.API.Payloads.Request.Brand;
 using FSU.SmartMenuWithAI.API.Payloads.Responses;
 using FSU.SmartMenuWithAI.API.Payloads;
 using FSU.SmartMenuWithAI.API.Validations;
 using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Services;
 using Microsoft.AspNetCore.Mvc;
-using FSU.SmartMenuWithAI.API.Payloads.Request.GroupAttribute;
-using FSU.SmartMenuWithAI.API.Common.Constants;
+using FSU.SmartMenuWithAI.API.Payloads.Request.Attribute;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
-    public class GroupAttributeController : ControllerBase
+    public class AttributeController : ControllerBase
     {
-        private readonly IGroupAttributeService _groupAttributeService;
+        private readonly IAttributeService _attributeService;
 
-        public GroupAttributeController(IGroupAttributeService groupAttributeService)
+        public AttributeController(IAttributeService attributeService)
         {
-            _groupAttributeService = groupAttributeService;
+            _attributeService = attributeService;
         }
-
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPost(APIRoutes.GroupAttribute.Add, Name = "AddGroupAttributeAsync")]
-        public async Task<IActionResult> AddAsync([FromForm] CreateGroupAttributeRequest reqObj)
+        [HttpPost(APIRoutes.Attribute.Add, Name = "add-attribute-async")]
+        public async Task<IActionResult> AddAsync([FromForm] CreateAttributeRequest reqObj)
         {
             try
             {
-              
-                var groupAttributeAdd = await _groupAttributeService.Insert(reqObj.GroupAttributeName);
+                var attributeAdd = await _attributeService.Insert(reqObj.AttributeName, reqObj.Description!, reqObj.GroupAttributeId);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Tạo nhóm thuộc tính mới thành công",
-                    Data = groupAttributeAdd,
+                    Message = "Tạo thuộc tính mới thành công",
+                    Data = attributeAdd,
                     IsSuccess = true
                 });
             }
@@ -40,7 +38,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 return BadRequest(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Lỗi khi tạo mới nhóm thuộc tính! " + ex.Message,
+                    Message = "Lỗi khi tạo mới thuộc tính!" + ex.Message,
                     Data = null,
                     IsSuccess = false
                 });
@@ -48,18 +46,18 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpDelete(APIRoutes.GroupAttribute.Delete, Name = "DeleteGroupAttributeAsync")]
+        [HttpDelete(APIRoutes.Attribute.Delete, Name = "delete-attribute-async")]
         public async Task<IActionResult> DeleteAsynce([FromQuery] int id)
         {
             try
             {
-                var result = await _groupAttributeService.Delete(id);
+                var result = await _attributeService.Delete(id);
                 if (!result)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "không tìm thấy nhóm thuộc tính",
+                        Message = "không tìm thấy thuộc tính",
                         Data = null,
                         IsSuccess = false
                     });
@@ -67,7 +65,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "xoá nhóm thuộc tính thành công",
+                    Message = "xoá thuộc tính thành công",
                     Data = null,
                     IsSuccess = true
                 });
@@ -84,12 +82,12 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPut(APIRoutes.GroupAttribute.Update, Name = "UpdateGroupAttributeAsync")]
-        public async Task<IActionResult> UpdateUserAsync([FromForm] int id, [FromForm] string name)
+        [HttpPut(APIRoutes.Attribute.Update, Name = "update-attribute-async")]
+        public async Task<IActionResult> UpdateUserAsync([FromForm] int id, [FromForm] UpdateAttributeRequest reqObj)
         {
             try
             {
-                var result = await _groupAttributeService.Update(id, name);
+                var result = await _attributeService.Update(id, reqObj.AttributeName, reqObj.Description!, reqObj.GroupAttributeId);
                 if (result == null)
                 {
                     return NotFound(new BaseResponse
@@ -121,20 +119,20 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpGet(APIRoutes.GroupAttribute.GetAll, Name = "getGroupAttributeAsync")]
+        [HttpGet(APIRoutes.Attribute.GetAll, Name = "get-attributes-async")]
         public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search-key")] string? searchKey
             , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
             , [FromQuery(Name = "page-size")] int PageSize = Page.DefaultPageSize)
         {
             try
             {
-                var groups = await _groupAttributeService.Get(searchKey!, pageIndex: pageNumber, pageSize: PageSize);
+                var allBrands = await _attributeService.Get(searchKey!, pageIndex: pageNumber, pageSize: PageSize);
 
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Tải dữ liệu thành công",
-                    Data = groups,
+                    Data = allBrands,
                     IsSuccess = true
                 });
             }
@@ -150,19 +148,19 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpGet(APIRoutes.GroupAttribute.GetByID, Name = "GetGroupAttributeByID")]
+        [HttpGet(APIRoutes.Attribute.GetByID, Name = "GetAttributeByID")]
         public async Task<IActionResult> GetAsync([FromQuery] int id)
         {
             try
             {
-                var group = await _groupAttributeService.GetByID(id);
+                var attribute = await _attributeService.GetByID(id);
 
-                if (group == null)
+                if (attribute == null)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Không tìm thấy nhóm thuộc tính",
+                        Message = "Không tìm thấy thuộc tính",
                         Data = null,
                         IsSuccess = false
                     });
@@ -171,7 +169,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Tìm thành công",
-                    Data = group,
+                    Data = attribute,
                     IsSuccess = true
                 });
             }

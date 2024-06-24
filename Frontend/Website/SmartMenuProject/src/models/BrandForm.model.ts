@@ -1,4 +1,4 @@
-export interface BrandData {
+export interface BrandForm {
   brandName: {
     value: string;
     errorMessage: string;

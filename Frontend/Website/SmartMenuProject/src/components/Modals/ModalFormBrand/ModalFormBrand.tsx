@@ -11,14 +11,14 @@ import {
 } from "@chakra-ui/react";
 
 import styles from "./ModalFormBrand.module.scss";
-import { BrandData } from "../../../models/Brand.model";
+import { BrandForm } from "../../../models/BrandForm.model";
 import { themeColors } from "../../../constants/GlobalStyles";
 import { isImageFile } from "../../../utils/validation";
 
 interface ModalFormBrandProps {
-  brandData: BrandData;
+  brandData: BrandForm;
   onClose: () => void;
-  updateBrandData: (brand: BrandData, isSave: boolean) => void;
+  updateBrandData: (brand: BrandForm, isSave: boolean) => void;
   nextHandler?: () => void;
   isEdit: boolean;
 }
@@ -30,7 +30,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
   nextHandler,
   isEdit,
 }) => {
-  const [formData, setFormData] = useState<BrandData>({
+  const [formData, setFormData] = useState<BrandForm>({
     brandName: { value: brandData.brandName.value, errorMessage: "" },
     image: { value: brandData.image.value, errorMessage: "" },
     imageUrl: {
@@ -38,7 +38,6 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
       errorMessage: "",
     },
   });
-  console.log(formData);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -127,7 +126,6 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
   const imageUrl = formData.image.value
     ? URL.createObjectURL(formData.image.value)
     : formData.imageUrl?.value;
-  console.log(imageUrl);
 
   return (
     <>
@@ -153,7 +151,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
               )}
               <Box mt={2}>
                 <Text className={styles.textFontWeight} py={3} pr={3}>
-                  Upload Brand Image
+                  Upload Brand Logo
                 </Text>
                 <Flex align="center">
                   {!formData.image.value && !formData.imageUrl?.value && (
