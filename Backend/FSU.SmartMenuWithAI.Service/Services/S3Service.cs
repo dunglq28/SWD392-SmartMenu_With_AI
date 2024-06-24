@@ -5,6 +5,14 @@ using Amazon.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.Text;
+using Amazon;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using Amazon.Rekognition;
+using Amazon.Rekognition.Model;
+using SharpDX.Direct3D11;
+using FSU.SmartMenuWithAI.Service.Models.AWS;
 
 namespace FSU.SmartMenuWithAI.Service.Services
 {
@@ -17,6 +25,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         Task<PutObjectResponse> UploadItemAsync(IFormFile file, string fileName, string folderRoot);
         Task<DeleteObjectResponse> DeleteItemAsync(Guid id, string directoryPath);
         string GetPreSignedURL(string fileName, string folderRoot);
+        Task<FaceDetail> AnalyzeFacesInImage(IFormFile file);
     }
 
     public class S3Service : IS3Service
@@ -27,6 +36,8 @@ namespace FSU.SmartMenuWithAI.Service.Services
         private const string BucketName = "smart-menu-with-ai";
         private static BasicAWSCredentials AwsCredentials;
         private static AmazonS3Config S3Config = new() { RegionEndpoint = Amazon.RegionEndpoint.APSoutheast1 };
+        private AmazonRekognitionClient _rekognitionClient;
+        private Texture2D _cameraTexture;
 
         private readonly IConfiguration _configuration;
         public S3Service(IAmazonS3 s3, IConfiguration configuration)
@@ -36,6 +47,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             AWSAccessKeyId = _configuration["AWS:AccessKeyId"];
             AWSSecretAccessKey = _configuration["AWS:SecretAccessKey"];
             AwsCredentials = new(AWSAccessKeyId, AWSSecretAccessKey);
+            _rekognitionClient = new AmazonRekognitionClient(awsAccessKeyId: AWSAccessKeyId,awsSecretAccessKey: AWSSecretAccessKey,region: S3Config.RegionEndpoint);
         }
 
         public async Task CreateDirectoryAsync(string directoryPath)
@@ -84,7 +96,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public string GetPreSignedURL(string fileName, string folderRoot)
         {
-            var preIamge = "https://" + "smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/"  +folderRoot + "/";
+            var preIamge = "https://" + "smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/" + folderRoot + "/";
             string url = preIamge + fileName;
             return url;
         }
@@ -122,5 +134,25 @@ namespace FSU.SmartMenuWithAI.Service.Services
             var bytes = Encoding.ASCII.GetBytes(input);
             return Encoding.ASCII.GetString(bytes);
         }
+
+        public async Task<FaceDetail> AnalyzeFacesInImage(IFormFile file)
+        {
+            var ms = new MemoryStream();
+           
+            file.CopyTo(ms);
+            ms.Position = 0;
+            var detectFacesRequest = new DetectFacesRequest
+            {
+                Image = new Image
+                {
+                    Bytes = ms
+                },
+                Attributes = new List<string> { "ALL" }
+            };
+            var detectFacesResponse = await _rekognitionClient.DetectFacesAsync(detectFacesRequest);
+            var customerFace = detectFacesResponse.FaceDetails[0];
+            return customerFace;
+        }
+
     }
 }

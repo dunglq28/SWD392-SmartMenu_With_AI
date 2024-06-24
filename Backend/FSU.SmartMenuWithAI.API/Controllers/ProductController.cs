@@ -277,5 +277,57 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
+
+        [HttpPost(APIRoutes.Product.testRecogize, Name = "testCusRecognize")]
+        public async Task<IActionResult> testCusRecognize([FromForm] AddProductRequest imageFile)
+        {
+            try
+            {
+                var validationImg = await _imageFileValidator.ValidateAsync(imageFile.Image);
+                if (!validationImg.IsValid)
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "File không phải là hình ảnh hợp lệ",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+
+
+                var result = await _s3Service.AnalyzeFacesInImage(imageFile.Image);
+
+                if (result == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Phân tích không thành công",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Phân tích thành công",
+                    Data = result,
+                    IsSuccess = true
+                });
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
     }
 }

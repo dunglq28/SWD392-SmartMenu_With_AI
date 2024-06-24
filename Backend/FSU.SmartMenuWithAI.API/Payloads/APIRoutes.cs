@@ -109,6 +109,7 @@
             public const string Delete = Base + "/products/";
 
             public const string GetByID = Base + "/products/get-by-id";
+            public const string testRecogize = Base + "/products/test-recogize";
         }
         public static class ProductMenu
         {
