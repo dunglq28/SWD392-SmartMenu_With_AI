@@ -2,6 +2,7 @@
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Token;
+using FSU.SmartMenuWithAI.Service.Models.ViewModel;
 using Attribute = FSU.SmartMenuWithAI.Repository.Entities.Attribute;
 
 
@@ -12,19 +13,27 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
         public MappingProfile()
         {
             // Mapping classes
+            // user
             CreateMap<AppUser, AppUserDTO>().ReverseMap();
             CreateMap<Token, TokenDto>().ReverseMap();
-            CreateMap<Menu, MenuDTO>().ReverseMap();
-            CreateMap<Store, StoreDTO>().ReverseMap();
-            CreateMap<Menu, MenuDTO>().ReverseMap();
-            CreateMap<Product, ProductDTO>().ReverseMap();
-            CreateMap<Brand, BrandDTO>().ReverseMap();
-            CreateMap<Category, CategoryDTO>().ReverseMap();
-            CreateMap<ProductMenu, ProductMenuDTO>().ReverseMap();
-            //CreateMap<ProductMenu, CreateProductMenuDTO>().ReverseMap();
             CreateMap<RefreshToken, RefreshTokenDTO>().ReverseMap();
-            CreateMap<GroupAttribute, GroupAttributeDTO>().ReverseMap();
+            // menu
+            CreateMap<Menu, MenuDTO>().ReverseMap();
+            // store
+            CreateMap<Store, StoreDTO>().ReverseMap();
+            // brand
+            CreateMap<Brand, BrandDTO>().ReverseMap();
+            // menu
+            CreateMap<Menu, MenuDTO>().ReverseMap();
+            // category
+            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<Category, CategoryViewModel>().ReverseMap();
+            // product
+            CreateMap<Product, ProductDTO>().ReverseMap();
+            CreateMap<ProductMenu, ProductMenuDTO>().ReverseMap();
+            // attribute
             CreateMap<Attribute, AttributeDTO>().ReverseMap();
+            CreateMap<GroupAttribute, GroupAttributeDTO>().ReverseMap();
 
         }
     }

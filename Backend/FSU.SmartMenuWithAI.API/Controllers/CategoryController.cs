@@ -216,5 +216,42 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
+        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager + UserRoles.Store)]
+        [HttpGet(APIRoutes.Category.GetByBrandID, Name = "GetCategoryByBrandID")]
+        public async Task<IActionResult> GetByBrandIdAsync([FromQuery(Name = "brand-id")] int brandId)
+        {
+            try
+            {
+                var category = await _categoryService.GetByBrandID(brandId: brandId);
+
+                if (category == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Can not find this category",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Get category successfully",
+                    Data = category,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
     }
 }
