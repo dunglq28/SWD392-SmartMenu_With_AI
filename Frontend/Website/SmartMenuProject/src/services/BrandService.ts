@@ -1,7 +1,7 @@
 import axiosAuth from "../api/axiosAuth";
 import axiosMultipartForm from "../api/axiosMultipartForm";
 import { brandUpdate } from "../payloads/requests/updateBrand.model";
-import { ApiResponse } from "../payloads/responses/ApiResponse.model";
+import { ApiResponse, ApiResponseNotPagin } from "../payloads/responses/ApiResponse.model";
 import { BrandData } from "../payloads/responses/BrandData.model";
 import { GetData } from "../payloads/responses/GetData.model";
 
@@ -17,6 +17,12 @@ export const getBrands = async (
   });
   const apiResponse = res.data as ApiResponse<Object>;
   return apiResponse.data as GetData<BrandData>;
+};
+
+export const getAllBrandName = async (): Promise<ApiResponseNotPagin<BrandData>> => {
+  const res = await axiosAuth.get("brands/get-all-name");
+  const apiResponse = res.data as ApiResponseNotPagin<Object>;
+  return apiResponse as ApiResponseNotPagin<BrandData>;
 };
 
 export const getBrand = async (id: number): Promise<ApiResponse<BrandData>> => {

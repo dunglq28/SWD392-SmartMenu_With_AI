@@ -1,24 +1,23 @@
-import React, { MouseEventHandler } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   Button,
-  Flex,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import styles from "./ModalForm.module.scss";
 import { themeColors } from "../../../constants/GlobalStyles";
-import { BrandData } from "../../../models/Brand.model";
+import { BrandForm } from "../../../models/BrandForm.model";
 
 interface ModalFormProps {
   isOpen: boolean;
   onClose: () => void;
   formBody: React.ReactNode;
   title: string;
-  updateBrandData?: (data: BrandData, isSave: boolean) => void;
+  updateBrandData?: (data: BrandForm, isSave: boolean) => void;
 }
 
 const ModalForm: React.FC<ModalFormProps> = ({
@@ -28,6 +27,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
   title,
   updateBrandData,
 }) => {
+  
   function cancelHandler() {
     if (updateBrandData) {
       updateBrandData(
@@ -42,28 +42,34 @@ const ModalForm: React.FC<ModalFormProps> = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={cancelHandler} motionPreset="slideInBottom">
-      <ModalOverlay onClick={cancelHandler} />
-      <ModalContent borderRadius="23px" maxW="40%">
-        <ModalHeader
-          className={styles["modal-header"]}
-          backgroundColor={themeColors.primaryButton}
-        >
-          {title}
-          <Button
-            bg="none"
-            p={0}
-            color="white"
-            fontSize="25px"
-            className={styles["close-button"]}
-            onClick={cancelHandler}
+    <>
+      <Modal
+        isOpen={isOpen}
+        onClose={cancelHandler}
+        motionPreset="slideInBottom"
+      >
+        <ModalOverlay onClick={cancelHandler} />
+        <ModalContent borderRadius="23px" maxW="40%">
+          <ModalHeader
+            className={styles["modal-header"]}
+            backgroundColor={themeColors.primaryButton}
           >
-            <IoMdCloseCircleOutline />
-          </Button>
-        </ModalHeader>
-        {formBody}
-      </ModalContent>
-    </Modal>
+            {title}
+            <Button
+              bg="none"
+              p={0}
+              color="white"
+              fontSize="25px"
+              className={styles["close-button"]}
+              onClick={cancelHandler}
+            >
+              <IoMdCloseCircleOutline />
+            </Button>
+          </ModalHeader>
+          {formBody}
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 

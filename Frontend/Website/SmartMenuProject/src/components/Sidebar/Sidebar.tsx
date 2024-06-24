@@ -29,14 +29,16 @@ import { useTranslation } from "react-i18next";
 import ModalForm from "../Modals/ModalForm/ModalForm";
 import ModalFormBrand from "../Modals/ModalFormBrand/ModalFormBrand";
 import ModalFormUser from "../Modals/ModalFormUser/ModalFormUser";
-import ModalFormStore from "../Modals/ModalFormStore/ModalFormStore";
+import ModalFormBranch from "../Modals/ModalFormBranch/ModalFormBranch";
 import { CurrentForm } from "../../constants/Enum";
-import { BrandData } from "../../models/Brand.model";
-import { UserForm } from "../../models/User.model";
+import { BrandForm } from "../../models/BrandForm.model";
+import { UserForm } from "../../models/UserForm.model";
 import { createUser } from "../../services/UserService";
 import { toast } from "react-toastify";
 import { createBrand } from "../../services/BrandService";
 import { getInitialUserData } from "../../utils/initialUserData";
+import { BranchForm } from "../../models/BranchForm.model";
+import { createBranch } from "../../services/BranchService";
 
 function Sidebar() {
   const { t } = useTranslation();
@@ -47,13 +49,41 @@ function Sidebar() {
   const [formPrevious, setFormPrevious] = useState(CurrentForm.BRAND);
 
   //BRAND DATA
-  const [brandData, setBrandData] = useState<BrandData>({
+  const [brandData, setBrandData] = useState<BrandForm>({
     brandName: {
       value: "",
       errorMessage: "",
     },
     image: {
       value: null,
+      errorMessage: "",
+    },
+  });
+
+  //BRANCH DATA
+  const [branchData, setBranchData] = useState<BranchForm>({
+    brandName: {
+      id: "",
+      value: "",
+      errorMessage: "",
+    },
+    city: {
+      id: "",
+      name: "",
+      errorMessage: "",
+    },
+    district: {
+      id: "",
+      name: "",
+      errorMessage: "",
+    },
+    ward: {
+      id: "",
+      name: "",
+      errorMessage: "",
+    },
+    address: {
+      value: "",
       errorMessage: "",
     },
   });
@@ -67,9 +97,9 @@ function Sidebar() {
     onClose: onCloseBrand,
   } = useDisclosure();
   const {
-    isOpen: isOpenStore,
-    onOpen: onOpenStore,
-    onClose: onCloseStore,
+    isOpen: isOpenBranch,
+    onOpen: onOpenBranch,
+    onClose: onCloseBranch,
   } = useDisclosure();
   const {
     isOpen: isOpenUser,
@@ -109,7 +139,7 @@ function Sidebar() {
     {
       icon: CgAddR,
       label: t("new branch"),
-      onclick: onOpenStore,
+      onclick: onOpenBranch,
     },
   ];
 
@@ -128,21 +158,33 @@ function Sidebar() {
     navigate("/login");
   }
 
+  useEffect(() => {
+    const toastMessage = localStorage.getItem("toastMessage");
+    if (toastMessage) {
+      toast.success(toastMessage);
+      localStorage.removeItem("toastMessage");
+    }
+  }, []);
+
   function nextHandler(currentForm: CurrentForm) {
     if (currentForm === CurrentForm.BRAND) {
       onCloseBrand();
       setFormPrevious(CurrentForm.BRAND);
     } else {
-      onCloseStore();
-      setFormPrevious(CurrentForm.STORE);
+      onCloseBranch();
+      setFormPrevious(CurrentForm.BRANCH);
     }
     setTimeout(() => {
       onOpenUser();
     }, 350);
   }
 
-  const updateBrandData = (data: BrandData) => {
+  const updateBrandData = (data: BrandForm) => {
     setBrandData(data);
+  };
+
+  const updateBranchData = (data: BranchForm) => {
+    setBranchData(data);
   };
 
   const updateUserData = (data: UserForm) => {
@@ -169,11 +211,53 @@ function Sidebar() {
         if (brandResult.statusCode === 200) {
           await onCloseUser();
           const toastMessage = "Thêm thương hiệu mới thành công";
-          navigate("/brands", { state: { toastMessage } });
+          const pathname = location.pathname;
+          const formattedPathname = pathname.replace("/", "");
+          if (formattedPathname === "brands") {
+            localStorage.setItem("toastMessage", toastMessage);
+            window.location.reload();
+          } else {
+            navigate("/brands", { state: { toastMessage } });
+          }
         }
       }
     } catch {
       toast.error("Tên thương hiệu đã tồn tại");
+    }
+  }
+
+  async function saveBranchHandle(data: UserForm) {
+    try {
+      setUserData(data);
+      console.log(data);
+
+      const userResult = await createUser(data, 3);
+      console.log(userResult);
+
+      if (userResult.statusCode === 200) {
+        const branchResult = await createBranch(
+          branchData,
+          userResult.data.toString()
+        );
+        console.log(branchResult);
+
+        if (branchResult.statusCode === 200) {
+          await onCloseUser();
+          const toastMessage = "Thêm chi nhánh mới thành công";
+          const pathname = location.pathname;
+          const formattedPathname = pathname.replace("/", "");
+          const brandName = branchData.brandName.value;
+          const id = branchData.brandName.id;
+          localStorage.setItem("toastMessage", toastMessage);
+          if (formattedPathname === `/branches/${brandName}`) {
+            window.location.reload();
+          } else {
+            navigate(`/branches/${brandName}`, { state: { id } });
+          }
+        }
+      }
+    } catch {
+      toast.error("Thêm chi nhánh mới thất bại");
     }
   }
 
@@ -249,14 +333,15 @@ function Sidebar() {
 
       <ModalForm
         formBody={
-          <ModalFormStore
-            onClose={onCloseStore}
-            updateBrandData={updateBrandData}
-            nextHandler={() => nextHandler(CurrentForm.STORE)}
+          <ModalFormBranch
+            branchData={branchData}
+            onClose={onCloseBranch}
+            updateBranchData={updateBranchData}
+            nextHandler={() => nextHandler(CurrentForm.BRANCH)}
           />
         }
-        onClose={onCloseStore}
-        isOpen={isOpenStore}
+        onClose={onCloseBranch}
+        isOpen={isOpenBranch}
         title={t("Add New Branch")}
       />
 
@@ -266,12 +351,15 @@ function Sidebar() {
             isEdit={false}
             onClose={onCloseUser}
             formPrevious={formPrevious}
-            onOpenStore={onOpenStore}
+            onOpenBranch={onOpenBranch}
             onOpenBrand={onOpenBrand}
             updateBrandData={updateBrandData}
+            updateBranchData={updateBranchData}
             updateUserData={updateUserData}
             saveBrandHandle={saveBrandHandle}
+            saveBranchHandle={saveBranchHandle}
             brandName={brandData.brandName.value}
+            branch={branchData}
             userData={userData}
           />
         }

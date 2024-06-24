@@ -23,10 +23,11 @@ import style from "./ActionMenu.module.scss";
 import ModalForm from "../../Modals/ModalForm/ModalForm";
 import ModalFormUser from "../../Modals/ModalFormUser/ModalFormUser";
 import { useTranslation } from "react-i18next";
-import { UserForm } from "../../../models/User.model";
+import { UserForm } from "../../../models/UserForm.model";
 import { getInitialUserData } from "../../../utils/initialUserData";
 import { getUser } from "../../../services/UserService";
 import { userUpdate } from "../../../payloads/requests/updateUser.model";
+import CustomAlertDialog from "../../AlertDialog";
 
 interface ActionMenuProps {
   id: number;
@@ -106,40 +107,15 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
         </Popover>
       </Flex>
 
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
+      <CustomAlertDialog
         onClose={onClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Customer
-            </AlertDialogHeader>
-
-            <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
-            </AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancel
-              </Button>
-              {/* Pass the id parameter to the onDelete callback */}
-              <Button
-                colorScheme="red"
-                onClick={() => {
-                  onDelete(id);
-                  onClose();
-                }}
-                ml={3}
-              >
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+        isOpen={isOpen}
+        id={id}
+        onDelete={onDelete}
+        titleHeader="Delete Customer"
+        titleBody="Are you sure? You can't undo this action afterwards."
+        btnName=" Delete"
+      />
 
       <ModalForm
         formBody={
