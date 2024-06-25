@@ -21,10 +21,14 @@ function HomeOverview() {
       screenOptions={{
         tabBarActiveTintColor: GlobalStyle.colors.primaryButton,
         tabBarInactiveTintColor: GlobalStyle.colors.darken30,
+        headerStyle: {
+          backgroundColor: GlobalStyle.colors.primary,
+        },
+        headerShown: false,
       }}
     >
       <BottomTabs.Screen
-        name="Home"
+        name="Trang chủ"
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -33,16 +37,16 @@ function HomeOverview() {
         }}
       />
       <BottomTabs.Screen
-        name="Camera"
+        name="Menu thông minh"
         component={CameraScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="camera" size={size} color={color} />
+            <Ionicons name="cafe" size={size} color={color} />
           ),
         }}
       />
       <BottomTabs.Screen
-        name="Profile"
+        name="Hồ sơ"
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -59,16 +63,17 @@ export default function App() {
     <>
       <StatusBar style="auto" />
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: GlobalStyle.colors.primary,
+            },
+            headerShown: false,
+          }}
+        >
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen
-            name="HomeOverview"
-            component={HomeOverview}
-            options={{
-              headerShown: false,
-            }}
-          />
+          <Stack.Screen name="HomeOverview" component={HomeOverview} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
