@@ -1,5 +1,6 @@
 ﻿using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
+using FSU.SmartMenuWithAI.Service.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,7 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
         Task<CategoryDTO?> GetAsync(int id);
 
         Task<bool> Delete(int id);
+
+        Task<List<CategoryViewModel>> GetByBrandID(int brandId);
     }
 }
