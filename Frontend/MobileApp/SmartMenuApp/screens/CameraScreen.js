@@ -11,8 +11,12 @@ import * as ImagePicker from "expo-image-picker";
 import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome icon
 import { GlobalStyle } from "../constants/styles";
 
-function CameraScreen() {
+function CameraScreen({ navigation }) {
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleMenuOpen = () => {
+    navigation.navigate("MenuRecommend");
+  };
 
   const openCamera = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -65,6 +69,9 @@ function CameraScreen() {
       {/* {selectedImage && (
         <Image source={{ uri: selectedImage }} style={styles.image} />
       )} */}
+      <TouchableOpacity style={styles.loginButton} onPress={handleMenuOpen}>
+        <Text>MenuRecommend</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
