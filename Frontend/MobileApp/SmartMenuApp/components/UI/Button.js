@@ -22,8 +22,11 @@ export default Button;
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 4,
-    padding: 8,
+    borderRadius: 12,
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingRight: 50,
+    paddingLeft: 50,
     backgroundColor: GlobalStyle.colors.primaryButton,
   },
   flat: {
