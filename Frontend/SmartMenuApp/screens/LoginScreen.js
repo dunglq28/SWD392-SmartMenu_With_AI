@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { GlobalStyle } from "../constants/styles";
 import Icon from "react-native-vector-icons/Ionicons";
-// import SvgUri from 'react-native-svg-uri';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -40,13 +39,13 @@ function LoginScreen({ navigation }) {
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.leftContainer}>
         <Image source={require("../assets/wave.png")} style={styles.wave} />
-        {/* <SvgUri uri={require("../assets/bg.svg")} style={styles.bg} /> */}
+        <Image source={require("../assets/bg.png")} style={styles.bg} />
       </View>
       <View style={styles.rightContainer}>
         <View style={styles.formContainer}>
           <View style={styles.headerContainer}>
             <Image
-              source={require("../assets/avatar.svg")}
+              source={require("../assets/avatar.png")}
               style={styles.avatar}
             />
             <Text style={styles.welcomeText}>CHÀO MỪNG</Text>
