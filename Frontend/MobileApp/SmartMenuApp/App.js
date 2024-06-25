@@ -10,6 +10,7 @@ import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import CameraScreen from "./screens/CameraScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import MenuRecommendScreen from "./screens/MenuRecommendScreen";
 import { GlobalStyle } from "./constants/styles";
 
 const Stack = createNativeStackNavigator();
@@ -74,6 +75,7 @@ export default function App() {
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="HomeOverview" component={HomeOverview} />
+          <Stack.Screen name="MenuRecommend" component={MenuRecommendScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
