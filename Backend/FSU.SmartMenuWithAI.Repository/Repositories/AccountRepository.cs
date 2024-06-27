@@ -30,6 +30,21 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
             return user;
         }
 
+        public async Task<AppUser?> CheckLoginMobileAsync(string userName, string password)
+        {
+            password = PasswordHelper.ConvertToEncrypt(password);
+            var user = await _context.AppUsers
+                .FirstOrDefaultAsync(u => u.UserName.Equals( userName )
+                && u.Password.Equals( password )
+                && u.RoleId == (int)UserRole.Store
+                && u.Status == (int)Status.Exist);
+            if (user == null)
+            {
+                return null;
+            }
+            return user;
+        }
+
         public async Task<Token> GenerateAccessTokenAsync(int id)
         {
             var user = await _context.AppUsers.FindAsync(id);
