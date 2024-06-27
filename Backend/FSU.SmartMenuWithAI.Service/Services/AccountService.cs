@@ -58,6 +58,15 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return userDTO;
         }
 
+        public async Task<AppUserDTO?> CheckLoginMobileAsync(string userName, string password)
+        {
+            var user = await _unitOfWork.AccountRepository
+                 .CheckLoginMobileAsync(userName, password);
+
+            var userDTO = _mapper.Map<AppUserDTO>(user);
+            return userDTO;
+        }
+
         public async Task<TokenDto> GenerateAccessTokenAsync(int id)
         {
             var token = await _unitOfWork.AccountRepository.GenerateAccessTokenAsync(id);

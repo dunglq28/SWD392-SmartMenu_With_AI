@@ -12,6 +12,7 @@
         public static class Authentication
         {
             public const string Login = Base + "/authentication/login";
+            public const string LoginMobile = Base + "/authentication/login-mobile";
 
             public const string RefreshToken = Base + "/authentication/refresh-token";
 
