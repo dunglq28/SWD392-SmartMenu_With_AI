@@ -8,11 +8,13 @@ import {
   ScrollView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome icon
+import { FontAwesome } from "@expo/vector-icons";
 import { GlobalStyle } from "../constants/styles";
+import Loading from "../components/Loading";
+import LoadingSpinnerOverlay from "react-native-loading-spinner-overlay";
 
 function CameraScreen({ navigation }) {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleMenuOpen = () => {
     navigation.navigate("MenuRecommend");
@@ -36,42 +38,55 @@ function CameraScreen({ navigation }) {
     });
 
     if (!result.cancelled) {
-      setSelectedImage(result.assets[0].uri);
       console.log(result.assets[0].uri);
+      navigation.navigate("MenuRecommend");
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.logoContainer}>
-          <Image source={require("../assets/logo.png")} style={styles.logo} />
-        </View>
-        <View style={styles.logoContainer}>
+      {isLoading ? (
+        <LoadingSpinnerOverlay
+          visible={true}
+          textContent={"Đang xử lý..."}
+          textStyle={styles.spinnerText}
+        />
+      ) : (
+        <>
+          <View style={styles.header}>
+            <View style={styles.logoContainer}>
+              <Image
+                source={require("../assets/logo.png")}
+                style={styles.logo}
+              />
+            </View>
+            <View style={styles.logoContainer}>
+              <Image
+                source={require("../assets/phuclong.png")}
+                style={styles.logo}
+              />
+            </View>
+          </View>
+          <Text style={styles.title}>Ứng dụng Menu Thông Minh</Text>
           <Image
-            source={require("../assets/phuclong.png")}
-            style={styles.logo}
+            source={require("../assets/face-id.png")}
+            style={styles.faceIcon}
           />
-        </View>
-      </View>
-      <Text style={styles.title}>Ứng dụng Menu Thông Minh</Text>
-      <Image
-        source={require("../assets/face-id.png")}
-        style={styles.faceIcon}
-      />
-      <Text style={styles.instructions}>
-        Đưa camera về phía mặt của bạn để quét
-      </Text>
-      <TouchableOpacity style={styles.button} onPress={openCamera}>
-        <FontAwesome name="camera" size={40} color="white" />
-        <Text style={styles.buttonText}>Quét Khuôn Mặt</Text>
-      </TouchableOpacity>
-      {/* {selectedImage && (
-        <Image source={{ uri: selectedImage }} style={styles.image} />
-      )} */}
-      <TouchableOpacity style={styles.loginButton} onPress={handleMenuOpen}>
-        <Text>MenuRecommend</Text>
-      </TouchableOpacity>
+          <Text style={styles.instructions}>
+            Đưa camera về phía mặt của bạn để quét
+          </Text>
+          <TouchableOpacity style={styles.button} onPress={openCamera}>
+            <FontAwesome name="camera" size={40} color="white" />
+            <Text style={styles.buttonText}>Quét Khuôn Mặt</Text>
+          </TouchableOpacity>
+          {/* {selectedImage && (
+          <Image source={{ uri: selectedImage }} style={styles.image} />
+        )} */}
+          <TouchableOpacity style={styles.loginButton} onPress={handleMenuOpen}>
+            <Text>MenuRecommend</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </ScrollView>
   );
 }
