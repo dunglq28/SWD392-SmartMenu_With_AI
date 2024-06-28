@@ -20,13 +20,15 @@ namespace FSU.SmartMenuWithAI.API.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IAppUserService _appUserService;
+        private readonly IBrandService _brandService;
         private readonly IRefreshTokenService _refreshTokenService;
 
-        public AuthenticationController(IAccountService accountService, IRefreshTokenService refreshTokenService, IAppUserService appUserService)
+        public AuthenticationController(IAccountService accountService, IRefreshTokenService refreshTokenService, IAppUserService appUserService, IBrandService brandService)
         {
             _accountService = accountService;
             _refreshTokenService = refreshTokenService;
             _appUserService = appUserService;
+            _brandService = brandService;
         }
 
         [HttpPost(APIRoutes.Authentication.Login, Name = "LoginAsync")]
@@ -83,6 +85,77 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         token,
                         userDto.UserId,
                         userDto.RoleId
+                    },
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
+
+        [HttpPost(APIRoutes.Authentication.LoginMobile, Name = "LoginMobileAsync")]
+        public async Task<IActionResult> LoginMobileAsync([FromBody] LoginRequest reqObj)
+        {
+            try
+            {
+                var userDto = await _accountService.CheckLoginMobileAsync(reqObj.UserName, reqObj.Password);
+
+                if (userDto == null)
+                {
+                    return Unauthorized(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status401Unauthorized,
+                        Message = "Sai tài khoản hoặc mật khẩu",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+
+                if (userDto.IsActive == false)
+                {
+                    var baseResponse = new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status403Forbidden,
+                        Message = "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với quản trị viên để biết thêm thông tin",
+                        Data = null,
+                        IsSuccess = false
+                    };
+
+                    return new ObjectResult(baseResponse)
+                    {
+                        StatusCode = StatusCodes.Status403Forbidden
+                    };
+                }
+                var tokenExist = await _refreshTokenService
+                    .CheckRefreshTokenByUserIdAsync(userDto.UserId!.Value);
+
+                if (tokenExist != null)
+                {
+                    var reuslt = await _refreshTokenService
+                        .RemoveRefreshTokenAsync(tokenExist);
+                }
+
+                var token = await _accountService.GenerateAccessTokenAsync(userDto.UserId.Value);
+                var brand = await _brandService.GetBrandByUserID(userDto.UserId.Value);
+
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Đăng nhập thành công",
+                    Data = new
+                    {
+                        token,
+                        userDto.UserId,
+                        brand.BrandId,
+                        brand.BrandName
                     },
                     IsSuccess = true
                 });

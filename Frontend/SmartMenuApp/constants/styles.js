@@ -2,6 +2,10 @@ export const GlobalStyle = {
   colors: {
     primary: "#b8d7d5",
     primaryButton: "#127973",
+    sidebarColor: "#E3F2F1",
+    homeBackground: "#B8D7D5",
+    textColor: "#5A3D41",
+    titleColor: "#7AD7F4",
     lighten10: "#d3e7e6",
     lighten20: "#e0f1f0",
     darken10: "#a0bfbf",

@@ -11,7 +11,11 @@ import {
 } from "react-native";
 import { GlobalStyle } from "../constants/styles";
 import Icon from "react-native-vector-icons/Ionicons";
-// import SvgUri from 'react-native-svg-uri';
+import Toast from "react-native-toast-message";
+import { login } from "../services/AuthenticationService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoadingSpinnerOverlay from "react-native-loading-spinner-overlay"; 
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -24,29 +28,51 @@ function LoginScreen({ navigation }) {
     password: "",
   });
 
-  // Function to handle login button press
-  const handleLogin = () => {
-    // Navigate to Home or Dashboard screen after login
-    navigation.navigate("HomeOverview");
+  const handleChange = (name, value) => {
+    setCredentials({ ...credentials, [name]: value });
   };
 
   const handleShowClick = () => setShowPassword(!showPassword);
 
-  const loginHandler = () => {
-    navigation.navigate("HomeOverview");
+  const loginHandler = async () => {
+    if (!credentials.username || !credentials.password) {
+      Toast.show({
+        type: "error",
+        text1: "Vui lòng nhập tài khoản và mật khẩu",
+      });
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const response = await login(credentials.username, credentials.password);
+
+      // console.log(response);
+      if (response && response.statusCode === 200) {
+        AsyncStorage.setItem("UserId", response.data.userId.toString());
+        AsyncStorage.setItem("AccessToken", response.data.token.accessToken);
+        AsyncStorage.setItem("RefreshToken", response.data.token.refreshToken);
+        Toast.show({
+          type: "success",
+          text1: "Đăng nhập thành công",
+        });
+        navigation.navigate("HomeOverview");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.leftContainer}>
         <Image source={require("../assets/wave.png")} style={styles.wave} />
-        {/* <SvgUri uri={require("../assets/bg.svg")} style={styles.bg} /> */}
+        <Image source={require("../assets/bg.png")} style={styles.bg} />
       </View>
       <View style={styles.rightContainer}>
         <View style={styles.formContainer}>
           <View style={styles.headerContainer}>
             <Image
-              source={require("../assets/avatar.svg")}
+              source={require("../assets/avatar.png")}
               style={styles.avatar}
             />
             <Text style={styles.welcomeText}>CHÀO MỪNG</Text>
@@ -57,9 +83,8 @@ function LoginScreen({ navigation }) {
               <TextInput
                 style={styles.input}
                 placeholder="Tên đăng nhập"
-                // value={credentials.username}
-                // onChangeText={(text) => handleChange("username", text)}
-                // onKeyPress={handleKeyPress}
+                value={credentials.username}
+                onChangeText={(text) => handleChange("username", text)}
               />
             </View>
             <View style={styles.inputGroup}>
@@ -73,9 +98,8 @@ function LoginScreen({ navigation }) {
                 style={styles.input}
                 placeholder="Mật khẩu"
                 secureTextEntry={!showPassword}
-                // value={credentials.password}
-                // onChangeText={(text) => handleChange("password", text)}
-                // onKeyPress={handleKeyPress}
+                value={credentials.password}
+                onChangeText={(text) => handleChange("password", text)}
               />
               <TouchableOpacity
                 onPress={handleShowClick}
@@ -90,6 +114,11 @@ function LoginScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
+      <LoadingSpinnerOverlay
+        visible={isLoading}
+        textContent={"Đang đăng nhập..."}
+        textStyle={styles.spinnerText}
+      />
       {/* <Toast ref={(ref) => Toast.setRef(ref)} /> */}
     </KeyboardAvoidingView>
   );
@@ -166,7 +195,7 @@ const styles = StyleSheet.create({
   loginButton: {
     width: "100%",
     padding: 15,
-    backgroundColor: "#b9d7d5",
+    backgroundColor: GlobalStyle.colors.primaryButton,
     alignItems: "center",
     borderRadius: 5,
   },

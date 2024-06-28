@@ -141,5 +141,12 @@ namespace FSU.SmartMenuWithAI.Service.Services
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
         }
+
+        public async Task<BrandDTO> GetBrandByUserID(int userID)
+        {
+            Expression<Func<Brand, bool>> condition = x => x.UserId == userID;
+            var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
+            return _mapper.Map<BrandDTO?>(entity)!;
+        }
     }
 }
