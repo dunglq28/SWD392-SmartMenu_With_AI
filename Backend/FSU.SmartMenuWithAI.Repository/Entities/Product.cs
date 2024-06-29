@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using FSU.SmartMenuWithAI.Repository.Entities;
 
 namespace FSU.SmartMenuWithAI.Repository.Entities;
 
@@ -30,5 +29,5 @@ public partial class Product
 
     public virtual Category Category { get; set; } = null!;
 
-    public virtual ICollection<ProductMenu> ProductMenus { get; set; } = new List<ProductMenu>();
+    public virtual ICollection<ProductList> ProductLists { get; set; } = new List<ProductList>();
 }

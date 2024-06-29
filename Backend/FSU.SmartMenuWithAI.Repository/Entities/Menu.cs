@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using FSU.SmartMenuWithAI.Repository.Entities;
 
 namespace FSU.SmartMenuWithAI.Repository.Entities;
+
 public partial class Menu
 {
     public int MenuId { get; set; }
@@ -17,7 +17,7 @@ public partial class Menu
 
     public virtual Brand Brand { get; set; } = null!;
 
-    public virtual ICollection<MenuSegment> MenuSegments { get; set; } = new List<MenuSegment>();
+    public virtual ICollection<MenuList> MenuLists { get; set; } = new List<MenuList>();
 
-    public virtual ICollection<ProductMenu> ProductMenus { get; set; } = new List<ProductMenu>();
+    public virtual ICollection<MenuSegment> MenuSegments { get; set; } = new List<MenuSegment>();
 }
