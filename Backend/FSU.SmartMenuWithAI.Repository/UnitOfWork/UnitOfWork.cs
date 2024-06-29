@@ -17,7 +17,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         private GenericRepository<Store> _storeRepo;
         private GenericRepository<Menu> _menuRepo;
         private GenericRepository<Product> _productRepo;
-        private ProductMenuRepository _productMenuRepo;
+        //private ProductMenuRepository _productMenuRepo;
         private BrandRepository _brandRepo;
         private GroupAttributeRepository _groupAttributeRepo;
         private AttributeRepository _attributeRepository;
@@ -127,17 +127,17 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
                 return _productRepo;
             }
         }
-        public ProductMenuRepository ProductMenuRepository
-        {
-            get
-            {
-                if (_productMenuRepo == null)
-                {
-                    this._productMenuRepo = new ProductMenuRepository(_context);
-                }
-                return _productMenuRepo;
-            }
-        }
+        //public ProductMenuRepository ProductMenuRepository
+        //{
+        //    get
+        //    {
+        //        if (_productMenuRepo == null)
+        //        {
+        //            this._productMenuRepo = new ProductMenuRepository(_context);
+        //        }
+        //        return _productMenuRepo;
+        //    }
+        //}
         RefreshTokenRepository IUnitOfWork.RefreshTokenRepository
         {
             get

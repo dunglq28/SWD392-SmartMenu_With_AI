@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using FSU.SmartMenuWithAI.Repository.Entities;
 
 namespace FSU.SmartMenuWithAI.Repository.Entities;
 
