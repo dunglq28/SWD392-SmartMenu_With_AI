@@ -34,13 +34,12 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return result;
         }
 
-        public async Task<PageEntity<ProductDTO>?> GetAllAsync(string? searchKey, int brandID, int? categoryID, int? pageIndex, int? pageSize)
+        public async Task<PageEntity<ProductDTO>?> GetAllByCategoryAsync(string? searchKey, int brandID, int? categoryID, int? pageIndex, int? pageSize)
         {
             Expression<Func<Product, bool>> filter = searchKey != null ? x =>
-                 
                 x.BrandId == brandID 
                 && x.CategoryId == categoryID 
-                && x.ProductName.ToLower().Contains(searchKey.ToLower()) : null!;
+                && x.ProductName.ToLower().Contains(searchKey.ToLower()) :  x => x.BrandId == brandID && x.CategoryId == categoryID;
             Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = q => q.OrderByDescending(x => x.ProductId);
             string includeProperties = "Category";
 
@@ -48,7 +47,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 .Get(filter: filter, orderBy: orderBy,includeProperties: includeProperties ,pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<ProductDTO>();
             pagin.List = _mapper.Map<IEnumerable<ProductDTO>>(entities).ToList();
-            Expression<Func<Product, bool>> getProductInBrand = x => x.BrandId == brandID;
+            Expression<Func<Product, bool>> getProductInBrand = x => x.BrandId == brandID && x.CategoryId == categoryID;
             pagin.TotalRecord = await _unitOfWork.ProductRepository.Count(getProductInBrand);
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
@@ -141,6 +140,23 @@ namespace FSU.SmartMenuWithAI.Service.Services
             _unitOfWork.ProductRepository.Update(product);
             var result = await _unitOfWork.SaveAsync() > 0;
             return result;
+        }
+        public async Task<PageEntity<ProductDTO>?> GetAllAsync(string? searchKey, int brandID, int? pageIndex, int? pageSize)
+        {
+            Expression<Func<Product, bool>> filter = searchKey != null ? x =>
+                x.BrandId == brandID
+                && x.ProductName.ToLower().Contains(searchKey.ToLower()) : x => x.BrandId == brandID;
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = q => q.OrderByDescending(x => x.ProductId);
+            string includeProperties = "Category";
+
+            var entities = await _unitOfWork.ProductRepository
+                .Get(filter: filter, orderBy: orderBy, includeProperties: includeProperties, pageIndex: pageIndex, pageSize: pageSize);
+            var pagin = new PageEntity<ProductDTO>();
+            pagin.List = _mapper.Map<IEnumerable<ProductDTO>>(entities).ToList();
+            Expression<Func<Product, bool>> getProductInBrand = x => x.BrandId == brandID;
+            pagin.TotalRecord = await _unitOfWork.ProductRepository.Count(getProductInBrand);
+            pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
+            return pagin;
         }
     }
 }

@@ -149,7 +149,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             try
             {
                 var existProduct = await _productService.GetAsync(id);
-                if (existProduct == null )
+                if (existProduct == null)
                 {
                     return NotFound(new BaseResponse
                     {
@@ -209,8 +209,8 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpGet(APIRoutes.Product.GetAll, Name = "GetProductAsync")]
-        public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search-key")] string? searchKey
+        [HttpGet(APIRoutes.Product.GetAllByCategory, Name = "GetProductByCategoryAsync")]
+        public async Task<IActionResult> GetAllByCategoryAsync([FromQuery(Name = "search-key")] string? searchKey
             , [FromQuery(Name = "brand-id")] int brandID
             , [FromQuery(Name = "category-id")] int? categoryID
             , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
@@ -218,7 +218,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         {
             try
             {
-                var menus = await _productService.GetAllAsync(searchKey: searchKey, categoryID: categoryID, brandID: brandID, pageIndex: pageNumber, pageSize: PageSize);
+                var menus = await _productService.GetAllByCategoryAsync(searchKey: searchKey, categoryID: categoryID, brandID: brandID, pageIndex: pageNumber, pageSize: PageSize);
 
                 return Ok(new BaseResponse
                 {
@@ -240,6 +240,36 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpGet(APIRoutes.Product.GetAll, Name = "GetProductInBrandAsync")]
+        public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search-key")] string? searchKey
+            , [FromQuery(Name = "brand-id")] int brandID
+            , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
+            , [FromQuery(Name = "page-size")] int PageSize = Page.DefaultPageSize)
+            {
+            try
+            {
+                var menus = await _productService.GetAllAsync(searchKey: searchKey, brandID: brandID, pageIndex: pageNumber, pageSize: PageSize);
+
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Lấy thông tin thành công",
+                    Data = menus,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Product.GetByID, Name = "GetProductByID")]
         public async Task<IActionResult> GetAsync([FromQuery] int Id)

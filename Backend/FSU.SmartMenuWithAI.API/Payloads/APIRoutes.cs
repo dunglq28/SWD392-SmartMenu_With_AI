@@ -118,7 +118,7 @@
         }
         public static class Product
         {
-            public const string GetAll = Base + "/products/";
+            public const string GetAllByCategory = Base + "/products/get-by-category";
 
             public const string Add = Base + "/products/";
 
@@ -127,6 +127,9 @@
             public const string Delete = Base + "/products/";
 
             public const string GetByID = Base + "/products/get-by-id";
+
+            public const string GetAll = Base + "/products/";
+
             public const string testRecogize = Base + "/products/test-recogize";
         }
         public static class ProductMenu
