@@ -1,79 +1,29 @@
-import React from "react";
-import { View, Text, ScrollView, StyleSheet, Image, FlatList, ImageBackground } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
 import { GlobalStyle } from "../constants/styles";
+import { drinks } from "../Data/drinks";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+ 
 
 const categories = [
   { id: 1, name: "Cà phê" },
   { id: 2, name: "Sinh tố" },
-  { id: 4, name: "Nước ép" },
-  { id: 5, name: "Nước ép" },
-  { id: 6, name: "Nước ép" },
-  { id: 7, name: "Nước ép" },
-  { id: 8, name: "Nước ép" },
-  { id: 9, name: "Nước ép" },
-  { id: 10, name: "Nước ép" },
-];
+  { id: 3, name: "Nước ép" },
 
-const drinks = [
-  {
-    id: 1,
-    name: "Espresso",
-    category: "Cà phê",
-    image: require("../assets/drinks.png"),
-    price: 50000,
-  },
-  {
-    id: 2,
-    name: "Cà phê sữa đá",
-    category: "Cà phê",
-    image: require("../assets/drinks.png"),
-    price: 45000,
-  },
-  {
-    id: 3,
-    name: "Sinh tố bơ",
-    category: "Sinh tố",
-    image: require("../assets/drinks.png"),
-    price: 60000,
-  },
-  {
-    id: 4,
-    name: "Nước ép cam",
-    category: "Nước ép",
-    image: require("../assets/drinks.png"),
-    price: 55000,
-  },
-  {
-    id: 5,
-    name: "Nước ép táo",
-    category: "Nước ép",
-    image: require("../assets/drinks.png"),
-    price: 48000,
-  },
-  {
-    id: 6,
-    name: "Cacao",
-    category: "Cà phê",
-    image: require("../assets/drinks.png"),
-    price: 52000,
-  },
-  {
-    id: 7,
-    name: "Sinh tố dưa hấu",
-    category: "Sinh tố",
-    image: require("../assets/drinks.png"),
-    price: 58000,
-  },
-  {
-    id: 8,
-    name: "Nước dừa",
-    category: "Nước ép",
-    image: require("../assets/drinks.png"),
-    price: 65000,
-  },
 ];
 
 const HomeScreen = () => {
+  const [activeCategory, setActiveCategory] = useState(categories[0].id); // Ban đầu chọn danh mục đầu tiên làm active
+
   // Render item cho FlatList trong cart
   const renderDrinkItem = ({ item }) => (
     <View key={item.id} style={[styles.drinkItem, { backgroundColor: "#fff" }]}>
@@ -88,6 +38,11 @@ const HomeScreen = () => {
     </View>
   );
 
+  // Xử lý khi chọn một danh mục
+  const handleCategoryPress = (categoryId) => {
+    setActiveCategory(categoryId); // Cập nhật danh mục được chọn
+  };
+
   return (
     <View style={styles.container}>
       {/* Sidebar */}
@@ -95,33 +50,66 @@ const HomeScreen = () => {
         style={styles.sidebar}
         contentContainerStyle={{ flexGrow: 1 }}
       >
-        <Text style={styles.categoryTitle}>Loại đồ uống</Text>
+        <ImageBackground
+          source={require("../assets/bgTitle.png")}
+          style={styles.categoryTitle}
+        >
+          <Text style={styles.categoryTitleText}>Loại đồ uống</Text>
+        </ImageBackground>
         <View style={styles.categoryList}>
           {categories.map((category) => (
-            <View key={category.id} style={styles.categoryItem}>
-              <Text style={styles.categoryName}>{category.name}</Text>
-            </View>
+            <TouchableOpacity
+              key={category.id}
+              style={[
+                styles.categoryItem,
+                category.id === activeCategory
+                  ? styles.activeCategoryItem
+                  : null,
+              ]}
+              onPress={() => handleCategoryPress(category.id)}
+            >
+              <Text
+                style={[
+                  styles.categoryName,
+                  category.id === activeCategory
+                    ? styles.activeCategoryText
+                    : null,
+                ]}
+              >
+                {category.name}
+              </Text>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
 
       {/* Cart */}
-      <FlatList
-        style={styles.cart}
-        data={drinks}
-        numColumns={3} // Số cột là 3
-        renderItem={renderDrinkItem}
-        keyExtractor={(item) => item.id.toString()}
-        ListHeaderComponent={
-          // <ImageBackground
-          //   source={require("../assets/backgroundTitle.png")} // Đường dẫn đến hình ảnh nền
-          //   style={styles.cartHeaderBackground}
-          // >
-            <Text style={styles.cartTitle}>Món nước</Text>
-          // </ImageBackground>
-        }
-        contentContainerStyle={{ padding: 20, paddingTop: 40 }}
-      />
+      <View style={styles.cartContainer}>
+        <View style={styles.cartHeader}>
+          <ImageBackground
+            source={require("../assets/bgTitle2.png")}
+            style={styles.cartTitle}
+          >
+            <Text style={styles.cartTitleText}>Món nước</Text>
+          </ImageBackground>
+          <Image
+            source={require("../assets/phuclong.png")}
+            style={styles.brandImage}
+          />
+        </View>
+        <FlatList
+          style={styles.cart}
+          data={drinks.filter(
+            (item) =>
+              item.category ===
+              categories.find((cat) => cat.id === activeCategory).name
+          )}
+          numColumns={3}
+          renderItem={renderDrinkItem}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={{ paddingHorizontal: 20 }}
+        />
+      </View>
     </View>
   );
 };
@@ -138,28 +126,40 @@ const styles = StyleSheet.create({
   sidebar: {
     flex: 1,
     backgroundColor: GlobalStyle.colors.sidebarColor,
-    paddingTop: 40,
+    paddingTop: 58,
     paddingHorizontal: 5,
     maxWidth: "20%",
   },
   categoryTitle: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: 50,
+  },
+  categoryTitleText: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 10,
-    paddingHorizontal: 10,
     color: GlobalStyle.colors.titleColor,
   },
   categoryList: {
     flex: 1,
     justifyContent: "flex-start",
+    borderRadius: 8,
+    paddingTop: 20,
     paddingHorizontal: 10,
   },
   categoryItem: {
     alignItems: "center",
-    paddingVertical: 10,
-    marginBottom: 10,
+    paddingVertical: 15,
+    marginBottom: 14,
     marginRight: 10,
-    backgroundColor: "#fff",
+    borderRadius: 8,
+  },
+  activeCategoryItem: {
+    backgroundColor: GlobalStyle.colors.darken50,
+  },
+  activeCategoryText: {
+    color: "#fff",
   },
   categoryName: {
     fontSize: 14,
@@ -167,20 +167,33 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: GlobalStyle.colors.textColor,
   },
-  cart: {
+  cartContainer: {
     flex: 4,
     backgroundColor: GlobalStyle.colors.homeBackground,
   },
-  cartHeaderBackground: {
-    width: "100%",
-    height: 150, // Chiều cao của hình ảnh nền
-    justifyContent: "center",
+  cartHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    marginTop: 38,
+    marginBottom: 4,
+    paddingHorizontal: 20,
+    zIndex: 999,
   },
   cartTitle: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 250,
+    height: 50,
+  },
+  cartTitleText: {
     fontSize: 20,
     fontWeight: "bold",
     color: GlobalStyle.colors.titleColor,
+  },
+  brandImage: {
+    width: 80,
+    height: 80,
   },
   drinkItem: {
     flex: 1,

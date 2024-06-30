@@ -143,6 +143,20 @@
 
             public const string Add = Base + "/products-menu/";
         }
+        public static class ListPosition
+        {
+            public const string GetByID = Base + "/list-positions/get-by-id";
+
+            public const string GetByBrandID = Base + "/list-positions/get-by-brand-id";
+
+            public const string Add = Base + "/list-positions/";
+
+            public const string Update = Base + "/list-positions/";
+
+            public const string Delete = Base + "/list-positions/";
+
+        }
+
         public static class MenuList
         {
             public const string GetAll = Base + "/menu-list/";

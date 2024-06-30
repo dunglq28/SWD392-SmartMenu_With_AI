@@ -144,7 +144,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<BrandDTO> GetBrandByUserID(int userID)
         {
-            Expression<Func<Brand, bool>> condition = x => x.UserId == userID;
+            Expression<Func<Brand, bool>> condition = x => x.UserId == userID && x.Status != (int)Status.Deleted;
             var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
             return _mapper.Map<BrandDTO?>(entity)!;
         }

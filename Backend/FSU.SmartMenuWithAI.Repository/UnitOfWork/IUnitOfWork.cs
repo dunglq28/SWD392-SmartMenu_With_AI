@@ -21,6 +21,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         public BrandRepository BrandRepository { get; }
         public GroupAttributeRepository GroupAttributeRepository { get; }
         public AttributeRepository AttributeRepository { get; }
+        public ListPositionRepository ListPositionRepository { get; }
 
     }
 }

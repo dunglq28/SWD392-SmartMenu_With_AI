@@ -12,9 +12,46 @@ import CameraScreen from "./screens/CameraScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import MenuRecommendScreen from "./screens/MenuRecommendScreen";
 import { GlobalStyle } from "./constants/styles";
+import Toast, { BaseToast } from "react-native-toast-message";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection']);
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
+const toastConfig = {
+  success: (internalState) => (
+    <BaseToast
+      {...internalState}
+      style={{ borderLeftColor: "green",  width: "40%" }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 20,
+        fontWeight: "400",
+      }}
+      text2Style={{
+        fontSize: 15,
+        color: "gray",
+      }}
+    />
+  ),
+  error: (internalState) => (
+    <BaseToast
+      {...internalState}
+      style={{ borderLeftColor: "red", width: "40%"}}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 20,
+        fontWeight: '400'
+      }}
+      text2Style={{
+        fontSize: 15,
+        color: 'gray'
+      }}
+    />
+  ),
+};
 
 function HomeOverview() {
   return (
@@ -77,6 +114,7 @@ export default function App() {
           <Stack.Screen name="HomeOverview" component={HomeOverview} />
           <Stack.Screen name="MenuRecommend" component={MenuRecommendScreen} />
         </Stack.Navigator>
+        <Toast config={toastConfig} />
       </NavigationContainer>
     </>
   );
