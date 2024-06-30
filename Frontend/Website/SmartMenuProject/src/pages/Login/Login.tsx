@@ -21,6 +21,8 @@ import { login } from "../../services/AuthenticationService";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loading";
 import { useLocation, useNavigate } from "react-router-dom";
+import { UserRole } from "../../constants/Enum";
+import { getBrand } from "../../services/BrandService";
 
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -78,11 +80,27 @@ function Login() {
       const response = await login(credentials.username, credentials.password);
 
       if (response.statusCode === 200) {
-        localStorage.setItem("UserId", response.data.userId.toString());
+        localStorage.setItem("RoleId", response.data.roleId.toString());
         localStorage.setItem("AccessToken", response.data.token.accessToken);
         localStorage.setItem("RefreshToken", response.data.token.refreshToken);
         const toastMessage = response.message;
-        navigate("/dashboard", { state: { toastMessage } });
+
+        if (
+          response.data.roleId.toString() ===
+            UserRole.BrandManager.toString() ||
+          response.data.roleId.toString() === UserRole.BranchManager.toString()
+        ) {
+          const brand = await getBrand(23);
+          localStorage.setItem("BrandId", brand.data.brandId.toString());
+          localStorage.setItem("BrandName", brand.data.brandName.toString());
+          localStorage.setItem("BrandLogo", brand.data.imageUrl.toString());
+          navigate("/products", { state: { toastMessage } });
+        } else if (
+          response.data.roleId.toString() === UserRole.Admin.toString()
+        ) {
+          localStorage.setItem("UserId", response.data.userId.toString());
+          navigate("/dashboard", { state: { toastMessage } });
+        }
       }
     } finally {
       setIsLoading(false);

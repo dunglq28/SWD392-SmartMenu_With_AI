@@ -8,7 +8,7 @@ import Settings from "../pages/Setting";
 import New from "../pages/New";
 import Profile from "../pages/Profile";
 import { HeaderOnly } from "../layouts";
-import Branch from "../pages/Branch/Branch";
+import Branch from "../pages/Branch";
 
 interface RouteItem {
   path: string;

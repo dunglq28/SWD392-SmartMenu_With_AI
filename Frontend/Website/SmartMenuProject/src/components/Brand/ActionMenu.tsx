@@ -84,7 +84,7 @@ const ActionMenu: FC<ActionMenuProps> = ({
   };
 
   const handleViewClick = () => {
-    navigate(`/branches/${brandName}`, { state: { id } });
+    navigate(`/branches/${brandName}`, { state: { id, brandName } });
   };
 
   return (

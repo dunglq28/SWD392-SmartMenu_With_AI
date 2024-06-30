@@ -106,10 +106,10 @@ function Brand() {
       var result = await updateBrand(brand);
       if (result.statusCode === 200) {
         fetchData();
-        toast.success("Cập nhật thành công");
+        toast.success("Cập nhật thương hiệu thành công");
       }
     } catch {
-      toast.error("Cập nhật thất bại");
+      toast.error("Cập nhật thương hiệu thất bại");
     }
   }
 

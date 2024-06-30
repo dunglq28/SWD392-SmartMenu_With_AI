@@ -17,13 +17,15 @@ import {
 import Loading from "../../components/Loading";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import { getOptions } from "../../utils/getRowPerPage";
-import { getBranches } from "../../services/BranchService";
+import { getBranches, updateBranch } from "../../services/BranchService";
 import moment from "moment";
+import ActionMenu from "../../components/Branch/ActionMenu";
+import { branchUpdate } from "../../payloads/requests/updateBranch.model";
 
 function Branch() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id } = location.state || {};
+  const { id, brandName } = location.state || {};
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
@@ -120,13 +122,21 @@ function Branch() {
 
   async function handleDelete(id: number) {}
 
-  async function handleEdit(id: number) {}
+  async function handleEdit(branch: branchUpdate) {
+    try {
+      var result = await updateBranch(branch);
+      if (result.statusCode === 200) {
+        fetchData();
+        toast.success("Cập nhật chi nhánh thành công");
+      }
+    } catch {
+      toast.error("Cập nhật chi nhánh thất bại");
+    }
+  }
 
   async function handleSearch(value: string) {
     fetchData(value);
   }
-
-  console.log(id);
 
   return (
     <Flex className={style.Brand} flexDirection="column">
@@ -162,14 +172,21 @@ function Branch() {
                     <Td colSpan={10}>Không có chi nhánh để hiển thị</Td>
                   </Tr>
                 ) : (
-                  branchData.map((brand, index) => (
-                    <Tr className={style.BrandItem} key={brand.storeId}>
+                  branchData.map((branch, index) => (
+                    <Tr className={style.BrandItem} key={branch.storeId}>
                       <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
-                      <Td>{brand.city}</Td>
-                      <Td>{brand.address}</Td>
-                      <Td>{moment(brand.createDate).format("DD/MM/YYYY")}</Td>
-                      <Td>{brand.isActive ? "Yes" : "No"}</Td>
-                      <Td>Yes</Td>
+                      <Td>{branch.city}</Td>
+                      <Td>{branch.address}</Td>
+                      <Td>{moment(branch.createDate).format("DD/MM/YYYY")}</Td>
+                      <Td>{branch.isActive ? "Yes" : "No"}</Td>
+                      <Td>
+                        <ActionMenu
+                          id={branch.storeId}
+                          brandName={brandName}
+                          onDelete={handleDelete}
+                          onEdit={handleEdit}
+                        />
+                      </Td>
                     </Tr>
                   ))
                 )}
