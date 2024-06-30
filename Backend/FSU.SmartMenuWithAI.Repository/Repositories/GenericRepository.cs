@@ -73,12 +73,17 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
 
         public virtual async Task<IEnumerable<TEntity>> GetAllNoPaging(
             Expression<Func<TEntity, bool>> filter = null!,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null!,
             string includeProperties = "")
         {
             IQueryable<TEntity> query = dbSet;
             if (filter != null)
             {
                 query = query.Where(filter);
+            }
+            if (orderBy != null)
+            {
+                query = orderBy(query);
             }
             if (!includeProperties.IsNullOrEmpty())
             {

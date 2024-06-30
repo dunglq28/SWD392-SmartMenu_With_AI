@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.MenuList;
 using FSU.SmartMenuWithAI.Service.Models.Token;
 using FSU.SmartMenuWithAI.Service.Models.ViewModel;
 using Attribute = FSU.SmartMenuWithAI.Repository.Entities.Attribute;
@@ -34,6 +35,10 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
             // attribute
             CreateMap<Attribute, AttributeDTO>().ReverseMap();
             CreateMap<GroupAttribute, GroupAttributeDTO>().ReverseMap();
+            // menu list
+            CreateMap<MenuList, MenuListDTO>().ReverseMap();
+            CreateMap<MenuList, CreateMenuListDTO>().ReverseMap();
+
 
         }
     }

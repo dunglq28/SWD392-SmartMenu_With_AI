@@ -124,7 +124,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         public async Task<List<CategoryViewModel>> GetByBrandID(int brandId)
         {
             Expression<Func<Category, bool>> condition = x => x.BrandId == brandId && (x.Status != (int)Status.Deleted);
-            var listCategory = await _unitOfWork.CategoryRepository.GetAllNoPaging(filter:condition, includeProperties: null!);
+            var listCategory = await _unitOfWork.CategoryRepository.GetAllNoPaging(filter:condition, orderBy: null! ,includeProperties: null!);
             var mapDTO = _mapper.Map<IEnumerable<CategoryViewModel>>(listCategory);
             return mapDTO.ToList();
         }
