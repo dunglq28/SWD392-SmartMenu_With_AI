@@ -34,6 +34,7 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
             // attribute
             CreateMap<Attribute, AttributeDTO>().ReverseMap();
             CreateMap<GroupAttribute, GroupAttributeDTO>().ReverseMap();
+            CreateMap<ListPosition, ListPositionDTO>().ReverseMap();
 
         }
     }

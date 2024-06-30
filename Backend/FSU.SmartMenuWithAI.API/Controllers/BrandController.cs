@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using FSU.SmartMenuWithAI.API.Common.Constants;
 using FSU.SmartMenuWithAI.API.Payloads.Request.Brand;
 using Microsoft.EntityFrameworkCore;
+using FSU.SmartMenuWithAI.Service.Models;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -278,5 +279,45 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
+
+        //[Authorize(Roles = UserRoles)]
+        [HttpGet(APIRoutes.Brand.GetByUserID, Name = "GetBrandByUserId")]
+        public async Task<IActionResult> GetBrandByUserIdAsync([FromQuery] int userId)
+        {
+            try
+            {
+                var brands = await _brandService.GetBrandByUserID(userId);
+
+                if (brands == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy thương hiệu cho người dùng này",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Tìm thành công",
+                    Data = brands,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Lỗi khi tìm kiếm!" + ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
+
     }
 }

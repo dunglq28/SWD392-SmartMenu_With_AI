@@ -21,6 +21,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         private BrandRepository _brandRepo;
         private GroupAttributeRepository _groupAttributeRepo;
         private AttributeRepository _attributeRepository;
+        private ListPositionRepository _listPositionRepo;
 
 
         public UnitOfWork(SmartMenuContext context, IConfiguration configuration)
@@ -181,6 +182,17 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
                     this._attributeRepository = new AttributeRepository(_context);
                 }
                 return _attributeRepository;
+            }
+        }
+        ListPositionRepository IUnitOfWork.ListPositionRepository
+        {
+            get
+            {
+                if (_listPositionRepo == null)
+                {
+                    this._listPositionRepo = new ListPositionRepository(_context);
+                }
+                return _listPositionRepo;
             }
         }
     }
