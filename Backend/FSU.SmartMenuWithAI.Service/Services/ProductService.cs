@@ -59,7 +59,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Expression<Func<Product, bool>> condition = x => x.BrandId == brandId;
             string includeProperties = "Category";
 
-            var productInBrand = await _unitOfWork.ProductRepository.GetAllNoPaging(filter: condition, includeProperties: includeProperties);
+            var productInBrand = await _unitOfWork.ProductRepository.GetAllNoPaging(filter: condition,orderBy: null! ,includeProperties: includeProperties);
             var dtos = _mapper.Map<List<ProductDTO>>(productInBrand.ToList());
             return dtos;
         }

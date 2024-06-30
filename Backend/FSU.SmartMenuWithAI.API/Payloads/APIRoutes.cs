@@ -157,5 +157,19 @@
 
         }
 
+        public static class MenuList
+        {
+            public const string GetAll = Base + "/menu-list/";
+
+            public const string GetByID = Base + "/menu-list/get-by-id";
+
+            public const string GetProductNotInMenu = Base + "/menu-list/get-product-not-in-menu";
+
+            public const string Update = Base + "/menu-list/";
+
+            public const string Delete = Base + "/menu-list/";
+
+            public const string Add = Base + "/menu-list/";
+        }
     }
 }

@@ -90,7 +90,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<bool> UpdateAsync(int id, StoreDTO entityToUpdate)
         {
-            Expression<Func<Store, bool>> condition = x => x.BrandId == id && (x.Status != (int)Status.Deleted);
+            Expression<Func<Store, bool>> condition = x => x.StoreId == id && x.Status != (int)Status.Deleted;
             var store = await _unitOfWork.StoreRepository.GetByCondition(condition);
             if (store == null)
             {
