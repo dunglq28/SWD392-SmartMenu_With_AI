@@ -24,6 +24,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { IoGitBranchOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdListAlt } from "react-icons/md";
+import { MdOutlineBrandingWatermark } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 
 import ModalForm from "../Modals/ModalForm/ModalForm";
@@ -128,7 +129,7 @@ function Sidebar() {
       permissionRole: UserRole.Admin,
     },
     {
-      icon: IoGitBranchOutline,
+      icon: MdOutlineBrandingWatermark,
       label: t("brands"),
       divider: true,
       to: "/brands",
@@ -145,6 +146,12 @@ function Sidebar() {
       label: t("menu"),
       to: "/menu",
       permissionRole: [UserRole.BrandManager, UserRole.BranchManager],
+    },
+    {
+      icon: IoGitBranchOutline,
+      label: t("branches"),
+      to: "/branches",
+      permissionRole: [UserRole.BrandManager],
     },
     {
       icon: IoSettingsOutline,

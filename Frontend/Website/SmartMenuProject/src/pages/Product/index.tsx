@@ -21,11 +21,6 @@ import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
 import Loading from "../../components/Loading";
 
-function truncateText(text: string | undefined, maxLength: number): string {
-  if (!text || text.length <= maxLength) return text || "";
-  return text.substring(0, maxLength) + "...";
-}
-
 function Product() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
@@ -95,16 +90,12 @@ function Product() {
           <TableCaption>Bảng quản lý Product</TableCaption>
           <Thead>
             <Tr>
-              <Th className={style.HeaderTbl}>Product code</Th>
-              <Th className={style.HeaderTbl}>Created date</Th>
-              <Th className={style.HeaderTbl}>Product name</Th>
-              <Th className={style.HeaderTbl}>Spotlight url</Th>
-              <Th className={style.HeaderTbl}>Spotlight name</Th>
-              <Th className={style.HeaderTbl}>Image url</Th>
-              <Th className={style.HeaderTbl}>Image name</Th>
+              <Th className={style.HeaderTbl}>Id</Th>
+              <Th className={style.HeaderTbl}>Name</Th>
               <Th className={style.HeaderTbl}>Description</Th>
-              <Th className={style.HeaderTbl}>Category ID</Th>
-              <Th className={style.HeaderTbl}>Brand ID</Th>
+              <Th className={style.HeaderTbl}>Created on</Th>
+              <Th className={style.HeaderTbl}>Image</Th>
+              <Th className={style.HeaderTbl}>Category</Th>
               <Th className={style.HeaderTbl}>Settings</Th>
             </Tr>
           </Thead>
@@ -116,22 +107,26 @@ function Product() {
                 </Td>
               </Tr>
             ) : (
-              data.map((product) => (
+              data.map((product, index) => (
                 <Tr key={product.productCode} className={style.ProductItem}>
-                  <Td>{product.productId}</Td>
+                  <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
+                  <Td>
+                    {product.productName}
+                  </Td>
+                  <Td className={style.WrapText}>
+                    {product.description}
+                  </Td>
                   <Td>{moment(product.createDate).format("DD/MM/YYYY")}</Td>
-                  <Td title={product.productName}>
-                    {truncateText(product.productName, 10)}
+                  <Td>
+                    <img
+                      // src={product.imageUrl}
+                      src="https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/highlands.png"
+                      alt={product.productName}
+                      className={style.ProductImage}
+                    />
                   </Td>
-                  <Td>{truncateText(product.spotlightVideoImageUrl, 10)}</Td>
-                  <Td>{truncateText(product.spotlightVideoImageName, 10)}</Td>
-                  <Td>{truncateText(product.imageUrl, 10)}</Td>
-                  <Td>{truncateText(product.imageName, 10)}</Td>
-                  <Td title={product.description}>
-                    {truncateText(product.description, 10)}
-                  </Td>
-                  <Td>{product.categoryId}</Td>
-                  <Td>{product.brandId}</Td>
+                  {/* <Td>{product.categoryId}</Td> */}
+                  <Td>Cà Phê</Td>
                   <Td>
                     <ActionMenu
                       id={product.productId}

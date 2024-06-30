@@ -22,6 +22,7 @@ export const publicRoutes: RouteItem[] = [
   { path: "/dashboard", component: Dashboard },
   { path: "/users", component: User },
   { path: "/brands", component: Brand },
+  { path: "/branches", component: Branch },
   { path: "/branches/:brandName", component: Branch },
   { path: "/products", component: Products },
   { path: "/menu", component: Menu },

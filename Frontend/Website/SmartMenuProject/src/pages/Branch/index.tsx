@@ -17,16 +17,27 @@ import {
 import Loading from "../../components/Loading";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import { getOptions } from "../../utils/getRowPerPage";
-import { getBranches, updateBranch } from "../../services/BranchService";
+import {
+  deleteBranch,
+  getBranches,
+  updateBranch,
+} from "../../services/BranchService";
 import moment from "moment";
 import ActionMenu from "../../components/Branch/ActionMenu";
 import { branchUpdate } from "../../payloads/requests/updateBranch.model";
+import Searchbar from "../../components/Searchbar";
 
 function Branch() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id, brandName } = location.state || {};
+  const { state } = location;
 
+  const initialId = state?.id || localStorage.getItem("BrandId") || "";
+  const initialBrandName =
+    state?.brandName || localStorage.getItem("BrandName") || "";
+  const initialState = { id: initialId, brandName: initialBrandName };
+
+  const [brandInfo, setBrandInfo] = useState(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
   const [branchData, setBranchData] = useState<BranchData[]>([]);
@@ -47,15 +58,15 @@ function Branch() {
       flagRef.current = true;
       localStorage.removeItem("toastMessage");
       navigate(`${location.pathname}`, {
-        state: { id },
+        state: { id: brandInfo.id },
         replace: true,
       });
     }
-  }, [toastMessage, location.pathname, navigate]);
+  }, [toastMessage, location.pathname, navigate, brandInfo.id]);
 
   const fetchData = useCallback(
     async (searchValue?: string) => {
-      if (!id) {
+      if (!brandInfo.id) {
         toast.error("ID chi nhánh không tồn tại");
         setIsLoading(false);
         return;
@@ -68,13 +79,18 @@ function Branch() {
         const loadData = async () => {
           if (searchValue) {
             result = await getBranches(
-              id,
+              brandInfo.id,
               currentPage,
               rowsPerPage,
               searchValue
             );
           } else {
-            result = await getBranches(id, currentPage, rowsPerPage, "");
+            result = await getBranches(
+              brandInfo.id,
+              currentPage,
+              rowsPerPage,
+              ""
+            );
           }
           setBranchData(result.list);
           setTotalPages(result.totalPage);
@@ -98,12 +114,12 @@ function Branch() {
         setIsLoading(false);
       }
     },
-    [currentPage, rowsPerPage, isInitialLoad, id]
+    [currentPage, rowsPerPage, isInitialLoad, brandInfo.id]
   );
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, currentPage, isInitialLoad]);
+  }, [fetchData, currentPage, isInitialLoad, brandInfo.id]);
 
   const handlePageChange = useCallback(
     (page: number) => {
@@ -120,7 +136,21 @@ function Branch() {
     [setCurrentPage, setRowsPerPage]
   );
 
-  async function handleDelete(id: number) {}
+  async function handleDelete(id: number) {
+    try {
+      const result = await deleteBranch(id);
+      if (result.statusCode === 200) {
+        if ((totalRecords - 1) % rowsPerPage === 0 && currentPage > 1) {
+          setCurrentPage((prevPage) => prevPage - 1);
+        } else {
+          fetchData();
+        }
+        toast.success("Xoá chi nhánh thành công");
+      }
+    } catch (e) {
+      toast.error("Xoá chi nhánh thất bại");
+    }
+  }
 
   async function handleEdit(branch: branchUpdate) {
     try {
@@ -139,70 +169,78 @@ function Branch() {
   }
 
   return (
-    <Flex className={style.Brand} flexDirection="column">
-      {!id ? (
-        <Flex justifyContent="center" alignItems="center" height="50vh">
-          <p>ID chi nhánh không tồn tại. Vui lòng kiểm tra lại.</p>
-        </Flex>
-      ) : (
-        <>
-          <Flex className={style.ButtonContainer}></Flex>
-          <TableContainer className={style.BrandTbl}>
-            <Table>
-              <TableCaption>Bảng quản lý chi nhánh</TableCaption>
-              <Thead>
-                <Tr>
-                  <Th className={style.HeaderTbl}>Id</Th>
-                  <Th className={style.HeaderTbl}>City</Th>
-                  <Th className={style.HeaderTbl}>Address</Th>
-                  <Th className={style.HeaderTbl}>Create on</Th>
-                  <Th className={style.HeaderTbl}>Is active</Th>
-                  <Th className={style.HeaderTbl}>Settings</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {isLoading && isInitialLoad ? (
+    <Flex className={style.container}>
+      <Flex w="40%" ml="20px">
+        <Searchbar onSearch={handleSearch} />
+      </Flex>
+
+      <Flex className={style.Brand} flexDirection="column">
+        {!brandInfo.id ? (
+          <Flex justifyContent="center" alignItems="center" height="50vh">
+            <p>ID chi nhánh không tồn tại. Vui lòng kiểm tra lại.</p>
+          </Flex>
+        ) : (
+          <>
+            <Flex className={style.ButtonContainer}></Flex>
+            <TableContainer className={style.BrandTbl}>
+              <Table>
+                <TableCaption>Bảng quản lý chi nhánh</TableCaption>
+                <Thead>
                   <Tr>
-                    <Td colSpan={10} className={style.LoadingCell}>
-                      <Loading />
-                    </Td>
+                    <Th className={style.HeaderTbl}>Id</Th>
+                    <Th className={style.HeaderTbl}>City</Th>
+                    <Th className={style.HeaderTbl}>Address</Th>
+                    <Th className={style.HeaderTbl}>Create on</Th>
+                    <Th className={style.HeaderTbl}>Is active</Th>
+                    <Th className={style.HeaderTbl}>Settings</Th>
                   </Tr>
-                ) : branchData.length === 0 ? (
-                  <Tr>
-                    <Td colSpan={10}>Không có chi nhánh để hiển thị</Td>
-                  </Tr>
-                ) : (
-                  branchData.map((branch, index) => (
-                    <Tr className={style.BrandItem} key={branch.storeId}>
-                      <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
-                      <Td>{branch.city}</Td>
-                      <Td>{branch.address}</Td>
-                      <Td>{moment(branch.createDate).format("DD/MM/YYYY")}</Td>
-                      <Td>{branch.isActive ? "Yes" : "No"}</Td>
-                      <Td>
-                        <ActionMenu
-                          id={branch.storeId}
-                          brandName={brandName}
-                          onDelete={handleDelete}
-                          onEdit={handleEdit}
-                        />
+                </Thead>
+                <Tbody>
+                  {isLoading && isInitialLoad ? (
+                    <Tr>
+                      <Td colSpan={10} className={style.LoadingCell}>
+                        <Loading />
                       </Td>
                     </Tr>
-                  ))
-                )}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                  ) : branchData.length === 0 ? (
+                    <Tr>
+                      <Td colSpan={10}>Không có chi nhánh để hiển thị</Td>
+                    </Tr>
+                  ) : (
+                    branchData.map((branch, index) => (
+                      <Tr className={style.BrandItem} key={branch.storeId}>
+                        <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
+                        <Td>{branch.city}</Td>
+                        <Td>{branch.address}</Td>
+                        <Td>
+                          {moment(branch.createDate).format("DD/MM/YYYY")}
+                        </Td>
+                        <Td>{branch.isActive ? "Yes" : "No"}</Td>
+                        <Td>
+                          <ActionMenu
+                            id={branch.storeId}
+                            brandName={brandInfo.brandName}
+                            onDelete={handleDelete}
+                            onEdit={handleEdit}
+                          />
+                        </Td>
+                      </Tr>
+                    ))
+                  )}
+                </Tbody>
+              </Table>
+            </TableContainer>
 
-          <NavigationDot
-            totalPages={totalPages}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-            rowsPerPageOptions={rowsPerPageOption}
-            onRowsPerPageChange={handleRowsPerPageChange}
-          />
-        </>
-      )}
+            <NavigationDot
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              rowsPerPageOptions={rowsPerPageOption}
+              onRowsPerPageChange={handleRowsPerPageChange}
+            />
+          </>
+        )}
+      </Flex>
     </Flex>
   );
 }
