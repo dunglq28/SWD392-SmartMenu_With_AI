@@ -37,14 +37,14 @@ namespace FSU.SmartMenuWithAI.Service.Services
         public async Task<PageEntity<ProductDTO>?> GetAllByCategoryAsync(string? searchKey, int brandID, int? categoryID, int? pageIndex, int? pageSize)
         {
             Expression<Func<Product, bool>> filter = searchKey != null ? x =>
-                x.BrandId == brandID 
-                && x.CategoryId == categoryID 
-                && x.ProductName.ToLower().Contains(searchKey.ToLower()) :  x => x.BrandId == brandID && x.CategoryId == categoryID;
+                x.BrandId == brandID
+                && x.CategoryId == categoryID
+                && x.ProductName.ToLower().Contains(searchKey.ToLower()) : x => x.BrandId == brandID && x.CategoryId == categoryID;
             Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = q => q.OrderByDescending(x => x.ProductId);
             string includeProperties = "Category";
 
             var entities = await _unitOfWork.ProductRepository
-                .Get(filter: filter, orderBy: orderBy,includeProperties: includeProperties ,pageIndex: pageIndex, pageSize: pageSize);
+                .Get(filter: filter, orderBy: orderBy, includeProperties: includeProperties, pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<ProductDTO>();
             pagin.List = _mapper.Map<IEnumerable<ProductDTO>>(entities).ToList();
             Expression<Func<Product, bool>> getProductInBrand = x => x.BrandId == brandID && x.CategoryId == categoryID;
@@ -58,7 +58,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Expression<Func<Product, bool>> condition = x => x.BrandId == brandId;
             string includeProperties = "Category";
 
-            var productInBrand = await _unitOfWork.ProductRepository.GetAllNoPaging(filter: condition,orderBy: null! ,includeProperties: includeProperties);
+            var productInBrand = await _unitOfWork.ProductRepository.GetAllNoPaging(filter: condition, orderBy: null!, includeProperties: includeProperties);
             var dtos = _mapper.Map<List<ProductDTO>>(productInBrand.ToList());
             return dtos;
         }
@@ -83,12 +83,9 @@ namespace FSU.SmartMenuWithAI.Service.Services
             product.SpotlightVideoImageUrl = reqObj.SpotlightVideoImageUrl;
             product.CategoryId = reqObj.CategoryId;
             product.BrandId = reqObj.BrandId;
+            product.Price = reqObj.Price;
 
             await _unitOfWork.ProductRepository.Insert(product);
-            if (await _unitOfWork.SaveAsync() < 1)
-            {
-                return false!;
-            }
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             return result;
         }
@@ -141,7 +138,10 @@ namespace FSU.SmartMenuWithAI.Service.Services
             {
                 product.Description = reqObj.Description;
             }
-
+            if (reqObj.Price.HasValue)
+            {
+                product.Price = reqObj.Price.Value;
+            }
             _unitOfWork.ProductRepository.Update(product);
             var result = await _unitOfWork.SaveAsync() > 0;
             return result;

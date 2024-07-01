@@ -31,5 +31,6 @@ namespace FSU.SmartMenuWithAI.Service.Models
         public int BrandId { get; set; }
 
         public decimal? Price { get; set; }
+        public string? CategoryName { get; set; }
     }
 }

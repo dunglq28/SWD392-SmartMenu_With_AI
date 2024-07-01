@@ -30,8 +30,9 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<Category, CategoryViewModel>().ReverseMap();
             // product
-            CreateMap<Product, ProductDTO>().ReverseMap();
-            CreateMap<ProductMenu, ProductMenuDTO>().ReverseMap();
+            CreateMap<Product, ProductDTO>()
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
+                .ReverseMap();
             // attribute
             CreateMap<Attribute, AttributeDTO>().ReverseMap();
             CreateMap<GroupAttribute, GroupAttributeDTO>().ReverseMap();
