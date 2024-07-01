@@ -333,8 +333,8 @@ function Sidebar() {
                   ? () => changeItem(menuItem.label)
                   : menuItem.onclick
               }
-              backgroundColor={item === menuItem.label ? "#5D5FEF" : "#fff"}
-              color={item === menuItem.label ? "#fff" : "black"}
+              backgroundColor={item === menuItem.label ? "#55AD9B" : "#95D2B3"}
+              color={item === menuItem.label ? "#F1F8E8" : "black"}
             >
               <Flex>
                 <Icon as={menuItem.icon} className={style.MenuIcon} />

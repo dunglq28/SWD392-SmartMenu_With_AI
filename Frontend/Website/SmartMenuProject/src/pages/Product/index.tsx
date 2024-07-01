@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Button,
   Flex,
   Table,
   TableCaption,
@@ -9,6 +10,7 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import style from "./Product.module.scss";
 import { useCallback, useEffect, useState } from "react";
@@ -20,6 +22,9 @@ import moment from "moment";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
 import Loading from "../../components/Loading";
+import ModalForm from "../../components/Modals/ModalForm/ModalForm";
+import ModalFormBranch from "../../components/Modals/ModalFormBranch/ModalFormBranch";
+import ModalFormProduct from "../../components/Modals/ModalFormProduct";
 
 function Product() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -83,8 +88,25 @@ function Product() {
     console.log(id);
   }
 
+  const {
+    isOpen: isOpenProduct,
+    onOpen: onOpenProduct,
+    onClose: onCloseProduct,
+  } = useDisclosure();
+
   return (
     <Flex className={style.Product}>
+      <Flex>
+        <Button onClick={onOpenProduct} className={style.AddProductBtn}>
+          Add product
+        </Button>
+        <ModalForm
+          formBody={<ModalFormProduct onClose={onCloseProduct} />}
+          onClose={onCloseProduct}
+          isOpen={isOpenProduct}
+          title={"Add New Product"}
+        />
+      </Flex>
       <TableContainer className={style.ProductTbl}>
         <Table>
           <TableCaption>Bảng quản lý Product</TableCaption>
@@ -110,12 +132,8 @@ function Product() {
               data.map((product, index) => (
                 <Tr key={product.productCode} className={style.ProductItem}>
                   <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
-                  <Td>
-                    {product.productName}
-                  </Td>
-                  <Td className={style.WrapText}>
-                    {product.description}
-                  </Td>
+                  <Td>{product.productName}</Td>
+                  <Td className={style.WrapText}>{product.description}</Td>
                   <Td>{moment(product.createDate).format("DD/MM/YYYY")}</Td>
                   <Td>
                     <img

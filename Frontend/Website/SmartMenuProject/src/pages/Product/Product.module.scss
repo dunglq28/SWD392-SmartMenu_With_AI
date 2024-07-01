@@ -4,6 +4,18 @@
   user-select: none;
   justify-content: center;
   flex-direction: column;
+  row-gap: 20px;
+
+  .AddProductBtn {
+    background-color: #55ad9b;
+    color: #f1f8e8;
+    &:hover {
+      background-color: #499182;
+    }
+    &:active {
+      background-color: #3f7a6f;
+    }
+  }
 
   .ProductTbl {
     border-radius: 7px;
@@ -50,10 +62,10 @@
       width: 40%;
       white-space: normal;
     }
-    
+
     .ProductImage {
       max-width: 100%;
-      max-height: 100%; 
+      max-height: 100%;
     }
   }
   .PopupButton {
