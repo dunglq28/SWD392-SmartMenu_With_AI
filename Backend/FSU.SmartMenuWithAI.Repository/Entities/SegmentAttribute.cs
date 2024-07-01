@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using FSU.SmartMenuWithAI.Repository.Entities;
 
 namespace FSU.SmartMenuWithAI.Repository.Entities;
+
 public partial class SegmentAttribute
 {
     public int SegmentId { get; set; }

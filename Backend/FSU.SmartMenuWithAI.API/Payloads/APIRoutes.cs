@@ -12,6 +12,7 @@
         public static class Authentication
         {
             public const string Login = Base + "/authentication/login";
+            public const string LoginMobile = Base + "/authentication/login-mobile";
 
             public const string RefreshToken = Base + "/authentication/refresh-token";
 
@@ -117,7 +118,7 @@
         }
         public static class Product
         {
-            public const string GetAll = Base + "/products/";
+            public const string GetAllByCategory = Base + "/products/get-by-category";
 
             public const string Add = Base + "/products/";
 
@@ -126,6 +127,9 @@
             public const string Delete = Base + "/products/";
 
             public const string GetByID = Base + "/products/get-by-id";
+
+            public const string GetAll = Base + "/products/";
+
             public const string testRecogize = Base + "/products/test-recogize";
         }
         public static class ProductMenu
@@ -141,6 +145,34 @@
             public const string Delete = Base + "/products-menu/";
 
             public const string Add = Base + "/products-menu/";
+        }
+        public static class ListPosition
+        {
+            public const string GetByID = Base + "/list-positions/get-by-id";
+
+            public const string GetByBrandID = Base + "/list-positions/get-by-brand-id";
+
+            public const string Add = Base + "/list-positions/";
+
+            public const string Update = Base + "/list-positions/";
+
+            public const string Delete = Base + "/list-positions/";
+
+        }
+
+        public static class MenuList
+        {
+            public const string GetAll = Base + "/menu-list/";
+
+            public const string GetByID = Base + "/menu-list/get-by-id";
+
+            public const string GetProductNotInMenu = Base + "/menu-list/get-product-not-in-menu";
+
+            public const string Update = Base + "/menu-list/";
+
+            public const string Delete = Base + "/menu-list/";
+
+            public const string Add = Base + "/menu-list/";
         }
     }
 }

@@ -157,6 +157,29 @@ CREATE TABLE SegmentAttribute
   FOREIGN KEY (AttributeID) REFERENCES Attribute(AttributeID)
 );
 
+Create Table ListPosition(
+ListID INT NOT NULL IDENTITY(1,1),
+ListCode NVARCHAR(36) NOT NULL,
+TotalProduct INT NULL,
+CreateDate DATE NOT NULL,
+BrandID INT NOT NULL
+PRIMARY KEY (ListID),
+);
+
+CREATE TABLE ProductList
+(
+  ProductID INT NOT NULL,
+  ListID INT NOT NULL,
+  Price INT NOT NULL,
+  IndexInList INT NOT NULL,
+  BrandID INT NOT NULL,
+  PRIMARY KEY (ProductID, ListID),
+  FOREIGN KEY (ProductID) REFERENCES Product(ProductID),
+  FOREIGN KEY (ListID) REFERENCES ListPosition(ListID)
+);
+
+
+
 CREATE TABLE Menu
 (
   MenuID INT NOT NULL IDENTITY(1,1),
@@ -168,15 +191,15 @@ CREATE TABLE Menu
   FOREIGN KEY (BrandID) REFERENCES Brand(BrandID)
 );
 
-CREATE TABLE ProductMenu
+CREATE TABLE MenuList
 (
-  Price INT NOT NULL,
-  ProductID INT NOT NULL,
   MenuID INT NOT NULL,
-  DisplayIndex int NULL,
-  PRIMARY KEY (ProductID, MenuID),
-  FOREIGN KEY (ProductID) REFERENCES Product(ProductID),
-  FOREIGN KEY (MenuID) REFERENCES Menu(MenuID)
+  ListID INT NOT NULL,
+  ListIndex INT NOT NULL,
+  BrandID INT NOT NULL,
+  PRIMARY KEY (MenuID, ListID),
+  FOREIGN KEY (MenuID) REFERENCES Menu(MenuID),
+  FOREIGN KEY (ListID) REFERENCES ListPosition(ListID)
 );
 
 CREATE TABLE CustomerVisit
@@ -480,7 +503,44 @@ insert into Product (ProductCode, ProductName, Description, CreateDate, BrandID,
 insert into Product (ProductCode, ProductName, Description, CreateDate, BrandID, CategoryID) values ('b4a7acdc-8310-4f5d-82f6-4f065c4e953f', 'Bear, sloth', 'Phasellus in felis.', '5/16/2024', 1, 8);
 insert into Product (ProductCode, ProductName, Description, CreateDate, BrandID, CategoryID) values ('33e36ee5-25fd-4b51-9f7e-9c6c9c7693b2', 'Blackbird, red-winged', 'Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus. Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.', '2/14/2024', 1, 8);
 
---category
+-- Insert 10 rows of data into the ListPosition table
+INSERT INTO ListPosition (ListCode, TotalProduct, CreateDate, BrandID) VALUES
+(NEWID(), 10, '2024-01-01', 1),
+(NEWID(), 20, '2024-01-02', 1),
+(NEWID(), 30, '2024-01-03', 1),
+(NEWID(), 15, '2024-01-04', 2),
+(NEWID(), 25, '2024-01-05', 2),
+(NEWID(), 35, '2024-01-06', 2),
+(NEWID(), 5, '2024-01-07', 3),
+(NEWID(), 10, '2024-01-08', 3),
+(NEWID(), 20, '2024-01-09', 3),
+(NEWID(), 30, '2024-01-10', 1);
+
+--Menu
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( 'bfdd194b-0cd5-4462-914c-fb43dd86d5ec', '1/2/2024', 0, (SELECT BrandID FROM Brand WHERE BrandName = N'Phúc Long'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( 'ce30468f-8d3f-4283-a69b-f4b23f71bc73', '3/25/2024', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Phúc Long'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '19e388d2-cdae-4991-a486-62c1f807d95d', '8/14/2023', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Phúc Long'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '3f04f7e0-ff88-4f46-8a00-2870e2fb9baf', '4/13/2024', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Highlands'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '1d8c44a2-04c0-4215-b368-df7aae1d15de', '8/23/2023', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Highlands'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( 'b985ad24-24a6-4e4f-b913-de8931f2ea22', '7/10/2023', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Highlands'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '992eb6cc-6e43-42d9-9ea9-0f613094f3ec', '10/8/2023', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '81bbd1c7-bb39-41c4-a2b5-2b0db6767e6d', '12/26/2023', 0, (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '3ef4ac78-eed0-4f79-83dd-3b212cd5c1be', '8/18/2023', 0, (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
+insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '56b32ea0-623b-4952-8256-89db4ff94010', '1/29/2024', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
+-- Insert sample data into MenuList table
+INSERT INTO MenuList (MenuID, ListID, ListIndex, BrandID) VALUES
+(1, 1, 1, 1),
+(1, 2, 2, 1),
+(2, 3, 1, 1),
+(2, 4, 2, 2),
+(3, 5, 1, 2),
+(3, 6, 2, 2),
+(1, 7, 1, 3),
+(2, 8, 2, 3),
+(3, 9, 1, 3),
+(1, 10, 2, 1);
+
+--CustomerSegment
 insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '85b7f688-a323-460d-aa05-096fb64fe27a', 'Doors, Frames & Hardware', '8/17/2023', '3/25/2024', 13,1);
 insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '3de8a465-8194-4508-a62d-a636891b1101', 'Plumbing & Medical Gas', '5/26/2024', '12/23/2023', 16,1);
 insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( 'f8030941-20e9-4220-b999-7e084d107c6c', 'Rebar & Wire Mesh Install', '9/14/2023', '6/27/2023', 3,1);
@@ -550,30 +610,6 @@ insert into SegmentAttribute (SegmentID, AttributeID, Value) values (7, 10, 'AS'
 insert into SegmentAttribute (SegmentID, AttributeID, Value) values (9, 8, 'AS');
 
 
---Menu
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( 'bfdd194b-0cd5-4462-914c-fb43dd86d5ec', '1/2/2024', 0, (SELECT BrandID FROM Brand WHERE BrandName = N'Phúc Long'));
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( 'ce30468f-8d3f-4283-a69b-f4b23f71bc73', '3/25/2024', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Phúc Long'));
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '19e388d2-cdae-4991-a486-62c1f807d95d', '8/14/2023', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Phúc Long'));
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '3f04f7e0-ff88-4f46-8a00-2870e2fb9baf', '4/13/2024', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Highlands'));
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '1d8c44a2-04c0-4215-b368-df7aae1d15de', '8/23/2023', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Highlands'));
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( 'b985ad24-24a6-4e4f-b913-de8931f2ea22', '7/10/2023', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Highlands'));
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '992eb6cc-6e43-42d9-9ea9-0f613094f3ec', '10/8/2023', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '81bbd1c7-bb39-41c4-a2b5-2b0db6767e6d', '12/26/2023', 0, (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '3ef4ac78-eed0-4f79-83dd-3b212cd5c1be', '8/18/2023', 0, (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
-insert into Menu ( MenuCode, CreateDate, IsActive, BrandID) values ( '56b32ea0-623b-4952-8256-89db4ff94010', '1/29/2024', 1, (SELECT BrandID FROM Brand WHERE BrandName = N'Cộng'));
-
-
---ProductMenu
-insert into ProductMenu (Price, ProductID, MenuID, DisplayIndex) values (17, 1, 5, 3);
-insert into ProductMenu (Price, ProductID, MenuID, DisplayIndex) values (20, 8, 5, 9);
-insert into ProductMenu (Price, ProductID, MenuID, DisplayIndex) values (23, 1, 6, 8);
-insert into ProductMenu (Price, ProductID, MenuID, DisplayIndex) values (28, 9, 8, 14);
-insert into ProductMenu (Price, ProductID, MenuID, DisplayIndex) values (19, 8, 6, 7);
-insert into ProductMenu (Price, ProductID, MenuID, DisplayIndex) values (19, 2, 1, 11);
-insert into ProductMenu (Price, ProductID, MenuID, DisplayIndex) values (28, 5, 3, 1);
-insert into ProductMenu (Price, ProductID, MenuID, DisplayIndex) values (23, 4, 4, 11);
-insert into ProductMenu (Price, ProductID, MenuID, DisplayIndex) values (30, 8, 3, 9);
-insert into ProductMenu (Price, ProductID, MenuID, DisplayIndex) values (17, 3, 7, 5);
 
 --MenuSegment
 insert into MenuSegment (Priority, MenuID, SegmentID) values (9, 7, 9);

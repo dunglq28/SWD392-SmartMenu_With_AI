@@ -17,10 +17,12 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         private GenericRepository<Store> _storeRepo;
         private GenericRepository<Menu> _menuRepo;
         private GenericRepository<Product> _productRepo;
-        private ProductMenuRepository _productMenuRepo;
+        private MenuListRepository _menuListRepo;
+        //private ProductMenuRepository _productMenuRepo;
         private BrandRepository _brandRepo;
         private GroupAttributeRepository _groupAttributeRepo;
         private AttributeRepository _attributeRepository;
+        private ListPositionRepository _listPositionRepo;
 
 
         public UnitOfWork(SmartMenuContext context, IConfiguration configuration)
@@ -127,17 +129,17 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
                 return _productRepo;
             }
         }
-        public ProductMenuRepository ProductMenuRepository
-        {
-            get
-            {
-                if (_productMenuRepo == null)
-                {
-                    this._productMenuRepo = new ProductMenuRepository(_context);
-                }
-                return _productMenuRepo;
-            }
-        }
+        //public ProductMenuRepository ProductMenuRepository
+        //{
+        //    get
+        //    {
+        //        if (_productMenuRepo == null)
+        //        {
+        //            this._productMenuRepo = new ProductMenuRepository(_context);
+        //        }
+        //        return _productMenuRepo;
+        //    }
+        //}
         RefreshTokenRepository IUnitOfWork.RefreshTokenRepository
         {
             get
@@ -181,6 +183,29 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
                     this._attributeRepository = new AttributeRepository(_context);
                 }
                 return _attributeRepository;
+            }
+        }
+        ListPositionRepository IUnitOfWork.ListPositionRepository
+        {
+            get
+            {
+                if (_listPositionRepo == null)
+                {
+                    this._listPositionRepo = new ListPositionRepository(_context);
+                }
+                return _listPositionRepo;
+            }
+        }
+
+        MenuListRepository IUnitOfWork.MenuListRepository
+        {
+            get
+            {
+                if (_menuListRepo == null)
+                {
+                    this._menuListRepo = new MenuListRepository(_context, _configuration);
+                }
+                return _menuListRepo;
             }
         }
     }
