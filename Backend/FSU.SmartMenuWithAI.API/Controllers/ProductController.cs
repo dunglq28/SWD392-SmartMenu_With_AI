@@ -44,31 +44,38 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         IsSuccess = false
                     });
                 }
-                var validationvideo = await _videoValidation.ValidateAsync(reqObj.SpotlightVideo);
-                if (!validationImg.IsValid)
+                if (reqObj.SpotlightVideo != null)
                 {
-                    return BadRequest(new BaseResponse
+                    var validationvideo = await _videoValidation.ValidateAsync(reqObj.SpotlightVideo!);
+                    if (!validationvideo.IsValid)
                     {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "File không phải là video hợp lệ",
-                        Data = null,
-                        IsSuccess = false
-                    });
+                        return BadRequest(new BaseResponse
+                        {
+                            StatusCode = StatusCodes.Status400BadRequest,
+                            Message = "File không phải là video hợp lệ",
+                            Data = null,
+                            IsSuccess = false
+                        });
+                    }
                 }
 
                 var dto = new ProductDTO
                 {
                     ProductName = reqObj.ProductName,
-                    SpotlightVideoImageName = reqObj.BrandId + reqObj.SpotlightVideo.FileName,
-                    SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.BrandId + reqObj.SpotlightVideo.FileName, FolderRootImg.Product),
                     ImageName = reqObj.BrandId + reqObj.Image.FileName,
                     ImageUrl = _s3Service.GetPreSignedURL(reqObj.BrandId + reqObj.Image.FileName, FolderRootImg.Product),
                     Description = reqObj.Description,
                     CategoryId = reqObj.CategoryId,
                     BrandId = reqObj.BrandId,
+                    Price = reqObj.Price,
                 };
+                if (reqObj.SpotlightVideo != null)
+                {
 
-                await _s3Service.UploadItemAsync(reqObj.SpotlightVideo, dto.SpotlightVideoImageName, FolderRootImg.Product);
+                    dto.SpotlightVideoImageName = reqObj.BrandId + reqObj.SpotlightVideo.FileName;
+                    dto.SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.BrandId + reqObj.SpotlightVideo.FileName, FolderRootImg.Product);
+                    await _s3Service.UploadItemAsync(reqObj.SpotlightVideo, dto.SpotlightVideoImageName, FolderRootImg.Product);
+                }
                 await _s3Service.UploadItemAsync(reqObj.Image, dto.ImageName, FolderRootImg.Product);
 
                 var result = await _productService.Insert(dto);
@@ -159,8 +166,13 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         IsSuccess = false
                     });
                 }
-                var dto = new ProductDTO();
-                dto.ProductName = reqObj.ProductName!;
+                var dto = new ProductDTO
+                {
+
+                ProductName = reqObj.ProductName!,
+                Description = reqObj.Description,
+                Price = reqObj.Price
+                };
                 if (reqObj.SpotlightVideo != null)
                 {
 
@@ -174,9 +186,6 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     await _s3Service.UploadItemAsync(reqObj.Image, existProduct.ProductId + existProduct.BrandId + reqObj.Image.FileName, FolderRootImg.Product);
                     dto.ImageUrl = _s3Service.GetPreSignedURL(existProduct.ProductId + existProduct.BrandId + reqObj.Image.FileName, FolderRootImg.Product);
                 }
-
-                dto.Description = reqObj.Description;
-
 
                 bool result = await _productService.UpdateAsync(id, dto, existProduct.BrandId);
 
@@ -248,7 +257,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             , [FromQuery(Name = "brand-id")] int brandID
             , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
             , [FromQuery(Name = "page-size")] int PageSize = Page.DefaultPageSize)
-            {
+        {
             try
             {
                 var menus = await _productService.GetAllAsync(searchKey: searchKey, brandID: brandID, pageIndex: pageNumber, pageSize: PageSize);
