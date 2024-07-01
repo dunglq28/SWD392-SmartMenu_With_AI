@@ -129,17 +129,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
                 return _productRepo;
             }
         }
-        //public ProductMenuRepository ProductMenuRepository
-        //{
-        //    get
-        //    {
-        //        if (_productMenuRepo == null)
-        //        {
-        //            this._productMenuRepo = new ProductMenuRepository(_context);
-        //        }
-        //        return _productMenuRepo;
-        //    }
-        //}
+       
         RefreshTokenRepository IUnitOfWork.RefreshTokenRepository
         {
             get
