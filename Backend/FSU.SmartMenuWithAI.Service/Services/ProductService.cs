@@ -93,14 +93,19 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return result;
         }
 
-        public async Task<bool> UpdateAsync(int id, ProductDTO reqObj)
+        public async Task<bool> UpdateAsync(int id, ProductDTO reqObj, int brandId)
         {
-            Expression<Func<Product, bool>> condition = x => x.ProductName.ToLower().Equals(reqObj.ProductName.ToLower());
-            var existName = _unitOfWork.ProductRepository.GetByCondition(condition);
-            if (existName != null)
+            // Kiểm tra xem có sản phẩm nào của brandId đó trùng tên không
+            Expression<Func<Product, bool>> condition =
+                x => x.BrandId == brandId && x.ProductName == reqObj.ProductName;
+
+            Product existName = await _unitOfWork.ProductRepository.GetByCondition(condition);
+
+            if (existName != null && existName.ProductId != id)
             {
                 throw new Exception("Tên đã tồn tại");
             }
+
             var product = await _unitOfWork.ProductRepository.GetByID(id);
             if (product == null)
             {

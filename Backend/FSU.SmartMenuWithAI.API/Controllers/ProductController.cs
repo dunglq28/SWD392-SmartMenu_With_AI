@@ -59,10 +59,10 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 var dto = new ProductDTO
                 {
                     ProductName = reqObj.ProductName,
-                    SpotlightVideoImageName = reqObj.SpotlightVideo.FileName + reqObj.BrandId,
-                    SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.SpotlightVideo.FileName + reqObj.BrandId, FolderRootImg.Product),
-                    ImageName = reqObj.Image.FileName + reqObj.BrandId,
-                    ImageUrl = _s3Service.GetPreSignedURL(reqObj.Image.FileName + reqObj.BrandId, FolderRootImg.Product),
+                    SpotlightVideoImageName = reqObj.BrandId + reqObj.SpotlightVideo.FileName,
+                    SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.BrandId + reqObj.SpotlightVideo.FileName, FolderRootImg.Product),
+                    ImageName = reqObj.BrandId + reqObj.Image.FileName,
+                    ImageUrl = _s3Service.GetPreSignedURL(reqObj.BrandId + reqObj.Image.FileName, FolderRootImg.Product),
                     Description = reqObj.Description,
                     CategoryId = reqObj.CategoryId,
                     BrandId = reqObj.BrandId,
@@ -144,7 +144,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Product.Update, Name = "UpdateProductAsync")]
-        public async Task<IActionResult> UpdateUserAsync([FromQuery(Name = "product-id")] int id, [FromForm] UpdateProductRequest reqObj)
+        public async Task<IActionResult> UpdateProductAsync([FromQuery(Name = "product-id")] int id, [FromForm] UpdateProductRequest reqObj)
         {
             try
             {
@@ -164,19 +164,21 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 if (reqObj.SpotlightVideo != null)
                 {
 
-                    dto.SpotlightVideoImageName = reqObj.SpotlightVideo.FileName + existProduct.BrandId;
-                    dto.SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.SpotlightVideo.FileName + existProduct.BrandId, FolderRootImg.Product);
+                    dto.SpotlightVideoImageName = reqObj.SpotlightVideo.FileName;
+                    await _s3Service.UploadItemAsync(reqObj.SpotlightVideo, existProduct.ProductId + existProduct.BrandId + reqObj.SpotlightVideo.FileName, FolderRootImg.Product);
+                    dto.SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(existProduct.ProductId + existProduct.BrandId + reqObj.SpotlightVideo.FileName, FolderRootImg.Product);
                 }
                 if (reqObj.Image != null)
                 {
-                    dto.ImageName = reqObj.Image.FileName + existProduct.BrandId;
-                    dto.ImageUrl = _s3Service.GetPreSignedURL(reqObj.Image.FileName + existProduct.BrandId, FolderRootImg.Product);
+                    dto.ImageName = reqObj.Image.FileName;
+                    await _s3Service.UploadItemAsync(reqObj.Image, existProduct.ProductId + existProduct.BrandId + reqObj.Image.FileName, FolderRootImg.Product);
+                    dto.ImageUrl = _s3Service.GetPreSignedURL(existProduct.ProductId + existProduct.BrandId + reqObj.Image.FileName, FolderRootImg.Product);
                 }
 
                 dto.Description = reqObj.Description;
 
 
-                var result = await _productService.UpdateAsync(id, dto);
+                bool result = await _productService.UpdateAsync(id, dto, existProduct.BrandId);
 
                 if (!result)
                 {
