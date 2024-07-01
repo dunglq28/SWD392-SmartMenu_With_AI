@@ -128,20 +128,19 @@ function User() {
       <Flex w="40%" ml="20px">
         <Searchbar onSearch={handleSearch} />
       </Flex>
-      <Flex className={style.User} flexDirection="column">
-        <Flex className={style.ButtonContainer}></Flex>
+      <Flex className={style.User}>
         <TableContainer className={style.UserTbl}>
           <Table>
-            <TableCaption>Bảng quản lý user</TableCaption>
+            <TableCaption>Bảng quản lý người dùng</TableCaption>
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>
                 <Th className={style.HeaderTbl}>Full name</Th>
                 <Th className={style.HeaderTbl}>User name</Th>
-                <Th className={style.HeaderTbl}>Date of birth</Th>
+                <Th className={style.HeaderTbl}>DOB</Th>
                 <Th className={style.HeaderTbl}>Gender</Th>
-                <Th className={style.HeaderTbl}>Phone number</Th>
-                <Th className={style.HeaderTbl}>Role name</Th>
+                <Th className={style.HeaderTbl}>Phone</Th>
+                <Th className={style.HeaderTbl}>Role</Th>
                 <Th className={style.HeaderTbl}>Created on</Th>
                 <Th className={style.HeaderTbl}>Is active</Th>
                 <Th className={style.HeaderTbl}>Settings</Th>

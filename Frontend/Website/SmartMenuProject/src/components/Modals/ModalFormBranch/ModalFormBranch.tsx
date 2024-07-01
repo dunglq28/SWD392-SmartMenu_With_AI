@@ -322,7 +322,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
             >
               <Flex justify="space-between" mb={3}>
                 <Box flex="1" ml={2}>
-                  <Text className={styles.textFontWeight} py={3} pr={3}>
+                  <Text className={styles.textFontWeight600} py={3} pr={3}>
                     Brand Name
                   </Text>
                   {isEdit ? (
@@ -357,7 +357,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
                     </Text>
                   )}
 
-                  <Text className={styles.textFontWeight} py={3} pr={3}>
+                  <Text className={styles.textFontWeight600} py={3} pr={3}>
                     City
                   </Text>
                   <Select
@@ -382,7 +382,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
 
                   <Flex justify="space-between" mb={3}>
                     <Box flex="1">
-                      <Text className={styles.textFontWeight} py={3} pr={3}>
+                      <Text className={styles.textFontWeight600} py={3} pr={3}>
                         District
                       </Text>
                       <Select
@@ -412,7 +412,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
                     </Box>
 
                     <Box flex="1" ml={3}>
-                      <Text className={styles.textFontWeight} py={3} pr={3}>
+                      <Text className={styles.textFontWeight600} py={3} pr={3}>
                         Ward
                       </Text>
                       <Select
@@ -442,7 +442,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
                     </Box>
                   </Flex>
 
-                  <Text className={styles.textFontWeight} py={3} pr={3}>
+                  <Text className={styles.textFontWeight600} py={3} pr={3}>
                     Address
                   </Text>
                   <Input

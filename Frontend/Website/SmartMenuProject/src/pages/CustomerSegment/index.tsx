@@ -1,4 +1,5 @@
 import {
+  Box,
   Flex,
   Table,
   TableCaption,
@@ -9,26 +10,30 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import style from "./Category.module.scss";
-import Searchbar from "../../components/Searchbar";
-import { useCallback, useEffect, useState } from "react";
-import Loading from "../../components/Loading";
-import { CategoryData } from "../../payloads/responses/CategoryData.model";
-import { getOptions } from "../../utils/getRowPerPage";
-import { getCategory } from "../../services/CategoryService";
-import { toast } from "react-toastify";
-import moment from "moment";
-import NavigationDot from "../../components/NavigationDot/NavigationDot";
+import style from "./CustomerSegment.module.scss";
 
-function Category() {
+import React, { useCallback, useEffect, useState } from "react";
+import { deleteUser, getUsers, updateUser } from "../../services/UserService";
+import NavigationDot from "../../components/NavigationDot/NavigationDot";
+import { getOptions } from "../../utils/getRowPerPage";
+import { UserData } from "../../payloads/responses/UserData.model";
+import moment from "moment";
+import { toast } from "react-toastify";
+import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
+import Loading from "../../components/Loading";
+import { userUpdate } from "../../payloads/requests/updateUser.model";
+import Searchbar from "../../components/Searchbar";
+import { getRoleName } from "../../utils/getRoleName";
+
+function CustomerSegment() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
-  const [data, setData] = useState<CategoryData[]>([]);
+  const [data, setData] = useState<UserData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
   const [totalPages, setTotalPages] = useState<number>(10);
-  const brandId = localStorage.getItem("BrandId");
+  const [totalRecords, setTotalRecords] = useState<number>(0);
 
   const fetchData = useCallback(
     async (searchValue?: string) => {
@@ -38,29 +43,24 @@ function Category() {
 
         const loadData = async () => {
           if (searchValue) {
-            result = await getCategory(
-              Number(brandId),
-              currentPage,
-              rowsPerPage,
-              searchValue
-            );
+            result = await getUsers(currentPage, rowsPerPage, searchValue);
           } else {
-            result = await getCategory(
-              Number(brandId),
-              currentPage,
-              rowsPerPage,
-              ""
-            );
+            result = await getUsers(currentPage, rowsPerPage, "");
           }
           setData(result.list);
           setTotalPages(result.totalPage);
+          setTotalRecords(result.totalRecord);
           setRowsPerPageOption(getOptions(result.totalRecord));
           setIsLoading(false);
-          setIsInitialLoad(false);
+          if (isInitialLoad) {
+            setIsInitialLoad(false);
+          }
         };
 
         if (isInitialLoad) {
-          setTimeout(loadData, 500);
+          setTimeout(async () => {
+            await loadData();
+          }, 500);
         } else {
           await loadData();
         }
@@ -74,7 +74,7 @@ function Category() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, currentPage, isInitialLoad]);
 
   const handlePageChange = useCallback(
     (page: number) => {
@@ -91,12 +91,32 @@ function Category() {
     [setCurrentPage, setRowsPerPage]
   );
 
-  function handleDelete(id: number) {
-    console.log(id);
+  async function handleDelete(id: number) {
+    try {
+      var result = await deleteUser(id);
+      if (result.statusCode === 200) {
+        if ((totalRecords - 1) % rowsPerPage === 0 && currentPage > 1) {
+          setCurrentPage((prevPage) => prevPage - 1);
+        } else {
+          fetchData();
+        }
+        toast.success("Xoá người dùng thành công");
+      }
+    } catch (e) {
+      toast.error("Xoá người dùng thất bại");
+    }
   }
 
-  function handleEdit(id: number) {
-    console.log(id);
+  async function handleEdit(id: number, user: userUpdate) {
+    try {
+      var result = await updateUser(id, user);
+      if (result.statusCode === 200) {
+        fetchData();
+        toast.success("Cập nhật thành công");
+      }
+    } catch {
+      toast.error("Cập nhật thất bại");
+    }
   }
 
   async function handleSearch(value: string) {
@@ -108,10 +128,10 @@ function Category() {
       <Flex w="40%" ml="20px">
         <Searchbar onSearch={handleSearch} />
       </Flex>
-      <Flex className={style.Category}>
-        <TableContainer className={style.CategoryTbl}>
+      <Flex className={style.CustomerSegment}>
+        <TableContainer className={style.CustomerSegmentTbl}>
           <Table>
-            <TableCaption>Bảng quản lý loại sản phẩm</TableCaption>
+            <TableCaption>Bảng quản lý phân khúc khách hàng</TableCaption>
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>
@@ -121,7 +141,7 @@ function Category() {
               </Tr>
             </Thead>
             <Tbody>
-              {isLoading && isInitialLoad ? (
+              {isInitialLoad && isLoading ? (
                 <Tr>
                   <Td colSpan={10} className={style.LoadingCell}>
                     <Loading />
@@ -129,23 +149,22 @@ function Category() {
                 </Tr>
               ) : data.length === 0 ? (
                 <Tr>
-                  <Td colSpan={10}>Không có loại sản phẩm để hiển thị</Td>
+                  <Td colSpan={10}>Không có người dùng để hiển thị</Td>
                 </Tr>
               ) : (
-                data.map((cate, index) => (
-                  <Tr key={cate.categoryId} className={style.CategoryItem}>
-                    <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
-                    <Td>{cate.categoryName}</Td>
-                    <Td>{moment(cate.createDate).format("DD/MM/YYYY")}</Td>
-                    <Td>
-                      {/* <ActionMenu
-                        id={Category.CategoryId}
-                        onDelete={handleDelete}
-                        onEdit={handleEdit}
-                      /> */}
-                    </Td>
-                  </Tr>
-                ))
+                //   data.map((CustomerSegment, index) => (
+                <Tr className={style.CustomerSegmentItem}>
+                  <Td></Td>
+                  <Td></Td>
+                  <Td></Td>
+                  <Td>
+                    {/* <ActionMenu
+                          id={user.userId}
+                          onDelete={handleDelete}
+                          onEdit={handleEdit}
+                        /> */}
+                  </Td>
+                </Tr>
               )}
             </Tbody>
           </Table>
@@ -163,4 +182,4 @@ function Category() {
   );
 }
 
-export default Category;
+export default CustomerSegment;

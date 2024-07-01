@@ -20,6 +20,7 @@ import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
 import Loading from "../../components/Loading";
 import Searchbar from "../../components/Searchbar";
+import { formatCurrency } from "../../utils/formatCurrency";
 
 function Product() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -112,15 +113,16 @@ function Product() {
       <Flex className={style.Product}>
         <TableContainer className={style.ProductTbl}>
           <Table>
-            <TableCaption>Bảng quản lý Product</TableCaption>
+            <TableCaption>Bảng quản lý sản phẩm</TableCaption>
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>
                 <Th className={style.HeaderTbl}>Name</Th>
-                <Th className={style.HeaderTbl}>Description</Th>
-                <Th className={style.HeaderTbl}>Created on</Th>
                 <Th className={style.HeaderTbl}>Image</Th>
                 <Th className={style.HeaderTbl}>Category</Th>
+                <Th className={style.HeaderTbl}>Price</Th>
+                <Th className={style.HeaderTbl}>Description</Th>
+                <Th className={style.HeaderTbl}>Created on</Th>
                 <Th className={style.HeaderTbl}>Settings</Th>
               </Tr>
             </Thead>
@@ -140,18 +142,18 @@ function Product() {
                   <Tr key={product.productCode} className={style.ProductItem}>
                     <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
                     <Td>{product.productName}</Td>
-                    <Td className={style.WrapText}>{product.description}</Td>
-                    <Td>{moment(product.createDate).format("DD/MM/YYYY")}</Td>
                     <Td>
                       <img
-                        // src={product.imageUrl}
-                        src="https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/highlands.png"
+                        src={product.imageUrl}
                         alt={product.productName}
                         className={style.ProductImage}
                       />
                     </Td>
-                    {/* <Td>{product.categoryId}</Td> */}
                     <Td>Cà Phê</Td>
+                    {/* <Td>{product.categoryId}</Td> */}
+                    <Td>{formatCurrency("27000")}</Td>
+                    <Td className={style.WrapText}>{product.description}</Td>
+                    <Td>{moment(product.createDate).format("DD/MM/YYYY")}</Td>
                     <Td>
                       <ActionMenu
                         id={product.productId}

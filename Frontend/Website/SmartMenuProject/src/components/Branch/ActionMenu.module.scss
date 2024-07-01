@@ -1,48 +1,17 @@
-.SettingBrand {
-  width: 100%;
-  height: 25px;
-  justify-content: center;
-  background-color: #fff;
+@import "../../styles/shared.scss";
+
+.SettingBranch {
+  @extend .settingItem;
 
   .SettingsIconBtn {
-    width: 0px;
-    height: 25px;
-    background-color: transparent;
+    @extend .settingsIconBtn;
+
     .SettingsIcon {
-      transition: 0.3s;
-      width: 25px;
-      height: 25px;
-      cursor: pointer;
-      &:hover {
-        rotate: 180deg;
-      }
-      &:active {
-        width: 20px;
-        height: 20px;
-      }
+      @extend .settingsIcon;
     }
   }
 }
 
 .PopoverContent {
-  width: 100% !important;
-  .PopupButton {
-    width: 150px;
-    height: 40px;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-    transition: 0.3s;
-    border-radius: 8px;
-    font-weight: bold;
-
-    &:hover {
-      background-color: #5d5fef;
-      color: #fff;
-    }
-    &:active {
-      background-color: #4d4ff0;
-    }
-  }
+  @extend .popoverContent;
 }

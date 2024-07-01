@@ -1,125 +1,29 @@
+@import "../../styles/shared.scss";
+
 .container {
-    width: 100%;
-    flex-direction: column;
-    .Product {
-      width: 100%;
-      padding: 20px;
-      user-select: none;
-      justify-content: center;
-      flex-direction: column;
-  
-      .ProductTbl {
-        border-radius: 7px;
-        border: 1px solid #ccc;
-        background-color: #fff;
-        .SettingProduct {
-          width: 100%;
-          height: 25px;
-          justify-content: center;
-        }
-  
-        .SettingsIconBtn {
-          width: 0px;
-          height: 25px;
-          background-color: transparent;
-          .SettingsIcon {
-            transition: 0.3s;
-            width: 25px;
-            height: 25px;
-            cursor: pointer;
-            &:hover {
-              rotate: 180deg;
-            }
-            &:active {
-              width: 20px;
-              height: 20px;
-            }
-          }
-        }
-        .ProductItem {
-          transition: 0.3s;
-          &:hover {
-            background-color: #f9fafb;
-            cursor: pointer;
-            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-          }
-          &:active {
-            transition: 0.1s;
-            box-shadow: none;
-          }
-        }
-  
-        .WrapText {
-          width: 40%;
-          white-space: normal;
-        }
-  
-        .ProductImage {
-          max-width: 100%;
-          max-height: 100%;
-        }
+  @extend .container;
+  .Category {
+    @extend .table;
+
+    .CategoryTbl {
+      @extend .tableContainer;
+      @extend .shadow;
+
+      .CategoryItem {
+        @extend .tableItem;
       }
-      .PopupButton {
-        width: 150px;
-        height: 40px;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        user-select: none;
-        transition: 0.3s;
-        &:hover {
-          background-color: #b9d7d5;
-        }
-        &:active {
-          background-color: #a0c4c3;
-        }
+
+      .WrapText {
+        @extend .wrapText;
       }
-  
-      .PopoverContent {
-        width: 100%;
-        .PopupButton {
-          font-weight: bold;
-          border-radius: 10px;
-          width: 150px;
-          height: 40px;
-          justify-content: center;
-          align-items: center;
-          cursor: pointer;
-          user-select: none;
-          transition: 0.3s;
-          &:hover {
-            background-color: #5d5fef;
-            color: #fff;
-          }
-          &:active {
-            background-color: #4d4ff0;
-          }
-        }
-      }
-  
-      .HeaderTbl {
-        color: black;
-        font-size: 15px;
-        text-align: center;
-      }
-  
-      .full-text-tooltip {
-        position: relative;
-      }
-  
-      .full-text-tooltip:hover::before {
-        content: attr(data-fulltext);
-        display: block;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        white-space: nowrap;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: #fff;
-        padding: 5px;
-        border-radius: 5px;
-        z-index: 999;
+
+      .CategoryImage {
+        @extend .itemImage;
       }
     }
+
+    .HeaderTbl {
+      @extend .header;
+    }
   }
-  
+}

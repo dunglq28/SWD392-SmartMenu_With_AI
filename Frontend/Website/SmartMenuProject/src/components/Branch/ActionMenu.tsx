@@ -124,7 +124,7 @@ const ActionMenu: FC<ActionMenuProps> = ({
 
   return (
     <>
-      <Flex className={style.SettingBrand}>
+      <Flex className={style.SettingBranch}>
         <Popover>
           <PopoverTrigger>
             <Button className={style.SettingsIconBtn}>
