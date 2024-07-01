@@ -1,10 +1,12 @@
+@import "../../../styles/shared.scss";
+
 .containerForm {
-  .textFontWeight {
-    font-weight: 600;
+  .textFontWeight600 {
+    @extend .textFontWeight600;
   }
 
   input {
-    border-color: #466d6b;
+    @extend .borderColor;
   }
 
   .inputImage {

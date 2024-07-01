@@ -137,7 +137,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
         >
           <Flex justify="space-between" mb={3}>
             <Box flex="1" ml={2}>
-              <Text className={styles.textFontWeight} py={3} pr={3}>
+              <Text className={styles.textFontWeight600} py={3} pr={3}>
                 Brand Name
               </Text>
               <Input
@@ -150,7 +150,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
                 <Text color="red.500">{formData.brandName.errorMessage}</Text>
               )}
               <Box mt={2}>
-                <Text className={styles.textFontWeight} py={3} pr={3}>
+                <Text className={styles.textFontWeight600} py={3} pr={3}>
                   Upload Brand Logo
                 </Text>
                 <Flex align="center">

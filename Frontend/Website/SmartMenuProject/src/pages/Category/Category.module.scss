@@ -2,28 +2,23 @@
 
 .container {
   @extend .container;
-
-  .Product {
+  .Category {
     @extend .table;
 
-    .ProductTbl {
+    .CategoryTbl {
       @extend .tableContainer;
       @extend .shadow;
 
-      .ProductItem {
+      .CategoryItem {
         @extend .tableItem;
       }
 
       .WrapText {
-        width: 40%;
-        white-space: normal;
-        text-align: justify;
+        @extend .wrapText;
       }
 
-      .ProductImage {
-        max-width: 150px;
-        max-height: 150px;
-        object-fit: cover;
+      .CategoryImage {
+        @extend .itemImage;
       }
     }
 

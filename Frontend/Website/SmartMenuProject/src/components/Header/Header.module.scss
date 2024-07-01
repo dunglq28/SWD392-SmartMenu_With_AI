@@ -85,6 +85,13 @@
   }
 
   .ProfileImage {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+
+  .ProfileImageAdmin {
     height: 50px;
     border-radius: 8px;
   }
@@ -92,6 +99,8 @@
   .ProfileInfo {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-left: 10px;
     margin-top: 4px;
   }

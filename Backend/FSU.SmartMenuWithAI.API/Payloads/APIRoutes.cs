@@ -62,7 +62,7 @@
 
             public const string Delete = Base + "/brands/delete";
 
-            public const string GetByUserID = Base + "/brands/get-by-userid";
+            public const string GetByUserID = Base + "/brands/get-by-user-id";
         }
 
         public static class Store
