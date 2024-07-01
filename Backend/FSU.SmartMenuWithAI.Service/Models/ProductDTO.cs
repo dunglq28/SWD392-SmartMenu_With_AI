@@ -29,5 +29,7 @@ namespace FSU.SmartMenuWithAI.Service.Models
         public int CategoryId { get; set; }
 
         public int BrandId { get; set; }
+
+        public decimal? Price { get; set; }
     }
 }
