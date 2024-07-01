@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Flex,
@@ -9,12 +10,12 @@ import {
 import style from "./ModalFormProduct.module.scss";
 import Select from "react-select";
 import { getCategoryByBrandId } from "../../../services/CategoryService";
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 interface ModalFormBrandProps {
   onClose: () => void;
 }
+
 interface CategoryDataSelection {
   categoryId: number;
   categoryCode: string;
@@ -23,29 +24,39 @@ interface CategoryDataSelection {
 
 const ModalFormProduct: React.FC<ModalFormBrandProps> = ({ onClose }) => {
   const brandId = Number(localStorage.getItem("BrandId"));
-  const [data, setData] = useState<CategoryDataSelection[]>([]);
+  const [categoryOptions, setCategoryOptions] = useState<
+    { value: number; label: string }[]
+  >([]);
 
   useEffect(() => {
-    async () => {
+    const loadData = async () => {
       try {
-        let result;
+        const result = await getCategoryByBrandId(brandId);
+        if (result && Array.isArray(result)) {
+          const categories: CategoryDataSelection[] = result.map(
+            (category) => ({
+              categoryId: category.categoryId,
+              categoryCode: category.categoryCode,
+              categoryName: category.categoryName,
+            })
+          );
 
-        const loadData = async () => {
-          result = await getCategoryByBrandId(brandId);
-          setData(result.list);
-        };
-
-        setTimeout(loadData, 500);
+          const options = categories.map((category) => ({
+            value: category.categoryId,
+            label: category.categoryName,
+          }));
+          setCategoryOptions(options);
+        } else {
+          throw new Error("Invalid response format");
+        }
       } catch (err) {
-        toast.error("Lỗi khi lấy dữ liệu");
+        console.error("Error fetching data:", err);
+        toast.error("Error fetching data");
       }
     };
-  });
 
-  const categoryOptions = data.map((category) => ({
-    value: category.categoryId,
-    label: category.categoryName,
-  }));
+    loadData();
+  }, [brandId]);
 
   return (
     <>

@@ -117,7 +117,7 @@ function Product() {
   } = useDisclosure();
   return (
     <Flex className={style.container}>
-      <Flex w="40%" ml="20px">
+      <Flex w="60%" ml="20px" columnGap="30px">
         <Button onClick={onOpenProduct} className={style.AddProductBtn}>
           Add product
         </Button>
