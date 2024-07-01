@@ -63,7 +63,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
         motionPreset="slideInBottom"
       >
         <ModalOverlay onClick={cancelHandler} />
-        <ModalContent borderRadius="23px" maxW="40%">
+        <ModalContent borderRadius="23px" maxW="40%" backgroundColor="#F1F8E8">
           <ModalHeader
             className={styles["modal-header"]}
             backgroundColor={themeColors.primaryButton}

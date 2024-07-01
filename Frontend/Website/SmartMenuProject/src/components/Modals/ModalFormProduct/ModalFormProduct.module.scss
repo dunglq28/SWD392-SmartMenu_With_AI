@@ -1,0 +1,39 @@
+.ModalBody {
+  flex-direction: column;
+  row-gap: 20px;
+  .ModalBodyItem {
+    flex-direction: column;
+    row-gap: 10px;
+    .FieldTitle {
+      font-weight: bold;
+      font-size: 17px;
+    }
+    .InputField {
+      border: 2px solid #55ad9b;
+      &:focus {
+        border: 2px solid #95d2b3;
+      }
+      &:hover {
+        border: 2px solid #95d2b3;
+      }
+    }
+    .InputFileField {
+      padding: 5px;
+      border: none;
+    }
+  }
+}
+
+.Footer {
+  column-gap: 30px;
+  .AddProductBtn {
+    background-color: #55ad9b;
+    color: #f1f8e8;
+    &:hover {
+      background-color: #499182;
+    }
+    &:active {
+      background-color: #3f7a6f;
+    }
+  }
+}

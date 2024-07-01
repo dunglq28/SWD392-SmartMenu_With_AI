@@ -1,4 +1,5 @@
 import {
+  Button,
   Flex,
   Table,
   TableCaption,
@@ -8,6 +9,7 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import style from "./Product.module.scss";
 import { useCallback, useEffect, useState } from "react";
@@ -19,6 +21,9 @@ import moment from "moment";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
 import Loading from "../../components/Loading";
+import ModalForm from "../../components/Modals/ModalForm/ModalForm";
+import ModalFormBranch from "../../components/Modals/ModalFormBranch/ModalFormBranch";
+import ModalFormProduct from "../../components/Modals/ModalFormProduct";
 import Searchbar from "../../components/Searchbar";
 import { formatCurrency } from "../../utils/formatCurrency";
 
@@ -105,9 +110,23 @@ function Product() {
     fetchData(value);
   }
 
+  const {
+    isOpen: isOpenProduct,
+    onOpen: onOpenProduct,
+    onClose: onCloseProduct,
+  } = useDisclosure();
   return (
     <Flex className={style.container}>
-      <Flex w="40%" ml="20px">
+      <Flex w="60%" ml="20px" columnGap="30px">
+        <Button onClick={onOpenProduct} className={style.AddProductBtn}>
+          Add product
+        </Button>
+        <ModalForm
+          formBody={<ModalFormProduct onClose={onCloseProduct} />}
+          onClose={onCloseProduct}
+          isOpen={isOpenProduct}
+          title={"Add New Product"}
+        />
         <Searchbar onSearch={handleSearch} />
       </Flex>
       <Flex className={style.Product}>

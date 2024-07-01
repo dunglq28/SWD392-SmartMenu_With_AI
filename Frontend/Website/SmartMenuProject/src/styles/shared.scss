@@ -13,6 +13,7 @@
   user-select: none;
   justify-content: center;
   flex-direction: column;
+  row-gap: 20px;
 
   .tableContainer {
     border-radius: 7px;
@@ -120,6 +121,6 @@
   font-size: 1em;
 }
 
-.textFontWeight600{
+.textFontWeight600 {
   font-weight: 600;
 }
