@@ -44,7 +44,6 @@ const ActionMenu: FC<ActionMenuProps> = ({
     onClose: onCloseBranch,
   } = useDisclosure();
   const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
-  const navigate = useNavigate();
   //BRANCH DATA
   const [branchData, setBranchData] = useState<BranchForm>({
     brandName: {
@@ -82,6 +81,7 @@ const ActionMenu: FC<ActionMenuProps> = ({
       address: branch.address.value,
       isActive: true
     };
+    onCloseBranch();
     if (isSave) {
       onEdit(branchUpdate);
     }
@@ -124,7 +124,7 @@ const ActionMenu: FC<ActionMenuProps> = ({
 
   return (
     <>
-      <Flex className={style.SettingBrand}>
+      <Flex className={style.SettingBranch}>
         <Popover>
           <PopoverTrigger>
             <Button className={style.SettingsIconBtn}>

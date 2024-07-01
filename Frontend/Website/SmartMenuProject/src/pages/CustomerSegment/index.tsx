@@ -10,7 +10,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import style from "./User.module.scss";
+import style from "./CustomerSegment.module.scss";
 
 import React, { useCallback, useEffect, useState } from "react";
 import { deleteUser, getUsers, updateUser } from "../../services/UserService";
@@ -25,7 +25,7 @@ import { userUpdate } from "../../payloads/requests/updateUser.model";
 import Searchbar from "../../components/Searchbar";
 import { getRoleName } from "../../utils/getRoleName";
 
-function User() {
+function CustomerSegment() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
   const [data, setData] = useState<UserData[]>([]);
@@ -128,21 +128,15 @@ function User() {
       <Flex w="40%" ml="20px">
         <Searchbar onSearch={handleSearch} />
       </Flex>
-      <Flex className={style.User}>
-        <TableContainer className={style.UserTbl}>
+      <Flex className={style.CustomerSegment}>
+        <TableContainer className={style.CustomerSegmentTbl}>
           <Table>
-            <TableCaption>Bảng quản lý người dùng</TableCaption>
+            <TableCaption>Bảng quản lý phân khúc khách hàng</TableCaption>
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>
-                <Th className={style.HeaderTbl}>Full name</Th>
-                <Th className={style.HeaderTbl}>User name</Th>
-                <Th className={style.HeaderTbl}>DOB</Th>
-                <Th className={style.HeaderTbl}>Gender</Th>
-                <Th className={style.HeaderTbl}>Phone</Th>
-                <Th className={style.HeaderTbl}>Role</Th>
+                <Th className={style.HeaderTbl}>Name</Th>
                 <Th className={style.HeaderTbl}>Created on</Th>
-                <Th className={style.HeaderTbl}>Is active</Th>
                 <Th className={style.HeaderTbl}>Settings</Th>
               </Tr>
             </Thead>
@@ -158,26 +152,19 @@ function User() {
                   <Td colSpan={10}>Không có người dùng để hiển thị</Td>
                 </Tr>
               ) : (
-                data.map((user, index) => (
-                  <Tr key={user.userCode} className={style.UserItem}>
-                    <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
-                    <Td>{user.fullname}</Td>
-                    <Td>{user.userName}</Td>
-                    <Td>{moment(user.dob).format("DD/MM/YYYY")}</Td>
-                    <Td>{user.gender}</Td>
-                    <Td>{user.phone}</Td>
-                    <Td>{getRoleName(user.roleId)}</Td>
-                    <Td>{moment(user.createDate).format("DD/MM/YYYY")}</Td>
-                    <Td>{user.isActive ? "Yes" : "No"}</Td>
-                    <Td>
-                      <ActionMenu
-                        id={user.userId}
-                        onDelete={handleDelete}
-                        onEdit={handleEdit}
-                      />
-                    </Td>
-                  </Tr>
-                ))
+                //   data.map((CustomerSegment, index) => (
+                <Tr className={style.CustomerSegmentItem}>
+                  <Td></Td>
+                  <Td></Td>
+                  <Td></Td>
+                  <Td>
+                    {/* <ActionMenu
+                          id={user.userId}
+                          onDelete={handleDelete}
+                          onEdit={handleEdit}
+                        /> */}
+                  </Td>
+                </Tr>
               )}
             </Tbody>
           </Table>
@@ -195,4 +182,4 @@ function User() {
   );
 }
 
-export default User;
+export default CustomerSegment;

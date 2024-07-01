@@ -154,11 +154,17 @@ function Header() {
                   <Flex>
                     <Image
                       src={logoUrl ? logoUrl : "https://bit.ly/dan-abramov"}
-                      className={style.ProfileImage}
+                      className={
+                        !logoUrl ? style.ProfileImageAdmin : style.ProfileImage
+                      }
                     />
                     <Flex className={style.ProfileInfo}>
-                      <Text className={style.ProfileName}>{brandName ? brandName : "Admin"}</Text>
-                      <Text className={style.ProfileRole}>{getRoleName(Number(roleId))}</Text>
+                      <Text className={style.ProfileName}>
+                        {brandName ? brandName : "Admin"}
+                      </Text>
+                      <Text className={style.ProfileRole}>
+                        {getRoleName(Number(roleId))}
+                      </Text>
                     </Flex>
                   </Flex>
                   <RiArrowDropDownLine className={style.DropdownIcon} />

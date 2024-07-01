@@ -1,5 +1,7 @@
 export interface CategoryData {
-    categoryId:number,
-    categoryCode:string,
-    categoryName:string
+    categoryId: number;
+    productCode: string;
+    createDate: Date;
+    categoryName: string;
+    brandId: number;
 }

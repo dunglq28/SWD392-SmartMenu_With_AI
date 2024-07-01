@@ -1,5 +1,4 @@
 import {
-  Button,
   Flex,
   Table,
   TableCaption,
@@ -9,28 +8,22 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure,
 } from "@chakra-ui/react";
-import style from "./Product.module.scss";
+import style from "./Category.module.scss";
+import Searchbar from "../../components/Searchbar";
 import { useCallback, useEffect, useState } from "react";
-import { ProductData } from "../../payloads/responses/ProductData.model";
-import { getProduct } from "../../services/ProductService";
+import Loading from "../../components/Loading";
+import { CategoryData } from "../../payloads/responses/CategoryData.model";
 import { getOptions } from "../../utils/getRowPerPage";
+import { getCategory } from "../../services/CategoryService";
 import { toast } from "react-toastify";
 import moment from "moment";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
-import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
-import Loading from "../../components/Loading";
-import ModalForm from "../../components/Modals/ModalForm/ModalForm";
-import ModalFormBranch from "../../components/Modals/ModalFormBranch/ModalFormBranch";
-import ModalFormProduct from "../../components/Modals/ModalFormProduct";
-import Searchbar from "../../components/Searchbar";
-import { formatCurrency } from "../../utils/formatCurrency";
 
-function Product() {
+function Category() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
-  const [data, setData] = useState<ProductData[]>([]);
+  const [data, setData] = useState<CategoryData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
@@ -45,14 +38,14 @@ function Product() {
 
         const loadData = async () => {
           if (searchValue) {
-            result = await getProduct(
+            result = await getCategory(
               Number(brandId),
               currentPage,
               rowsPerPage,
               searchValue
             );
           } else {
-            result = await getProduct(
+            result = await getCategory(
               Number(brandId),
               currentPage,
               rowsPerPage,
@@ -110,37 +103,19 @@ function Product() {
     fetchData(value);
   }
 
-  const {
-    isOpen: isOpenProduct,
-    onOpen: onOpenProduct,
-    onClose: onCloseProduct,
-  } = useDisclosure();
   return (
     <Flex className={style.container}>
       <Flex w="40%" ml="20px">
-        <Button onClick={onOpenProduct} className={style.AddProductBtn}>
-          Add product
-        </Button>
-        <ModalForm
-          formBody={<ModalFormProduct onClose={onCloseProduct} />}
-          onClose={onCloseProduct}
-          isOpen={isOpenProduct}
-          title={"Add New Product"}
-        />
         <Searchbar onSearch={handleSearch} />
       </Flex>
-      <Flex className={style.Product}>
-        <TableContainer className={style.ProductTbl}>
+      <Flex className={style.Category}>
+        <TableContainer className={style.CategoryTbl}>
           <Table>
-            <TableCaption>Bảng quản lý sản phẩm</TableCaption>
+            <TableCaption>Bảng quản lý loại sản phẩm</TableCaption>
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>
                 <Th className={style.HeaderTbl}>Name</Th>
-                <Th className={style.HeaderTbl}>Image</Th>
-                <Th className={style.HeaderTbl}>Category</Th>
-                <Th className={style.HeaderTbl}>Price</Th>
-                <Th className={style.HeaderTbl}>Description</Th>
                 <Th className={style.HeaderTbl}>Created on</Th>
                 <Th className={style.HeaderTbl}>Settings</Th>
               </Tr>
@@ -154,31 +129,20 @@ function Product() {
                 </Tr>
               ) : data.length === 0 ? (
                 <Tr>
-                  <Td colSpan={10}>Không có sản phẩm để hiển thị</Td>
+                  <Td colSpan={10}>Không có loại sản phẩm để hiển thị</Td>
                 </Tr>
               ) : (
-                data.map((product, index) => (
-                  <Tr key={product.productCode} className={style.ProductItem}>
+                data.map((cate, index) => (
+                  <Tr key={cate.categoryId} className={style.CategoryItem}>
                     <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
-                    <Td>{product.productName}</Td>
+                    <Td>{cate.categoryName}</Td>
+                    <Td>{moment(cate.createDate).format("DD/MM/YYYY")}</Td>
                     <Td>
-                      <img
-                        src={product.imageUrl}
-                        alt={product.productName}
-                        className={style.ProductImage}
-                      />
-                    </Td>
-                    <Td>Cà Phê</Td>
-                    {/* <Td>{product.categoryId}</Td> */}
-                    <Td>{formatCurrency("27000")}</Td>
-                    <Td className={style.WrapText}>{product.description}</Td>
-                    <Td>{moment(product.createDate).format("DD/MM/YYYY")}</Td>
-                    <Td>
-                      <ActionMenu
-                        id={product.productId}
+                      {/* <ActionMenu
+                        id={Category.CategoryId}
                         onDelete={handleDelete}
                         onEdit={handleEdit}
-                      />
+                      /> */}
                     </Td>
                   </Tr>
                 ))
@@ -199,4 +163,4 @@ function Product() {
   );
 }
 
-export default Product;
+export default Category;

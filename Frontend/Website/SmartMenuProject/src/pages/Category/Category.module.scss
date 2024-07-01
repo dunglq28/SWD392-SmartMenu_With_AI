@@ -2,20 +2,26 @@
 
 .container {
   @extend .container;
-  .User {
+  .Category {
     @extend .table;
 
-    .UserTbl {
+    .CategoryTbl {
       @extend .tableContainer;
       @extend .shadow;
 
-      .UserItem {
+      .CategoryItem {
         @extend .tableItem;
-        td {
-          font-size: 17px;
-        }
+      }
+
+      .WrapText {
+        @extend .wrapText;
+      }
+
+      .CategoryImage {
+        @extend .itemImage;
       }
     }
+
     .HeaderTbl {
       @extend .header;
     }

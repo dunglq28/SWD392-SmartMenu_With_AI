@@ -174,15 +174,14 @@ function Branch() {
         <Searchbar onSearch={handleSearch} />
       </Flex>
 
-      <Flex className={style.Brand} flexDirection="column">
+      <Flex className={style.Branch}>
         {!brandInfo.id ? (
           <Flex justifyContent="center" alignItems="center" height="50vh">
             <p>ID chi nhánh không tồn tại. Vui lòng kiểm tra lại.</p>
           </Flex>
         ) : (
           <>
-            <Flex className={style.ButtonContainer}></Flex>
-            <TableContainer className={style.BrandTbl}>
+            <TableContainer className={style.BranchTbl}>
               <Table>
                 <TableCaption>Bảng quản lý chi nhánh</TableCaption>
                 <Thead>
@@ -208,7 +207,7 @@ function Branch() {
                     </Tr>
                   ) : (
                     branchData.map((branch, index) => (
-                      <Tr className={style.BrandItem} key={branch.storeId}>
+                      <Tr className={style.BranchItem} key={branch.storeId}>
                         <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
                         <Td>{branch.city}</Td>
                         <Td>{branch.address}</Td>

@@ -10,16 +10,20 @@ import style from "./ModalFormProduct.module.scss";
 import Select from "react-select";
 import { getCategoryByBrandId } from "../../../services/CategoryService";
 import { useEffect, useState } from "react";
-import { CategoryData } from "../../../payloads/responses/CategoryData.model";
 import { toast } from "react-toastify";
 
 interface ModalFormBrandProps {
   onClose: () => void;
 }
+interface CategoryDataSelection {
+  categoryId: number;
+  categoryCode: string;
+  categoryName: string;
+}
 
 const ModalFormProduct: React.FC<ModalFormBrandProps> = ({ onClose }) => {
   const brandId = Number(localStorage.getItem("BrandId"));
-  const [data, setData] = useState<CategoryData[]>([]);
+  const [data, setData] = useState<CategoryDataSelection[]>([]);
 
   useEffect(() => {
     async () => {

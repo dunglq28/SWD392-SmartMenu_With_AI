@@ -1,26 +1,16 @@
-.containerForm {
-  .roleId,
-  .status {
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-    color: #1c1c1c !important;
-  }
+@import "../../../styles/shared.scss";
 
+.containerForm {
   ::placeholder {
-    font-style: italic;
-    color: #949494;
-    font-size: 1em;
+    @extend .placeholder;
   }
 
   input,
   select {
-    border-color: #466d6b;
+    @extend .borderColor;
   }
 
-  .textFontWeight {
-    font-weight: 600;
-  }
-
-  .genderText {
-    font-weight: 600;
+  .textFontWeight600 {
+    @extend .textFontWeight600;
   }
 }
