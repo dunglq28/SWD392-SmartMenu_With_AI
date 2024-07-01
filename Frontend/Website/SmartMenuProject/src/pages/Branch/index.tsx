@@ -153,7 +153,7 @@ function Branch() {
   }
 
   async function handleEdit(branch: branchUpdate) {
-    try {
+    try {      
       var result = await updateBranch(branch);
       if (result.statusCode === 200) {
         fetchData();

@@ -18,7 +18,6 @@ import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import { getOptions } from "../../utils/getRowPerPage";
 import { UserData } from "../../payloads/responses/UserData.model";
 import moment from "moment";
-import { UserRole } from "../../constants/Enum";
 import { toast } from "react-toastify";
 import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
 import Loading from "../../components/Loading";

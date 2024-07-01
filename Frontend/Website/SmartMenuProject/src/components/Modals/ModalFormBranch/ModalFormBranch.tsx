@@ -120,7 +120,6 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
         if (formData.district.id) {
           const wardData = await fetchWards(formData.district.id);
           setWards(wardData);
-          console.log(1);
 
           // Set ward ID if not already set
           if (formData.ward.name && formData.ward.id === "") {

@@ -19,6 +19,7 @@ import {
 } from "react-router-dom";
 import Logo from "../../assets/images/Logo.jpeg";
 import { AiOutlineProduct } from "react-icons/ai";
+import { MdOutlineCategory } from "react-icons/md";
 import { GoHome } from "react-icons/go";
 import { AiOutlineUser } from "react-icons/ai";
 import { IoGitBranchOutline } from "react-icons/io5";
@@ -139,6 +140,12 @@ function Sidebar() {
       icon: AiOutlineProduct,
       label: t("products"),
       to: "/products",
+      permissionRole: [UserRole.BrandManager, UserRole.BranchManager],
+    },
+    {
+      icon: MdOutlineCategory,
+      label: t("categories"),
+      to: "/categories",
       permissionRole: [UserRole.BrandManager, UserRole.BranchManager],
     },
     {
