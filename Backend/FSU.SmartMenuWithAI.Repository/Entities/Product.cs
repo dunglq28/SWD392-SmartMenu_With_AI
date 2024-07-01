@@ -27,6 +27,8 @@ public partial class Product
 
     public int BrandId { get; set; }
 
+    public decimal? Price { get; set; }
+
     public virtual Category Category { get; set; } = null!;
 
     public virtual ICollection<ProductList> ProductLists { get; set; } = new List<ProductList>();

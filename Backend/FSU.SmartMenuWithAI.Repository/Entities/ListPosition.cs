@@ -1,4 +1,7 @@
-﻿namespace FSU.SmartMenuWithAI.Repository.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace FSU.SmartMenuWithAI.Repository.Entities;
 
 public partial class ListPosition
 {

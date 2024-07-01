@@ -5,7 +5,7 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
 {
     public interface IProductService
     {
-        Task<bool> UpdateAsync(int id, ProductDTO reqObj);
+        Task<bool> UpdateAsync(int id, ProductDTO reqObj, int brandId);
         Task<bool> Insert(ProductDTO reqObj);
         Task<PageEntity<ProductDTO>?> GetAllByCategoryAsync(string? searchKey, int brandID, int? categoryID, int? pageIndex, int? pageSize);
         Task<ProductDTO?> GetAsync(int id);
