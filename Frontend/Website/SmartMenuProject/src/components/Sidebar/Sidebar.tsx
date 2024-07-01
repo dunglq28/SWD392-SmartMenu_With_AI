@@ -24,13 +24,14 @@ import { AiOutlineUser } from "react-icons/ai";
 import { IoGitBranchOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdListAlt } from "react-icons/md";
+import { MdOutlineBrandingWatermark } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 
 import ModalForm from "../Modals/ModalForm/ModalForm";
 import ModalFormBrand from "../Modals/ModalFormBrand/ModalFormBrand";
 import ModalFormUser from "../Modals/ModalFormUser/ModalFormUser";
 import ModalFormBranch from "../Modals/ModalFormBranch/ModalFormBranch";
-import { CurrentForm } from "../../constants/Enum";
+import { CurrentForm, UserRole } from "../../constants/Enum";
 import { BrandForm } from "../../models/BrandForm.model";
 import { UserForm } from "../../models/UserForm.model";
 import { createUser } from "../../services/UserService";
@@ -112,34 +113,64 @@ function Sidebar() {
   };
 
   const toggleSidebar = () => setIsExpanded(!isExpanded);
-
+  const roleIdString = localStorage.getItem("RoleId");
+  const roleId = roleIdString ? roleIdString : "";
   const menuItems = [
-    { icon: GoHome, label: t("dashboard"), to: "/dashboard" },
-    { icon: AiOutlineUser, label: t("users"), to: "/users" },
     {
-      icon: IoGitBranchOutline,
+      icon: GoHome,
+      label: t("dashboard"),
+      to: "/dashboard",
+      permissionRole: UserRole.Admin,
+    },
+    {
+      icon: AiOutlineUser,
+      label: t("users"),
+      to: "/users",
+      permissionRole: UserRole.Admin,
+    },
+    {
+      icon: MdOutlineBrandingWatermark,
       label: t("brands"),
       divider: true,
       to: "/brands",
+      permissionRole: UserRole.Admin,
     },
-    { icon: AiOutlineProduct, label: t("products"), to: "/products" },
-    { icon: MdListAlt, label: t("menu"), to: "/menu" },
+    {
+      icon: AiOutlineProduct,
+      label: t("products"),
+      to: "/products",
+      permissionRole: [UserRole.BrandManager, UserRole.BranchManager],
+    },
+    {
+      icon: MdListAlt,
+      label: t("menu"),
+      to: "/menu",
+      permissionRole: [UserRole.BrandManager, UserRole.BranchManager],
+    },
+    {
+      icon: IoGitBranchOutline,
+      label: t("branches"),
+      to: "/branches",
+      permissionRole: [UserRole.BrandManager],
+    },
     {
       icon: IoSettingsOutline,
       label: t("settings"),
       divider: true,
       to: "/settings",
     },
-    { icon: CgAddR, label: t("new product"), to: "/new" },
+    // { icon: CgAddR, label: t("new product"), to: "/new" ,permissionRole: UserRole.Admin,},
     {
       icon: CgAddR,
       label: t("new brand"),
       onclick: onOpenBrand,
+      permissionRole: UserRole.Admin,
     },
     {
       icon: CgAddR,
       label: t("new branch"),
       onclick: onOpenBranch,
+      permissionRole: UserRole.Admin,
     },
   ];
 
@@ -153,8 +184,7 @@ function Sidebar() {
   }, [location.pathname, menuItems]);
 
   function logoutHandler() {
-    localStorage.removeItem("AccessToken");
-    localStorage.removeItem("RefreshToken");
+    localStorage.clear();
     navigate("/login");
   }
 
@@ -261,6 +291,14 @@ function Sidebar() {
     }
   }
 
+  const filteredMenuItems = menuItems.filter((menuItem) => {
+    if (!menuItem.permissionRole) return true;
+    if (Array.isArray(menuItem.permissionRole)) {
+      return menuItem.permissionRole.toString().includes(roleId);
+    }
+    return menuItem.permissionRole.toString() === roleId;
+  });
+
   return (
     <Flex
       className={style.Sidebar}
@@ -283,7 +321,7 @@ function Sidebar() {
       </Flex>
 
       <Flex className={style.MenuItems} direction="column">
-        {menuItems.map((menuItem, index) => (
+        {filteredMenuItems.map((menuItem, index) => (
           <React.Fragment key={index}>
             <ChakraLink
               as={menuItem.to ? ReactRouterLink : "button"}
@@ -338,6 +376,7 @@ function Sidebar() {
             onClose={onCloseBranch}
             updateBranchData={updateBranchData}
             nextHandler={() => nextHandler(CurrentForm.BRANCH)}
+            isEdit={false}
           />
         }
         onClose={onCloseBranch}

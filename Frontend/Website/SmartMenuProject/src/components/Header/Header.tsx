@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import i18n from "../../i18n/i18n";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import Searchbar from "../Searchbar";
+import { getRoleName } from "../../utils/getRoleName";
 
 function Header() {
   const location = useLocation();
@@ -37,9 +38,13 @@ function Header() {
   const formattedPathname = pathname.replace("/", "");
   const translatedPathname = t(formattedPathname).toUpperCase();
 
+  const brandName = localStorage.getItem("BrandName");
+  const logoUrl = localStorage.getItem("BrandLogo");
+  const roleId = localStorage.getItem("RoleId");
+
   const getInitialLanguage = () => {
     const savedLanguage = localStorage.getItem("language");
-    return savedLanguage === "vi" ? "vi" : "en";
+    return savedLanguage === "en" ? "en" : "vi";
   };
 
   const [language, setLanguage] = useState<"en" | "vi">(getInitialLanguage());
@@ -77,8 +82,8 @@ function Header() {
   }, [formattedPathname]);
 
   const languageOptions = [
-    { value: "en", label: "Eng (US)" },
     { value: "vi", label: "Vi (VN)" },
+    { value: "en", label: "Eng (US)" },
   ];
 
   type PositionValue =
@@ -148,12 +153,12 @@ function Header() {
                 <Flex className={style.ProfileContainer}>
                   <Flex>
                     <Image
-                      src="https://bit.ly/dan-abramov"
+                      src={logoUrl ? logoUrl : "https://bit.ly/dan-abramov"}
                       className={style.ProfileImage}
                     />
                     <Flex className={style.ProfileInfo}>
-                      <Text className={style.ProfileName}>Travis</Text>
-                      <Text className={style.ProfileRole}>Admin</Text>
+                      <Text className={style.ProfileName}>{brandName ? brandName : "Admin"}</Text>
+                      <Text className={style.ProfileRole}>{getRoleName(Number(roleId))}</Text>
                     </Flex>
                   </Flex>
                   <RiArrowDropDownLine className={style.DropdownIcon} />
@@ -178,9 +183,6 @@ function Header() {
                   </Flex>
                   <Flex className={style.PopupSubNav}>
                     <Text className={style.Text}>FeedBack</Text>
-                  </Flex>
-                  <Flex className={style.PopupSubNav}>
-                    <Text className={style.Text}>Logout</Text>
                   </Flex>
                 </Flex>
               </PopoverBody>

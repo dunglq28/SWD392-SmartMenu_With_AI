@@ -284,7 +284,7 @@ INSERT INTO AppUser (UserCode, UserName, Password, RoleID, CreateDate, IsActive,
 ('95a2e6b3-4827-40a5-9d96-89faf5025e38', 'Abramo', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '2023-06-21', 1, 1, 'Abramo Villa', '1234567810', '1987-06-21', 'Male', '1', '2023-06-21'),
 ('bdb28209-13c4-4de2-b77f-b36a54891210', 'Misty', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '2024-05-10', 1, 1, 'Misty Green', '1234567811', '1991-05-10', 'Female', '1', '2024-05-10'),
 ('b0dea5a7-cd92-43f5-9a37-8ef1af0a6982', 'Sylvan', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '2023-06-14', 1, 1, 'Sylvan Forest', '1234567812', '1987-06-14', 'Male', '1', '2023-06-14'),
-('005436bb-f7d8-43ad-bd71-cf2f3b429392', 'Paule', 'YeE2JKedsIRzqg6yRuJXIw==', 3, '2023-06-20', 1, 1, 'Paule Dupont', '1234567813', '1988-06-20', 'Male', '1', '2023-06-20');
+('005436bb-f7d8-43ad-bd71-cf2f3b429392', 'HighlandsSmartMenu', 'YeE2JKedsIRzqg6yRuJXIw==', 2, '2023-06-20', 1, 1, 'Quang Dũng', '0961287612', '1988-06-20', 'Male', '1', '2023-06-20');
 
 
 
@@ -313,7 +313,7 @@ insert into Brand ( BrandCode, BrandName, UserID, CreateDate, Status, ImageUrl) 
 INSERT INTO Brand (BrandCode, BrandName, UserID, CreateDate, Status, ImageUrl, ImageName) VALUES 
 ('b1234567-89ab-cdef-0123-456789abcdef', N'Phúc Long', 2, '2024-02-01', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/phuclong.png', NULL),
 ('c2345678-9abc-def0-1234-56789abcdef0', N'Cộng', 3, '2024-02-02', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/Cong.png', NULL),
-('d3456789-abcd-ef01-2345-6789abcdef01', N'Highlands', 4, '2024-02-03', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/highlands.png', NULL);
+('d3456789-abcd-ef01-2345-6789abcdef01', N'Highlands', 24, '2024-02-03', 1, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/brands/highlands.png', NULL);
 GO
 
 -- Category

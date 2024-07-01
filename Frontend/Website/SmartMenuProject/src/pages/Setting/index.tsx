@@ -22,7 +22,7 @@ function Setting() {
 
   const getInitialLanguage = () => {
     const savedLanguage = localStorage.getItem("language");
-    return savedLanguage === "vi" ? "vi" : "en";
+    return savedLanguage === "en" ? "en" : "vi";
   };
 
   const [language, setLanguage] = useState<"en" | "vi">(getInitialLanguage());
@@ -37,7 +37,7 @@ function Setting() {
     selectedOption: SingleValue<{ value: string; label: string }>
   ) => {
     if (selectedOption) {
-      const selectedLanguage = selectedOption.value === "en" ? "en" : "vi";
+      const selectedLanguage = selectedOption.value === "vi" ? "vi" : "en";
       changeLanguage(selectedLanguage);
     }
   };
@@ -48,8 +48,8 @@ function Setting() {
   }, []);
 
   const languageOptions = [
-    { value: "en", label: "Eng (US)" },
     { value: "vi", label: "Vi (VN)" },
+    { value: "en", label: "Eng (US)" },
   ];
 
   type PositionValue =

@@ -24,6 +24,7 @@ import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
 import Loading from "../../components/Loading";
 import { userUpdate } from "../../payloads/requests/updateUser.model";
 import Searchbar from "../../components/Searchbar";
+import { getRoleName } from "../../utils/getRoleName";
 
 function User() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -90,15 +91,6 @@ function User() {
     },
     [setCurrentPage, setRowsPerPage]
   );
-
-  const getRoleName = (roleId: number): string => {
-    if (roleId === UserRole.BrandManager) {
-      return "Brand Manager";
-    } else if (roleId === UserRole.BranchManager) {
-      return "Branch Manager";
-    }
-    return UserRole[roleId] || "Unknown Role";
-  };
 
   async function handleDelete(id: number) {
     try {

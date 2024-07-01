@@ -11,6 +11,7 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 import styles from "./ModalForm.module.scss";
 import { themeColors } from "../../../constants/GlobalStyles";
 import { BrandForm } from "../../../models/BrandForm.model";
+import { BranchForm } from "../../../models/BranchForm.model";
 
 interface ModalFormProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ interface ModalFormProps {
   formBody: React.ReactNode;
   title: string;
   updateBrandData?: (data: BrandForm, isSave: boolean) => void;
+  updateBranchData?: (data: BranchForm, isSave: boolean) => void;
 }
 
 const ModalForm: React.FC<ModalFormProps> = ({
@@ -26,8 +28,8 @@ const ModalForm: React.FC<ModalFormProps> = ({
   formBody,
   title,
   updateBrandData,
+  updateBranchData,
 }) => {
-  
   function cancelHandler() {
     if (updateBrandData) {
       updateBrandData(
