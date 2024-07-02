@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.CustomerSegment;
 using FSU.SmartMenuWithAI.Service.Models.MenuList;
 using FSU.SmartMenuWithAI.Service.Models.Token;
 using FSU.SmartMenuWithAI.Service.Models.ViewModel;
@@ -41,6 +42,12 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
             CreateMap<MenuList, CreateMenuListDTO>().ReverseMap();
             // listPosition
             CreateMap<ListPosition, ListPositionDTO>().ReverseMap();
+            // Customer segment
+            CreateMap<CustomerSegment, CustomerSegmentDTO>()
+                .ForMember(dest => dest.SegmentAttributes, opt => opt.MapFrom(src => src.SegmentAttributes))
+                .ReverseMap();
+            CreateMap<SegmentAttribute, SegmentAttributeDTO>().ReverseMap();
+            CreateMap<SegmentAttribute, AddAttributeSegmentDTO>().ReverseMap();
 
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,10 +12,11 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Menu
     public class AddMenuRequest
     {
         [Required]
+        [JsonProperty("is-activee")]
         public bool IsActive { get; set; }
 
         [Required]
-        [Display(Name = "Brand ID")]
+        [JsonProperty("brand-id")]
         [Range(1, int.MaxValue, ErrorMessage = "Brand ID must be a positive integer.")]
         public int BrandId { get; set; }
     }

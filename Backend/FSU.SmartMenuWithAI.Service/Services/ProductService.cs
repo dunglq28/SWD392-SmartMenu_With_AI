@@ -72,6 +72,12 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<bool> Insert(ProductDTO reqObj)
         {
+            Expression<Func<Product, bool>> duplicateName = x => x.BrandId == reqObj.BrandId && x.ProductName == reqObj.ProductName;
+            var existName = _unitOfWork.ProductRepository.GetByCondition(duplicateName);
+            if (existName != null)
+            {
+                return false;
+            }
             var product = new Product();
             product.ProductCode = Guid.NewGuid().ToString();
             product.ProductName = reqObj.ProductName;
