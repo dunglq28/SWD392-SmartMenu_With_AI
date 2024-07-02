@@ -69,14 +69,6 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     BrandId = reqObj.BrandId,
                     Price = reqObj.Price,
                 };
-                if (reqObj.SpotlightVideo != null)
-                {
-
-                    dto.SpotlightVideoImageName = reqObj.BrandId + reqObj.SpotlightVideo.FileName;
-                    dto.SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.BrandId + reqObj.SpotlightVideo.FileName, FolderRootImg.Product);
-                    await _s3Service.UploadItemAsync(reqObj.SpotlightVideo, dto.SpotlightVideoImageName, FolderRootImg.Product);
-                }
-                await _s3Service.UploadItemAsync(reqObj.Image, dto.ImageName, FolderRootImg.Product);
 
                 var result = await _productService.Insert(dto);
 
@@ -85,10 +77,18 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Sản phẩm không tồn tại",
+                        Message = "Sản phẩm trùng tên hoặc không đủ điều kiện, vui lòng kiểm tra lại thông tin sản phẩm",
                         Data = null,
                         IsSuccess = false
                     });
+                }
+                await _s3Service.UploadItemAsync(reqObj.Image, dto.ImageName, FolderRootImg.Product);
+                if (reqObj.SpotlightVideo != null)
+                {
+
+                    dto.SpotlightVideoImageName = reqObj.BrandId + reqObj.SpotlightVideo.FileName;
+                    dto.SpotlightVideoImageUrl = _s3Service.GetPreSignedURL(reqObj.BrandId + reqObj.SpotlightVideo.FileName, FolderRootImg.Product);
+                    await _s3Service.UploadItemAsync(reqObj.SpotlightVideo, dto.SpotlightVideoImageName, FolderRootImg.Product);
                 }
                 return Ok(new BaseResponse
                 {
@@ -319,56 +319,5 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        [HttpPost(APIRoutes.Product.testRecogize, Name = "testCusRecognize")]
-        public async Task<IActionResult> testCusRecognize([FromForm] AddProductRequest imageFile)
-        {
-            try
-            {
-                var validationImg = await _imageFileValidator.ValidateAsync(imageFile.Image);
-                if (!validationImg.IsValid)
-                {
-                    return BadRequest(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status400BadRequest,
-                        Message = "File không phải là hình ảnh hợp lệ",
-                        Data = null,
-                        IsSuccess = false
-                    });
-                }
-
-
-                var result = await _s3Service.AnalyzeFacesInImage(imageFile.Image);
-
-                if (result == null)
-                {
-                    return NotFound(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Phân tích không thành công",
-                        Data = null,
-                        IsSuccess = false
-                    });
-                }
-                return Ok(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status200OK,
-                    Message = "Phân tích thành công",
-                    Data = result,
-                    IsSuccess = true
-                });
-
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = ex.Message,
-                    Data = null,
-                    IsSuccess = false
-                });
-            }
-        }
     }
 }

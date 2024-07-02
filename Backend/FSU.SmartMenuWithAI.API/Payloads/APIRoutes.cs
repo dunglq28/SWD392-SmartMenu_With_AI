@@ -104,6 +104,9 @@
             public const string Delete = Base + "/menus/";
 
             public const string Add = Base + "/menus/";
+
+            public const string RecomendMenu = Base + "/menus/recomend-menu";
+
         }
         public static class GroupAttribute
         {
