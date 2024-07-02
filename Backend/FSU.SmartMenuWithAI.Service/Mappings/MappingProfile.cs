@@ -41,6 +41,8 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
             CreateMap<MenuList, CreateMenuListDTO>().ReverseMap();
             // listPosition
             CreateMap<ListPosition, ListPositionDTO>().ReverseMap();
+            //productlist
+            CreateMap<ProductList, ProductListDTO>().ReverseMap();
 
         }
     }
