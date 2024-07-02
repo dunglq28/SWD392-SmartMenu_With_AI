@@ -22,6 +22,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         public ListPositionRepository ListPositionRepository { get; }
         public GenericRepository<CustomerSegment> CustomerSegmentRepository { get; }
 
+        public ProductListRepository ProductListRepository { get; }
 
     }
 }

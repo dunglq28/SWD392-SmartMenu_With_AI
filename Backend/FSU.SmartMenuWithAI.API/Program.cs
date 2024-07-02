@@ -82,7 +82,7 @@ builder.Services.AddScoped<IMenuListRepository,  MenuListRepository>();
 builder.Services.AddScoped<IGroupAttributeRepository, GroupAttributeRepository>();
 builder.Services.AddScoped<IAttributeRepository, AttributeRepository>();
 builder.Services.AddScoped<IListPositionRepository, ListPositionRepository>();
-
+builder.Services.AddScoped<IProductListRepository, ProductListRepository>();
 
 // Register servicies
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -98,6 +98,7 @@ builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IGroupAttributeService, GroupAttributeService>();
 builder.Services.AddScoped<IAttributeService, AttributeService>();
 builder.Services.AddScoped<IListPositionService, ListPositionService>();
+builder.Services.AddScoped<IProductListService, ProductListService>();
 
 
 

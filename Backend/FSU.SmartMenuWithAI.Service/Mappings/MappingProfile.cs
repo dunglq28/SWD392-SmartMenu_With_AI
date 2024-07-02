@@ -48,6 +48,8 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
                 .ReverseMap();
             CreateMap<SegmentAttribute, SegmentAttributeDTO>().ReverseMap();
             CreateMap<SegmentAttribute, AddAttributeSegmentDTO>().ReverseMap();
+            //productlist
+            CreateMap<ProductList, ProductListDTO>().ReverseMap();
 
         }
     }
