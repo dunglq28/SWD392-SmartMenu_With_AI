@@ -54,7 +54,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Expression<Func<AppUser, bool>> filter = searchKey != null
                 ? x => x.UserName.Contains(searchKey) && x.RoleId != (int)UserRole.Admin && !(x.Status == (int)Status.Deleted)
                 : x => x.RoleId != (int)UserRole.Admin && !(x.Status == (int)Status.Deleted);
-            Expression<Func<AppUser, bool>> filterRecord = x => (x.Status != (int)Status.Deleted && x.RoleId != (int)UserRole.Admin);
+            //Expression<Func<AppUser, bool>> filterRecord = x => (x.Status != (int)Status.Deleted && x.RoleId != (int)UserRole.Admin);
 
 
             Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = q => q.OrderByDescending(x => x.UserId);
@@ -63,7 +63,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             var entities = _unitOfWork.AppUserRepository.Get(currentIDLogin, filter: filter, orderBy: orderBy, includeProperties: includeProperties, pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<AppUserDTO>();
             pagin.List = _mapper.Map<IEnumerable<AppUserDTO>>(entities).ToList();
-            pagin.TotalRecord = await _unitOfWork.AppUserRepository.Count(filterRecord);
+            pagin.TotalRecord = await _unitOfWork.AppUserRepository.Count(filter);
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
         }

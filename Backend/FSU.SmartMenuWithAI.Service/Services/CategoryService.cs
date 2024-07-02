@@ -79,7 +79,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Expression<Func<Category, bool>> filter = searchKey != null 
                 ? x => x.CategoryName.Contains(searchKey) && x.BrandId == brandID  && (x.Status != (int)Status.Deleted)
                 : x => x.BrandId == brandID && (x.Status != (int)Status.Deleted);
-            Expression<Func<Category, bool>> filterRecord =  x =>  (x.Status != (int)Status.Deleted) && x.BrandId == brandID;
+            //Expression<Func<Category, bool>> filterRecord =  x =>  (x.Status != (int)Status.Deleted) && x.BrandId == brandID;
                
                
             Func<IQueryable<Category>, IOrderedQueryable<Category>> orderBy = q => q.OrderByDescending(x => x.CategoryId);
@@ -89,7 +89,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 .Get(filter: filter, orderBy: orderBy, includeProperties: includeProperties, pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<CategoryDTO>();
             pagin.List = _mapper.Map<IEnumerable<CategoryDTO>>(entities).ToList();
-            pagin.TotalRecord = await _unitOfWork.CategoryRepository.Count(filterRecord);
+            pagin.TotalRecord = await _unitOfWork.CategoryRepository.Count(filter);
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
         }
