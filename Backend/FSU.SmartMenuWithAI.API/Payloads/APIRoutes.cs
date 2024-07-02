@@ -174,5 +174,18 @@
 
             public const string Add = Base + "/menu-list/";
         }
+
+        public static class CustomerSegment
+        {
+            public const string GetAll = Base + "/customer-segment/";
+
+            public const string GetByID = Base + "/customer-segment/get-by-id";
+
+            public const string Update = Base + "/customer-segment/";
+
+            public const string Delete = Base + "/customer-segment/";
+
+            public const string Add = Base + "/customer-segment/";
+        }
     }
 }
