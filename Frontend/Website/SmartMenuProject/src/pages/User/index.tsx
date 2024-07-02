@@ -125,7 +125,7 @@ function User() {
 
   return (
     <Flex className={style.container}>
-      <Flex w="40%" ml="20px">
+      <Flex className={style.searchWrapper}>
         <Searchbar onSearch={handleSearch} />
       </Flex>
       <Flex className={style.User}>

@@ -2,6 +2,11 @@
 
 .container {
   @extend .container;
+
+  .searchWrapper {
+    @extend .searchWrapper;
+  }
+
   .User {
     @extend .table;
 

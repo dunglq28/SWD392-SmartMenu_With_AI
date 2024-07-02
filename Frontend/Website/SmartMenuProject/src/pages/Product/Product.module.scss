@@ -2,9 +2,16 @@
 
 .container {
   @extend .container;
+
+  .searchWrapper {
+    @extend .searchWrapper;
+  }
+  
   .AddProductBtn {
-    background-color: #55ad9b;
+    @extend .primaryButton;
     color: #f1f8e8;
+    margin-right: 38px;
+    height: 100%;
     &:hover {
       background-color: #499182;
     }

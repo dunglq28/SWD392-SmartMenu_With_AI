@@ -112,7 +112,7 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
         isOpen={isOpen}
         id={id}
         onDelete={onDelete}
-        titleHeader="Delete Customer"
+        titleHeader="Delete User"
         titleBody="Are you sure? You can't undo this action afterwards."
         btnName=" Delete"
       />

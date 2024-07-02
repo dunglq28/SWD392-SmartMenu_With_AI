@@ -5,9 +5,13 @@
     @extend .placeholder;
   }
 
+  .InputFileField {
+    @extend .InputFileField;
+  }
+
   input,
   select {
-    @extend .borderColor;
+    @extend .InputField;
   }
 
   .textFontWeight600 {

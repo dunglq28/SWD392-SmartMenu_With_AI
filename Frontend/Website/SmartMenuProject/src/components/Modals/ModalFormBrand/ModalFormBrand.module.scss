@@ -6,13 +6,20 @@
   }
 
   input {
-    @extend .borderColor;
+    @extend .InputField;
   }
 
   .inputImage {
     border: none;
     padding: 0;
     border-radius: 0;
+
+    &:focus {
+      border: none;
+    }
+    &:hover {
+      border: none;
+    }
   }
 
   .imagePreview {

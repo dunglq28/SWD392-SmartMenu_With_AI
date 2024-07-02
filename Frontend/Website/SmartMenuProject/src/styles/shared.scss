@@ -6,6 +6,13 @@
   flex-direction: column;
 }
 
+.searchWrapper {
+  width: "auto";
+  margin-left: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
 // Table styles
 .table {
   width: 100%;
@@ -87,10 +94,10 @@
 }
 
 // Popover styles
-.popoverContent {
+.PopoverContent {
   width: 100% !important;
 
-  .popupButton {
+  .PopupButton {
     width: 150px;
     height: 40px;
     justify-content: center;
@@ -102,17 +109,13 @@
     font-weight: bold;
 
     &:hover {
-      background-color: #5d5fef;
+      background-color: #55ad9b;
       color: #fff;
     }
     &:active {
-      background-color: #4d4ff0;
+      background-color: #55ad9b;
     }
   }
-}
-
-.borderColor {
-  border-color: #466d6b;
 }
 
 .placeholder {
@@ -123,4 +126,23 @@
 
 .textFontWeight600 {
   font-weight: 600;
+}
+
+.InputField {
+  border: 2px solid #55ad9b;
+  &:focus {
+    border: 2px solid #95d2b3;
+  }
+  &:hover {
+    border: 2px solid #95d2b3;
+  }
+}
+
+.InputFileField {
+  padding: 5px;
+  border: none;
+}
+
+.primaryButton {
+  background-color: #466d6b;
 }

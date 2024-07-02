@@ -170,10 +170,9 @@ function Branch() {
 
   return (
     <Flex className={style.container}>
-      <Flex w="40%" ml="20px">
+      <Flex className={style.searchWrapper}>
         <Searchbar onSearch={handleSearch} />
       </Flex>
-
       <Flex className={style.Branch}>
         {!brandInfo.id ? (
           <Flex justifyContent="center" alignItems="center" height="50vh">

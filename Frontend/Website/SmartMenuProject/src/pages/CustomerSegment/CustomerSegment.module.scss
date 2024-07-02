@@ -2,6 +2,11 @@
 
 .container {
   @extend .container;
+
+  .searchWrapper {
+    @extend .searchWrapper;
+  }
+  
   .CustomerSegment {
     @extend .table;
 

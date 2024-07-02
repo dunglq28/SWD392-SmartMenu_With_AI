@@ -6,26 +6,30 @@ import {
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
+import { IoAddCircleOutline } from "react-icons/io5";
+
 import style from "./Product.module.scss";
 import { useCallback, useEffect, useState } from "react";
 import { ProductData } from "../../payloads/responses/ProductData.model";
-import { getProduct } from "../../services/ProductService";
+import { createProduct, deleteProduct, getProducts } from "../../services/ProductService";
 import { getOptions } from "../../utils/getRowPerPage";
 import { toast } from "react-toastify";
 import moment from "moment";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
-import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
 import Loading from "../../components/Loading";
 import ModalForm from "../../components/Modals/ModalForm/ModalForm";
-import ModalFormBranch from "../../components/Modals/ModalFormBranch/ModalFormBranch";
-import ModalFormProduct from "../../components/Modals/ModalFormProduct";
+import ModalFormProduct from "../../components/Modals/ModalFormProduct/ModalFormProduct";
 import Searchbar from "../../components/Searchbar";
 import { formatCurrency } from "../../utils/formatCurrency";
+import { ProductForm } from "../../models/ProductForm.model";
+import ActionMenu from "../../components/Product/ActionMenu";
+import { productUpdate } from "../../payloads/requests/updateProduct.model";
 
 function Product() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -35,7 +39,13 @@ function Product() {
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
   const [totalPages, setTotalPages] = useState<number>(10);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
   const brandId = localStorage.getItem("BrandId");
+  const {
+    isOpen: isOpenProduct,
+    onOpen: onOpenProduct,
+    onClose: onCloseProduct,
+  } = useDisclosure();
 
   const fetchData = useCallback(
     async (searchValue?: string) => {
@@ -45,14 +55,14 @@ function Product() {
 
         const loadData = async () => {
           if (searchValue) {
-            result = await getProduct(
+            result = await getProducts(
               Number(brandId),
               currentPage,
               rowsPerPage,
               searchValue
             );
           } else {
-            result = await getProduct(
+            result = await getProducts(
               Number(brandId),
               currentPage,
               rowsPerPage,
@@ -61,6 +71,7 @@ function Product() {
           }
           setData(result.list);
           setTotalPages(result.totalPage);
+          setTotalRecords(result.totalRecord);
           setRowsPerPageOption(getOptions(result.totalRecord));
           setIsLoading(false);
           setIsInitialLoad(false);
@@ -98,36 +109,70 @@ function Product() {
     [setCurrentPage, setRowsPerPage]
   );
 
-  function handleDelete(id: number) {
-    console.log(id);
+  async function handleCreate(productForm: FormData) {
+    try {
+      setIsLoading(true);
+      const productResult = await createProduct(productForm);
+      console.log(productResult);
+      
+      if (productResult.statusCode === 200) {
+        fetchData();
+        toast.success("Thêm sản phẩm thành công");
+        onCloseProduct();
+      } else {
+        toast.error(productResult.message);
+        // onCloseProduct();
+      }
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-  function handleEdit(id: number) {
-    console.log(id);
+  async function handleDelete(id: number) {
+    try {
+      const result = await deleteProduct(id);
+      if (result.statusCode === 200) {
+        if ((totalRecords - 1) % rowsPerPage === 0 && currentPage > 1) {
+          setCurrentPage((prevPage) => prevPage - 1);
+        } else {
+          fetchData();
+        }
+        toast.success("Xoá sản phẩm thành công");
+      }
+    } catch (e) {
+      toast.error("Xoá sản phẩm thất bại");
+    }
+  }
+
+  function handleEdit(product: productUpdate) {
   }
 
   async function handleSearch(value: string) {
     fetchData(value);
   }
 
-  const {
-    isOpen: isOpenProduct,
-    onOpen: onOpenProduct,
-    onClose: onCloseProduct,
-  } = useDisclosure();
   return (
     <Flex className={style.container}>
-      <Flex w="60%" ml="20px" columnGap="30px">
+      <Flex className={style.searchWrapper}>
+        <Searchbar onSearch={handleSearch} />
         <Button onClick={onOpenProduct} className={style.AddProductBtn}>
-          Add product
+          <Text as="span" fontSize="25px" me={3}>
+            <IoAddCircleOutline />
+          </Text>
+          Create product
         </Button>
         <ModalForm
-          formBody={<ModalFormProduct onClose={onCloseProduct} />}
+          formBody={
+            <ModalFormProduct
+              onClose={onCloseProduct}
+              handleCreate={handleCreate}
+              isEdit={false}
+            />
+          }
           onClose={onCloseProduct}
           isOpen={isOpenProduct}
           title={"Add New Product"}
         />
-        <Searchbar onSearch={handleSearch} />
       </Flex>
       <Flex className={style.Product}>
         <TableContainer className={style.ProductTbl}>
@@ -168,9 +213,8 @@ function Product() {
                         className={style.ProductImage}
                       />
                     </Td>
-                    <Td>Cà Phê</Td>
-                    {/* <Td>{product.categoryId}</Td> */}
-                    <Td>{formatCurrency("27000")}</Td>
+                    <Td>{product.categoryName}</Td>
+                    <Td>{formatCurrency(product.price.toString())}</Td>
                     <Td className={style.WrapText}>{product.description}</Td>
                     <Td>{moment(product.createDate).format("DD/MM/YYYY")}</Td>
                     <Td>

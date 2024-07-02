@@ -4,18 +4,25 @@
   @extend .settingItem;
 
   .SettingsIconBtn {
-    @extend .settingsIconBtn;
-
+    width: 0px;
+    height: 25px;
+    background-color: transparent;
     .SettingsIcon {
-      @extend .settingsIcon;
+      transition: 0.3s;
+      width: 34px;
+      height: 34px;
+      cursor: pointer;
+      &:active {
+        width: 20px;
+        height: 20px;
+      }
     }
   }
-
   .SettingsIconBtn:hover {
     background-color: #fff;
   }
 }
 
 .PopoverContent {
-  @extend .popoverContent;
+  @extend .PopoverContent;
 }

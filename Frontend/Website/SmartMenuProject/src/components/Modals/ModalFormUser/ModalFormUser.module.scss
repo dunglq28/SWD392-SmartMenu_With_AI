@@ -13,7 +13,7 @@
 
   input,
   select {
-    @extend .borderColor;
+    @extend .InputField;
   }
 
   .textFontWeight600 {
