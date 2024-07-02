@@ -2,6 +2,16 @@
 
 .container {
   @extend .container;
+
+  .searchWrapper {
+    @extend .searchWrapper;
+  }
+
+  .AddCategoryBtn {
+    @extend .primaryButton;
+    @extend .addButton;
+  }
+
   .Category {
     @extend .table;
 

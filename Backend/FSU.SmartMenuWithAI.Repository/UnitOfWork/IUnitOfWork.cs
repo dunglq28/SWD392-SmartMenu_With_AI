@@ -16,12 +16,12 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         public GenericRepository<Menu> MenuRepository { get; }
         public GenericRepository<Product> ProductRepository { get; }
         public MenuListRepository MenuListRepository { get; }
-
-        //public ProductMenuRepository ProductMenuRepository { get; }
         public BrandRepository BrandRepository { get; }
         public GroupAttributeRepository GroupAttributeRepository { get; }
         public AttributeRepository AttributeRepository { get; }
         public ListPositionRepository ListPositionRepository { get; }
+        public GenericRepository<CustomerSegment> CustomerSegmentRepository { get; }
+
         public ProductListRepository ProductListRepository { get; }
 
     }

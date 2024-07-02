@@ -23,5 +23,7 @@ public partial class Attribute
 
     public virtual GroupAttribute GroupAttribute { get; set; } = null!;
 
+    public virtual ICollection<SegmentAttribute> SegmentAttributes { get; set; } = new List<SegmentAttribute>();
+
     public virtual ICollection<VisitAttribute> VisitAttributes { get; set; } = new List<VisitAttribute>();
 }

@@ -14,8 +14,8 @@ import {
 import { BrandData } from "../../payloads/responses/BrandData.model";
 import moment from "moment";
 import Loading from "../../components/Loading";
-import ActionMenu from "../../components/Brand/ActionMenu";
 import { brandUpdate } from "../../payloads/requests/updateBrand.model";
+import ActionMenuBrand from "../../components/ActionMenu/ActionMenuBrand/ActionMenuBrand";
 
 function Brand() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -145,7 +145,7 @@ function Brand() {
                   </div>
                 </div>
                 <div className={style.btnContainer}>
-                  <ActionMenu
+                  <ActionMenuBrand
                     id={brand.brandId}
                     brandName={brand.brandName}
                     onDelete={handleDelete}

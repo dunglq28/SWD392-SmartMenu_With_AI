@@ -23,9 +23,9 @@ import {
   updateBranch,
 } from "../../services/BranchService";
 import moment from "moment";
-import ActionMenu from "../../components/Branch/ActionMenu";
 import { branchUpdate } from "../../payloads/requests/updateBranch.model";
 import Searchbar from "../../components/Searchbar";
+import ActionMenuBranch from "../../components/ActionMenu/ActionMenuBranch/ActionMenuBranch";
 
 function Branch() {
   const location = useLocation();
@@ -170,10 +170,9 @@ function Branch() {
 
   return (
     <Flex className={style.container}>
-      <Flex w="40%" ml="20px">
+      <Flex className={style.searchWrapper}>
         <Searchbar onSearch={handleSearch} />
       </Flex>
-
       <Flex className={style.Branch}>
         {!brandInfo.id ? (
           <Flex justifyContent="center" alignItems="center" height="50vh">
@@ -216,7 +215,7 @@ function Branch() {
                         </Td>
                         <Td>{branch.isActive ? "Yes" : "No"}</Td>
                         <Td>
-                          <ActionMenu
+                          <ActionMenuBranch
                             id={branch.storeId}
                             brandName={brandInfo.brandName}
                             onDelete={handleDelete}

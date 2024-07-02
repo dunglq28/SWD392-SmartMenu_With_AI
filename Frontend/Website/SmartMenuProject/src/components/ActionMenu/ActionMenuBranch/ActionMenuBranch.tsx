@@ -12,16 +12,15 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import style from "./ActionMenu.module.scss";
+import style from "./ActionMenuBranch.module.scss";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import ModalForm from "../Modals/ModalForm/ModalForm";
-import CustomAlertDialog from "../AlertDialog";
-import { branchUpdate } from "../../payloads/requests/updateBranch.model";
-import { BranchForm } from "../../models/BranchForm.model";
-import ModalFormBranch from "../Modals/ModalFormBranch/ModalFormBranch";
+import ModalForm from "../../Modals/ModalForm/ModalForm";
+import CustomAlertDialog from "../../AlertDialog";
+import { branchUpdate } from "../../../payloads/requests/updateBranch.model";
+import { BranchForm } from "../../../models/BranchForm.model";
+import ModalFormBranch from "../../Modals/ModalFormBranch/ModalFormBranch";
 import { RiSettings3Line } from "react-icons/ri";
-import { getBranch } from "../../services/BranchService";
+import { getBranch } from "../../../services/BranchService";
 
 interface ActionMenuProps {
   id: number;
@@ -30,7 +29,7 @@ interface ActionMenuProps {
   onEdit: (branch: branchUpdate) => void;
 }
 
-const ActionMenu: FC<ActionMenuProps> = ({
+const ActionMenuBranch: FC<ActionMenuProps> = ({
   id,
   brandName,
   onDelete,
@@ -177,4 +176,4 @@ const ActionMenu: FC<ActionMenuProps> = ({
   );
 };
 
-export default ActionMenu;
+export default ActionMenuBranch;

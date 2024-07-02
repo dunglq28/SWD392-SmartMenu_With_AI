@@ -1,6 +1,6 @@
 @import "../../../styles/shared.scss";
 
-.SettingUser {
+.SettingCategory {
   @extend .settingItem;
 
   .SettingsIconBtn {
@@ -13,5 +13,5 @@
 }
 
 .PopoverContent {
-  @extend .popoverContent;
+  @extend .PopoverContent;
 }

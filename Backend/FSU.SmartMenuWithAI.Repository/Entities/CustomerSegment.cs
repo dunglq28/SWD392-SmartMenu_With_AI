@@ -17,9 +17,11 @@ public partial class CustomerSegment
 
     public int Status { get; set; }
 
-    public int BrandId { get; set; }
+    public int? BrandId { get; set; }
 
-    public virtual Brand Brand { get; set; } = null!;
+    public virtual Brand? Brand { get; set; }
 
     public virtual ICollection<MenuSegment> MenuSegments { get; set; } = new List<MenuSegment>();
+
+    public virtual ICollection<SegmentAttribute> SegmentAttributes { get; set; } = new List<SegmentAttribute>();
 }

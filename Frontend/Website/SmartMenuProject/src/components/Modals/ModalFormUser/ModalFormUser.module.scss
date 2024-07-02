@@ -13,10 +13,19 @@
 
   input,
   select {
-    @extend .borderColor;
+    @extend .InputField;
   }
 
   .textFontWeight600 {
     @extend .textFontWeight600;
   }
 }
+
+.MainBtn {
+  @extend .primaryButton;
+}
+
+.CancelBtn {
+  @extend .cancelButton;
+}
+

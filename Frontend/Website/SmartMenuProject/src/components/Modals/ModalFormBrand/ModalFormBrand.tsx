@@ -187,14 +187,12 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
       <ModalFooter>
         <Flex>
           <Button
-            backgroundColor={themeColors.primaryButton}
-            color="white"
-            mr={3}
+            className={styles.CancelBtn}
             onClick={cancelHandler}
           >
             Cancel
           </Button>
-          <Button variant="ghost" onClick={handleNextForm}>
+          <Button  onClick={handleNextForm} className={styles.MainBtn}>
             {isEdit ? "Save" : "Next"}
           </Button>
         </Flex>

@@ -93,7 +93,7 @@ builder.Services.AddScoped<IStoreService, StoreService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
 builder.Services.AddScoped<IMenuListService, MenuListService>();
-//builder.Services.AddScoped<IProductMenuSerivce, ProductMenuSerivce>();
+builder.Services.AddScoped<ICustomerSegmentService, CustomerSegmentService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IGroupAttributeService, GroupAttributeService>();
 builder.Services.AddScoped<IAttributeService, AttributeService>();

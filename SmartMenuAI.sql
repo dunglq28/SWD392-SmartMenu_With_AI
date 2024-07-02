@@ -122,7 +122,7 @@ CREATE TABLE CustomerSegment
   CreateDate DATE NOT NULL,
   UpdateDate DATE NULL,
   Status INT NOT NULL,
-  BrandID INT NOT NULL,
+  BrandID INT NULL
   PRIMARY KEY (SegmentID),
   FOREIGN KEY (BrandID) REFERENCES Brand(BrandID)
 );
@@ -154,6 +154,7 @@ CREATE TABLE SegmentAttribute
   SegmentID INT NOT NULL,
   AttributeID INT NOT NULL,
   Value NVARCHAR(125) NOT NULL,
+   PRIMARY KEY (SegmentID, AttributeID),
   FOREIGN KEY (SegmentID) REFERENCES CustomerSegment(SegmentID),
   FOREIGN KEY (AttributeID) REFERENCES Attribute(AttributeID)
 );
@@ -608,7 +609,6 @@ insert into SegmentAttribute (SegmentID, AttributeID, Value) values (7, 3, 'AS')
 insert into SegmentAttribute (SegmentID, AttributeID, Value) values (4, 1, 'AF');
 insert into SegmentAttribute (SegmentID, AttributeID, Value) values (6, 10, 'EU');
 insert into SegmentAttribute (SegmentID, AttributeID, Value) values (7, 10, 'AS');
-insert into SegmentAttribute (SegmentID, AttributeID, Value) values (9, 8, 'AS');
 
 
 

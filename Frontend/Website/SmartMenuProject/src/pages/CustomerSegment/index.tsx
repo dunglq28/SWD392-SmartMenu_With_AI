@@ -19,7 +19,6 @@ import { getOptions } from "../../utils/getRowPerPage";
 import { UserData } from "../../payloads/responses/UserData.model";
 import moment from "moment";
 import { toast } from "react-toastify";
-import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
 import Loading from "../../components/Loading";
 import { userUpdate } from "../../payloads/requests/updateUser.model";
 import Searchbar from "../../components/Searchbar";
@@ -125,7 +124,7 @@ function CustomerSegment() {
 
   return (
     <Flex className={style.container}>
-      <Flex w="40%" ml="20px">
+      <Flex className={style.searchWrapper}>
         <Searchbar onSearch={handleSearch} />
       </Flex>
       <Flex className={style.CustomerSegment}>
