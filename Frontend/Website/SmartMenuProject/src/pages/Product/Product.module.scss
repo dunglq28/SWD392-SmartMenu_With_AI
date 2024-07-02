@@ -2,15 +2,14 @@
 
 .container {
   @extend .container;
+
+  .searchWrapper {
+    @extend .searchWrapper;
+  }
+
   .AddProductBtn {
-    background-color: #55ad9b;
-    color: #f1f8e8;
-    &:hover {
-      background-color: #499182;
-    }
-    &:active {
-      background-color: #3f7a6f;
-    }
+    @extend .primaryButton;
+    @extend .addButton;
   }
   .Product {
     @extend .table;

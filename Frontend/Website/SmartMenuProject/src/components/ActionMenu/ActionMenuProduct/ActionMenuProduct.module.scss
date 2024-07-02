@@ -1,6 +1,6 @@
-@import "../../styles/shared.scss";
+@import "../../../styles/shared.scss";
 
-.SettingBrand {
+.SettingBranch {
   @extend .settingItem;
 
   .SettingsIconBtn {
@@ -10,12 +10,8 @@
       @extend .settingsIcon;
     }
   }
-
-  .SettingsIconBtn:hover {
-    background-color: #fff;
-  }
 }
 
 .PopoverContent {
-  @extend .popoverContent;
+  @extend .PopoverContent;
 }

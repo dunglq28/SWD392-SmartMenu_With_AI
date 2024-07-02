@@ -348,7 +348,7 @@ function Sidebar() {
                   ? () => changeItem(menuItem.label)
                   : menuItem.onclick
               }
-              backgroundColor={item === menuItem.label ? "#55AD9B" : "#95D2B3"}
+              backgroundColor={item === menuItem.label ? "#55AD9B" : "#fff"}
               color={item === menuItem.label ? "#F1F8E8" : "black"}
             >
               <Flex>
