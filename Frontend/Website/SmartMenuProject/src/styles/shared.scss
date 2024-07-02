@@ -8,6 +8,7 @@
 
 .searchWrapper {
   width: "auto";
+  margin-top: 10px;
   margin-left: 20px;
   justify-content: space-between;
   align-items: center;
@@ -98,8 +99,9 @@
   width: 100% !important;
 
   .PopupButton {
-    width: 150px;
+    width: 140px;
     height: 40px;
+    font-size: 16px;
     justify-content: center;
     align-items: center;
     cursor: pointer;
@@ -144,5 +146,29 @@
 }
 
 .primaryButton {
-  background-color: #466d6b;
+  background-color: #466d6b !important;
+  color: #f1f8e8 !important;
+  &:hover {
+    background-color: #499182 !important; 
+  }
+  &:active {
+    background-color: #3f7a6f !important;
+  }
+}
+
+.addButton {
+  margin-right: 20px;
+  height: 100%;
+}
+
+.cancelButton {
+  background-color: #edf2f7 !important;
+  margin-right: 0.75rem;
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.ml16Down {
+  margin-left: -16px;
 }

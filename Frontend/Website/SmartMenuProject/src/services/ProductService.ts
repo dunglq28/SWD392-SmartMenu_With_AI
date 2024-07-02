@@ -24,14 +24,16 @@ export const getProducts = async (
   return apiResponse.data as GetData<ProductData>;
 };
 
-export const getProduct = async (id: number): Promise<ApiResponse<ProductData>> => {
+export const getProduct = async (
+  id: number
+): Promise<ApiResponse<ProductData>> => {
   const res = await axiosAuth.get("products/get-by-id", {
     params: {
       id: id,
     },
   });
   const apiResponse = res.data as ApiResponse<ProductData>;
-  return apiResponse
+  return apiResponse;
 };
 
 export const createProduct = async (
@@ -50,14 +52,22 @@ export const createProduct = async (
 };
 
 export const updateProduct = async (
-  product: productUpdate
+  id: number,
+  product: FormData
 ): Promise<ApiResponse<Object>> => {
-  const res = await axiosMultipartForm.put(
-    `products?product-id=${product.id}`,
-    product
-  );
-  const apiResponse = res.data as ApiResponse<Object>;
-  return apiResponse;
+  try {
+    const res = await axiosMultipartForm.put(
+      `products?product-id=${id}`,
+      product
+    );
+    const apiResponse = res.data as ApiResponse<Object>;
+    return apiResponse;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return error.response.data as ApiResponse<Object>;
+    }
+    throw new Error("Unexpected error");
+  }
 };
 
 export const deleteProduct = async (

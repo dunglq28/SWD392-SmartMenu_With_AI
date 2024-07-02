@@ -11,22 +11,20 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-
-import style from "./ActionMenu.module.scss";
-import { useTranslation } from "react-i18next";
-import ModalForm from "../Modals/ModalForm/ModalForm";
-import CustomAlertDialog from "../AlertDialog";
 import { RiSettings3Line } from "react-icons/ri";
-import ModalFormProduct from "../Modals/ModalFormProduct/ModalFormProduct";
-import { productUpdate } from "../../payloads/requests/updateProduct.model";
+import style from "./ActionMenuProduct.module.scss";
+import { useTranslation } from "react-i18next";
+import CustomAlertDialog from "../../AlertDialog";
+import ModalForm from "../../Modals/ModalForm/ModalForm";
+import ModalFormProduct from "../../Modals/ModalFormProduct/ModalFormProduct";
 
 interface ActionMenuProps {
   id: number;
   onDelete: (id: number) => void;
-  onEdit: (product: productUpdate) => void;
+  onEdit: (id: number, product: FormData) => void;
 }
 
-const ActionMenu: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
+const ActionMenuProduct: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -74,7 +72,7 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
       />
 
       <ModalForm
-        formBody={<ModalFormProduct onClose={onCloseProduct} isEdit={true} id={id} />}
+        formBody={<ModalFormProduct onClose={onCloseProduct} handleEdit={onEdit} isEdit={true} id={id} />}
         onClose={onCloseProduct}
         isOpen={isOpenProduct}
         title={t("Update Product")}
@@ -83,4 +81,4 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
   );
 };
 
-export default ActionMenu;
+export default ActionMenuProduct;

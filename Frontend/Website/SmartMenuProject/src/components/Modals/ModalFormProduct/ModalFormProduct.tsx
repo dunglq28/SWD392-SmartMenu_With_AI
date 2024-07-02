@@ -15,12 +15,12 @@ import { getCategoryByBrandId } from "../../../services/CategoryService";
 import { toast } from "react-toastify";
 import { ProductForm } from "../../../models/ProductForm.model";
 import { isImageFile } from "../../../utils/validation";
-import { themeColors } from "../../../constants/GlobalStyles";
 import { getProduct } from "../../../services/ProductService";
 
 interface ModalFormProductProps {
   id?: number;
   handleCreate?: (productForm: FormData) => void;
+  handleEdit?: (id: number, productForm: FormData) => void;
   onClose: () => void;
   isEdit: boolean;
 }
@@ -36,6 +36,7 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
   onClose,
   handleCreate,
   isEdit,
+  handleEdit,
 }) => {
   const brandId = Number(localStorage.getItem("BrandId"));
   const [categoryOptions, setCategoryOptions] = useState<
@@ -164,7 +165,7 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
       price: formData.price.value
         ? isNaN(Number(formData.price.value)) ||
           Number(formData.price.value) <= 1000
-          ? "Price must be a number greater than 1000"
+          ? "Price must be a number greater than 1000 has format: 100000"
           : ""
         : "Price is required",
     };
@@ -212,7 +213,7 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
       if (!isEdit) {
         handleCreate?.(productForm);
       } else {
-        console.log(productForm);
+        handleEdit?.(id!, productForm);
       }
     }
   };
@@ -305,7 +306,7 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
             <Text className={style.FieldTitle}>Price</Text>
             <Input
               className={style.InputField}
-              placeholder="Price"
+              placeholder="Price: 100000"
               value={formData.price.value?.toString()}
               onChange={(e) => handleChange("price", e.target.value)}
             />
@@ -319,11 +320,7 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
       </ModalBody>
       <ModalFooter>
         <Flex className={style.Footer}>
-          <Button
-            variant="ghost"
-            backgroundColor="#ccc"
-            onClick={() => onClose()}
-          >
+          <Button onClick={() => onClose()}>
             Cancel
           </Button>
           <Button className={style.AddProductBtn} onClick={handleSubmit}>

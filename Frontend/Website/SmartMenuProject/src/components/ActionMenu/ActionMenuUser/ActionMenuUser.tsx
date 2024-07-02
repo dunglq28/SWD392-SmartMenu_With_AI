@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { RiSettings3Line } from "react-icons/ri";
 
-import style from "./ActionMenu.module.scss";
+import style from "./ActionMenuUser.module.scss";
 import ModalForm from "../../Modals/ModalForm/ModalForm";
 import ModalFormUser from "../../Modals/ModalFormUser/ModalFormUser";
 import { useTranslation } from "react-i18next";
@@ -35,7 +35,7 @@ interface ActionMenuProps {
   onDelete: (id: number) => void;
 }
 
-const ActionMenu: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
+const ActionMenuUser: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
@@ -48,7 +48,7 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
   const [userData, setUserData] = useState<UserForm>(getInitialUserData());
 
   const handleEditClick = async () => {
-    var result = await getUser(id);
+    var result = await getUser(id);    
 
     if (result.statusCode === 200) {
       const { fullname, userName, phone, dob, gender, isActive } = result.data;
@@ -134,4 +134,4 @@ const ActionMenu: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
   );
 };
 
-export default ActionMenu;
+export default ActionMenuUser;

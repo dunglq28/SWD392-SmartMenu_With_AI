@@ -17,7 +17,12 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import style from "./Product.module.scss";
 import { useCallback, useEffect, useState } from "react";
 import { ProductData } from "../../payloads/responses/ProductData.model";
-import { createProduct, deleteProduct, getProducts } from "../../services/ProductService";
+import {
+  createProduct,
+  deleteProduct,
+  getProducts,
+  updateProduct,
+} from "../../services/ProductService";
 import { getOptions } from "../../utils/getRowPerPage";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -27,13 +32,11 @@ import ModalForm from "../../components/Modals/ModalForm/ModalForm";
 import ModalFormProduct from "../../components/Modals/ModalFormProduct/ModalFormProduct";
 import Searchbar from "../../components/Searchbar";
 import { formatCurrency } from "../../utils/formatCurrency";
-import { ProductForm } from "../../models/ProductForm.model";
-import ActionMenu from "../../components/Product/ActionMenu";
-import { productUpdate } from "../../payloads/requests/updateProduct.model";
+import { useLocation, useNavigate } from "react-router-dom";
+import ActionMenuProduct from "../../components/ActionMenu/ActionMenuProduct/ActionMenuProduct";
 
 function Product() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
   const [data, setData] = useState<ProductData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
@@ -46,6 +49,20 @@ function Product() {
     onOpen: onOpenProduct,
     onClose: onCloseProduct,
   } = useDisclosure();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  let flag = false;
+
+  useEffect(() => {
+    if (location.state?.toastMessage && !flag) {
+      toast.success(location.state.toastMessage, {
+        autoClose: 2500,
+      });
+      flag = true;
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location.state]);
 
   const fetchData = useCallback(
     async (searchValue?: string) => {
@@ -74,20 +91,15 @@ function Product() {
           setTotalRecords(result.totalRecord);
           setRowsPerPageOption(getOptions(result.totalRecord));
           setIsLoading(false);
-          setIsInitialLoad(false);
         };
 
-        if (isInitialLoad) {
-          setTimeout(loadData, 500);
-        } else {
-          await loadData();
-        }
+        setTimeout(loadData, 500);
       } catch (err) {
         toast.error("Lỗi khi lấy dữ liệu");
         setIsLoading(false);
       }
     },
-    [currentPage, rowsPerPage, isInitialLoad]
+    [currentPage, rowsPerPage]
   );
 
   useEffect(() => {
@@ -113,18 +125,18 @@ function Product() {
     try {
       setIsLoading(true);
       const productResult = await createProduct(productForm);
-      console.log(productResult);
-      
+
       if (productResult.statusCode === 200) {
         fetchData();
         toast.success("Thêm sản phẩm thành công");
         onCloseProduct();
       } else {
         toast.error(productResult.message);
-        // onCloseProduct();
       }
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     }
   }
 
@@ -144,7 +156,18 @@ function Product() {
     }
   }
 
-  function handleEdit(product: productUpdate) {
+  async function handleEdit(id: number, productForm: FormData) {
+    try {
+      var result = await updateProduct(id, productForm);
+      if (result.statusCode === 200) {
+        fetchData();
+        toast.success("Cập nhật sản phẩm thành công");
+      } else {
+        toast.error(result.message);
+      }
+    } catch {
+      toast.error("Cập nhật sản phẩm thất bại");
+    }
   }
 
   async function handleSearch(value: string) {
@@ -191,7 +214,7 @@ function Product() {
               </Tr>
             </Thead>
             <Tbody>
-              {isLoading && isInitialLoad ? (
+              {isLoading ? (
                 <Tr>
                   <Td colSpan={10} className={style.LoadingCell}>
                     <Loading />
@@ -218,7 +241,7 @@ function Product() {
                     <Td className={style.WrapText}>{product.description}</Td>
                     <Td>{moment(product.createDate).format("DD/MM/YYYY")}</Td>
                     <Td>
-                      <ActionMenu
+                      <ActionMenuProduct
                         id={product.productId}
                         onDelete={handleDelete}
                         onEdit={handleEdit}

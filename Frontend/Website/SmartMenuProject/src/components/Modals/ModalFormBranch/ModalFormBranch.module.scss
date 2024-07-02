@@ -18,3 +18,12 @@
     @extend .textFontWeight600;
   }
 }
+
+.MainBtn {
+  @extend .primaryButton;
+}
+
+.CancelBtn {
+  @extend .cancelButton;
+}
+

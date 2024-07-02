@@ -463,15 +463,10 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
 
           <ModalFooter>
             <Flex>
-              <Button
-                backgroundColor={themeColors.primaryButton}
-                color="white"
-                mr={3}
-                onClick={cancelHandler}
-              >
+              <Button className={styles.CancelBtn} onClick={cancelHandler}>
                 Cancel
               </Button>
-              <Button variant="ghost" onClick={handleNextForm}>
+              <Button onClick={handleNextForm} className={styles.MainBtn}>
                 {isEdit ? "Save" : "Next"}
               </Button>
             </Flex>

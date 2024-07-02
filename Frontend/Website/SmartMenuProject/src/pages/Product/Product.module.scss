@@ -6,18 +6,10 @@
   .searchWrapper {
     @extend .searchWrapper;
   }
-  
+
   .AddProductBtn {
     @extend .primaryButton;
-    color: #f1f8e8;
-    margin-right: 38px;
-    height: 100%;
-    &:hover {
-      background-color: #499182;
-    }
-    &:active {
-      background-color: #3f7a6f;
-    }
+    @extend .addButton;
   }
   .Product {
     @extend .table;

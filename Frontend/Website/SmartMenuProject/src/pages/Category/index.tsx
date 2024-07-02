@@ -1,13 +1,16 @@
 import {
+  Button,
   Flex,
   Table,
   TableCaption,
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import style from "./Category.module.scss";
 import Searchbar from "../../components/Searchbar";
@@ -15,10 +18,19 @@ import { useCallback, useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { CategoryData } from "../../payloads/responses/CategoryData.model";
 import { getOptions } from "../../utils/getRowPerPage";
-import { getCategory } from "../../services/CategoryService";
+import {
+  createCategory,
+  deleteCategory,
+  getCategories,
+  updateCategory,
+} from "../../services/CategoryService";
 import { toast } from "react-toastify";
 import moment from "moment";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
+import { IoAddCircleOutline } from "react-icons/io5";
+import ModalForm from "../../components/Modals/ModalForm/ModalForm";
+import ModalFormCategory from "../../components/Modals/ModalFormCategory/ModalFormCategory";
+import ActionMenuCategory from "../../components/ActionMenu/ActionMenuCategory/ActionMenuCategory";
 
 function Category() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -28,7 +40,13 @@ function Category() {
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
   const [totalPages, setTotalPages] = useState<number>(10);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
   const brandId = localStorage.getItem("BrandId");
+  const {
+    isOpen: isOpenCategory,
+    onOpen: onOpenCategory,
+    onClose: onCloseCategory,
+  } = useDisclosure();
 
   const fetchData = useCallback(
     async (searchValue?: string) => {
@@ -38,14 +56,14 @@ function Category() {
 
         const loadData = async () => {
           if (searchValue) {
-            result = await getCategory(
+            result = await getCategories(
               Number(brandId),
               currentPage,
               rowsPerPage,
               searchValue
             );
           } else {
-            result = await getCategory(
+            result = await getCategories(
               Number(brandId),
               currentPage,
               rowsPerPage,
@@ -54,6 +72,7 @@ function Category() {
           }
           setData(result.list);
           setTotalPages(result.totalPage);
+          setTotalRecords(result.totalRecord);
           setRowsPerPageOption(getOptions(result.totalRecord));
           setIsLoading(false);
           setIsInitialLoad(false);
@@ -91,12 +110,53 @@ function Category() {
     [setCurrentPage, setRowsPerPage]
   );
 
-  function handleDelete(id: number) {
-    console.log(id);
+  async function handleCreate(id: number, categoryName: string) {
+    try {
+      setIsLoading(true);
+      const cateResult = await createCategory(categoryName, id);
+
+      if (cateResult.statusCode === 200) {
+        fetchData();
+        toast.success("Thêm loại sản phẩm thành công");
+        onCloseCategory();
+      } else {
+        toast.error(cateResult.message);
+      }
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    }
   }
 
-  function handleEdit(id: number) {
-    console.log(id);
+  async function handleDelete(id: number) {
+    try {
+      const result = await deleteCategory(id);
+      if (result.statusCode === 200) {
+        if ((totalRecords - 1) % rowsPerPage === 0 && currentPage > 1) {
+          setCurrentPage((prevPage) => prevPage - 1);
+        } else {
+          fetchData();
+        }
+        toast.success("Xoá loại sản phẩm thành công");
+      }
+    } catch (e) {
+      toast.error("Xoá loại sản phẩm thất bại");
+    }
+  }
+
+  async function handleEdit(cateId: number, brandId: number, categoryName: string) {
+    try { 
+      var result = await updateCategory(cateId, brandId, categoryName);
+      if (result.statusCode === 200) {
+        fetchData();
+        toast.success("Cập nhật loại sản phẩm thành công");
+      } else {
+        toast.error(result.message);
+      }
+    } catch {
+      toast.error("Cập nhật loại sản phẩm thất bại");
+    }
   }
 
   async function handleSearch(value: string) {
@@ -107,6 +167,24 @@ function Category() {
     <Flex className={style.container}>
       <Flex className={style.searchWrapper}>
         <Searchbar onSearch={handleSearch} />
+        <Button onClick={onOpenCategory} className={style.AddCategoryBtn}>
+          <Text as="span" fontSize="25px" me={3}>
+            <IoAddCircleOutline />
+          </Text>
+          Create Category
+        </Button>
+        <ModalForm
+          formBody={
+            <ModalFormCategory
+              onClose={onCloseCategory}
+              handleCreate={handleCreate}
+              isEdit={false}
+            />
+          }
+          onClose={onCloseCategory}
+          isOpen={isOpenCategory}
+          title={"Add New Category"}
+        />
       </Flex>
       <Flex className={style.Category}>
         <TableContainer className={style.CategoryTbl}>
@@ -138,11 +216,11 @@ function Category() {
                     <Td>{cate.categoryName}</Td>
                     <Td>{moment(cate.createDate).format("DD/MM/YYYY")}</Td>
                     <Td>
-                      {/* <ActionMenu
-                        id={Category.CategoryId}
+                      <ActionMenuCategory
+                        id={cate.categoryId}
                         onDelete={handleDelete}
                         onEdit={handleEdit}
-                      /> */}
+                      />
                     </Td>
                   </Tr>
                 ))

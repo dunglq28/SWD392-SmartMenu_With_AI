@@ -19,11 +19,11 @@ import { getOptions } from "../../utils/getRowPerPage";
 import { UserData } from "../../payloads/responses/UserData.model";
 import moment from "moment";
 import { toast } from "react-toastify";
-import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
 import Loading from "../../components/Loading";
 import { userUpdate } from "../../payloads/requests/updateUser.model";
 import Searchbar from "../../components/Searchbar";
 import { getRoleName } from "../../utils/getRoleName";
+import ActionMenuUser from "../../components/ActionMenu/ActionMenuUser/ActionMenuUser";
 
 function User() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -170,7 +170,7 @@ function User() {
                     <Td>{moment(user.createDate).format("DD/MM/YYYY")}</Td>
                     <Td>{user.isActive ? "Yes" : "No"}</Td>
                     <Td>
-                      <ActionMenu
+                      <ActionMenuUser
                         id={user.userId}
                         onDelete={handleDelete}
                         onEdit={handleEdit}

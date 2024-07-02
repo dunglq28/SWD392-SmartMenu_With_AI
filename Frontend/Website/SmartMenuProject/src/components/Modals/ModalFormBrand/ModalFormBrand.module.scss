@@ -36,3 +36,11 @@
     font-style: italic;
   }
 }
+
+.MainBtn {
+  @extend .primaryButton;
+}
+
+.CancelBtn {
+  @extend .cancelButton;
+}

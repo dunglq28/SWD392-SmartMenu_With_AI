@@ -69,7 +69,9 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
   const [formData, setFormData] = useState<UserForm>({
     fullName: { value: userData.fullName.value, errorMessage: "" },
     userName: {
-      value: initialUserNameValue,
+      value: initialUserNameValue
+        ? initialUserNameValue
+        : userData.userName.value,
       errorMessage: "",
     },
     phoneNumber: { value: userData.phoneNumber.value, errorMessage: "" },
@@ -345,15 +347,10 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         )}
 
         <Flex>
-          <Button
-            backgroundColor={themeColors.primaryButton}
-            color="white"
-            mr={3}
-            onClick={cancelHandler}
-          >
+          <Button className={styles.CancelBtn} onClick={cancelHandler}>
             Cancel
           </Button>
-          <Button variant="ghost" onClick={handleSaveForm}>
+          <Button onClick={handleSaveForm} className={styles.MainBtn}>
             Save
           </Button>
         </Flex>
