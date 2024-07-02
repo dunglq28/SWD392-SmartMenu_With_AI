@@ -13,6 +13,8 @@ using Amazon.Rekognition;
 using Amazon.Rekognition.Model;
 using SharpDX.Direct3D11;
 using FSU.SmartMenuWithAI.Service.Models.AWS;
+using FSU.SmartMenuWithAI.Service.Models.Menu;
+using FSU.SmartMenuWithAI.Service.Utils;
 
 namespace FSU.SmartMenuWithAI.Service.Services
 {
@@ -25,7 +27,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         Task<PutObjectResponse> UploadItemAsync(IFormFile file, string fileName, string folderRoot);
         Task<DeleteObjectResponse> DeleteItemAsync(Guid id, string directoryPath);
         string GetPreSignedURL(string fileName, string folderRoot);
-        Task<FaceDetail> AnalyzeFacesInImage(IFormFile file);
+        Task<CustomerFaceRognizeDTO> AnalyzeFacesInImage(IFormFile file);
     }
 
     public class S3Service : IS3Service
@@ -135,23 +137,35 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return Encoding.ASCII.GetString(bytes);
         }
 
-        public async Task<FaceDetail> AnalyzeFacesInImage(IFormFile file)
+        public async Task<CustomerFaceRognizeDTO> AnalyzeFacesInImage(IFormFile file)
         {
             var ms = new MemoryStream();
-           
+           // copy qua memory stream vì detectface chỉ nhận file stream image
             file.CopyTo(ms);
             ms.Position = 0;
+
             var detectFacesRequest = new DetectFacesRequest
             {
                 Image = new Image
                 {
                     Bytes = ms
                 },
+                // lấy tất cả thuộc tính
                 Attributes = new List<string> { "ALL" }
             };
+            //phân tích
             var detectFacesResponse = await _rekognitionClient.DetectFacesAsync(detectFacesRequest);
+            // nhận diện khuôn mặt chính
             var customerFace = detectFacesResponse.FaceDetails[0];
-            return customerFace;
+            // truyền các giá trị sử dụng vào object DTO
+            var faceAttributes = new CustomerFaceRognizeDTO
+            {
+                AgeRange = AverageAge.CalAverageAge(customerFace.AgeRange.Low, customerFace.AgeRange.High),
+                Emotions = customerFace.Emotions,
+                Gender = customerFace.Gender.ToString(),
+                Session = SessionHelper.GetSession() 
+            };
+            return faceAttributes;
         }
 
     }

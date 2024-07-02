@@ -31,7 +31,6 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Product
         [JsonProperty("price")]
         [Range(1, int.MaxValue, ErrorMessage = "giá không hợp lệ")]
         public decimal Price { get; set; }
-
         [Required]
         [JsonProperty("category-id")]
         public int CategoryId { get; set; }

@@ -6,6 +6,8 @@ using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.API.Common.Constants;
 using FSU.SmartMenuWithAI.API.Payloads.Request.Menu;
 using FSU.SmartMenuWithAI.Service.Models;
+using Microsoft.AspNetCore.Authorization;
+using FSU.SmartMenuWithAI.Service.Services;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -16,10 +18,14 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
 
         private readonly IMenuService _menuService;
+        private readonly ImageFileValidator _imageFileValidator;
+        private readonly IS3Service _s3Service;
 
-        public MenuController(IMenuService menuService)
+        public MenuController(IMenuService menuService, IS3Service s3Service)
         {
-            _menuService = menuService;
+            _menuService = menuService; 
+            _imageFileValidator = new ImageFileValidator();
+            _s3Service = s3Service;
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
@@ -199,5 +205,59 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
+        //[Authorize(Roles = UserRoles.BrandManager + "," +UserRoles.Store)]
+        [HttpPost(APIRoutes.Menu.RecomendMenu, Name = "recommend-menu-async")]
+        public async Task<IActionResult> RecommendMenuAsync([FromForm] RecomentMenuRequest reqobj)
+        {
+            try
+            {
+                var validationImg = await _imageFileValidator.ValidateAsync(reqobj.faceImage);
+                if (!validationImg.IsValid)
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "File không phải là hình ảnh hợp lệ",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+
+
+                var customerAtt = await _s3Service.AnalyzeFacesInImage(reqobj.faceImage);
+
+                if (customerAtt == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Phân tích không thành công",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Phân tích thành công",
+                    Data = customerAtt,
+                    IsSuccess = true
+                });
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
+
+
     }
 }

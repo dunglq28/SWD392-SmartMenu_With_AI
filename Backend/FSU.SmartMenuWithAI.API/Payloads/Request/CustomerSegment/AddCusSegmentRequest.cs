@@ -11,8 +11,10 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.CustomerSegment
         
         [Required]
         [StringLength(500, MinimumLength = 5)]
+        [JsonProperty("segment-name")]
         public string SegmentName { get; set; } = null!;
         [Required]
+        [JsonProperty("attributes-dto")]
         public List<AddAttributeSegmentDTO> attributeDTOs { get; set; }
     }
 }
