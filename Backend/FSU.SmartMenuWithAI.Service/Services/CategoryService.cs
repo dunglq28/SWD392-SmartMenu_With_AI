@@ -35,7 +35,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             category.BrandId = reqObj.BrandId;
 
             Expression<Func<Category, bool>> duplicateName = x => x.BrandId == reqObj.BrandId && x.CategoryName.Equals(category.CategoryName) && (x.Status != (int)Status.Deleted);
-            var exist = _unitOfWork.CategoryRepository.GetByCondition(duplicateName);
+            var exist = await _unitOfWork.CategoryRepository.GetByCondition(duplicateName);
             if (exist != null)
             {
                 throw new DbUpdateException("Tên đã tồn tại");
