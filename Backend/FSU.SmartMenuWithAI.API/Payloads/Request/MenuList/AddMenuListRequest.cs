@@ -14,7 +14,7 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.MenuList
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Brand ID must be a positive integer.")]
         [JsonProperty("brand-id")]
-        public int brandID { get; set; }
+        public int brandId { get; set; }
         [Required]
         [JsonProperty("list-add-to-menu")]
         public List<CreateMenuListDTO> listAddToMenu { get; set; }

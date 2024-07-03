@@ -17,10 +17,13 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
 
         Task<MenuListDTO?> GetByID(int menuId, int listId, int brandId);
 
-        Task<List<MenuListDTO>> Insert(int MenuId,int BrandId ,List<CreateMenuListDTO> entity);
+        Task<List<MenuListDTO>> Insert(int MenuId, int BrandId, List<CreateMenuListDTO> entity);
 
         Task<bool> Delete(int menuId, int listId, int brandId);
 
         Task<MenuListDTO?> Update(MenuListDTO entityToUpdate);
+
+        Task<MenuListDTO> InsertNewListToMenu(MenuListDTO reqObj);
+
     }
 }
