@@ -35,10 +35,10 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 _unitOfWork.CustomerSegmentRepository.Update(cusSegment);
                 // Xóa tất cả SegmentAttribute có cùng SegmentId
                 Expression<Func<SegmentAttribute, bool>> attributeCondition = x => x.SegmentId == SegmentId;
-                var segmentAttributes = await _unitOfWork.SegmentAttributeRepository.Get(attributeCondition);
+                var segmentAttributes = await _unitOfWork.SegmentAttributeRepository1.Get(attributeCondition);
                 foreach (var attribute in segmentAttributes)
                 {
-                    _unitOfWork.SegmentAttributeRepository.Delete(attribute);
+                    _unitOfWork.SegmentAttributeRepository1.Delete(attribute);
                 }
 
                 var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
@@ -176,7 +176,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                                     break;
                             }
                             segmentAttribute.BrandId = brandID;
-                            await _unitOfWork.SegmentAttributeRepository.Insert(segmentAttribute);
+                            await _unitOfWork.SegmentAttributeRepository1.Insert(segmentAttribute);
                             //await _unitOfWork.SaveAsync();
                         }
                         await _unitOfWork.SaveAsync();
@@ -257,7 +257,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 throw new Exception("Không tìm thấy phân khúc khách hàng");
             }
             Expression<Func<SegmentAttribute, bool>> condition = x => x.SegmentId != segmentId && (x.AttributeId == 1 && x.Value == age);
-            var segmentAttributes = await _unitOfWork.SegmentAttributeRepository.Get(condition);
+            var segmentAttributes = await _unitOfWork.SegmentAttributeRepository1.Get(condition);
 
             // Prepare a list to batch update
             //List<SegmentAttribute> attributesToUpdate = new List<SegmentAttribute>();
@@ -301,7 +301,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 //attributesToUpdate.Add(segmentAttribute);
                 try
                 {
-                    _unitOfWork.SegmentAttributeRepository.Update(segmentAttribute);
+                    _unitOfWork.SegmentAttributeRepository1.Update(segmentAttribute);
                     //await Task.Delay(100);
                     //await _unitOfWork.SaveAsync();
                 }

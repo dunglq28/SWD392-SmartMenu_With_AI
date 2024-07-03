@@ -14,6 +14,7 @@ namespace FSU.SmartMenuWithAI.Service.Models
         public int AttributeId { get; set; }
 
         public string Value { get; set; } = null!;
+        public string AttributeName { get; set; }
 
         public int BrandId { get; set; }
     }
