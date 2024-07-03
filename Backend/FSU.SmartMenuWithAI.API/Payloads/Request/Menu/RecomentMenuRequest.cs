@@ -8,5 +8,9 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Menu
         [Required]
         [JsonProperty("face-image")]
         public IFormFile faceImage { get; set; }
+
+        [Required]
+        [JsonProperty("brand-id")]
+        public int BrandId { get; set; }
     }
 }

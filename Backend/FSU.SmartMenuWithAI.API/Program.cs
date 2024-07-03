@@ -83,6 +83,9 @@ builder.Services.AddScoped<IGroupAttributeRepository, GroupAttributeRepository>(
 builder.Services.AddScoped<IAttributeRepository, AttributeRepository>();
 builder.Services.AddScoped<IListPositionRepository, ListPositionRepository>();
 builder.Services.AddScoped<IProductListRepository, ProductListRepository>();
+builder.Services.AddScoped<ICustomerSegmentRepository, CustomerSegmentRepository>();
+builder.Services.AddScoped<IMenuSegmentRepository, MenuSegmentRepository>();
+
 
 // Register servicies
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -99,6 +102,7 @@ builder.Services.AddScoped<IGroupAttributeService, GroupAttributeService>();
 builder.Services.AddScoped<IAttributeService, AttributeService>();
 builder.Services.AddScoped<IListPositionService, ListPositionService>();
 builder.Services.AddScoped<IProductListService, ProductListService>();
+builder.Services.AddScoped<ISegmentAttributeService, SegmentAttributeService>();
 
 
 

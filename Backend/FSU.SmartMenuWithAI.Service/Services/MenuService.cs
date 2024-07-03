@@ -5,18 +5,24 @@ using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
 using FSU.SmartMenuWithAI.Service.Utils;
+using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 using System.Linq.Expressions;
 
 namespace FSU.SmartMenuWithAI.Service.Services
 {
-    public class MenuService :  IMenuService
+    public class MenuService : IMenuService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public MenuService(IUnitOfWork context, IMapper mapper) 
+        private readonly IS3Service _s3Service;
+        private readonly ISegmentAttributeService _segmentAttributeService;
+        public MenuService(IUnitOfWork context, IMapper mapper, IS3Service s3Service, ISegmentAttributeService segmentAttributeService)
         {
             _unitOfWork = context;
             _mapper = mapper;
+            _s3Service = s3Service;
+            _segmentAttributeService = segmentAttributeService;
         }
 
         public async Task<bool> Delete(int id)
@@ -31,7 +37,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return result;
         }
 
-        public async Task<PageEntity<MenuDTO>?> GetAllAsync( int brandID, int? pageIndex, int? pageSize)
+        public async Task<PageEntity<MenuDTO>?> GetAllAsync(int brandID, int? pageIndex, int? pageSize)
         {
             Expression<Func<Menu, bool>> filter = brandID > 0 ? x => x.BrandId == brandID : null!;
 
@@ -80,6 +86,28 @@ namespace FSU.SmartMenuWithAI.Service.Services
             _unitOfWork.MenuRepository.Update(menu);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             return result;
+        }
+
+        public async Task<MenuDTO> RecomendMenu(IFormFile fileImage, int brandId)
+        {
+            // lay duoc hinh anh phan tich ra attribute
+            var customerAtt = await _s3Service.AnalyzeFacesInImage(fileImage);
+            // tim customer segment
+            var customerSegment = await _segmentAttributeService.GetCusSegmentAsync(customerAtt);
+
+            // tim menu cos priority cao nhat trong bang MenuSegment
+            Func<IQueryable<MenuSegment>, IOrderedQueryable<MenuSegment>> orderBy = q => q.OrderByDescending(x => x.Priority);
+            var menuSegment = await _unitOfWork.MenuSegmentRepository.HighestMenuSegment(segmentId: customerSegment.SegmentId, BrandId: brandId);
+            // tim menu theo id da lay duoc
+            if (menuSegment != null)
+            {
+                var menuRecomend = await _unitOfWork.MenuRepository.GetByID(menuSegment!.MenuId);
+                var mapdto1 = _mapper.Map<MenuDTO>(menuRecomend);
+                return mapdto1;
+            }
+            var menuDefault = await _unitOfWork.MenuRepository.GetAllNoPaging(x=> x.BrandId == brandId, x => x.OrderByDescending(x => x.MenuId));
+            var mapdto2 = _mapper.Map<MenuDTO>(menuDefault.FirstOrDefault());
+            return mapdto2;
         }
     }
 }

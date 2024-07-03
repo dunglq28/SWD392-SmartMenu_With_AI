@@ -9,7 +9,7 @@ namespace FSU.SmartMenuWithAI.Service.Models.Menu
 {
     public class CustomerFaceRognizeDTO
     {
-        public int AgeRange { get; set; }
+        public int Age { get; set; } = -1;
         public List<Emotion>? Emotions { get; set; }
         public string? Gender { get; set; }
         public string? Session {  get; set; }

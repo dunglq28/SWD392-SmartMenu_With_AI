@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace FSU.SmartMenuWithAI.API.Payloads.Request.Product
@@ -14,28 +15,28 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Product
     {
         [Required]
         [StringLength(100, MinimumLength = 3)]
-        [JsonProperty("product-name")]
+        [JsonPropertyName("product-name")]
         public string ProductName { get; set; } = null!;
-        [JsonProperty("sportlight-video")]
+        [JsonPropertyName("sportlight-video")]
         public IFormFile? SpotlightVideo { get; set; } = null!;
 
-        [JsonProperty("image")]
+        [JsonPropertyName("image")]
         public IFormFile Image { get; set; } = null!;
 
         [Required]
         [StringLength(300, MinimumLength = 5)]
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
 
         [Required]
-        [JsonProperty("price")]
+        [JsonPropertyName("price")]
         [Range(1, int.MaxValue, ErrorMessage = "giá không hợp lệ")]
         public decimal Price { get; set; }
         [Required]
-        [JsonProperty("category-id")]
+        [JsonPropertyName("category-id")]
         public int CategoryId { get; set; }
         [Required]
-        [JsonProperty("brand-id")]
+        [JsonPropertyName("brand-id")]
         public int BrandId { get; set; }
 
     }
