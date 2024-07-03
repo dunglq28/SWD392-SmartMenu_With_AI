@@ -282,7 +282,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles)]
         [HttpGet(APIRoutes.Brand.GetByUserID, Name = "GetBrandByUserId")]
-        public async Task<IActionResult> GetBrandByUserIdAsync([FromQuery] int userId)
+        public async Task<IActionResult> GetBrandByUserIdAsync([FromQuery(Name = "user-id")] int userId)
         {
             try
             {

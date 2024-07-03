@@ -40,6 +40,18 @@ const ModalForm: React.FC<ModalFormProps> = ({
         false
       );
     }
+    if (updateBranchData) {
+      updateBranchData(
+        {
+          brandName: { id: "", value: "", errorMessage: "" },
+          city: { id: "", name: "", errorMessage: "" },
+          district: { id: "", name: "", errorMessage: "" },
+          ward: { id: "", name: "", errorMessage: "" },
+          address: { value: "", errorMessage: "" },
+        },
+        false
+      );
+    }
     onClose();
   }
 

@@ -22,6 +22,8 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         private GroupAttributeRepository _groupAttributeRepo;
         private AttributeRepository _attributeRepository;
         private ListPositionRepository _listPositionRepo;
+        private GenericRepository<CustomerSegment> _customerSegmentRepo;
+        private ProductListRepository _productListRepo;
         private CustomerSegmentRepository _customerSegmentRepo;
         private GenericRepository<MenuSegment> _menuSegmentRepo;
         private GenericRepository<SegmentAttribute> _segmentAttributeRepo;
@@ -187,6 +189,17 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
                     this._listPositionRepo = new ListPositionRepository(_context);
                 }
                 return _listPositionRepo;
+            }
+        }
+        ProductListRepository IUnitOfWork.ProductListRepository
+        {
+            get
+            {
+                if (_productListRepo == null)
+                {
+                    this._productListRepo = new ProductListRepository(_context);
+                }
+                return _productListRepo;
             }
         }
 

@@ -1,0 +1,25 @@
+@import "../../styles/shared.scss";
+
+.container {
+  @extend .container;
+
+  .searchWrapper {
+    @extend .searchWrapper;
+  }
+  
+  .CustomerSegment {
+    @extend .table;
+
+    .CustomerSegmentTbl {
+      @extend .tableContainer;
+      @extend .shadow;
+
+      .CustomerSegmentItem {
+        @extend .tableItem;
+      }
+    }
+    .HeaderTbl {
+      @extend .header;
+    }
+  }
+}

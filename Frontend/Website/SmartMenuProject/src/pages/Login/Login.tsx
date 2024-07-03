@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 import Loading from "../../components/Loading";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserRole } from "../../constants/Enum";
-import { getBrand } from "../../services/BrandService";
+import { getBrand, getBrandByUserId } from "../../services/BrandService";
 
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -90,7 +90,7 @@ function Login() {
             UserRole.BrandManager.toString() ||
           response.data.roleId.toString() === UserRole.BranchManager.toString()
         ) {
-          const brand = await getBrand(23);
+          const brand = await getBrandByUserId(response.data.userId);
           localStorage.setItem("BrandId", brand.data.brandId.toString());
           localStorage.setItem("BrandName", brand.data.brandName.toString());
           localStorage.setItem("BrandLogo", brand.data.imageUrl.toString());

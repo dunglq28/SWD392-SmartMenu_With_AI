@@ -69,7 +69,9 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
   const [formData, setFormData] = useState<UserForm>({
     fullName: { value: userData.fullName.value, errorMessage: "" },
     userName: {
-      value: initialUserNameValue,
+      value: initialUserNameValue
+        ? initialUserNameValue
+        : userData.userName.value,
       errorMessage: "",
     },
     phoneNumber: { value: userData.phoneNumber.value, errorMessage: "" },
@@ -227,7 +229,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         >
           <Flex justify="space-between" mb={3}>
             <Box flex="1" ml={2}>
-              <Text className={styles.textFontWeight} py={3} pr={3}>
+              <Text className={styles.textFontWeight600} py={3} pr={3}>
                 Full Name
               </Text>
               <Input
@@ -244,7 +246,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
 
           <Flex justify="space-between" mb={3}>
             <Box flex="1" ml={2}>
-              <Text className={styles.textFontWeight} py={3} pr={3}>
+              <Text className={styles.textFontWeight600} py={3} pr={3}>
                 Username
               </Text>
               <Input
@@ -258,7 +260,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
 
           <Flex justify="space-between" mb={3} ml={2}>
             <Box flex="1">
-              <Text className={styles.textFontWeight} py={3} pr={3}>
+              <Text className={styles.textFontWeight600} py={3} pr={3}>
                 Phone Number
               </Text>
               <Input
@@ -275,7 +277,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
             </Box>
 
             <Box flex="1" ml={3}>
-              <Text className={styles.textFontWeight} py={3} pr={3}>
+              <Text className={styles.textFontWeight600} py={3} pr={3}>
                 Date of Birth
               </Text>
               <Input
@@ -296,7 +298,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
 
           <Flex justify="space-between" mb={3}>
             <Box flex="1" ml={3}>
-              <Text className={styles.textFontWeight} py={3} pr={3} mb={2}>
+              <Text className={styles.textFontWeight600} py={3} pr={3} mb={2}>
                 Gender
               </Text>
               <RadioGroup
@@ -305,16 +307,16 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
               >
                 <Stack spacing={5} direction="row" ml={3}>
                   <Radio value="Male">
-                    <Text className={styles.genderText}>Male</Text>
+                    <Text className={styles.textFontWeight600}>Male</Text>
                   </Radio>
                   <Radio value="Female">
-                    <Text className={styles.genderText}>Female</Text>
+                    <Text className={styles.textFontWeight600}>Female</Text>
                   </Radio>
                 </Stack>
               </RadioGroup>
             </Box>
             <Box flex="1" ml={3}>
-              <Text className={styles.textFontWeight} py={3} pr={3}>
+              <Text className={styles.textFontWeight600} py={3} pr={3}>
                 Is Active
               </Text>
               <Select
@@ -345,15 +347,10 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         )}
 
         <Flex>
-          <Button
-            backgroundColor={themeColors.primaryButton}
-            color="white"
-            mr={3}
-            onClick={cancelHandler}
-          >
+          <Button className={styles.CancelBtn} onClick={cancelHandler}>
             Cancel
           </Button>
-          <Button variant="ghost" onClick={handleSaveForm}>
+          <Button onClick={handleSaveForm} className={styles.MainBtn}>
             Save
           </Button>
         </Flex>

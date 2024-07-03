@@ -1,26 +1,29 @@
+@import "../../../styles/shared.scss";
+
 .containerForm {
-  .roleId,
-  .status {
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-    color: #1c1c1c !important;
+  ::placeholder {
+    @extend .placeholder;
   }
 
-  ::placeholder {
-    font-style: italic;
-    color: #949494;
-    font-size: 1em;
+  .InputFileField {
+    @extend .InputFileField;
   }
 
   input,
   select {
-    border-color: #466d6b;
+    @extend .InputField;
   }
 
-  .textFontWeight {
-    font-weight: 600;
-  }
-
-  .genderText {
-    font-weight: 600;
+  .textFontWeight600 {
+    @extend .textFontWeight600;
   }
 }
+
+.MainBtn {
+  @extend .primaryButton;
+}
+
+.CancelBtn {
+  @extend .cancelButton;
+}
+

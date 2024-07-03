@@ -47,24 +47,24 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<bool> UpdateAsync(int id, string cagetoryName, int brandId)
         {
-            Expression<Func<Category, bool>> condition = x => 
-            x.CategoryId != id
-            &&!x.CategoryName.Equals(cagetoryName)
+            Expression<Func<Category, bool>> condition = x =>
+            x.CategoryName.Equals(cagetoryName)
             && x.BrandId == brandId
+            && x.CategoryId != id
             && (x.Status != (int)Status.Deleted);
-            var exist = _unitOfWork.CategoryRepository.GetByCondition(condition);
+            var exist = await _unitOfWork.CategoryRepository.GetByCondition(condition);
             if (exist != null)
             {
                 throw new Exception("Tên đã tồn tại");
             }
             var category = await _unitOfWork.CategoryRepository.GetByID(id);
-            if (category == null )
+            if (category == null)
             {
                 return false;
             }
             if (!string.IsNullOrEmpty(category.CategoryName))
             {
-            category.CategoryName = cagetoryName;
+                category.CategoryName = cagetoryName;
 
             }
             category.UpdateDate = DateOnly.FromDateTime(DateTime.Now);
@@ -75,14 +75,14 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return result;
         }
 
-        public async Task<PageEntity<CategoryDTO>?> GetAllAsync(string? searchKey, int brandID, int? pageIndex , int? pageSize)
+        public async Task<PageEntity<CategoryDTO>?> GetAllAsync(string? searchKey, int brandID, int? pageIndex, int? pageSize)
         {
-            Expression<Func<Category, bool>> filter = searchKey != null 
-                ? x => x.CategoryName.Contains(searchKey) && x.BrandId == brandID  && (x.Status != (int)Status.Deleted)
+            Expression<Func<Category, bool>> filter = searchKey != null
+                ? x => x.CategoryName.Contains(searchKey) && x.BrandId == brandID && (x.Status != (int)Status.Deleted)
                 : x => x.BrandId == brandID && (x.Status != (int)Status.Deleted);
             //Expression<Func<Category, bool>> filterRecord =  x =>  (x.Status != (int)Status.Deleted) && x.BrandId == brandID;
-               
-               
+
+
             Func<IQueryable<Category>, IOrderedQueryable<Category>> orderBy = q => q.OrderByDescending(x => x.CategoryId);
             string includeProperties = "Brand";
 
@@ -125,7 +125,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         public async Task<List<CategoryViewModel>> GetByBrandID(int brandId)
         {
             Expression<Func<Category, bool>> condition = x => x.BrandId == brandId && (x.Status != (int)Status.Deleted);
-            var listCategory = await _unitOfWork.CategoryRepository.GetAllNoPaging(filter:condition, orderBy: null! ,includeProperties: null!);
+            var listCategory = await _unitOfWork.CategoryRepository.GetAllNoPaging(filter: condition, orderBy: null!, includeProperties: null!);
             var mapDTO = _mapper.Map<IEnumerable<CategoryViewModel>>(listCategory);
             return mapDTO.ToList();
         }

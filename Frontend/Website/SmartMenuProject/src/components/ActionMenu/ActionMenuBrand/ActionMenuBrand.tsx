@@ -13,15 +13,15 @@ import {
 } from "@chakra-ui/react";
 import { MdOutlineMoreHoriz } from "react-icons/md";
 
-import style from "./ActionMenu.module.scss";
+import style from "./ActionMenuBrand.module.scss";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import ModalForm from "../Modals/ModalForm/ModalForm";
-import ModalFormBrand from "../Modals/ModalFormBrand/ModalFormBrand";
-import { BrandForm } from "../../models/BrandForm.model";
-import { brandUpdate } from "../../payloads/requests/updateBrand.model";
-import { getBrand } from "../../services/BrandService";
-import CustomAlertDialog from "../AlertDialog";
+import ModalForm from "../../Modals/ModalForm/ModalForm";
+import ModalFormBrand from "../../Modals/ModalFormBrand/ModalFormBrand";
+import { BrandForm } from "../../../models/BrandForm.model";
+import { brandUpdate } from "../../../payloads/requests/updateBrand.model";
+import { getBrand } from "../../../services/BrandService";
+import CustomAlertDialog from "../../AlertDialog";
 
 interface ActionMenuProps {
   id: number;
@@ -30,7 +30,7 @@ interface ActionMenuProps {
   onEdit: (brand: brandUpdate) => void;
 }
 
-const ActionMenu: FC<ActionMenuProps> = ({
+const ActionMenuBrand: FC<ActionMenuProps> = ({
   id,
   brandName,
   onDelete,
@@ -145,4 +145,4 @@ const ActionMenu: FC<ActionMenuProps> = ({
   );
 };
 
-export default ActionMenu;
+export default ActionMenuBrand;

@@ -52,7 +52,7 @@ export const updateBranch = async (
 ): Promise<ApiResponse<Object>> => {
   const res = await axiosAuth.put(`stores?id=${branch.id}`, {
     city: branch.city,
-    address: `${branch.address}, Phường ${branch.ward}, Quận ${branch.ward}`,
+    address: `${branch.address}, Phường ${branch.ward}, Quận ${branch.district}`,
     isActive: branch.isActive
   });
   const apiResponse = res.data as ApiResponse<Object>;

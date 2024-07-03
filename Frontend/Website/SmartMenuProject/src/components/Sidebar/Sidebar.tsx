@@ -19,6 +19,7 @@ import {
 } from "react-router-dom";
 import Logo from "../../assets/images/Logo.jpeg";
 import { AiOutlineProduct } from "react-icons/ai";
+import { MdOutlineCategory } from "react-icons/md";
 import { GoHome } from "react-icons/go";
 import { AiOutlineUser } from "react-icons/ai";
 import { IoGitBranchOutline } from "react-icons/io5";
@@ -29,6 +30,7 @@ import { useTranslation } from "react-i18next";
 
 import ModalForm from "../Modals/ModalForm/ModalForm";
 import ModalFormBrand from "../Modals/ModalFormBrand/ModalFormBrand";
+import { AiOutlineCustomerService } from "react-icons/ai";
 import ModalFormUser from "../Modals/ModalFormUser/ModalFormUser";
 import ModalFormBranch from "../Modals/ModalFormBranch/ModalFormBranch";
 import { CurrentForm, UserRole } from "../../constants/Enum";
@@ -136,9 +138,22 @@ function Sidebar() {
       permissionRole: UserRole.Admin,
     },
     {
+      icon: AiOutlineCustomerService,
+      label: t("customer segment"),
+      divider: true,
+      to: "/customerSegment",
+      permissionRole: UserRole.Admin,
+    },
+    {
       icon: AiOutlineProduct,
       label: t("products"),
       to: "/products",
+      permissionRole: [UserRole.BrandManager, UserRole.BranchManager],
+    },
+    {
+      icon: MdOutlineCategory,
+      label: t("categories"),
+      to: "/categories",
       permissionRole: [UserRole.BrandManager, UserRole.BranchManager],
     },
     {
@@ -333,8 +348,8 @@ function Sidebar() {
                   ? () => changeItem(menuItem.label)
                   : menuItem.onclick
               }
-              backgroundColor={item === menuItem.label ? "#5D5FEF" : "#fff"}
-              color={item === menuItem.label ? "#fff" : "black"}
+              backgroundColor={item === menuItem.label ? "#55AD9B" : "#fff"}
+              color={item === menuItem.label ? "#F1F8E8" : "black"}
             >
               <Flex>
                 <Icon as={menuItem.icon} className={style.MenuIcon} />

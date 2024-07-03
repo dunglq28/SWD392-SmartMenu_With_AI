@@ -77,14 +77,21 @@
     border-radius: 8px;
 
     &:hover {
-      background-color: #eee;
+      background-color: #d8efd3;
     }
     &:active {
-      background-color: #cac7c7;
+      background-color: #c0d4bc;
     }
   }
 
   .ProfileImage {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+
+  .ProfileImageAdmin {
     height: 50px;
     border-radius: 8px;
   }
@@ -92,6 +99,8 @@
   .ProfileInfo {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-left: 10px;
     margin-top: 4px;
   }
@@ -128,11 +137,11 @@
         border-radius: 8px;
         transition: 0.3s;
         &:hover {
-          background-color: #5d5fef;
-          color: #fff;
+          background-color: #55ad9b;
+          color: #f1f8e8;
         }
         &:active {
-          background-color: #4b4ee6;
+          background-color: #499788;
         }
 
         .Text {

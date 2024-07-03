@@ -18,13 +18,12 @@ import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import { getOptions } from "../../utils/getRowPerPage";
 import { UserData } from "../../payloads/responses/UserData.model";
 import moment from "moment";
-import { UserRole } from "../../constants/Enum";
 import { toast } from "react-toastify";
-import ActionMenu from "../../components/User/ActionMenu/ActionMenu";
 import Loading from "../../components/Loading";
 import { userUpdate } from "../../payloads/requests/updateUser.model";
 import Searchbar from "../../components/Searchbar";
 import { getRoleName } from "../../utils/getRoleName";
+import ActionMenuUser from "../../components/ActionMenu/ActionMenuUser/ActionMenuUser";
 
 function User() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -126,23 +125,22 @@ function User() {
 
   return (
     <Flex className={style.container}>
-      <Flex w="40%" ml="20px">
+      <Flex className={style.searchWrapper}>
         <Searchbar onSearch={handleSearch} />
       </Flex>
-      <Flex className={style.User} flexDirection="column">
-        <Flex className={style.ButtonContainer}></Flex>
+      <Flex className={style.User}>
         <TableContainer className={style.UserTbl}>
           <Table>
-            <TableCaption>Bảng quản lý user</TableCaption>
+            <TableCaption>Bảng quản lý người dùng</TableCaption>
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>
                 <Th className={style.HeaderTbl}>Full name</Th>
                 <Th className={style.HeaderTbl}>User name</Th>
-                <Th className={style.HeaderTbl}>Date of birth</Th>
+                <Th className={style.HeaderTbl}>DOB</Th>
                 <Th className={style.HeaderTbl}>Gender</Th>
-                <Th className={style.HeaderTbl}>Phone number</Th>
-                <Th className={style.HeaderTbl}>Role name</Th>
+                <Th className={style.HeaderTbl}>Phone</Th>
+                <Th className={style.HeaderTbl}>Role</Th>
                 <Th className={style.HeaderTbl}>Created on</Th>
                 <Th className={style.HeaderTbl}>Is active</Th>
                 <Th className={style.HeaderTbl}>Settings</Th>
@@ -172,7 +170,7 @@ function User() {
                     <Td>{moment(user.createDate).format("DD/MM/YYYY")}</Td>
                     <Td>{user.isActive ? "Yes" : "No"}</Td>
                     <Td>
-                      <ActionMenu
+                      <ActionMenuUser
                         id={user.userId}
                         onDelete={handleDelete}
                         onEdit={handleEdit}

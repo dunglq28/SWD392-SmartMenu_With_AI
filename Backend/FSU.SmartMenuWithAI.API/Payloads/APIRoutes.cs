@@ -62,7 +62,7 @@
 
             public const string Delete = Base + "/brands/delete";
 
-            public const string GetByUserID = Base + "/brands/get-by-userid";
+            public const string GetByUserID = Base + "/brands/get-by-user-id";
         }
 
         public static class Store
@@ -162,6 +162,19 @@
             public const string Delete = Base + "/list-positions/";
 
         }
+        public static class ProductList
+        {
+            public const string GetByID = Base + "/product-lists/get-by-id";
+
+            public const string Add = Base + "/product-lists/add";
+
+            public const string Update = Base + "/product-lists/update";
+
+            public const string Delete = Base + "/product-lists/delete";
+
+        }
+
+
 
         public static class MenuList
         {

@@ -34,7 +34,7 @@
     position: absolute;
     right: -9px;
     top: 34px;
-    background-color: #5d5fef;
+    background-color: #55ad9b;
     color: #2c2c2e;
     border-radius: 10px;
     cursor: pointer;
@@ -61,17 +61,17 @@
       font-weight: 500;
 
       &:hover {
-        background-color: #5d5fef;
-        color: #fff;
+        background-color: #55ad9b;
+        color: #f1f8e8;
       }
       &:active {
-        background-color: #5d5fef;
+        background-color: #429b89;
       }
 
       .MenuIcon {
         font-size: 25px;
-        margin-right: 20px;
-        margin-left: -4px;
+        margin-right: 10px;
+        margin-left: -6px;
       }
 
       .MenuText {

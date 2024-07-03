@@ -9,6 +9,8 @@ import New from "../pages/New";
 import Profile from "../pages/Profile";
 import { HeaderOnly } from "../layouts";
 import Branch from "../pages/Branch";
+import Category from "../pages/Category";
+import CustomerSegment from "../pages/CustomerSegment";
 
 interface RouteItem {
   path: string;
@@ -24,7 +26,9 @@ export const publicRoutes: RouteItem[] = [
   { path: "/brands", component: Brand },
   { path: "/branches", component: Branch },
   { path: "/branches/:brandName", component: Branch },
+  { path: "/customerSegment", component: CustomerSegment },
   { path: "/products", component: Products },
+  { path: "/categories", component: Category },
   { path: "/menu", component: Menu },
   { path: "/settings", component: Settings },
   { path: "/new", component: New },

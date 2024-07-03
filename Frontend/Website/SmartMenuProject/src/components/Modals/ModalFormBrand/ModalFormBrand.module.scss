@@ -1,16 +1,25 @@
+@import "../../../styles/shared.scss";
+
 .containerForm {
-  .textFontWeight {
-    font-weight: 600;
+  .textFontWeight600 {
+    @extend .textFontWeight600;
   }
 
   input {
-    border-color: #466d6b;
+    @extend .InputField;
   }
 
   .inputImage {
     border: none;
     padding: 0;
     border-radius: 0;
+
+    &:focus {
+      border: none;
+    }
+    &:hover {
+      border: none;
+    }
   }
 
   .imagePreview {
@@ -26,4 +35,12 @@
     font-size: 1em;
     font-style: italic;
   }
+}
+
+.MainBtn {
+  @extend .primaryButton;
+}
+
+.CancelBtn {
+  @extend .cancelButton;
 }

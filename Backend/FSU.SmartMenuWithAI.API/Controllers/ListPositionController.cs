@@ -90,7 +90,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
         //[Authorize(Roles = UserRoles)]
         [HttpPost(APIRoutes.ListPosition.Add, Name = "AddListPosition")]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateRequest request)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateListPositionRequest request)
         {
             try
             {
