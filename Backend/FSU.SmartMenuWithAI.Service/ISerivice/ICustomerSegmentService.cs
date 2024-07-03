@@ -1,27 +1,24 @@
-﻿using FSU.SmartMenuWithAI.Service.Models.MenuList;
-using FSU.SmartMenuWithAI.Service.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.CustomerSegment;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
 
 namespace FSU.SmartMenuWithAI.Service.ISerivice
 {
     public interface ICustomerSegmentService
     {
-        Task<PageEntity<CustomerSegmentDTO>> GetAllAsync(
+        Task<PageEntity<ViewCustomerSegment>> GetAllAsync(
             string? searchKey
             , int? pageIndex
-            , int? pageSize);
+            , int? pageSize
+            , int brandId);
 
-        Task<CustomerSegmentDTO?> GetByID(int SegmentId);
+        //Task<CustomerSegmentDTO?> GetByID(int SegmentId);
 
-        Task<CustomerSegmentDTO> Insert(CustomerSegmentDTO newCusSegment ,List<SegmentAttributeDTO> listDto);
+        Task<IEnumerable<ViewCustomerSegment>> Insert(string customerSegmentName , string age, List<string> gender, List<string> session, int brandID);
 
         Task<bool> Delete(int SegmentId);
 
-        Task<CustomerSegmentDTO?> Update(int segmentId, string segmentName);
+        Task<IEnumerable<ViewCustomerSegment>> Update(int segmentId, string segmentName);
+        Task<ViewCustomerSegment> UpdateSegmentValue(int segmentId, string age, string gender, string session);
     }
 }

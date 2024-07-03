@@ -197,7 +197,9 @@
 
             public const string GetByID = Base + "/customer-segment/get-by-id";
 
-            public const string Update = Base + "/customer-segment/";
+            public const string UpdateName = Base + "/customer-segment/update-name";
+
+            public const string UpdateValue = Base + "/customer-segment/update-value";
 
             public const string Delete = Base + "/customer-segment/";
 

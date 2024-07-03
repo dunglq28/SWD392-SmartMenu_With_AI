@@ -29,18 +29,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         {
             try
             {
-                var segment = new CustomerSegmentDTO();
-                segment.SegmentName = reqObj.SegmentName;
-                var attributes = new List<SegmentAttributeDTO>();
-                foreach (var attri in reqObj.attributeDTOs)
-                {
-                    attributes.Add(new SegmentAttributeDTO
-                    {
-                        AttributeId = attri.AttributeId,
-                        Value = attri.Value,
-                    });
-                }
-                var result = await _customerSegmentService.Insert(segment, attributes);
+                var result = await _customerSegmentService.Insert(reqObj.SegmentName, reqObj.Age, reqObj.Gender, reqObj.Session, reqObj.BrandID);
                 {
                     if (result != null)
                         return Ok(new BaseResponse
@@ -88,15 +77,15 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                         StatusCode = StatusCodes.Status404NotFound,
                         Message = "không tìm thấy phân khúc khách hàng này",
                         Data = null,
-                        IsSuccess = false
+                        IsSuccess = result
                     });
                 }
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "xoá thành công",
-                    Data = null,
-                    IsSuccess = true
+                    Data = result,
+                    IsSuccess = result
                 });
             }
             catch (Exception ex)
@@ -104,32 +93,20 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 return BadRequest(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Message = ex.Message,
+                    Message = "Có lỗi xảy ra: " + ex.Message,
                     Data = null,
                     IsSuccess = false
                 });
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPut(APIRoutes.CustomerSegment.Update, Name = "update-customer-segment-async")]
-        public async Task<IActionResult> UpdateUserAsync([FromForm] int id, [FromForm] string segmentName)
+        //[Authorize(Roles = UserRoles.BrandManager)]
+        [HttpPut(APIRoutes.CustomerSegment.UpdateName, Name = "update-segment-name-async")]
+        public async Task<IActionResult> UpdateSegmenNameAsync([FromForm(Name ="segment-id")] int segmentId, [FromForm(Name ="segment-name")] string segmentName)
         {
             try
             {
-                var existBrand = await _customerSegmentService.GetByID(id);
-                if (existBrand == null)
-                {
-                    return NotFound(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Không tìm thấy phân khúc này.",
-                        Data = null,
-                        IsSuccess = false
-                    });
-                }
-                
-                var result = await _customerSegmentService.Update(segmentId: id, segmentName: segmentName);
+                var result = await _customerSegmentService.Update(segmentId, segmentName);
                 if (result == null)
                 {
                     return NotFound(new BaseResponse
@@ -154,27 +131,27 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 return BadRequest(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Lỗi khi cập nhật!" + ex.Message,
+                    Message = "Lỗi khi cập nhật! " + ex.Message,
                     Data = null,
                     IsSuccess = false
                 });
             }
         }
-        //[Authorize(Roles = UserRoles.Admin)]
+        //[Authorize(Roles = UserRoles.BrandManager)]
         [HttpGet(APIRoutes.CustomerSegment.GetAll, Name = "get-customer-segment-async")]
-        public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search-key")] string? searchKey
+        public async Task<IActionResult> GetAllAsync([FromQuery(Name = "brand-id")] int brandId, [FromQuery(Name = "search-key")] string? searchKey
             , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
             , [FromQuery(Name = "page-size")] int PageSize = Page.DefaultPageSize)
         {
             try
             {
-                var allBrands = await _customerSegmentService.GetAllAsync(searchKey!, pageIndex: pageNumber, pageSize: PageSize);
+                var viewCustomerSegment = await _customerSegmentService.GetAllAsync(searchKey!, pageIndex: pageNumber, pageSize: PageSize, brandId);
 
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Tải dữ liệu thành công",
-                    Data = allBrands,
+                    Data = viewCustomerSegment,
                     IsSuccess = true
                 });
             }
@@ -189,29 +166,32 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
-        //[Authorize(Roles = UserRoles.Admin)]
-        [HttpGet(APIRoutes.CustomerSegment.GetByID, Name = "get-by-cus-segment-id-async")]
-        public async Task<IActionResult> GetAsync([FromQuery(Name = "customer-segment-id")] int segmentId)
+        //[Authorize(Roles = UserRoles.BrandManager)]
+        [HttpPut(APIRoutes.CustomerSegment.UpdateValue, Name = "update-segment-value-async")]
+        public async Task<IActionResult> UpdateSegmentValueAsync([FromForm(Name = "segment-id")] int segmentId,
+                                                                    [FromForm(Name = "age")] string age,
+                                                                    [FromForm(Name = "gender")] string gender,
+                                                                    [FromForm(Name = "session")] string session)
         {
             try
             {
-                var user = await _customerSegmentService.GetByID(segmentId);
-
-                if (user == null)
+                var result = await _customerSegmentService.UpdateSegmentValue(segmentId, age, gender, session);
+                if (result == null)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Không tìm thấy phân khúc này",
+                        Message = "Cập nhật không thành công",
                         Data = null,
                         IsSuccess = false
                     });
                 }
+
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Tìm thành công",
-                    Data = user,
+                    Message = "Cập nhật thành công",
+                    Data = result,
                     IsSuccess = true
                 });
             }
@@ -220,11 +200,48 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 return BadRequest(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Message = ex.Message,
+                    Message = "Lỗi khi cập nhật! " + ex.Message,
                     Data = null,
                     IsSuccess = false
                 });
             }
         }
+        //        //[Authorize(Roles = UserRoles.Admin)]
+        //        [HttpGet(APIRoutes.CustomerSegment.GetByID, Name = "get-by-cus-segment-id-async")]
+        //        public async Task<IActionResult> GetAsync([FromQuery(Name = "customer-segment-id")] int segmentId)
+        //        {
+        //            try
+        //            {
+        //                var user = await _customerSegmentService.GetByID(segmentId);
+
+        //                if (user == null)
+        //                {
+        //                    return NotFound(new BaseResponse
+        //                    {
+        //                        StatusCode = StatusCodes.Status404NotFound,
+        //                        Message = "Không tìm thấy phân khúc này",
+        //                        Data = null,
+        //                        IsSuccess = false
+        //                    });
+        //                }
+        //                return Ok(new BaseResponse
+        //                {
+        //                    StatusCode = StatusCodes.Status200OK,
+        //                    Message = "Tìm thành công",
+        //                    Data = user,
+        //                    IsSuccess = true
+        //                });
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                return BadRequest(new BaseResponse
+        //                {
+        //                    StatusCode = StatusCodes.Status400BadRequest,
+        //                    Message = ex.Message,
+        //                    Data = null,
+        //                    IsSuccess = false
+        //                });
+        //            }
+        //        }
     }
 }
