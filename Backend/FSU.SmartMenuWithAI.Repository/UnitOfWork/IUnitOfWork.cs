@@ -23,6 +23,8 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         public GenericRepository<CustomerSegment> CustomerSegmentRepository { get; }
 
         public ProductListRepository ProductListRepository { get; }
+        public SegmentAttributeRepository SegmentAttributeRepository { get; }
+
 
     }
 }

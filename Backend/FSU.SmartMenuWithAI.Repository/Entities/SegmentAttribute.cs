@@ -11,6 +11,8 @@ public partial class SegmentAttribute
 
     public string Value { get; set; } = null!;
 
+    public int? BrandId { get; set; }
+
     public virtual Attribute Attribute { get; set; } = null!;
 
     public virtual CustomerSegment Segment { get; set; } = null!;
