@@ -1,5 +1,6 @@
 ﻿using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,11 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
 {
     public interface IMenuService
     {
-
         Task<bool> UpdateAsync(int id, bool isActive);
         Task<bool> Insert(MenuDTO reqObj);
         Task<PageEntity<MenuDTO>?> GetAllAsync( int brandID, int? pageIndex, int? pageSize);
         Task<MenuDTO?> GetAsync(int id);
         Task<bool> Delete(int id);
-
+        Task<MenuDTO> RecomendMenu(IFormFile fileImage, int brandId);
     }
 }
