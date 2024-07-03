@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FSU.SmartMenuWithAI.Service.Utils
 {
-    public class AverageAge
+    public class AgeHelper
     {
         public static int CalAverageAge(int AgeFrom, int AgeTo)
         {
@@ -16,5 +16,15 @@ namespace FSU.SmartMenuWithAI.Service.Utils
 
             return roundedAverage;
         }
+        public static bool IsAgeInRange(int age, string ageRange)
+        {
+            var parts = ageRange.Split('-');
+            if (parts.Length == 2 && int.TryParse(parts[0], out int minAge) && int.TryParse(parts[1], out int maxAge))
+            {
+                return age >= minAge && age <= maxAge;
+            }
+            return false;
+        }
+
     }
 }

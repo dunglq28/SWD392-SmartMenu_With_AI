@@ -48,7 +48,8 @@ namespace FSU.SmartMenuWithAI.Service.Services
         public async Task<bool> UpdateAsync(int id, string cagetoryName, int brandId)
         {
             Expression<Func<Category, bool>> condition = x => 
-            !x.CategoryName.Equals(cagetoryName)
+            x.CategoryId != id
+            &&!x.CategoryName.Equals(cagetoryName)
             && x.BrandId == brandId
             && (x.Status != (int)Status.Deleted);
             var exist = _unitOfWork.CategoryRepository.GetByCondition(condition);

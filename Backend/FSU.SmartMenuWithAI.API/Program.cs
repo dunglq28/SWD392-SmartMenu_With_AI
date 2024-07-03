@@ -98,6 +98,7 @@ builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IGroupAttributeService, GroupAttributeService>();
 builder.Services.AddScoped<IAttributeService, AttributeService>();
 builder.Services.AddScoped<IListPositionService, ListPositionService>();
+builder.Services.AddScoped<ISegmentAttributeService, SegmentAttributeService>();
 
 
 

@@ -46,7 +46,9 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
             CreateMap<CustomerSegment, CustomerSegmentDTO>()
                 .ForMember(dest => dest.SegmentAttributes, opt => opt.MapFrom(src => src.SegmentAttributes))
                 .ReverseMap();
-            CreateMap<SegmentAttribute, SegmentAttributeDTO>().ReverseMap();
+            CreateMap<SegmentAttribute, SegmentAttributeDTO>()
+                .ForMember(dest => dest.AttributeName, opt => opt.MapFrom(src => src.Attribute.AttributeName))
+                .ReverseMap();
             CreateMap<SegmentAttribute, AddAttributeSegmentDTO>().ReverseMap();
 
         }

@@ -47,10 +47,9 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Expression<Func<CustomerSegment, bool>> filter = !searchKey.IsNullOrEmpty()
                 ? x => x.SegmentName.Contains(searchKey) && (x.Status == (int)Status.Exist)
                 : x => x.Status != (int)Status.Deleted;
-
             Func<IQueryable<CustomerSegment>, IOrderedQueryable<CustomerSegment>> orderBy = q => q.OrderByDescending(x => x.SegmentName);
 
-            var entities = await _unitOfWork.CustomerSegmentRepository.Get(filter: filter, orderBy: orderBy, pageIndex: pageIndex, pageSize: pageSize);
+            var entities = await _unitOfWork.CustomerSegmentRepository.Get(filter: filter,orderBy: orderBy, pageIndex: pageIndex, pageSize: pageSize);
             var pagin = new PageEntity<CustomerSegmentDTO>();
             pagin.List = _mapper.Map<IEnumerable<CustomerSegmentDTO>>(entities).ToList();
             pagin.TotalRecord = await _unitOfWork.CustomerSegmentRepository.Count(filter);
