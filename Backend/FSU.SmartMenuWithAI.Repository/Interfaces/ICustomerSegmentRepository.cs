@@ -17,6 +17,8 @@ namespace FSU.SmartMenuWithAI.Repository.Interfaces
            Func<IQueryable<CustomerSegment>, IOrderedQueryable<CustomerSegment>> orderBy = null!,
            string includeProperties = "",
            int? pageIndex = null, 
-           int? pageSize = null); 
-    }
+           int? pageSize = null);
+        public Task<CustomerSegment> getCusByAttribute(int ageId, int genderId, int sessionId, int ageValue, string gender, string session);
+        
+        }
 }

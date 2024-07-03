@@ -11,6 +11,6 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
 {
     public interface ISegmentAttributeService
     {
-        Task<SegmentAttributeDTO> GetCusSegmentAsync(CustomerFaceRognizeDTO imageValue);
+        Task<CustomerSegmentDTO> GetCusSegmentAsync(CustomerFaceRognizeDTO imageValue);
     }
 }

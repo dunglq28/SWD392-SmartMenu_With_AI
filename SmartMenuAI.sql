@@ -644,7 +644,7 @@ insert into SegmentAttribute (SegmentID, AttributeID, Value) values (18, 3, 'Eve
 
 
 --MenuSegment
-insert into MenuSegment (Priority, MenuID, SegmentID) values (20, 1, 1);
+insert into MenuSegment (Priority, MenuID, SegmentID) values (10, 1, 1);
 
 
 --Screen

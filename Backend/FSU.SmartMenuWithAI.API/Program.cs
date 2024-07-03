@@ -83,6 +83,9 @@ builder.Services.AddScoped<IGroupAttributeRepository, GroupAttributeRepository>(
 builder.Services.AddScoped<IAttributeRepository, AttributeRepository>();
 builder.Services.AddScoped<IListPositionRepository, ListPositionRepository>();
 builder.Services.AddScoped<IProductListRepository, ProductListRepository>();
+builder.Services.AddScoped<ICustomerSegmentRepository, CustomerSegmentRepository>();
+builder.Services.AddScoped<IMenuSegmentRepository, MenuSegmentRepository>();
+
 
 // Register servicies
 builder.Services.AddScoped<IAccountService, AccountService>();

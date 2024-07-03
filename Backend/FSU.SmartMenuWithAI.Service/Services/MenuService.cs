@@ -97,18 +97,16 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
             // tim menu cos priority cao nhat trong bang MenuSegment
             Func<IQueryable<MenuSegment>, IOrderedQueryable<MenuSegment>> orderBy = q => q.OrderByDescending(x => x.Priority);
-            string includeProperties = "Segment,Menu";
-            var menuSegments = await _unitOfWork.MenuSegmentRepository.GetAllNoPaging(x => x.SegmentId == customerSegment.SegmentId && x.Menu.BrandId == brandId, orderBy: orderBy, includeProperties);
+            var menuSegment = await _unitOfWork.MenuSegmentRepository.HighestMenuSegment(segmentId: customerSegment.SegmentId, BrandId: brandId);
             // tim menu theo id da lay duoc
-            if (!menuSegments.IsNullOrEmpty())
+            if (menuSegment != null)
             {
-                var menuSegment = menuSegments.FirstOrDefault();
                 var menuRecomend = await _unitOfWork.MenuRepository.GetByID(menuSegment!.MenuId);
                 var mapdto1 = _mapper.Map<MenuDTO>(menuRecomend);
                 return mapdto1;
             }
-            var menuDefault = await _unitOfWork.MenuRepository.GetAllNoPaging(x=> x.BrandId == brandId, x => x.OrderByDescending(x => x.MenuId), includeProperties: includeProperties);
-            var mapdto2 = _mapper.Map<MenuDTO>(menuDefault);
+            var menuDefault = await _unitOfWork.MenuRepository.GetAllNoPaging(x=> x.BrandId == brandId, x => x.OrderByDescending(x => x.MenuId));
+            var mapdto2 = _mapper.Map<MenuDTO>(menuDefault.FirstOrDefault());
             return mapdto2;
         }
     }

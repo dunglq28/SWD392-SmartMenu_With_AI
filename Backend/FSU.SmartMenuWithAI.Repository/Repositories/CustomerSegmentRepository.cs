@@ -1,5 +1,6 @@
 ﻿using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.Interfaces;
+using FSU.SmartMenuWithAI.Repository.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -55,5 +56,36 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
             }
             return await query.ToListAsync();
         }
+
+        //public CustomerSegment getCusByAttribute(int ageId, int genderId, int sessionId, int ageValue, string gender, string session)
+        //{
+
+        //    var cusSegment = _context.CustomerSegments.Where(cs => cs.SegmentAttributes.Any(sa => sa.AttributeId == ageId && string.Equals(sa.Value, gender, StringComparison.OrdinalIgnoreCase)) && cs.SegmentAttributes.Any(sa => sa.AttributeId == sessionId && string.Equals(sa.Value, session, StringComparison.OrdinalIgnoreCase)
+        //    )).AsEnumerable().Where(cs => cs.SegmentAttributes.Any(sa => sa.AttributeId == ageId && AgeHelper.IsAgeInRange(ageId, sa.Value))).FirstOrDefault();
+        //    if (cusSegment != null)
+        //    {
+        //        return cusSegment;
+        //    }
+        //    return null!;
+        //}
+        public async Task<CustomerSegment> getCusByAttribute(int ageId, int genderId, int sessionId, int ageValue, string gender, string session)
+        {
+            // Lấy tất cả các CustomerSegment từ cơ sở dữ liệu một cách bất đồng bộ và bao gồm SegmentAttributes
+            var customerSegments = await _context.CustomerSegments
+                .Include(cs => cs.SegmentAttributes)
+                .ToListAsync();
+
+            // Áp dụng các điều kiện lọc trên client-side
+            var cusSegment = customerSegments
+                .Where(cs =>
+                    cs.SegmentAttributes.Any(sa => sa.AttributeId == ageId && AgeHelper.IsAgeInRange(ageValue, sa.Value)) &&
+                    cs.SegmentAttributes.Any(sa => sa.AttributeId == genderId && string.Equals(sa.Value, gender, StringComparison.OrdinalIgnoreCase)) &&
+                    cs.SegmentAttributes.Any(sa => sa.AttributeId == sessionId && string.Equals(sa.Value, session, StringComparison.OrdinalIgnoreCase))
+                )
+                .FirstOrDefault();
+
+            return cusSegment ?? null!;
+        }
+
     }
 }
