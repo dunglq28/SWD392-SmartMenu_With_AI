@@ -17,7 +17,6 @@ import Searchbar from "../../components/Searchbar";
 import { useCallback, useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { CategoryData } from "../../payloads/responses/CategoryData.model";
-import { getOptions } from "../../utils/getRowPerPage";
 import {
   createCategory,
   deleteCategory,
@@ -31,6 +30,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import ModalForm from "../../components/Modals/ModalForm/ModalForm";
 import ModalFormCategory from "../../components/Modals/ModalFormCategory/ModalFormCategory";
 import ActionMenuCategory from "../../components/ActionMenu/ActionMenuCategory/ActionMenuCategory";
+import { getOptions } from "../../utils/functionHelper";
 
 function Category() {
   const [isLoading, setIsLoading] = useState<boolean>(false);

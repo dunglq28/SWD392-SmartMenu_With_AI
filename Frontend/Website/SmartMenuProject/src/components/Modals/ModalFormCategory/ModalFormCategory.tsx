@@ -9,9 +9,10 @@ import {
 } from "@chakra-ui/react";
 import style from "./ModalFormCategory.module.scss";
 import { toast } from "react-toastify";
-import { CategoryForm } from "../../../models/CategoryForm";
+import { CategoryForm } from "../../../models/CategoryForm.model";
 import moment from "moment";
 import { getCategory } from "../../../services/CategoryService";
+import { capitalizeWords } from "../../../utils/functionHelper";
 
 interface ModalFormCategoryProps {
   id?: number;
@@ -63,14 +64,6 @@ const ModalFormCategory: React.FC<ModalFormCategoryProps> = ({
       ...prevFormData,
       [field]: { value, errorMessage: "" },
     }));
-  };
-
-  const capitalizeWords = (str: string) => {
-    return str
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
   };
 
   const handleSubmit = async () => {

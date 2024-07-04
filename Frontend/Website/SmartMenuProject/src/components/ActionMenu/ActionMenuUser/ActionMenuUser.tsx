@@ -26,8 +26,8 @@ import { useTranslation } from "react-i18next";
 import { UserForm } from "../../../models/UserForm.model";
 import { getInitialUserData } from "../../../utils/initialUserData";
 import { getUser } from "../../../services/UserService";
-import { userUpdate } from "../../../payloads/requests/updateUser.model";
 import CustomAlertDialog from "../../AlertDialog";
+import { userUpdate } from "../../../payloads/requests/updateRequests.model";
 
 interface ActionMenuProps {
   id: number;

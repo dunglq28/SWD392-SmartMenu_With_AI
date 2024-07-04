@@ -1,6 +1,6 @@
 import axiosAuth from "../api/axiosAuth";
 import { UserForm } from "../models/UserForm.model";
-import { userUpdate } from "../payloads/requests/updateUser.model";
+import { userUpdate } from "../payloads/requests/updateRequests.model";
 import { ApiResponse } from "../payloads/responses/ApiResponse.model";
 import { GetData } from "../payloads/responses/GetData.model";
 import { UserData } from "../payloads/responses/UserData.model";

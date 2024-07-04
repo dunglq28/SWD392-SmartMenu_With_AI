@@ -1,28 +1,32 @@
 import {
   Box,
+  Button,
   Flex,
   Table,
   TableCaption,
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import style from "./CustomerSegment.module.scss";
 
 import React, { useCallback, useEffect, useState } from "react";
 import { deleteUser, getUsers, updateUser } from "../../services/UserService";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
-import { getOptions } from "../../utils/getRowPerPage";
 import { UserData } from "../../payloads/responses/UserData.model";
 import moment from "moment";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loading";
-import { userUpdate } from "../../payloads/requests/updateUser.model";
 import Searchbar from "../../components/Searchbar";
-import { getRoleName } from "../../utils/getRoleName";
+import { userUpdate } from "../../payloads/requests/updateRequests.model";
+import { IoAddCircleOutline } from "react-icons/io5";
+import ModalForm from "../../components/Modals/ModalForm/ModalForm";
+import ModalFormCustomerSegment from "../../components/Modals/ModalFormCustomerSegment/ModalFormCusSegment";
 
 function CustomerSegment() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -33,99 +37,126 @@ function CustomerSegment() {
   const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
   const [totalPages, setTotalPages] = useState<number>(10);
   const [totalRecords, setTotalRecords] = useState<number>(0);
+  const {
+    isOpen: isOpenCustomerSegment,
+    onOpen: onOpenCustomerSegment,
+    onClose: onCloseCustomerSegment,
+  } = useDisclosure();
 
-  const fetchData = useCallback(
-    async (searchValue?: string) => {
-      try {
-        setIsLoading(true);
-        let result;
+  // const fetchData = useCallback(
+  //   async (searchValue?: string) => {
+  //     try {
+  //       setIsLoading(true);
+  //       let result;
 
-        const loadData = async () => {
-          if (searchValue) {
-            result = await getUsers(currentPage, rowsPerPage, searchValue);
-          } else {
-            result = await getUsers(currentPage, rowsPerPage, "");
-          }
-          setData(result.list);
-          setTotalPages(result.totalPage);
-          setTotalRecords(result.totalRecord);
-          setRowsPerPageOption(getOptions(result.totalRecord));
-          setIsLoading(false);
-          if (isInitialLoad) {
-            setIsInitialLoad(false);
-          }
-        };
+  //       const loadData = async () => {
+  //         if (searchValue) {
+  //           result = await getUsers(currentPage, rowsPerPage, searchValue);
+  //         } else {
+  //           result = await getUsers(currentPage, rowsPerPage, "");
+  //         }
+  //         setData(result.list);
+  //         setTotalPages(result.totalPage);
+  //         setTotalRecords(result.totalRecord);
+  //         setRowsPerPageOption(getOptions(result.totalRecord));
+  //         setIsLoading(false);
+  //         if (isInitialLoad) {
+  //           setIsInitialLoad(false);
+  //         }
+  //       };
 
-        if (isInitialLoad) {
-          setTimeout(async () => {
-            await loadData();
-          }, 500);
-        } else {
-          await loadData();
-        }
-      } catch (err) {
-        toast.error("Lỗi khi lấy dữ liệu");
-        setIsLoading(false);
-      }
-    },
-    [currentPage, rowsPerPage, isInitialLoad]
-  );
+  //       if (isInitialLoad) {
+  //         setTimeout(async () => {
+  //           await loadData();
+  //         }, 500);
+  //       } else {
+  //         await loadData();
+  //       }
+  //     } catch (err) {
+  //       toast.error("Lỗi khi lấy dữ liệu");
+  //       setIsLoading(false);
+  //     }
+  //   },
+  //   [currentPage, rowsPerPage, isInitialLoad]
+  // );
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData, currentPage, isInitialLoad]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [fetchData, currentPage, isInitialLoad]);
 
-  const handlePageChange = useCallback(
-    (page: number) => {
-      setCurrentPage(page);
-    },
-    [setCurrentPage]
-  );
+  // const handlePageChange = useCallback(
+  //   (page: number) => {
+  //     setCurrentPage(page);
+  //   },
+  //   [setCurrentPage]
+  // );
 
-  const handleRowsPerPageChange = useCallback(
-    (newRowsPerPage: number) => {
-      setCurrentPage(1);
-      setRowsPerPage(newRowsPerPage);
-    },
-    [setCurrentPage, setRowsPerPage]
-  );
+  // const handleRowsPerPageChange = useCallback(
+  //   (newRowsPerPage: number) => {
+  //     setCurrentPage(1);
+  //     setRowsPerPage(newRowsPerPage);
+  //   },
+  //   [setCurrentPage, setRowsPerPage]
+  // );
 
-  async function handleDelete(id: number) {
-    try {
-      var result = await deleteUser(id);
-      if (result.statusCode === 200) {
-        if ((totalRecords - 1) % rowsPerPage === 0 && currentPage > 1) {
-          setCurrentPage((prevPage) => prevPage - 1);
-        } else {
-          fetchData();
-        }
-        toast.success("Xoá người dùng thành công");
-      }
-    } catch (e) {
-      toast.error("Xoá người dùng thất bại");
-    }
+  async function handleCreate(productForm: FormData) {
+
   }
 
-  async function handleEdit(id: number, user: userUpdate) {
-    try {
-      var result = await updateUser(id, user);
-      if (result.statusCode === 200) {
-        fetchData();
-        toast.success("Cập nhật thành công");
-      }
-    } catch {
-      toast.error("Cập nhật thất bại");
-    }
-  }
+  // async function handleDelete(id: number) {
+  //   try {
+  //     var result = await deleteUser(id);
+  //     if (result.statusCode === 200) {
+  //       if ((totalRecords - 1) % rowsPerPage === 0 && currentPage > 1) {
+  //         setCurrentPage((prevPage) => prevPage - 1);
+  //       } else {
+  //         fetchData();
+  //       }
+  //       toast.success("Xoá người dùng thành công");
+  //     }
+  //   } catch (e) {
+  //     toast.error("Xoá người dùng thất bại");
+  //   }
+  // }
+
+  // async function handleEdit(id: number, user: userUpdate) {
+  //   try {
+  //     var result = await updateUser(id, user);
+  //     if (result.statusCode === 200) {
+  //       fetchData();
+  //       toast.success("Cập nhật thành công");
+  //     }
+  //   } catch {
+  //     toast.error("Cập nhật thất bại");
+  //   }
+  // }
 
   async function handleSearch(value: string) {
-    fetchData(value);
+    // fetchData(value);
   }
 
   return (
     <Flex className={style.container}>
       <Flex className={style.searchWrapper}>
         <Searchbar onSearch={handleSearch} />
+        <Button onClick={onOpenCustomerSegment} className={style.AddCustomerSegmentBtn}>
+          <Text as="span" fontSize="25px" me={3}>
+            <IoAddCircleOutline />
+          </Text>
+          Create Customer Segment
+        </Button>
+        <ModalForm
+          formBody={
+            <ModalFormCustomerSegment
+              onClose={onCloseCustomerSegment}
+              // handleCreate={handleCreate}
+              isEdit={false}
+            />
+          }
+          onClose={onCloseCustomerSegment}
+          isOpen={isOpenCustomerSegment}
+          title={"Add New Customer Segment"}
+        />
       </Flex>
       <Flex className={style.CustomerSegment}>
         <TableContainer className={style.CustomerSegmentTbl}>
@@ -134,13 +165,14 @@ function CustomerSegment() {
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>
-                <Th className={style.HeaderTbl}>Name</Th>
+                <Th className={style.HeaderTbl}>Customer Segment Name</Th>
+                <Th className={style.HeaderTbl}>Demographics</Th>
                 <Th className={style.HeaderTbl}>Created on</Th>
                 <Th className={style.HeaderTbl}>Settings</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {isInitialLoad && isLoading ? (
+              {/* {isInitialLoad && isLoading ? (
                 <Tr>
                   <Td colSpan={10} className={style.LoadingCell}>
                     <Loading />
@@ -151,31 +183,60 @@ function CustomerSegment() {
                   <Td colSpan={10}>Không có người dùng để hiển thị</Td>
                 </Tr>
               ) : (
-                //   data.map((CustomerSegment, index) => (
-                <Tr className={style.CustomerSegmentItem}>
-                  <Td></Td>
-                  <Td></Td>
-                  <Td></Td>
-                  <Td>
-                    {/* <ActionMenu
+                  data.map((CustomerSegment, index) => ( */}
+              <Tr className={style.CustomerSegmentItem}>
+                <Td>1</Td>
+                <Td>Khách hàng trẻ</Td>
+                <Td>Nam - Sáng</Td>
+                <Td> {moment("7/3/2024").format("DD/MM/YYYY")}</Td>
+                <Td>
+                  {/* <ActionMenu
                           id={user.userId}
                           onDelete={handleDelete}
                           onEdit={handleEdit}
                         /> */}
-                  </Td>
-                </Tr>
-              )}
+                </Td>
+              </Tr>
+              <Tr className={style.CustomerSegmentItem}>
+                <Td>2</Td>
+                <Td>Khách hàng trẻ</Td>
+                <Td>Nữ - Sáng</Td>
+                <Td> {moment("7/3/2024").format("DD/MM/YYYY")}</Td>
+                <Td></Td>
+              </Tr>
+              <Tr className={style.CustomerSegmentItem}>
+                <Td>3</Td>
+                <Td>Khách hàng trẻ</Td>
+                <Td>Nam - Trưa</Td>
+                <Td> {moment("7/3/2024").format("DD/MM/YYYY")}</Td>
+                <Td></Td>
+              </Tr>
+              <Tr className={style.CustomerSegmentItem}>
+                <Td>4</Td>
+                <Td>Khách hàng trung niên</Td>
+                <Td>Nam - Trưa</Td>
+                <Td> {moment("7/3/2024").format("DD/MM/YYYY")}</Td>
+                <Td></Td>
+              </Tr>
+              <Tr className={style.CustomerSegmentItem}>
+                <Td>5</Td>
+                <Td>Khách hàng trung niên</Td>
+                <Td>Nữ - Trưa</Td>
+                <Td> {moment("7/3/2024").format("DD/MM/YYYY")}</Td>
+                <Td></Td>
+              </Tr>
+              {/* )} */}
             </Tbody>
           </Table>
         </TableContainer>
 
-        <NavigationDot
+        {/* <NavigationDot
           totalPages={totalPages}
           currentPage={currentPage}
           onPageChange={handlePageChange}
           rowsPerPageOptions={rowsPerPageOption}
           onRowsPerPageChange={handleRowsPerPageChange}
-        />
+        /> */}
       </Flex>
     </Flex>
   );

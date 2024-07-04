@@ -19,9 +19,9 @@ import { useNavigate } from "react-router-dom";
 import ModalForm from "../../Modals/ModalForm/ModalForm";
 import ModalFormBrand from "../../Modals/ModalFormBrand/ModalFormBrand";
 import { BrandForm } from "../../../models/BrandForm.model";
-import { brandUpdate } from "../../../payloads/requests/updateBrand.model";
 import { getBrand } from "../../../services/BrandService";
 import CustomAlertDialog from "../../AlertDialog";
+import { brandUpdate } from "../../../payloads/requests/updateRequests.model";
 
 interface ActionMenuProps {
   id: number;

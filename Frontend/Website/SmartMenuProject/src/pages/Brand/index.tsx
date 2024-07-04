@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import style from "./Brand.module.scss";
 import { Image } from "@chakra-ui/react";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
-import { getBrandOptions } from "../../utils/getRowPerPage";
 import {
   deleteBrand,
   getBrands,
@@ -14,8 +13,9 @@ import {
 import { BrandData } from "../../payloads/responses/BrandData.model";
 import moment from "moment";
 import Loading from "../../components/Loading";
-import { brandUpdate } from "../../payloads/requests/updateBrand.model";
 import ActionMenuBrand from "../../components/ActionMenu/ActionMenuBrand/ActionMenuBrand";
+import { brandUpdate } from "../../payloads/requests/updateRequests.model";
+import { getBrandOptions } from "../../utils/functionHelper";
 
 function Brand() {
   const [isLoading, setIsLoading] = useState<boolean>(false);

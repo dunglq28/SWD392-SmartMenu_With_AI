@@ -1,6 +1,6 @@
 import axiosAuth from "../api/axiosAuth";
 import axiosMultipartForm from "../api/axiosMultipartForm";
-import { brandUpdate } from "../payloads/requests/updateBrand.model";
+import { brandUpdate } from "../payloads/requests/updateRequests.model";
 import { ApiResponse, ApiResponseNotPagin } from "../payloads/responses/ApiResponse.model";
 import { BrandData } from "../payloads/responses/BrandData.model";
 import { GetData } from "../payloads/responses/GetData.model";

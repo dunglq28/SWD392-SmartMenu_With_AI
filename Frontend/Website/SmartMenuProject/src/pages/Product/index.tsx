@@ -23,7 +23,6 @@ import {
   getProducts,
   updateProduct,
 } from "../../services/ProductService";
-import { getOptions } from "../../utils/getRowPerPage";
 import { toast } from "react-toastify";
 import moment from "moment";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
@@ -31,9 +30,9 @@ import Loading from "../../components/Loading";
 import ModalForm from "../../components/Modals/ModalForm/ModalForm";
 import ModalFormProduct from "../../components/Modals/ModalFormProduct/ModalFormProduct";
 import Searchbar from "../../components/Searchbar";
-import { formatCurrency } from "../../utils/formatCurrency";
 import { useLocation, useNavigate } from "react-router-dom";
 import ActionMenuProduct from "../../components/ActionMenu/ActionMenuProduct/ActionMenuProduct";
+import { formatCurrency, getOptions } from "../../utils/functionHelper";
 
 function Product() {
   const [isLoading, setIsLoading] = useState<boolean>(false);

@@ -3,7 +3,6 @@ import axiosMultipartForm from "../api/axiosMultipartForm";
 import { ApiResponse } from "../payloads/responses/ApiResponse.model";
 import { GetData } from "../payloads/responses/GetData.model";
 import { ProductData } from "../payloads/responses/ProductData.model";
-import { productUpdate } from "../payloads/requests/updateProduct.model";
 import axios from "axios";
 
 export const getProducts = async (

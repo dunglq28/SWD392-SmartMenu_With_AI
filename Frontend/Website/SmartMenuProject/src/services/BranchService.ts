@@ -1,6 +1,6 @@
 import axiosAuth from "../api/axiosAuth";
 import { BranchForm } from "../models/BranchForm.model";
-import { branchUpdate } from "../payloads/requests/updateBranch.model";
+import { branchUpdate } from "../payloads/requests/updateRequests.model";
 import { ApiResponse } from "../payloads/responses/ApiResponse.model";
 import { BranchData } from "../payloads/responses/BranchData.model";
 import { GetData } from "../payloads/responses/GetData.model";

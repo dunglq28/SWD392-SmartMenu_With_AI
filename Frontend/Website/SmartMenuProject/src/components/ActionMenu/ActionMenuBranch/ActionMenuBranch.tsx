@@ -16,11 +16,11 @@ import style from "./ActionMenuBranch.module.scss";
 import { useTranslation } from "react-i18next";
 import ModalForm from "../../Modals/ModalForm/ModalForm";
 import CustomAlertDialog from "../../AlertDialog";
-import { branchUpdate } from "../../../payloads/requests/updateBranch.model";
 import { BranchForm } from "../../../models/BranchForm.model";
 import ModalFormBranch from "../../Modals/ModalFormBranch/ModalFormBranch";
 import { RiSettings3Line } from "react-icons/ri";
 import { getBranch } from "../../../services/BranchService";
+import { branchUpdate } from "../../../payloads/requests/updateRequests.model";
 
 interface ActionMenuProps {
   id: number;
