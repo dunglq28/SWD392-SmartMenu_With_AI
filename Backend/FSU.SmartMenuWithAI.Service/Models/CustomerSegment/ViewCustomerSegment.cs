@@ -2,7 +2,7 @@
 {
     public class ViewCustomerSegment
     {
-        public int CustomerSegmentID { get; set; }
+        public int CustomerSegmentId { get; set; }
         public string CustomerSegmentName { get; set; }
         public string Demographic { get; set; }
         public string Age { get; set; }

@@ -12,7 +12,7 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
             , int? pageSize
             , int brandId);
 
-        //Task<CustomerSegmentDTO?> GetByID(int SegmentId);
+        Task<ViewCustomerSegment?> GetByID(int SegmentId);
 
         Task<IEnumerable<ViewCustomerSegment>> Insert(string customerSegmentName , string age, List<string> gender, List<string> session, int brandID);
 
