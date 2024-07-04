@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace FSU.SmartMenuWithAI.Service.Services
@@ -57,8 +58,9 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Expression<Func<CustomerSegment, bool>> filter = x => x.BrandId == brandId &&
                                                                 (!searchKey.IsNullOrEmpty()
                                                                 ? x.SegmentName.Contains(searchKey!) && x.Status == (int)Status.Exist
-        : x.Status != (int)Status.Deleted);
-            var customerSegments = await _unitOfWork.CustomerSegmentRepository.Get(filter: filter, orderBy: null!, includeProperties: "SegmentAttributes", pageIndex: pageIndex, pageSize: pageSize);
+                                                                : x.Status != (int)Status.Deleted);
+            Func<IQueryable<CustomerSegment>, IOrderedQueryable<CustomerSegment>> orderBy = q => q.OrderByDescending(x => x.SegmentId);
+            var customerSegments = await _unitOfWork.CustomerSegmentRepository.Get(filter: filter, orderBy: orderBy, includeProperties: "SegmentAttributes", pageIndex: pageIndex, pageSize: pageSize);
             var paginatedSegments = new PageEntity<ViewCustomerSegment>
             {
                 List = customerSegments.Select(segment => new ViewCustomerSegment
@@ -123,80 +125,106 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 }
 
                 // Kiểm tra genders
-                var validGenders = new List<string> { "Nam", "Nữ" };
+                var validGenders = new List<string> { "Nam", "Nữ", "Male", "Female" };
                 foreach (var gender in genders)
                 {
                     if (!validGenders.Contains(gender))
                     {
-                        throw new ArgumentException("Giới tính không hợp lệ. Chỉ chấp nhận 'Nam' hoặc 'Nữ'.");
+                        throw new ArgumentException("Giới tính không hợp lệ.");
                     }
                 }
 
                 // Kiểm tra sessions
-                var validSessions = new List<string> { "Sáng", "Trưa", "Chiều" };
+                var validSessions = new List<string> { "Sáng", "Trưa", "Chiều", "Morning", "Afternoon", "Evening" };
                 foreach (var session in sessions)
                 {
                     if (!validSessions.Contains(session))
                     {
-                        throw new ArgumentException("Thời gian không hợp lệ. Chỉ chấp nhận 'Sáng', 'Trưa' hoặc 'Chiều'.");
+                        throw new ArgumentException("Thời gian không hợp lệ.");
                     }
                 }
 
+                var listSegmentExist = new List<CustomerSegment>();
                 foreach (var gender in genders)
                 {
                     foreach (var session in sessions)
                     {
                         Expression<Func<CustomerSegment, bool>> duplicateName = x => x.SegmentName == customerSegmentName
-                                                                                            && x.Demographics == gender + " " + session
+                                                                                            && x.Demographics == gender + ", " + session
                                                                                             && (x.Status == (int)Status.Exist);
 
                         var exist = await _unitOfWork.CustomerSegmentRepository.GetByCondition(duplicateName);
                         if (exist != null)
                         {
-                            throw new DbUpdateException("Phân khúc khách hàng đã tồn tại");
+                            listSegmentExist.Add(exist);
                         }
-                        var customerSegment = new CustomerSegment();
-                        customerSegment.SegmentName = customerSegmentName;
-                        customerSegment.SegmentCode = Guid.NewGuid().ToString();
-                        customerSegment.CreateDate = DateOnly.FromDateTime(DateTime.Now);
-                        customerSegment.UpdateDate = DateOnly.FromDateTime(DateTime.Now);
-                        customerSegment.Demographics = gender + " " + session;
-                        customerSegment.Status = (int)Status.Exist;
-                        customerSegment.BrandId = brandID;
-                        await _unitOfWork.CustomerSegmentRepository.Insert(customerSegment);
-                        await _unitOfWork.SaveAsync();
-                        //lấy customerSegment vừa tạo ra
-                        var customerSegmentCreated = await _unitOfWork.CustomerSegmentRepository.GetByCondition(duplicateName);
-                        if (customerSegmentCreated == null)
-                        {
-                            throw new Exception("Lỗi khi truy vấn Customer Segment vừa tạo");
-                        }
-                        for (var i = 1; i <= 3; i++)
-                        {
-                            var segmentAttribute = new SegmentAttribute();
-                            segmentAttribute.SegmentId = customerSegment.SegmentId;
-                            switch (i)
-                            {
-                                case 1:
-                                    segmentAttribute.AttributeId = 1;
-                                    segmentAttribute.Value = age;
-                                    break;
-                                case 2:
-                                    segmentAttribute.AttributeId = 2;
-                                    segmentAttribute.Value = gender;
-                                    break;
-                                case 3:
-                                    segmentAttribute.AttributeId = 3;
-                                    segmentAttribute.Value = session;
-                                    break;
-                            }
-                            segmentAttribute.BrandId = brandID;
-                            await _unitOfWork.SegmentAttributeRepository1.Insert(segmentAttribute);
-                            //await _unitOfWork.SaveAsync();
-                        }
-                        await _unitOfWork.SaveAsync();
                     }
                 }
+
+                if (listSegmentExist.Count != 0)
+                {
+                    var errorMessageBuilder = new StringBuilder();
+                    errorMessageBuilder.AppendLine("Phân khúc khách hàng đã tồn tại. Thông tin các phân khúc:/n");
+
+                    foreach (var item in listSegmentExist)
+                    {
+                        errorMessageBuilder.AppendLine($"Tên phân khúc: {item.SegmentName}, Nhân khẩu học: {item.Demographics}/n");
+                    }
+                    string errorMessage = errorMessageBuilder.ToString();
+                    throw new DbUpdateException(errorMessage);
+                }
+                else
+                {
+                    foreach (var gender in genders)
+                    {
+                        foreach (var session in sessions)
+                        {
+                            var customerSegment = new CustomerSegment();
+                            customerSegment.SegmentName = customerSegmentName;
+                            customerSegment.SegmentCode = Guid.NewGuid().ToString();
+                            customerSegment.CreateDate = DateOnly.FromDateTime(DateTime.Now);
+                            customerSegment.UpdateDate = DateOnly.FromDateTime(DateTime.Now);
+                            customerSegment.Demographics = gender + ", " + session;
+                            customerSegment.Status = (int)Status.Exist;
+                            customerSegment.BrandId = brandID;
+                            await _unitOfWork.CustomerSegmentRepository.Insert(customerSegment);
+                            await _unitOfWork.SaveAsync();
+                            //lấy customerSegment vừa tạo ra
+                            //var customerSegmentCreated = await _unitOfWork.CustomerSegmentRepository.GetByCondition(duplicateName);
+                            //if (customerSegmentCreated == null)
+                            //{
+                            //    throw new Exception("Lỗi khi truy vấn Customer Segment vừa tạo");
+                            //}
+                            for (var i = 1; i <= 3; i++)
+                            {
+                                var segmentAttribute = new SegmentAttribute();
+                                segmentAttribute.SegmentId = customerSegment.SegmentId;
+                                switch (i)
+                                {
+                                    case 1:
+                                        segmentAttribute.AttributeId = 1;
+                                        segmentAttribute.Value = age;
+                                        break;
+                                    case 2:
+                                        segmentAttribute.AttributeId = 2;
+                                        segmentAttribute.Value = gender;
+                                        break;
+                                    case 3:
+                                        segmentAttribute.AttributeId = 3;
+                                        segmentAttribute.Value = session;
+                                        break;
+                                }
+                                segmentAttribute.BrandId = brandID;
+                                await _unitOfWork.SegmentAttributeRepository1.Insert(segmentAttribute);
+                                //await _unitOfWork.SaveAsync();
+                            }
+                            await _unitOfWork.SaveAsync();
+                        }
+                    }
+                }
+
+
+
                 //sau khi insert đầy đủ vào 2 bảng
                 Expression<Func<CustomerSegment, bool>> viewCustomerSegment = x => x.SegmentName == customerSegmentName
                                                                                             && (x.Status == (int)Status.Exist);
@@ -221,6 +249,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 throw;
             }
         }
+
 
         public async Task<IEnumerable<ViewCustomerSegment>> Update(int segmentId, string segmentName)
         {

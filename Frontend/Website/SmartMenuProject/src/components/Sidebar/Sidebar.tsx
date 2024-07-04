@@ -138,13 +138,6 @@ function Sidebar() {
       permissionRole: UserRole.Admin,
     },
     {
-      icon: AiOutlineCustomerService,
-      label: t("customer segment"),
-      divider: true,
-      to: "/customerSegment",
-      permissionRole: UserRole.Admin,
-    },
-    {
       icon: AiOutlineProduct,
       label: t("products"),
       to: "/products",
@@ -154,6 +147,13 @@ function Sidebar() {
       icon: MdOutlineCategory,
       label: t("categories"),
       to: "/categories",
+      permissionRole: [UserRole.BrandManager, UserRole.BranchManager],
+    },
+    {
+      icon: AiOutlineCustomerService,
+      label: t("customer segment"),
+      divider: true,
+      to: "/customerSegment",
       permissionRole: [UserRole.BrandManager, UserRole.BranchManager],
     },
     {

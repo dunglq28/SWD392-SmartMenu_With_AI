@@ -15,15 +15,14 @@ import style from "./User.module.scss";
 import React, { useCallback, useEffect, useState } from "react";
 import { deleteUser, getUsers, updateUser } from "../../services/UserService";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
-import { getOptions } from "../../utils/getRowPerPage";
 import { UserData } from "../../payloads/responses/UserData.model";
 import moment from "moment";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loading";
-import { userUpdate } from "../../payloads/requests/updateUser.model";
 import Searchbar from "../../components/Searchbar";
-import { getRoleName } from "../../utils/getRoleName";
 import ActionMenuUser from "../../components/ActionMenu/ActionMenuUser/ActionMenuUser";
+import { userUpdate } from "../../payloads/requests/updateRequests.model";
+import { getOptions, getRoleName } from "../../utils/functionHelper";
 
 function User() {
   const [isLoading, setIsLoading] = useState<boolean>(false);

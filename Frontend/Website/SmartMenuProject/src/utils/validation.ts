@@ -21,3 +21,7 @@ export const isValidPhoneNumber = (phoneNumber: string): boolean => {
   return phoneRegex.test(phoneNumber);
 };
 
+export const isInteger = (value: string) => {
+  return /^\d+$/.test(value);
+};
+

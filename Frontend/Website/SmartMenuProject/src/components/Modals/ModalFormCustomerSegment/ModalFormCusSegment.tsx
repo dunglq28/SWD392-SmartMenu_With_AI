@@ -1,0 +1,307 @@
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Checkbox,
+  Flex,
+  Input,
+  ModalBody,
+  ModalFooter,
+  Select,
+  Text,
+} from "@chakra-ui/react";
+import style from "./ModalFormCusSegment.module.scss";
+import { toast } from "react-toastify";
+import moment from "moment";
+import { CustomerSegmentForm } from "../../../models/SegmentForm.model";
+import { capitalizeWords } from "../../../utils/functionHelper";
+import { isInteger } from "../../../utils/validation";
+import { customerSegmentUpdate } from "../../../payloads/requests/updateRequests.model";
+import { customerSegmentCreate } from "../../../payloads/requests/createRequests.model";
+
+interface ModalFormCustomerSegmentProps {
+  formData: CustomerSegmentForm;
+  setFormData: React.Dispatch<React.SetStateAction<CustomerSegmentForm>>;
+  id?: number;
+  handleCreate?: (brandId: number, segment: customerSegmentCreate) => void;
+  handleEdit?: (
+    brandId: number,
+    segmentId: number,
+    segment: customerSegmentUpdate
+  ) => void;
+  onClose: () => void;
+  isEdit: boolean;
+}
+
+const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
+  formData,
+  setFormData,
+  id,
+  onClose,
+  handleCreate,
+  isEdit,
+  handleEdit,
+}) => {
+  const brandId = Number(localStorage.getItem("BrandId"));
+
+
+  // useEffect(() => {
+  //   if (isEdit && id) {
+  //     const loadCategoryData = async () => {
+  //       try {
+  //         const category = await getCategory(id);
+  //         if (category) {
+  //           setFormData({
+  //             categoryName: {
+  //               value: category.data.categoryName,
+  //               errorMessage: "",
+  //             },
+  //           });
+  //         } else {
+  //           throw new Error("Category not found");
+  //         }
+  //       } catch (err) {
+  //         console.error("Error fetching category data:", err);
+  //         toast.error("Error fetching category data");
+  //       }
+  //     };
+
+  //     loadCategoryData();
+  //   }
+  // }, []);
+
+  const handleChange = (
+    field: keyof CustomerSegmentForm,
+    value: string | string[]
+  ) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [field]: { value, errorMessage: "" },
+    }));
+  };
+
+  const handleCheckboxChange = (value: string) => {
+    setFormData((prevFormData) => {
+      const sessions = prevFormData.sessions.value.includes(value)
+        ? prevFormData.sessions.value.filter((session) => session !== value)
+        : [...prevFormData.sessions.value, value];
+
+      return {
+        ...prevFormData,
+        sessions: { value: sessions, errorMessage: "" },
+      };
+    });
+  };
+
+  const handleSubmit = async () => {
+    const errors = {
+      segmentName: formData.segmentName.value ? "" : "Segment name is required",
+      sessions: formData.sessions.value.length ? "" : "Sessions are required",
+      ageFrom: "",
+      ageTo: "",
+    };
+
+    if (!formData.ageFrom.value) {
+      errors.ageFrom = "Age From is required";
+    } else if (
+      isNaN(Number(formData.ageFrom.value)) ||
+      Number(formData.ageFrom.value) <= 0
+    ) {
+      errors.ageFrom = "Age From must be a number greater than 0";
+    } else if (
+      !isInteger(formData.ageFrom.value) ||
+      Number(formData.ageFrom.value) <= 0
+    ) {
+      errors.ageFrom = "Age From must be a positive integer";
+    }
+
+    if (!formData.ageTo.value) {
+      errors.ageTo = "Age To is required";
+    } else if (
+      isNaN(Number(formData.ageTo.value)) ||
+      Number(formData.ageTo.value) <= 0
+    ) {
+      errors.ageTo = "Age To must be a number greater than 0";
+    } else if (
+      !isInteger(formData.ageTo.value) ||
+      Number(formData.ageTo.value) <= 0
+    ) {
+      errors.ageTo = "Age To must be a positive integer";
+    } else if (Number(formData.ageTo.value) <= Number(formData.ageFrom.value)) {
+      errors.ageTo = "Age To must be greater than Age From";
+    }
+
+    const updatedFormData = {
+      segmentName: {
+        ...formData.segmentName,
+        errorMessage: errors.segmentName,
+      },
+      gender: { ...formData.gender, errorMessage: "" },
+      sessions: { ...formData.sessions, errorMessage: errors.sessions },
+      ageFrom: { ...formData.ageFrom, errorMessage: errors.ageFrom },
+      ageTo: { ...formData.ageTo, errorMessage: errors.ageTo },
+    };
+
+    setFormData(updatedFormData);
+
+    const hasErrors = Object.values(errors).some((error) => error !== "");
+    if (!hasErrors) {
+      const capitalizedSegmentName = capitalizeWords(
+        formData.segmentName.value
+      );
+
+      const genders = [];
+
+      if (
+        formData.gender.value.toLowerCase() === "nam" ||
+        formData.gender.value.toLowerCase() === "male"
+      ) {
+        genders.push(formData.gender.value);
+      } else if (
+        formData.gender.value.toLowerCase() === "nữ" ||
+        formData.gender.value.toLowerCase() === "female"
+      ) {
+        genders.push(formData.gender.value);
+      } else if (formData.gender.value.toLowerCase() === "both") {
+        genders.push("Male");
+        genders.push("Female");
+      } else if (formData.gender.value.toLowerCase() === "cả hai") {
+        genders.push("Nam");
+        genders.push("Nữ");
+      }
+
+      var customerSegmentcreate: customerSegmentCreate = {
+        segmentName: capitalizedSegmentName,
+        age: `${formData.ageFrom.value}-${formData.ageTo.value}`,
+        gender: genders,
+        session: formData.sessions.value,
+      };
+
+      if (!isEdit) {
+        handleCreate?.(brandId, customerSegmentcreate);
+      } else {
+        // handleEdit?.(brandId, id! , customerSegmentcreate);
+        onClose();
+      }
+    }
+  };
+
+  return (
+    <>
+      <ModalBody>
+        <Flex className={style.ModalBody}>
+          <Flex className={style.Row}>
+            <Flex className={style.ModalBodyItem}>
+              <Text className={style.FieldTitle}>Segment Name</Text>
+              <Input
+                className={style.InputField}
+                value={formData.segmentName.value}
+                placeholder="Segment Name"
+                onChange={(e) => handleChange("segmentName", e.target.value)}
+              />
+              {formData.segmentName.errorMessage && (
+                <Text className={style.ErrorText}>
+                  {formData.segmentName.errorMessage}
+                </Text>
+              )}
+            </Flex>
+            <Flex className={style.ModalBodyItem}>
+              <Text className={style.FieldTitle}>Gender</Text>
+              <Select
+                className={style.InputField}
+                value={formData.gender.value}
+                onChange={(e) => handleChange("gender", e.target.value)}
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                {!isEdit && <option value="Both">Both</option>}
+              </Select>
+              {formData.gender.errorMessage && (
+                <Text className={style.ErrorText}>
+                  {formData.gender.errorMessage}
+                </Text>
+              )}
+            </Flex>
+          </Flex>
+          <Flex className={style.ModalBodyItem}>
+            <Text className={style.FieldTitle}>Sessions</Text>
+            <Flex className={style.CheckboxGroup}>
+              <Checkbox
+                className={style.checkboxItem}
+                isChecked={formData.sessions.value.includes("Morning")}
+                onChange={() => handleCheckboxChange("Morning")}
+              >
+                Morning
+              </Checkbox>
+              <Checkbox
+                className={style.checkboxItem}
+                isChecked={formData.sessions.value.includes("Afternoon")}
+                onChange={() => handleCheckboxChange("Afternoon")}
+              >
+                Afternoon
+              </Checkbox>
+              <Checkbox
+                className={style.checkboxItem}
+                isChecked={formData.sessions.value.includes("Evening")}
+                onChange={() => handleCheckboxChange("Evening")}
+              >
+                Evening
+              </Checkbox>
+            </Flex>
+            {formData.sessions.errorMessage && (
+              <Text className={style.ErrorText}>
+                {formData.sessions.errorMessage}
+              </Text>
+            )}
+          </Flex>
+
+          <Flex className={style.Row}>
+            <Flex className={style.ModalBodyItem}>
+              <Text className={style.FieldTitle}>Age From</Text>
+              <Input
+                className={style.InputField}
+                value={formData.ageFrom.value}
+                placeholder="Format: 18"
+                onChange={(e) => handleChange("ageFrom", e.target.value)}
+              />
+              {formData.ageFrom.errorMessage && (
+                <Text className={style.ErrorText}>
+                  {formData.ageFrom.errorMessage}
+                </Text>
+              )}
+            </Flex>
+            <Flex className={style.ModalBodyItem}>
+              <Text className={style.FieldTitle}>Age To</Text>
+              <Input
+                className={style.InputField}
+                value={formData.ageTo.value}
+                placeholder="Format: 25"
+                onChange={(e) => handleChange("ageTo", e.target.value)}
+              />
+              {formData.ageTo.errorMessage && (
+                <Text className={style.ErrorText}>
+                  {formData.ageTo.errorMessage}
+                </Text>
+              )}
+            </Flex>
+          </Flex>
+        </Flex>
+      </ModalBody>
+      <ModalFooter>
+        <Flex className={style.Footer}>
+          <Button
+            variant="ghost"
+            backgroundColor="#ccc"
+            onClick={() => onClose()}
+          >
+            Cancel
+          </Button>
+          <Button className={style.AddSegmentBtn} onClick={handleSubmit}>
+            {isEdit ? "Save" : "Create"}
+          </Button>
+        </Flex>
+      </ModalFooter>
+    </>
+  );
+};
+
+export default ModalFormCustomerSegment;

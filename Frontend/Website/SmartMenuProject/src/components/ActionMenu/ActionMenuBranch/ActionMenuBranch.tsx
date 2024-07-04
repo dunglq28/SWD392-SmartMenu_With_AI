@@ -16,11 +16,11 @@ import style from "./ActionMenuBranch.module.scss";
 import { useTranslation } from "react-i18next";
 import ModalForm from "../../Modals/ModalForm/ModalForm";
 import CustomAlertDialog from "../../AlertDialog";
-import { branchUpdate } from "../../../payloads/requests/updateBranch.model";
 import { BranchForm } from "../../../models/BranchForm.model";
 import ModalFormBranch from "../../Modals/ModalFormBranch/ModalFormBranch";
 import { RiSettings3Line } from "react-icons/ri";
 import { getBranch } from "../../../services/BranchService";
+import { branchUpdate } from "../../../payloads/requests/updateRequests.model";
 
 interface ActionMenuProps {
   id: number;
@@ -38,7 +38,7 @@ const ActionMenuBranch: FC<ActionMenuProps> = ({
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    isOpen: isOpenBrand,
+    isOpen: isOpenBranch,
     onOpen: onOpenBranch,
     onClose: onCloseBranch,
   } = useDisclosure();
@@ -78,7 +78,7 @@ const ActionMenuBranch: FC<ActionMenuProps> = ({
       district: branch.district.name,
       ward: branch.ward.name,
       address: branch.address.value,
-      isActive: true
+      isActive: true,
     };
     onCloseBranch();
     if (isSave) {
@@ -137,11 +137,11 @@ const ActionMenuBranch: FC<ActionMenuProps> = ({
             <PopoverBody>
               <Divider />
               <Flex className={style.PopupButton} onClick={handleEditClick}>
-                <Text>Edit Branch</Text>
+                <Text className={style.PopupButtonText}>Edit Branch</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text>Delete Branch</Text>
+                <Text className={style.PopupButtonText}>Delete Branch</Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>
@@ -168,8 +168,8 @@ const ActionMenuBranch: FC<ActionMenuProps> = ({
           />
         }
         onClose={onCloseBranch}
-        isOpen={isOpenBrand}
-        title={t("Update Brand")}
+        isOpen={isOpenBranch}
+        title={t("Update Branch")}
         updateBranchData={updateBranchData}
       />
     </>

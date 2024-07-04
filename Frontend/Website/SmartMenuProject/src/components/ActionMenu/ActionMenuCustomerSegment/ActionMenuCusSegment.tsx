@@ -13,31 +13,45 @@ import {
 } from "@chakra-ui/react";
 import { RiSettings3Line } from "react-icons/ri";
 
-import style from "./ActionMenuCategory.module.scss";
+import style from "./ActionMenuCusSegment.module.scss";
 import { useTranslation } from "react-i18next";
 import CustomAlertDialog from "../../AlertDialog";
 import ModalForm from "../../Modals/ModalForm/ModalForm";
-import ModalFormCategory from "../../Modals/ModalFormCategory/ModalFormCategory";
+import { customerSegmentUpdate } from "../../../payloads/requests/updateRequests.model";
+import ModalFormCustomerSegment from "../../Modals/ModalFormCustomerSegment/ModalFormCusSegment";
+import { CustomerSegmentForm } from "../../../models/SegmentForm.model";
 
 interface ActionMenuProps {
+  formData: CustomerSegmentForm;
+  setFormData: React.Dispatch<React.SetStateAction<CustomerSegmentForm>>;
   id: number;
   onDelete: (id: number) => void;
-  onEdit: (cateId: number, brandId: number, categoryName: string) => void;
+  onEdit: (
+    brandId: number,
+    segmentId: number,
+    segment: customerSegmentUpdate
+  ) => void;
 }
 
-const ActionMenuCategory: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
+const ActionMenuCustomerSegment: FC<ActionMenuProps> = ({
+  formData,
+  setFormData,
+  id,
+  onDelete,
+  onEdit,
+}) => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    isOpen: isOpenCategory,
-    onOpen: onOpenCategory,
-    onClose: onCloseCategory,
+    isOpen: isOpenCustomerSegment,
+    onOpen: onOpenCustomerSegment,
+    onClose: onCloseCustomerSegment,
   } = useDisclosure();
   const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
 
   return (
     <>
-      <Flex className={style.SettingCategory}>
+      <Flex className={style.SettingCustomerSegment}>
         <Popover>
           <PopoverTrigger>
             <Button className={style.SettingsIconBtn}>
@@ -52,13 +66,17 @@ const ActionMenuCategory: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
               <Divider />
               <Flex
                 className={style.PopupButton}
-                onClick={() => onOpenCategory()}
+                onClick={() => onOpenCustomerSegment()}
               >
-                <Text className={style.PopupButtonText}>Edit Category</Text>
+                <Text className={style.PopupButtonText}>
+                  Edit Customer Segment
+                </Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text className={style.PopupButtonText}>Delete Category</Text>
+                <Text className={style.PopupButtonText}>
+                  Delete Customer Segment
+                </Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>
@@ -70,26 +88,28 @@ const ActionMenuCategory: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
         isOpen={isOpen}
         id={id}
         onDelete={onDelete}
-        titleHeader="Delete Category"
+        titleHeader="Delete Customer Segment"
         titleBody="Are you sure? You can't undo this action afterwards."
         btnName=" Delete"
       />
 
       <ModalForm
         formBody={
-          <ModalFormCategory
-            onClose={onCloseCategory}
+          <ModalFormCustomerSegment
+            onClose={onCloseCustomerSegment}
             handleEdit={onEdit}
             isEdit={true}
+            formData={formData}
+            setFormData={setFormData}
             id={id}
           />
         }
-        onClose={onCloseCategory}
-        isOpen={isOpenCategory}
-        title={t("Update Category")}
+        onClose={onCloseCustomerSegment}
+        isOpen={isOpenCustomerSegment}
+        title={t("Update Customer Segment")}
       />
     </>
   );
 };
 
-export default ActionMenuCategory;
+export default ActionMenuCustomerSegment;

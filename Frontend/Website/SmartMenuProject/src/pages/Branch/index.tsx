@@ -16,16 +16,16 @@ import {
 } from "@chakra-ui/react";
 import Loading from "../../components/Loading";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
-import { getOptions } from "../../utils/getRowPerPage";
 import {
   deleteBranch,
   getBranches,
   updateBranch,
 } from "../../services/BranchService";
 import moment from "moment";
-import { branchUpdate } from "../../payloads/requests/updateBranch.model";
 import Searchbar from "../../components/Searchbar";
 import ActionMenuBranch from "../../components/ActionMenu/ActionMenuBranch/ActionMenuBranch";
+import { branchUpdate } from "../../payloads/requests/updateRequests.model";
+import { getOptions } from "../../utils/functionHelper";
 
 function Branch() {
   const location = useLocation();

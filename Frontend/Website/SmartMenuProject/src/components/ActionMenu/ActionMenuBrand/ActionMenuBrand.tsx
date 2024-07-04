@@ -19,9 +19,9 @@ import { useNavigate } from "react-router-dom";
 import ModalForm from "../../Modals/ModalForm/ModalForm";
 import ModalFormBrand from "../../Modals/ModalFormBrand/ModalFormBrand";
 import { BrandForm } from "../../../models/BrandForm.model";
-import { brandUpdate } from "../../../payloads/requests/updateBrand.model";
 import { getBrand } from "../../../services/BrandService";
 import CustomAlertDialog from "../../AlertDialog";
+import { brandUpdate } from "../../../payloads/requests/updateRequests.model";
 
 interface ActionMenuProps {
   id: number;
@@ -102,15 +102,15 @@ const ActionMenuBrand: FC<ActionMenuProps> = ({
             <PopoverArrow />
             <PopoverBody>
               <Flex className={style.PopupButton} onClick={handleViewClick}>
-                <Text>View Branch</Text>
+                <Text className={style.PopupButtonText}>View Branch</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={handleEditClick}>
-                <Text>Edit Brand</Text>
+                <Text className={style.PopupButtonText}>Edit Brand</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text>Delete Brand</Text>
+                <Text className={style.PopupButtonText}>Delete Brand</Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>

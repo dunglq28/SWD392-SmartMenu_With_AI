@@ -12,7 +12,6 @@ import {
 
 import styles from "./ModalFormBrand.module.scss";
 import { BrandForm } from "../../../models/BrandForm.model";
-import { themeColors } from "../../../constants/GlobalStyles";
 import { isImageFile } from "../../../utils/validation";
 
 interface ModalFormBrandProps {
