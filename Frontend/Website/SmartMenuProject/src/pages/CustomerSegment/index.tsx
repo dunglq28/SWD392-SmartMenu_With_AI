@@ -264,6 +264,8 @@ function CustomerSegment() {
                     </Td>
                     <Td>
                       <ActionMenuCustomerSegment
+                        formData={segmentFormData}
+                        setFormData={setSegmentFormData}
                         id={customerSegment.customerSegmentId}
                         onDelete={handleDelete}
                         onEdit={handleEdit}

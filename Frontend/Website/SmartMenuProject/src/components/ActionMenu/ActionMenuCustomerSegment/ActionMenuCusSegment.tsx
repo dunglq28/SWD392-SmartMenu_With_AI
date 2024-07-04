@@ -17,17 +17,25 @@ import style from "./ActionMenuCusSegment.module.scss";
 import { useTranslation } from "react-i18next";
 import CustomAlertDialog from "../../AlertDialog";
 import ModalForm from "../../Modals/ModalForm/ModalForm";
-import ModalFormCategory from "../../Modals/ModalFormCategory/ModalFormCategory";
 import { customerSegmentUpdate } from "../../../payloads/requests/updateRequests.model";
 import ModalFormCustomerSegment from "../../Modals/ModalFormCustomerSegment/ModalFormCusSegment";
+import { CustomerSegmentForm } from "../../../models/SegmentForm.model";
 
 interface ActionMenuProps {
+  formData: CustomerSegmentForm;
+  setFormData: React.Dispatch<React.SetStateAction<CustomerSegmentForm>>;
   id: number;
   onDelete: (id: number) => void;
-  onEdit: (brandId: number, segmentId: number, segment: customerSegmentUpdate) => void;
+  onEdit: (
+    brandId: number,
+    segmentId: number,
+    segment: customerSegmentUpdate
+  ) => void;
 }
 
 const ActionMenuCustomerSegment: FC<ActionMenuProps> = ({
+  formData,
+  setFormData,
   id,
   onDelete,
   onEdit,
@@ -91,6 +99,8 @@ const ActionMenuCustomerSegment: FC<ActionMenuProps> = ({
             onClose={onCloseCustomerSegment}
             handleEdit={onEdit}
             isEdit={true}
+            formData={formData}
+            setFormData={setFormData}
             id={id}
           />
         }
