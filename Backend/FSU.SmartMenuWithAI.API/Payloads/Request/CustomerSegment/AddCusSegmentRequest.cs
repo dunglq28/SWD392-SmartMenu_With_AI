@@ -24,6 +24,6 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.CustomerSegment
         public List<string> Session { get; set; }
         [Required(ErrorMessage = "Thiếu ID thương hiệu")]
         [JsonProperty("brand-id")]
-        public int BrandID { get; set; }
+        public int BrandId { get; set; }
     }
 }

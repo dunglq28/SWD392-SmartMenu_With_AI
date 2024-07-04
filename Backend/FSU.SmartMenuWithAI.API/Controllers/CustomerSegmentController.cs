@@ -29,7 +29,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         {
             try
             {
-                var result = await _customerSegmentService.Insert(reqObj.SegmentName, reqObj.Age, reqObj.Gender, reqObj.Session, reqObj.BrandID);
+                var result = await _customerSegmentService.Insert(reqObj.SegmentName, reqObj.Age, reqObj.Gender, reqObj.Session, reqObj.BrandId);
                 {
                     if (result != null)
                         return Ok(new BaseResponse
@@ -173,7 +173,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             
             try
             {
-                var result = await _customerSegmentService.UpdateSegmentValue(updateReq.SegmentID, updateReq.Age, updateReq.Gender , updateReq.Session, updateReq.SegmentName, updateReq.BrandID);
+                var result = await _customerSegmentService.UpdateSegmentValue(updateReq.SegmentId, updateReq.Age, updateReq.Gender , updateReq.Session, updateReq.SegmentName, updateReq.BrandId);
                 if (result == null)
                 {
                     return NotFound(new BaseResponse
@@ -205,41 +205,41 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
         //        //[Authorize(Roles = UserRoles.Admin)]
-        //        [HttpGet(APIRoutes.CustomerSegment.GetByID, Name = "get-by-cus-segment-id-async")]
-        //        public async Task<IActionResult> GetAsync([FromQuery(Name = "customer-segment-id")] int segmentId)
-        //        {
-        //            try
-        //            {
-        //                var user = await _customerSegmentService.GetByID(segmentId);
+        [HttpGet(APIRoutes.CustomerSegment.GetByID, Name = "get-by-cus-segment-id-async")]
+        public async Task<IActionResult> GetAsync([FromQuery(Name = "customer-segment-id")] int segmentId)
+        {
+            try
+            {
+                var user = await _customerSegmentService.GetByID(segmentId);
 
-        //                if (user == null)
-        //                {
-        //                    return NotFound(new BaseResponse
-        //                    {
-        //                        StatusCode = StatusCodes.Status404NotFound,
-        //                        Message = "Không tìm thấy phân khúc này",
-        //                        Data = null,
-        //                        IsSuccess = false
-        //                    });
-        //                }
-        //                return Ok(new BaseResponse
-        //                {
-        //                    StatusCode = StatusCodes.Status200OK,
-        //                    Message = "Tìm thành công",
-        //                    Data = user,
-        //                    IsSuccess = true
-        //                });
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                return BadRequest(new BaseResponse
-        //                {
-        //                    StatusCode = StatusCodes.Status400BadRequest,
-        //                    Message = ex.Message,
-        //                    Data = null,
-        //                    IsSuccess = false
-        //                });
-        //            }
-        //        }
+                if (user == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy phân khúc này",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Tìm thành công",
+                    Data = user,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
     }
 }
