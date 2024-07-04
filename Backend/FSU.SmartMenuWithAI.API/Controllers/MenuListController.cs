@@ -51,7 +51,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
-        [HttpPost(APIRoutes.MenuList.Add, Name = "add-1-list-to-menu-async")]
+        [HttpPost(APIRoutes.MenuList.AddOneRow, Name = "add-1-list-to-menu-async")]
         public async Task<IActionResult> Add1ListAsync([FromBody] MenuListDTO reqObj)
         {
             try
