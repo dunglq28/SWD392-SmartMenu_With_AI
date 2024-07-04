@@ -102,25 +102,51 @@ function Header() {
     ResponsiveValue<PositionValue>
   >(getInitialHeaderSticky());
 
+  const generateBreadcrumbItems = () => {
+    const items = [];
+
+    if (formattedPathname === "profile" && previousPathName) {
+      items.push(
+        <BreadcrumbItem key="previous">
+          <BreadcrumbLink as={ReactRouterLink} to={`/${previousPathName}`}>
+            {previousPathName}
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      );
+    }
+
+    if (formattedPathname === "menu/create-menu" && previousPathName) {
+      items.push(
+        <BreadcrumbItem key="menu">
+          <BreadcrumbLink as={ReactRouterLink} to={`/menu`}>
+            menu
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      );
+    }
+
+    items.push(
+      <BreadcrumbItem key="current" isCurrentPage>
+        <BreadcrumbLink>
+          {formattedPathname === "menu/create-menu"
+            ? "create Menu"
+            : formattedPathname}
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+    );
+
+    return items;
+  };
+
   return (
     <Flex className={style.Header} position={headerSticky}>
       <Flex flexDirection="column">
-        <Breadcrumb fontSize="16px">
-          {formattedPathname === "profile" && previousPathName && (
-            <BreadcrumbItem>
-              <BreadcrumbLink as={ReactRouterLink} to={`/${previousPathName}`}>
-                {previousPathName}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          )}
-
-          <BreadcrumbItem isCurrentPage>
-            <BreadcrumbLink as={ReactRouterLink} to={`/${formattedPathname}`}>
-              {formattedPathname}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
-        <Text className={style.PathName}>{translatedPathname}</Text>
+        <Breadcrumb fontSize="16px">{generateBreadcrumbItems()}</Breadcrumb>
+        <Text className={style.PathName}>
+          {translatedPathname === "MENU/CREATE-MENU"
+            ? "CREATE MENU"
+            : translatedPathname}
+        </Text>
       </Flex>
       <Flex className={style.Content}>
         <Flex w="50%"></Flex>

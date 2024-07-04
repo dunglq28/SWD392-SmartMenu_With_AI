@@ -101,42 +101,42 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
 
         //[Authorize(Roles = UserRoles.BrandManager)]
-        [HttpPut(APIRoutes.CustomerSegment.UpdateName, Name = "update-segment-name-async")]
-        public async Task<IActionResult> UpdateSegmenNameAsync([FromForm(Name ="segment-id")] int segmentId, [FromForm(Name ="segment-name")] string segmentName)
-        {
-            try
-            {
-                var result = await _customerSegmentService.Update(segmentId, segmentName);
-                if (result == null)
-                {
-                    return NotFound(new BaseResponse
-                    {
-                        StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Cập nhật không thành công",
-                        Data = null,
-                        IsSuccess = false
-                    });
-                }
+        //[HttpPut(APIRoutes.CustomerSegment.UpdateName, Name = "update-segment-name-async")]
+        //public async Task<IActionResult> UpdateSegmenNameAsync([FromForm(Name ="segment-id")] int segmentId, [FromForm(Name ="segment-name")] string segmentName)
+        //{
+        //    try
+        //    {
+        //        var result = await _customerSegmentService.Update(segmentId, segmentName);
+        //        if (result == null)
+        //        {
+        //            return NotFound(new BaseResponse
+        //            {
+        //                StatusCode = StatusCodes.Status404NotFound,
+        //                Message = "Cập nhật không thành công",
+        //                Data = null,
+        //                IsSuccess = false
+        //            });
+        //        }
 
-                return Ok(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status200OK,
-                    Message = "Cập nhật thành công",
-                    Data = result,
-                    IsSuccess = true
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Lỗi khi cập nhật! " + ex.Message,
-                    Data = null,
-                    IsSuccess = false
-                });
-            }
-        }
+        //        return Ok(new BaseResponse
+        //        {
+        //            StatusCode = StatusCodes.Status200OK,
+        //            Message = "Cập nhật thành công",
+        //            Data = result,
+        //            IsSuccess = true
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(new BaseResponse
+        //        {
+        //            StatusCode = StatusCodes.Status400BadRequest,
+        //            Message = "Lỗi khi cập nhật! " + ex.Message,
+        //            Data = null,
+        //            IsSuccess = false
+        //        });
+        //    }
+        //}
         //[Authorize(Roles = UserRoles.BrandManager)]
         [HttpGet(APIRoutes.CustomerSegment.GetAll, Name = "get-customer-segment-async")]
         public async Task<IActionResult> GetAllAsync([FromQuery(Name = "brand-id")] int brandId, [FromQuery(Name = "search-key")] string? searchKey
@@ -168,14 +168,12 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
         //[Authorize(Roles = UserRoles.BrandManager)]
         [HttpPut(APIRoutes.CustomerSegment.UpdateValue, Name = "update-segment-value-async")]
-        public async Task<IActionResult> UpdateSegmentValueAsync([FromForm(Name = "segment-id")] int segmentId,
-                                                                    [FromForm(Name = "age")] string age,
-                                                                    [FromForm(Name = "gender")] string gender,
-                                                                    [FromForm(Name = "session")] string session)
+        public async Task<IActionResult> UpdateSegmentValueAsync([FromBody] UpdateCustomerSegmentRequest updateReq)
         {
+            
             try
             {
-                var result = await _customerSegmentService.UpdateSegmentValue(segmentId, age, gender, session);
+                var result = await _customerSegmentService.UpdateSegmentValue(updateReq.SegmentID, updateReq.Age, updateReq.Gender , updateReq.Session, updateReq.SegmentName, updateReq.BrandID);
                 if (result == null)
                 {
                     return NotFound(new BaseResponse
