@@ -11,6 +11,7 @@ import { HeaderOnly } from "../layouts";
 import Branch from "../pages/Branch";
 import Category from "../pages/Category";
 import CustomerSegment from "../pages/CustomerSegment";
+import CreateMenu from "../pages/Menu/CreateMenu";
 
 interface RouteItem {
   path: string;
@@ -30,6 +31,7 @@ export const publicRoutes: RouteItem[] = [
   { path: "/products", component: Products },
   { path: "/categories", component: Category },
   { path: "/menu", component: Menu },
+  { path: "/menu/create-menu", component: CreateMenu, layout: HeaderOnly },
   { path: "/settings", component: Settings },
   { path: "/new", component: New },
   { path: "/profile", component: Profile, layout: HeaderOnly },
