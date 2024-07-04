@@ -162,6 +162,19 @@
             public const string Delete = Base + "/list-positions/";
 
         }
+        public static class ProductList
+        {
+            public const string GetByID = Base + "/product-lists/get-by-id";
+
+            public const string Add = Base + "/product-lists/add";
+
+            public const string Update = Base + "/product-lists/update";
+
+            public const string Delete = Base + "/product-lists/delete";
+
+        }
+
+
 
         public static class MenuList
         {
@@ -176,6 +189,8 @@
             public const string Delete = Base + "/menu-list/";
 
             public const string Add = Base + "/menu-list/";
+
+            public const string AddOneRow = Base + "/menu-list/add-one-list-to-menu";
         }
 
         public static class CustomerSegment
@@ -184,7 +199,9 @@
 
             public const string GetByID = Base + "/customer-segment/get-by-id";
 
-            public const string Update = Base + "/customer-segment/";
+            public const string UpdateName = Base + "/customer-segment/update-name";
+
+            public const string UpdateValue = Base + "/customer-segment/update-value";
 
             public const string Delete = Base + "/customer-segment/";
 

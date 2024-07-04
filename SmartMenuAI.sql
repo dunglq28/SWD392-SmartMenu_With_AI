@@ -119,12 +119,13 @@ CREATE TABLE CustomerSegment
   SegmentID INT NOT NULL IDENTITY(1,1),
   SegmentCode NVARCHAR(36) NOT NULL UNIQUE,
   SegmentName NVARCHAR(MAX) NOT NULL,
+  Demographics NVARCHAR(MAX) NOT NULL,
   CreateDate DATE NOT NULL,
   UpdateDate DATE NULL,
   Status INT NOT NULL,
-  BrandID INT NULL
+  BrandID INT NOT NULL
   PRIMARY KEY (SegmentID),
-  FOREIGN KEY (BrandID) REFERENCES Brand(BrandID)
+  FOREIGN KEY (BrandID) REFERENCES Brand(BrandID),
 );
 
 CREATE TABLE GroupAttribute
@@ -154,7 +155,8 @@ CREATE TABLE SegmentAttribute
   SegmentID INT NOT NULL,
   AttributeID INT NOT NULL,
   Value NVARCHAR(125) NOT NULL,
-   PRIMARY KEY (SegmentID, AttributeID),
+  BrandID INT NULL,
+  PRIMARY KEY (SegmentID, AttributeID, Value),
   FOREIGN KEY (SegmentID) REFERENCES CustomerSegment(SegmentID),
   FOREIGN KEY (AttributeID) REFERENCES Attribute(AttributeID)
 );
@@ -543,86 +545,145 @@ INSERT INTO MenuList (MenuID, ListID, ListIndex, BrandID) VALUES
 (1, 10, 2, 1);
 
 --CustomerSegment
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '85b7f688-a323-460d-aa05-096fb64fe27a', 'Doors, Frames & Hardware', '8/17/2023', '3/25/2024', 13,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '3de8a465-8194-4508-a62d-a636891b1101', 'Plumbing & Medical Gas', '5/26/2024', '12/23/2023', 16,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( 'f8030941-20e9-4220-b999-7e084d107c6c', 'Rebar & Wire Mesh Install', '9/14/2023', '6/27/2023', 3,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '305c6046-5f32-4360-bd0c-f8956903b467', 'Site Furnishings', '12/12/2023', '6/18/2023', 14 ,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( 'bcf9cfc6-9202-4952-be0d-aa67fe902c5f', 'Landscaping & Irrigation', '7/2/2023', '11/28/2023', 10 ,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '0cd20b4c-97cb-48d1-9200-25c3962fe26b', 'Prefabricated Aluminum Metal Canopies', '2/5/2024', '9/16/2023', 12,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '96a68a36-df65-4c96-9ba5-e9fd90356f2a', 'EIFS', '10/3/2023', '2/16/2024', 9,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( 'a0500cd0-883b-4136-82b4-7c1dfb34aaa7', 'Masonry', '1/8/2024', '10/28/2023', 8,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values  ('64a3d307-0a79-45a4-a269-b943688a00ed', 'Retaining Wall and Brick Pavers', '12/19/2023', '12/4/2023', 19,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '558a92c7-283b-4e81-9601-4f757b97557b', 'Electrical', '10/5/2023', '12/15/2023', 2,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ('423d4770-992a-4ff8-b1b6-d1959d14e8b7', 'Elevator', '3/12/2024', '7/2/2023', 16,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '50be5e8f-3397-420e-a820-ee01be978675', 'Temp Fencing, Decorative Fencing and Gates', '1/28/2024', '1/28/2024', 2,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '6511fe8e-e0a0-400e-8ca0-f384022b8b4a', 'Framing (Steel)', '1/30/2024', '9/20/2023', 11,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '2ea2d79d-36a2-4f45-8442-45e34194195d', 'Drywall & Acoustical (FED)', '6/29/2023', '12/20/2023', 17,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '554c3e35-504b-4b57-a862-1d79735dbb62', 'Fire Protection', '6/13/2023', '1/23/2024', 18,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( 'cc5b0c90-3350-4b5f-8585-87d59960b0e2', 'Asphalt Paving', '9/30/2023', '5/28/2023', 4,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ('3cfedcd9-0cfa-4ddb-a747-b80d22a447e7', 'Temp Fencing, Decorative Fencing and Gates', '12/15/2023', '9/14/2023', 13,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '64f814e4-d991-4f14-9717-d5fc126c7526', 'Prefabricated Aluminum Metal Canopies', '4/15/2024', '3/26/2024', 3,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '87ed079d-7ebd-4346-8dcd-3712bc20957a', 'Termite Control', '9/10/2023', '5/21/2024', 16,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '6250ff88-bc26-4a2e-9487-da373b51a9e6', 'Waterproofing & Caulking', '11/18/2023', '1/26/2024', 16,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '64dec7ae-d908-44f1-973e-cc2cdce67631', 'Framing (Steel)', '12/22/2023', '4/25/2024', 1,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( 'f5b4d833-ab51-44f5-9f53-6a5e3a4f4f2e', 'Framing (Steel)', '2/22/2024', '8/20/2023', 5,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '1da35371-0ef9-4dfd-b27a-69731c67a335', 'Wall Protection', '1/17/2024', '1/11/2024', 9,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( 'ab5fcee7-70fc-4adb-ac16-67db7c2a9986', 'RF Shielding', '6/23/2023', '2/15/2024', 7,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '3a5e8c4e-aa87-4cac-b7a4-37b471ba28c3', 'Soft Flooring and Base', '9/8/2023', '10/4/2023', 6,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( 'a50f10d0-bb09-48a7-bb17-e7d3b597efc0', 'Waterproofing & Caulking', '2/19/2024', '11/9/2023', 14,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( 'dc6b61c5-e324-4527-b4fa-20c60b1eb4fa', 'Structural & Misc Steel Erection', '3/10/2024', '1/10/2024', 11,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ( '9a614ca7-a240-4652-892a-01458de55bd5', 'Sitework & Site Utilities', '5/13/2024', '1/10/2024', 17,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ('18fdc47e-8077-4e62-9f9b-c7b4ed55f42b', 'Plumbing & Medical Gas', '11/24/2023', '9/3/2023', 17,1);
-insert into CustomerSegment ( SegmentCode, SegmentName, CreateDate, UpdateDate, BrandID, Status) values ('891c4fd5-3f75-4451-b1c0-dcc85999fd35', 'RF Shielding', '7/13/2023', '8/13/2023', 11,1);
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc trẻ', N'Nam-Sáng', '8/17/2023', '3/25/2024', 1, 21); --1--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc trẻ', N'Nữ-Sáng', '8/17/2023', '3/25/2024', 1, 21); --2--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc trẻ', N'Nam-Trưa', '8/17/2023', '3/25/2024', 1, 21); --3--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc trẻ', N'Nữ-Trưa', '8/17/2023', '3/25/2024', 1, 21); --4--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc trẻ', N'Nam-Chiều', '8/17/2023', '3/25/2024', 1, 21); --5--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc trẻ', N'Nữ-Chiều', '8/17/2023', '3/25/2024', 1, 21); --6--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc trung niên', N'Nam-Sáng', '8/17/2023', '3/25/2024', 1, 21); --7--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc trung niên', N'Nữ-Sáng', '8/17/2023', '3/25/2024', 1, 21); --8--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc trung niên', N'Nam-Trưa', '8/17/2023', '3/25/2024', 1, 21); --9--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc trung niên', N'Nữ-Trưa', '8/17/2023', '3/25/2024', 1, 21); --10--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc trung niên', N'Nam-Chiều', '8/17/2023', '3/25/2024', 1, 21); --11--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc trung niên', N'Nữ-Chiều', '8/17/2023', '3/25/2024', 1, 21); --12--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc già', N'Nam-Sáng', '8/17/2023', '3/25/2024', 1, 21); --13--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc già', N'Nữ-Sáng', '8/17/2023', '3/25/2024', 1, 21); --14--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc già', N'Nam-Trưa', '8/17/2023', '3/25/2024', 1, 21); --15--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc già', N'Nữ-Trưa', '8/17/2023', '3/25/2024', 1, 21); --16--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc già', N'Nam-Chiều', '8/17/2023', '3/25/2024', 1, 21); --17--
+
+insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+values (NewID(), N'Phân khúc già', N'Nữ-Chiều', '8/17/2023', '3/25/2024', 1, 21); --18--
+
+					
+------------------------------------
 
 --group attribute
-insert into GroupAttribute ( GroupAttributeName, CreateDate) values ( 'Hard Tile & Stone', '8/20/2023');
-insert into GroupAttribute ( GroupAttributeName, CreateDate) values ( 'Doors, Frames & Hardware', '7/29/2023');
-insert into GroupAttribute ( GroupAttributeName, CreateDate) values ( 'Granite Surfaces', '12/30/2023');
-insert into GroupAttribute ( GroupAttributeName, CreateDate) values ( 'Structural & Misc Steel Erection', '9/10/2023');
-insert into GroupAttribute ( GroupAttributeName, CreateDate) values ( 'Construction Clean and Final Clean', '6/6/2023');
-insert into GroupAttribute ( GroupAttributeName, CreateDate) values ( 'Drywall & Acoustical (FED)', '9/18/2023');
-insert into GroupAttribute ( GroupAttributeName, CreateDate) values ( 'Electrical and Fire Alarm', '5/19/2024');
-insert into GroupAttribute ( GroupAttributeName, CreateDate) values ( 'Roofing (Asphalt)', '3/22/2024');
-insert into GroupAttribute ( GroupAttributeName, CreateDate) values ( 'Roofing (Metal)', '7/2/2023');
-insert into GroupAttribute ( GroupAttributeName, CreateDate) values ( 'Roofing (Metal)', '3/18/2024');
+insert into GroupAttribute ( GroupAttributeName, CreateDate) values ( N'Trạng thái sinh học', '8/20/2023'); --1--
+insert into GroupAttribute ( GroupAttributeName, CreateDate) values ( N'Thời gian', '7/29/2023');--2--
+
 
 --attribute
-insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( '1cd81372-e7e9-400a-add8-2cee869324cc', 'weight', 'Etiam faucibus cursus urna. Ut tellus.', 2, '7/25/2023', '4/3/2024', 7);
-insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( 'b5b80199-6594-40d2-a013-02d9ff67df0e', 'weight', 'Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus. Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst. Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst.', 1, '8/26/2023', '6/30/2023', 10);
-insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( '965488d0-c17c-4f75-9d40-c4c9b13bad3e', 'weight', 'Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices.', 2, '7/12/2023', '10/23/2023', 9);
-insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( 'd615cf99-2274-49b3-b9ee-a40dd874d3e8', 'size', 'Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius. Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.', 1, '1/5/2024', '12/28/2023', 6);
-insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( 'fcc20bc2-db9d-4e41-9250-993d88b483fa', 'size', 'Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.', 2, '8/30/2023', '10/15/2023', 6);
-insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( '1d1c8227-6644-4d27-81ee-da53850af59a', 'color', 'In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.', 2, '8/4/2023', '5/11/2024', 1);
-insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( '9f132d87-b14b-4daa-9f8b-5d8cd3397e78', 'weight', 'In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus. Suspendisse potenti. In eleifend quam a odio.', 0, '7/9/2023', '12/22/2023', 8);
-insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( '10c3d27b-3e96-4fef-94b4-492b7cff5d82', 'brand', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque. Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus. In sagittis dui vel nisl.', 0, '11/30/2023', '2/1/2024', 2);
-insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( '39f6e94f-93c2-432c-a513-392b82c6f474', 'size', 'Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero. Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh. In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.', 0, '10/16/2023', '6/28/2023', 5);
-insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( '07bdc6d7-de66-42f0-a4d0-6f2e0b8e4159', 'color', 'Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.', 2, '3/9/2024', '9/13/2023', 6);
+insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( '1cd81372-e7e9-400a-add8-2cee869324cc', N'Age', N'Độ tuổi', 1, '7/25/2023', '4/3/2024', 1);
+insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( 'b5b80199-6594-40d2-a013-02d9ff67df0e', N'Gender', N'Giới tính', 1, '8/26/2023', '6/30/2023', 1);
+insert into Attribute ( AttributeCode, AttributeName, Description, Status, CreateDate, UpdateDate, GroupAttributeID) values ( '965488d0-c17c-4f75-9d40-c4c9b13bad3e', N'Session', N'Thời gian trong ngày', 1, '7/12/2023', '10/23/2023', 2);
 
 
 --SegmentAttribute
-insert into SegmentAttribute (SegmentID, AttributeID, Value) values (10, 1, 'NA');
-insert into SegmentAttribute (SegmentID, AttributeID, Value) values (6, 3, 'NA');
-insert into SegmentAttribute (SegmentID, AttributeID, Value) values (9, 8, 'NA');
-insert into SegmentAttribute (SegmentID, AttributeID, Value) values (2, 2, 'AF');
-insert into SegmentAttribute (SegmentID, AttributeID, Value) values (5, 7, 'AS');
-insert into SegmentAttribute (SegmentID, AttributeID, Value) values (7, 3, 'AS');
-insert into SegmentAttribute (SegmentID, AttributeID, Value) values (4, 1, 'AF');
-insert into SegmentAttribute (SegmentID, AttributeID, Value) values (6, 10, 'EU');
-insert into SegmentAttribute (SegmentID, AttributeID, Value) values (7, 10, 'AS');
+--Phân khúc trẻ, độ tuổi
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (1, 1, '0-18', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (2, 1, '0-18', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (3, 1, '0-18', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (4, 1, '0-18', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (5, 1, '0-18', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (6, 1, '0-18', 21);
+--Phân khúc trẻ, giới tính--
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (1, 2, 'Male', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (2, 2, 'Female', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (3, 2, 'Male', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (4, 2, 'Female', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (5, 2, 'Male', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (6, 2, 'Female', 21);
+--Phân khúc trẻ, thời gian--
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (1, 3, 'Morning', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (3, 3, 'Afternoon', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (5, 3, 'Evening', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (2, 3, 'Morning', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (4, 3, 'Afternoon', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (6, 3, 'Evening', 21);
 
+--Phân khúc trung niên, độ tuổi
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (7, 1, '19-35',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (8, 1, '19-35',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (9, 1, '19-35',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (10, 1, '19-35',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (11, 1, '19-35',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (12, 1, '19-35',21);
+--Phân khúc trung niên, giới tính--
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (7, 2, 'Male',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (8, 2, 'Female',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (9, 2, 'Male',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (10, 2, 'Female',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (11, 2, 'Male',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (12, 2, 'Female',21);
+--Phân khúc trung niên, thời gian--
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (7, 3, 'Morning',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (9, 3, 'Afternoon',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (11, 3, 'Evening',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (8, 3, 'Morning',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (10, 3, 'Afternoon',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (12, 3, 'Evening',21);
+
+--Phân khúc trung niên, độ tuổi
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (13, 1, '36-99',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (14, 1, '36-99',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (15, 1, '36-99',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (16, 1, '36-99',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (17, 1, '36-99',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (18, 1, '36-99',21);
+--Phân khúc trung niên, giới tính--
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (13, 2, 'Male',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (14, 2, 'Female',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (15, 2, 'Male',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (16, 2, 'Female',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (17, 2, 'Male',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (18, 2, 'Female',21);
+--Phân khúc trung niên, thời gian--
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (13, 3, 'Morning',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (15, 3, 'Afternoon',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (17, 3, 'Evening',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (14, 3, 'Morning',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (16, 3, 'Afternoon',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (18, 3, 'Evening',21);
 
 
 --MenuSegment
-insert into MenuSegment (Priority, MenuID, SegmentID) values (9, 7, 9);
-insert into MenuSegment (Priority, MenuID, SegmentID) values (15, 8, 10);
-insert into MenuSegment (Priority, MenuID, SegmentID) values (9, 9, 4);
-insert into MenuSegment (Priority, MenuID, SegmentID) values (11, 1, 10);
-insert into MenuSegment (Priority, MenuID, SegmentID) values (5, 6, 4);
-insert into MenuSegment (Priority, MenuID, SegmentID) values (13, 4, 4);
-insert into MenuSegment (Priority, MenuID, SegmentID) values (20, 1, 9);
-insert into MenuSegment (Priority, MenuID, SegmentID) values (16, 5, 6);
-insert into MenuSegment (Priority, MenuID, SegmentID) values (15, 8, 4);
-insert into MenuSegment (Priority, MenuID, SegmentID) values (18, 9, 6);
+insert into MenuSegment (Priority, MenuID, SegmentID) values (10, 1, 1);
+
 
 --Screen
 insert into Screen (StoreID) values (2);
@@ -635,6 +696,7 @@ insert into Screen ( StoreID) values (6);
 insert into Screen ( StoreID) values ( 5);
 insert into Screen ( StoreID) values ( 1);
 insert into Screen ( StoreID) values ( 9);
+
 update AppUser 
 set IsActive = 1
 where UserCode = '9e2a9c0a-3f94-4b6a-8ef2-123456789012'

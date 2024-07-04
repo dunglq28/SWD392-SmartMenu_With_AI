@@ -160,9 +160,9 @@ namespace FSU.SmartMenuWithAI.Service.Services
             // truyền các giá trị sử dụng vào object DTO
             var faceAttributes = new CustomerFaceRognizeDTO
             {
-                AgeRange = AverageAge.CalAverageAge(customerFace.AgeRange.Low, customerFace.AgeRange.High),
+                Age = AgeHelper.CalAverageAge(customerFace.AgeRange.Low, customerFace.AgeRange.High),
                 Emotions = customerFace.Emotions,
-                Gender = customerFace.Gender.ToString(),
+                Gender = customerFace.Gender.Value.ToString(),
                 Session = SessionHelper.GetSession() 
             };
             return faceAttributes;

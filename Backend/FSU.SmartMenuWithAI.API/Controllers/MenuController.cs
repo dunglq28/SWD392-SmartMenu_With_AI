@@ -224,9 +224,9 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 }
 
 
-                var customerAtt = await _s3Service.AnalyzeFacesInImage(reqobj.faceImage);
+                var menuRecomend = await _menuService.RecomendMenu(reqobj.faceImage, reqobj.BrandId);
 
-                if (customerAtt == null)
+                if (menuRecomend == null)
                 {
                     return NotFound(new BaseResponse
                     {
@@ -240,7 +240,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Phân tích thành công",
-                    Data = customerAtt,
+                    Data = menuRecomend,
                     IsSuccess = true
                 });
 

@@ -22,7 +22,12 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         private GroupAttributeRepository _groupAttributeRepo;
         private AttributeRepository _attributeRepository;
         private ListPositionRepository _listPositionRepo;
-        private GenericRepository<CustomerSegment> _customerSegmentRepo;
+        private CustomerSegmentRepository _customerSegmentRepo;
+        private ProductListRepository _productListRepo;
+        private MenuSegmentRepository _menuSegmentRepo;
+        private GenericRepository<SegmentAttribute> _segmentAttributeRepo;
+        private SegmentAttributeRepository _segmentAttributeRepo1;
+
 
 
         public UnitOfWork(SmartMenuContext context, IConfiguration configuration)
@@ -59,6 +64,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
 
         GenericRepository<Category> IUnitOfWork.CategoryRepository
         {
@@ -186,6 +192,17 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
                 return _listPositionRepo;
             }
         }
+        ProductListRepository IUnitOfWork.ProductListRepository
+        {
+            get
+            {
+                if (_productListRepo == null)
+                {
+                    this._productListRepo = new ProductListRepository(_context);
+                }
+                return _productListRepo;
+            }
+        }
 
         MenuListRepository IUnitOfWork.MenuListRepository
         {
@@ -198,15 +215,48 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
                 return _menuListRepo;
             }
         }
-        GenericRepository<CustomerSegment> IUnitOfWork.CustomerSegmentRepository
+       CustomerSegmentRepository IUnitOfWork.CustomerSegmentRepository
         {
             get
             {
                 if (_customerSegmentRepo == null)
                 {
-                    this._customerSegmentRepo = new GenericRepository<CustomerSegment>(_context);
+                    this._customerSegmentRepo = new CustomerSegmentRepository(_context, _configuration);
                 }
                 return _customerSegmentRepo;
+            }
+        }
+        MenuSegmentRepository IUnitOfWork.MenuSegmentRepository
+        {
+            get
+            {
+                if (_menuSegmentRepo == null)
+                {
+                    this._menuSegmentRepo = new MenuSegmentRepository(_context, _configuration);
+                }
+                return _menuSegmentRepo;
+            }
+        }
+        GenericRepository<SegmentAttribute> IUnitOfWork.SegmentAttributeRepository
+        {
+            get
+            {
+                if (_segmentAttributeRepo == null)
+                {
+                    this._segmentAttributeRepo = new GenericRepository<SegmentAttribute>(_context);
+                }
+                return _segmentAttributeRepo;
+            }
+        }
+        SegmentAttributeRepository IUnitOfWork.SegmentAttributeRepository1
+        {
+            get
+            {
+                if (_segmentAttributeRepo1 == null)
+                {
+                    this._segmentAttributeRepo1 = new SegmentAttributeRepository(_context);
+                }
+                return _segmentAttributeRepo1;
             }
         }
     }

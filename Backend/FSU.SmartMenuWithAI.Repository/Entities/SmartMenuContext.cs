@@ -57,17 +57,17 @@ public partial class SmartMenuContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=.;Database=SmartMenu;User Id=sa;Password=12345;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("server = (local); database= SmartMenu ;uid=SA;pwd=12345;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AppUser>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__AppUser__1788CCAC33EA5F33");
+            entity.HasKey(e => e.UserId).HasName("PK__AppUser__1788CCACA758F8A7");
 
             entity.ToTable("AppUser");
 
-            entity.HasIndex(e => e.UserCode, "UQ__AppUser__1DF52D0C81D910AC").IsUnique();
+            entity.HasIndex(e => e.UserCode, "UQ__AppUser__1DF52D0C1DA46EF0").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.Fullname).HasMaxLength(50);
@@ -94,11 +94,11 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<Attribute>(entity =>
         {
-            entity.HasKey(e => e.AttributeId).HasName("PK__Attribut__C189298AF1C988C2");
+            entity.HasKey(e => e.AttributeId).HasName("PK__Attribut__C189298A9CCB9FA2");
 
             entity.ToTable("Attribute");
 
-            entity.HasIndex(e => e.AttributeCode, "UQ__Attribut__BD3ED16E013B9A2F").IsUnique();
+            entity.HasIndex(e => e.AttributeCode, "UQ__Attribut__BD3ED16E73418183").IsUnique();
 
             entity.Property(e => e.AttributeId).HasColumnName("AttributeID");
             entity.Property(e => e.AttributeCode).HasMaxLength(36);
@@ -113,11 +113,11 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<Brand>(entity =>
         {
-            entity.HasKey(e => e.BrandId).HasName("PK__Brand__DAD4F3BE62B5D767");
+            entity.HasKey(e => e.BrandId).HasName("PK__Brand__DAD4F3BEAF87A279");
 
             entity.ToTable("Brand");
 
-            entity.HasIndex(e => e.BrandCode, "UQ__Brand__44292CC7D47842B0").IsUnique();
+            entity.HasIndex(e => e.BrandCode, "UQ__Brand__44292CC7EB41DC4A").IsUnique();
 
             entity.Property(e => e.BrandId).HasColumnName("BrandID");
             entity.Property(e => e.BrandCode).HasMaxLength(36);
@@ -133,11 +133,11 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__19093A2BF150CE96");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__19093A2B5AED3502");
 
             entity.ToTable("Category");
 
-            entity.HasIndex(e => e.CategoryCode, "UQ__Category__371BA9557630340F").IsUnique();
+            entity.HasIndex(e => e.CategoryCode, "UQ__Category__371BA95511188645").IsUnique();
 
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.BrandId).HasColumnName("BrandID");
@@ -152,11 +152,11 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<CustomerSegment>(entity =>
         {
-            entity.HasKey(e => e.SegmentId).HasName("PK__Customer__C680609B15E37B38");
+            entity.HasKey(e => e.SegmentId).HasName("PK__Customer__C680609BCC342638");
 
             entity.ToTable("CustomerSegment");
 
-            entity.HasIndex(e => e.SegmentCode, "UQ__Customer__4A834E88403BCFDA").IsUnique();
+            entity.HasIndex(e => e.SegmentCode, "UQ__Customer__4A834E88759B289A").IsUnique();
 
             entity.Property(e => e.SegmentId).HasColumnName("SegmentID");
             entity.Property(e => e.BrandId).HasColumnName("BrandID");
@@ -164,12 +164,13 @@ public partial class SmartMenuContext : DbContext
 
             entity.HasOne(d => d.Brand).WithMany(p => p.CustomerSegments)
                 .HasForeignKey(d => d.BrandId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__CustomerS__Brand__52593CB8");
         });
 
         modelBuilder.Entity<CustomerVisit>(entity =>
         {
-            entity.HasKey(e => e.CustomerVisitId).HasName("PK__Customer__1DE5EEC185AFD4FF");
+            entity.HasKey(e => e.CustomerVisitId).HasName("PK__Customer__1DE5EEC1DE1FFBDE");
 
             entity.ToTable("CustomerVisit");
 
@@ -180,7 +181,7 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<GroupAttribute>(entity =>
         {
-            entity.HasKey(e => e.GroupAttributeId).HasName("PK__GroupAtt__2B6E4566FE95104D");
+            entity.HasKey(e => e.GroupAttributeId).HasName("PK__GroupAtt__2B6E4566247FE186");
 
             entity.ToTable("GroupAttribute");
 
@@ -190,7 +191,7 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<ListPosition>(entity =>
         {
-            entity.HasKey(e => e.ListId).HasName("PK__ListPosi__E38328652968C65C");
+            entity.HasKey(e => e.ListId).HasName("PK__ListPosi__E3832865A9EDD7A5");
 
             entity.ToTable("ListPosition");
 
@@ -201,11 +202,11 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<Menu>(entity =>
         {
-            entity.HasKey(e => e.MenuId).HasName("PK__Menu__C99ED250D19DCC73");
+            entity.HasKey(e => e.MenuId).HasName("PK__Menu__C99ED250C8381D39");
 
             entity.ToTable("Menu");
 
-            entity.HasIndex(e => e.MenuCode, "UQ__Menu__868A3A73B3ADA099").IsUnique();
+            entity.HasIndex(e => e.MenuCode, "UQ__Menu__868A3A734B414301").IsUnique();
 
             entity.Property(e => e.MenuId).HasColumnName("MenuID");
             entity.Property(e => e.BrandId).HasColumnName("BrandID");
@@ -219,7 +220,7 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<MenuList>(entity =>
         {
-            entity.HasKey(e => new { e.MenuId, e.ListId }).HasName("PK__MenuList__87A6E0D6AF5E99B5");
+            entity.HasKey(e => new { e.MenuId, e.ListId }).HasName("PK__MenuList__87A6E0D6351ED6CA");
 
             entity.ToTable("MenuList");
 
@@ -240,7 +241,7 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<MenuSegment>(entity =>
         {
-            entity.HasKey(e => new { e.MenuId, e.SegmentId }).HasName("PK__MenuSegm__65F6D4594C8941D6");
+            entity.HasKey(e => new { e.MenuId, e.SegmentId }).HasName("PK__MenuSegm__65F6D45908403DE1");
 
             entity.ToTable("MenuSegment");
 
@@ -260,11 +261,11 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Product__B40CC6ED82194BF9");
+            entity.HasKey(e => e.ProductId).HasName("PK__Product__B40CC6ED402E8226");
 
             entity.ToTable("Product");
 
-            entity.HasIndex(e => e.ProductCode, "UQ__Product__2F4E024FD2B875A0").IsUnique();
+            entity.HasIndex(e => e.ProductCode, "UQ__Product__2F4E024F6214D8F2").IsUnique();
 
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
             entity.Property(e => e.BrandId).HasColumnName("BrandID");
@@ -286,7 +287,7 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<ProductList>(entity =>
         {
-            entity.HasKey(e => new { e.ProductId, e.ListId }).HasName("PK__ProductL__FA34F46B40EAB58E");
+            entity.HasKey(e => new { e.ProductId, e.ListId }).HasName("PK__ProductL__FA34F46B58A4B1C3");
 
             entity.ToTable("ProductList");
 
@@ -307,11 +308,11 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<RefreshToken>(entity =>
         {
-            entity.HasKey(e => e.RefreshTokenId).HasName("PK__RefreshT__F5845E59EF3B4DA7");
+            entity.HasKey(e => e.RefreshTokenId).HasName("PK__RefreshT__F5845E59B3B42C01");
 
             entity.ToTable("RefreshToken");
 
-            entity.HasIndex(e => e.RefreshTokenCode, "UQ__RefreshT__5FC54920E2798F60").IsUnique();
+            entity.HasIndex(e => e.RefreshTokenCode, "UQ__RefreshT__5FC549207ECC4DBC").IsUnique();
 
             entity.Property(e => e.RefreshTokenId).HasColumnName("RefreshTokenID");
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
@@ -331,7 +332,7 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE3AD9E8E650");
+            entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE3A12F0F067");
 
             entity.ToTable("Role");
 
@@ -343,7 +344,7 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<Screen>(entity =>
         {
-            entity.HasKey(e => e.ScreenId).HasName("PK__Screen__0AB60F8515F967D6");
+            entity.HasKey(e => e.ScreenId).HasName("PK__Screen__0AB60F85A2A7F5F7");
 
             entity.ToTable("Screen");
 
@@ -378,13 +379,14 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<SegmentAttribute>(entity =>
         {
-            entity.HasKey(e => new { e.SegmentId, e.AttributeId }).HasName("PK__SegmentA__7A98F2038474F73C");
+            entity.HasKey(e => new { e.SegmentId, e.AttributeId, e.Value }).HasName("PK__SegmentA__B89F2BB8BDD78497");
 
             entity.ToTable("SegmentAttribute");
 
             entity.Property(e => e.SegmentId).HasColumnName("SegmentID");
             entity.Property(e => e.AttributeId).HasColumnName("AttributeID");
             entity.Property(e => e.Value).HasMaxLength(125);
+            entity.Property(e => e.BrandId).HasColumnName("BrandID");
 
             entity.HasOne(d => d.Attribute).WithMany(p => p.SegmentAttributes)
                 .HasForeignKey(d => d.AttributeId)
@@ -399,11 +401,11 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<Store>(entity =>
         {
-            entity.HasKey(e => e.StoreId).HasName("PK__Store__3B82F0E15DC08809");
+            entity.HasKey(e => e.StoreId).HasName("PK__Store__3B82F0E1952C9295");
 
             entity.ToTable("Store");
 
-            entity.HasIndex(e => e.StoreCode, "UQ__Store__02A384F85830DD8E").IsUnique();
+            entity.HasIndex(e => e.StoreCode, "UQ__Store__02A384F8DEA945B4").IsUnique();
 
             entity.Property(e => e.StoreId).HasColumnName("StoreID");
             entity.Property(e => e.Address).HasMaxLength(150);
@@ -425,7 +427,7 @@ public partial class SmartMenuContext : DbContext
 
         modelBuilder.Entity<VisitAttribute>(entity =>
         {
-            entity.HasKey(e => new { e.CustomerVisitId, e.AttributeId }).HasName("PK__VisitAtt__A1FD7C59BA635D86");
+            entity.HasKey(e => new { e.CustomerVisitId, e.AttributeId }).HasName("PK__VisitAtt__A1FD7C59FFD05671");
 
             entity.ToTable("VisitAttribute");
 

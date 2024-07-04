@@ -28,7 +28,35 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         {
             try
             {
-                var productAddToMenu = await _menuListService.Insert(MenuId:reqObj.MenuId, BrandId:reqObj.brandID , entity:reqObj.listAddToMenu);
+                var productAddToMenu = await _menuListService.Insert(MenuId:reqObj.MenuId, BrandId:reqObj.brandId , entity:reqObj.listAddToMenu);
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Thêm sản phẩm vào menu thành công",
+                    Data = productAddToMenu,
+                    IsSuccess = true
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
+
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpPost(APIRoutes.MenuList.AddOneRow, Name = "add-1-list-to-menu-async")]
+        public async Task<IActionResult> Add1ListAsync([FromBody] MenuListDTO reqObj)
+        {
+            try
+            {
+                var productAddToMenu = await _menuListService.InsertNewListToMenu(reqObj);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status200OK,

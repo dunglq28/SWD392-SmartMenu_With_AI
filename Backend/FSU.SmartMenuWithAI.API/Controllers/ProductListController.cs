@@ -1,35 +1,34 @@
-﻿using FSU.SmartMenuWithAI.API.Common.Constants;
+﻿using FSU.SmartMenuWithAI.API.Payloads.Responses;
 using FSU.SmartMenuWithAI.API.Payloads;
-using FSU.SmartMenuWithAI.API.Payloads.Request.ListPosition;
-using FSU.SmartMenuWithAI.API.Payloads.Responses;
 using FSU.SmartMenuWithAI.Service.ISerivice;
-using FSU.SmartMenuWithAI.Service.Models;
 using Microsoft.AspNetCore.Mvc;
+using FSU.SmartMenuWithAI.API.Payloads.Request.ProductList;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
-    public class ListPositionController : ControllerBase
+    public class ProductListController : ControllerBase
     {
-        private readonly IListPositionService _listPositionService;
+        private readonly IProductListService _productListService;
 
-        public ListPositionController(IListPositionService listPositionService)
+        public ProductListController(IProductListService productListService)
         {
-            _listPositionService = listPositionService;
+            _productListService = productListService;
         }
 
         //[Authorize(Roles = UserRoles)]
-        [HttpGet(APIRoutes.ListPosition.GetByID, Name = "GetListPositionByID")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        [HttpGet(APIRoutes.ProductList.GetByID, Name = "GetProductListByID")]
+        public async Task<IActionResult> GetByIdAsync([FromQuery(Name = "product-id")] int productId, [FromQuery(Name = "list-id")] int listId)
         {
             try
             {
-                var listPosition = await _listPositionService.GetByID(id);
-                if (listPosition == null)
+                var productList = await _productListService.GetByID(productId, listId);
+                if (productList == null)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Không tìm thấy vị trí",
+                        Message = "Không tìm thấy sản phẩm",
                         IsSuccess = false
                     });
                 }
@@ -37,7 +36,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Tìm thành công",
-                    Data = listPosition,
+                    Data = productList,
                     IsSuccess = true
                 });
             }
@@ -52,56 +51,32 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
         //[Authorize(Roles = UserRoles)]
-        [HttpGet(APIRoutes.ListPosition.GetByBrandID, Name = "get-by-brand-id-async")]
-        public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search-key")] int searchKey
-            , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
-            , [FromQuery(Name = "page-size")] int PageSize = Page.DefaultPageSize)
+        [HttpPost(APIRoutes.ProductList.Add, Name = "AddProductList")]
+        public async Task<IActionResult> CreateAsync([FromBody] CreateProducListRequest request)
         {
             try
             {
-                var listPs = await _listPositionService.GetListPositionByBrandID(searchKey, pageIndex: pageNumber, pageSize: PageSize);
-
-                if (listPs == null)
+                var createdProductList = await _productListService.Insert(request.ProductId, request.ListId, request.Price, request.IndexInList, request.BrandId);
+                if (createdProductList != null)
                 {
-                    return NotFound(new BaseResponse
+                    return Ok(new BaseResponse
                     {
-                        StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Không tìm thấy vị trí",
+                        StatusCode = StatusCodes.Status201Created,
+                        Message = "Tạo mới thành công",
+                        Data = createdProductList,
+                        IsSuccess = true
+                    });
+                }
+                else
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "Tạo mới không thành công " ,
+                        Data = createdProductList,
                         IsSuccess = false
                     });
                 }
-                return Ok(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status200OK,
-                    Message = "Tìm thành công",
-                    Data = listPs,
-                    IsSuccess = true
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Lỗi khi tải!" + ex.Message,
-                    IsSuccess = false
-                });
-            }
-        }
-        //[Authorize(Roles = UserRoles)]
-        [HttpPost(APIRoutes.ListPosition.Add, Name = "AddListPosition")]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateListPositionRequest request)
-        {
-            try
-            {
-                var createdListPosition = await _listPositionService.Insert(request.TotalProduct, request.BrandId);
-                return Ok(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status201Created,
-                    Message = "Tạo mới thành công",
-                    Data = createdListPosition,
-                    IsSuccess = true
-                });
             }
             catch (Exception ex)
             {
@@ -115,13 +90,17 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
 
         //[Authorize(Roles = UserRoles)]
-        [HttpPut(APIRoutes.ListPosition.Update, Name = "UpdateListPosition")]
-        public async Task<IActionResult> UpdateAsync([FromForm] int id, [FromForm(Name = "total-product")] int totalProduct)
+        [HttpPut(APIRoutes.ProductList.Update, Name = "update-product-list")]
+        public async Task<IActionResult> UpdateAsync([FromForm(Name = "product-id")] int productId,
+                                                        [FromForm(Name = "list-id")] int listId,
+                                                        [FromForm(Name = "index-in-list")] int index,
+                                                        [FromForm(Name = "price")] int price,
+                                                        [FromForm(Name = "new-product-id")] int newProductId)
         {
             try
             {
-                var updatedListPosition = await _listPositionService.UpdateAsync(id, totalProduct);
-                if (updatedListPosition == null)
+                var updatedProductList = await _productListService.UpdateAsync(productId, listId, index ,price, newProductId);
+                if (updatedProductList == null)
                 {
                     return NotFound(new BaseResponse
                     {
@@ -134,7 +113,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Cập nhật thành công",
-                    Data = updatedListPosition,
+                    Data = updatedProductList,
                     IsSuccess = true
                 });
             }
@@ -149,13 +128,13 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles)]
-        [HttpDelete(APIRoutes.ListPosition.Delete, Name = "DelListPosition")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        ////[Authorize(Roles = UserRoles)]
+        [HttpDelete(APIRoutes.ProductList.Delete, Name = "delete-product-list")]
+        public async Task<IActionResult> DeleteAsync([FromQuery(Name = "product-id")] int productId, [FromQuery(Name = "list-id")] int listId)
         {
             try
             {
-                var isDeleted = await _listPositionService.DeleteAsync(id);
+                var isDeleted = await _productListService.DeleteAsync(productId, listId);
                 if (!isDeleted)
                 {
                     return NotFound(new BaseResponse

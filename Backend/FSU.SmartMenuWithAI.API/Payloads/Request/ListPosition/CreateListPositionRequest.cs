@@ -2,7 +2,7 @@
 
 namespace FSU.SmartMenuWithAI.API.Payloads.Request.ListPosition
 {
-    public class CreateRequest
+    public class CreateListPositionRequest
     {
         [Required(ErrorMessage = "Thiếu số sản phẩm")]
         [Range(1, int.MaxValue, ErrorMessage = "Số không hợp lệ.")]

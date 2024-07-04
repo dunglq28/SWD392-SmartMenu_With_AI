@@ -8,13 +8,22 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.CustomerSegment
 {
     public class AddCusSegmentRequest
     {
-        
-        [Required]
+        [Required(ErrorMessage = "Nhập tên phân khúc")]
         [StringLength(500, MinimumLength = 5)]
         [JsonProperty("segment-name")]
         public string SegmentName { get; set; } = null!;
-        [Required]
-        [JsonProperty("attributes-dto")]
-        public List<AddAttributeSegmentDTO> attributeDTOs { get; set; }
+
+        [Required(ErrorMessage = "Nhập độ tuổi")]
+        [JsonProperty("age")]
+        public string Age { get; set; }
+        [Required(ErrorMessage = "Chọn giới tính")]
+        [JsonProperty("gender")]
+        public List<string> Gender { get; set; }
+        [Required(ErrorMessage = "Chọn thời gian")]
+        [JsonProperty("session")]
+        public List<string> Session { get; set; }
+        [Required(ErrorMessage = "Thiếu ID thương hiệu")]
+        [JsonProperty("brand-id")]
+        public int BrandID { get; set; }
     }
 }

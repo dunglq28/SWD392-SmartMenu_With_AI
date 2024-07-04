@@ -15,17 +15,17 @@ namespace FSU.SmartMenuWithAI.Service.Utils
             var thisTime = DateTime.Now.Hour;
             switch (thisTime)
             {
-                case int n when (n >= 6 && n <= 10):
+                case int n when (n >= 6 && n <= 12):
                     session = SessionInDay.Morning.ToString();
                     break;
-                case int n when (n >= 10 && n <= 13):
-                    session = SessionInDay.Noon.ToString();
+                //case int n when (n >= 10 && n <= 13):
+                //    session = SessionInDay.Noon.ToString();
+                //    break;
+                case int n when (n >= 13 && n <= 18):
+                    session = SessionInDay.Afternoon.ToString();
                     break;
-                case int n when (n >= 14 && n <= 17):
-                    session = SessionInDay.Morning.ToString();
-                    break;
-                case int n when (n >= 18 && n <= 23):
-                    session = SessionInDay.Morning.ToString();
+                case int n when (n >= 19 && n <= 23):
+                    session = SessionInDay.Evening.ToString();
                     break;
             }
             return session;
