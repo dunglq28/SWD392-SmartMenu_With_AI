@@ -102,15 +102,15 @@ const ActionMenuBrand: FC<ActionMenuProps> = ({
             <PopoverArrow />
             <PopoverBody>
               <Flex className={style.PopupButton} onClick={handleViewClick}>
-                <Text>View Branch</Text>
+                <Text className={style.PopupButtonText}>View Branch</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={handleEditClick}>
-                <Text>Edit Brand</Text>
+                <Text className={style.PopupButtonText}>Edit Brand</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text>Delete Brand</Text>
+                <Text className={style.PopupButtonText}>Delete Brand</Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>

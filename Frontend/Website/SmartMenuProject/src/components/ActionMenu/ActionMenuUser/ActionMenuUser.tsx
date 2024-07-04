@@ -48,7 +48,7 @@ const ActionMenuUser: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
   const [userData, setUserData] = useState<UserForm>(getInitialUserData());
 
   const handleEditClick = async () => {
-    var result = await getUser(id);    
+    var result = await getUser(id);
 
     if (result.statusCode === 200) {
       const { fullname, userName, phone, dob, gender, isActive } = result.data;
@@ -96,11 +96,11 @@ const ActionMenuUser: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
             <PopoverArrow />
             <PopoverBody>
               <Flex className={style.PopupButton} onClick={handleEditClick}>
-                <Text>Edit User</Text>
+                <Text className={style.PopupButtonText}>Edit User</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text>Delete User</Text>
+                <Text className={style.PopupButtonText}>Delete User</Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>

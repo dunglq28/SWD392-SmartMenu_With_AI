@@ -33,3 +33,10 @@ export interface productUpdate {
   description: string;
   price: number;
 }
+
+export interface customerSegmentUpdate {
+  segmentName: string;
+  age: string;
+  gender: string;
+  phone: string;
+}

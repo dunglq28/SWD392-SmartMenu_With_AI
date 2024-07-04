@@ -78,7 +78,7 @@ const ActionMenuBranch: FC<ActionMenuProps> = ({
       district: branch.district.name,
       ward: branch.ward.name,
       address: branch.address.value,
-      isActive: true
+      isActive: true,
     };
     onCloseBranch();
     if (isSave) {
@@ -137,11 +137,11 @@ const ActionMenuBranch: FC<ActionMenuProps> = ({
             <PopoverBody>
               <Divider />
               <Flex className={style.PopupButton} onClick={handleEditClick}>
-                <Text>Edit Branch</Text>
+                <Text className={style.PopupButtonText}>Edit Branch</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text>Delete Branch</Text>
+                <Text className={style.PopupButtonText}>Delete Branch</Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>

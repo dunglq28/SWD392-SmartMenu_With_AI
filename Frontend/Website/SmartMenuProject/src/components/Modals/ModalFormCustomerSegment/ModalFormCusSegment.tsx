@@ -17,7 +17,7 @@ import { capitalizeWords } from "../../../utils/functionHelper";
 import { isInteger } from "../../../utils/validation";
 
 interface ModalFormCategoryProps {
-  id?: number;
+  // id?: number;
   // handleCreate?: (id: number, categoryName: string) => void;
   // handleEdit?: (cateId: number, brandId: number, categoryName: string) => void;
   onClose: () => void;
@@ -25,7 +25,7 @@ interface ModalFormCategoryProps {
 }
 
 const ModalFormCustomerSegment: React.FC<ModalFormCategoryProps> = ({
-  id,
+  // id,
   onClose,
   // handleCreate,
   isEdit,
@@ -141,7 +141,7 @@ const ModalFormCustomerSegment: React.FC<ModalFormCategoryProps> = ({
 
     const hasErrors = Object.values(errors).some((error) => error !== "");
     if (!hasErrors) {
-      const capitalizedCategoryName = capitalizeWords(
+      const capitalizedSegmentName = capitalizeWords(
         formData.segmentName.value
       );
       console.log(formData);
@@ -183,7 +183,7 @@ const ModalFormCustomerSegment: React.FC<ModalFormCategoryProps> = ({
               >
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
-                <option value="Both">Both</option>
+                {!isEdit && <option value="Both">Both</option>}
               </Select>
               {formData.gender.errorMessage && (
                 <Text className={style.ErrorText}>

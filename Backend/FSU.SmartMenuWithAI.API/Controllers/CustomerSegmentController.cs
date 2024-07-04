@@ -29,7 +29,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         {
             try
             {
-                var result = await _customerSegmentService.Insert(reqObj.SegmentName, reqObj.Age, reqObj.Gender, reqObj.Session, reqObj.BrandID);
+                var result = await _customerSegmentService.Insert(reqObj.SegmentName, reqObj.Age, reqObj.Gender, reqObj.Session, reqObj.BrandId);
                 {
                     if (result != null)
                         return Ok(new BaseResponse

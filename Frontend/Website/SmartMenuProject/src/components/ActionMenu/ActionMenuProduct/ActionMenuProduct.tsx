@@ -49,12 +49,15 @@ const ActionMenuProduct: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
             <PopoverArrow />
             <PopoverBody>
               <Divider />
-              <Flex className={style.PopupButton} onClick={() => onOpenProduct()}>
-                <Text>Edit Product</Text>
+              <Flex
+                className={style.PopupButton}
+                onClick={() => onOpenProduct()}
+              >
+                <Text className={style.PopupButtonText}>Edit Product</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text>Delete Product</Text>
+                <Text className={style.PopupButtonText}>Delete Product</Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>
@@ -72,7 +75,14 @@ const ActionMenuProduct: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
       />
 
       <ModalForm
-        formBody={<ModalFormProduct onClose={onCloseProduct} handleEdit={onEdit} isEdit={true} id={id} />}
+        formBody={
+          <ModalFormProduct
+            onClose={onCloseProduct}
+            handleEdit={onEdit}
+            isEdit={true}
+            id={id}
+          />
+        }
         onClose={onCloseProduct}
         isOpen={isOpenProduct}
         title={t("Update Product")}

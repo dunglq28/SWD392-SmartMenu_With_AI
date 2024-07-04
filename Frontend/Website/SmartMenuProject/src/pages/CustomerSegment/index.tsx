@@ -16,17 +16,17 @@ import {
 import style from "./CustomerSegment.module.scss";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { deleteUser, getUsers, updateUser } from "../../services/UserService";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
 import { UserData } from "../../payloads/responses/UserData.model";
 import moment from "moment";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loading";
 import Searchbar from "../../components/Searchbar";
-import { userUpdate } from "../../payloads/requests/updateRequests.model";
+import { customerSegmentUpdate, userUpdate } from "../../payloads/requests/updateRequests.model";
 import { IoAddCircleOutline } from "react-icons/io5";
 import ModalForm from "../../components/Modals/ModalForm/ModalForm";
 import ModalFormCustomerSegment from "../../components/Modals/ModalFormCustomerSegment/ModalFormCusSegment";
+import ActionMenuCustomerSegment from "../../components/ActionMenu/ActionMenuCustomerSegment/ActionMenuCusSegment";
 
 function CustomerSegment() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -99,37 +99,35 @@ function CustomerSegment() {
   //   [setCurrentPage, setRowsPerPage]
   // );
 
-  async function handleCreate(productForm: FormData) {
+  async function handleCreate(productForm: FormData) {}
 
+  async function handleDelete(id: number) {
+    // try {
+    //   var result = await deleteUser(id);
+    //   if (result.statusCode === 200) {
+    //     if ((totalRecords - 1) % rowsPerPage === 0 && currentPage > 1) {
+    //       setCurrentPage((prevPage) => prevPage - 1);
+    //     } else {
+    //       fetchData();
+    //     }
+    //     toast.success("Xoá người dùng thành công");
+    //   }
+    // } catch (e) {
+    //   toast.error("Xoá người dùng thất bại");
+    // }
   }
 
-  // async function handleDelete(id: number) {
-  //   try {
-  //     var result = await deleteUser(id);
-  //     if (result.statusCode === 200) {
-  //       if ((totalRecords - 1) % rowsPerPage === 0 && currentPage > 1) {
-  //         setCurrentPage((prevPage) => prevPage - 1);
-  //       } else {
-  //         fetchData();
-  //       }
-  //       toast.success("Xoá người dùng thành công");
-  //     }
-  //   } catch (e) {
-  //     toast.error("Xoá người dùng thất bại");
-  //   }
-  // }
-
-  // async function handleEdit(id: number, user: userUpdate) {
-  //   try {
-  //     var result = await updateUser(id, user);
-  //     if (result.statusCode === 200) {
-  //       fetchData();
-  //       toast.success("Cập nhật thành công");
-  //     }
-  //   } catch {
-  //     toast.error("Cập nhật thất bại");
-  //   }
-  // }
+  async function handleEdit(id: number, customerSegment: customerSegmentUpdate) {
+    // try {
+    //   var result = await updateUser(id, user);
+    //   if (result.statusCode === 200) {
+    //     fetchData();
+    //     toast.success("Cập nhật thành công");
+    //   }
+    // } catch {
+    //   toast.error("Cập nhật thất bại");
+    // }
+  }
 
   async function handleSearch(value: string) {
     // fetchData(value);
@@ -139,7 +137,10 @@ function CustomerSegment() {
     <Flex className={style.container}>
       <Flex className={style.searchWrapper}>
         <Searchbar onSearch={handleSearch} />
-        <Button onClick={onOpenCustomerSegment} className={style.AddCustomerSegmentBtn}>
+        <Button
+          onClick={onOpenCustomerSegment}
+          className={style.AddCustomerSegmentBtn}
+        >
           <Text as="span" fontSize="25px" me={3}>
             <IoAddCircleOutline />
           </Text>
@@ -187,43 +188,15 @@ function CustomerSegment() {
               <Tr className={style.CustomerSegmentItem}>
                 <Td>1</Td>
                 <Td>Khách hàng trẻ</Td>
-                <Td>Nam - Sáng</Td>
+                <Td>Nam, Sáng, 18-25 tuổi</Td>
                 <Td> {moment("7/3/2024").format("DD/MM/YYYY")}</Td>
                 <Td>
-                  {/* <ActionMenu
-                          id={user.userId}
-                          onDelete={handleDelete}
-                          onEdit={handleEdit}
-                        /> */}
+                  <ActionMenuCustomerSegment
+                    // id={user.userId}
+                    onDelete={handleDelete}
+                    onEdit={handleEdit}
+                  />
                 </Td>
-              </Tr>
-              <Tr className={style.CustomerSegmentItem}>
-                <Td>2</Td>
-                <Td>Khách hàng trẻ</Td>
-                <Td>Nữ - Sáng</Td>
-                <Td> {moment("7/3/2024").format("DD/MM/YYYY")}</Td>
-                <Td></Td>
-              </Tr>
-              <Tr className={style.CustomerSegmentItem}>
-                <Td>3</Td>
-                <Td>Khách hàng trẻ</Td>
-                <Td>Nam - Trưa</Td>
-                <Td> {moment("7/3/2024").format("DD/MM/YYYY")}</Td>
-                <Td></Td>
-              </Tr>
-              <Tr className={style.CustomerSegmentItem}>
-                <Td>4</Td>
-                <Td>Khách hàng trung niên</Td>
-                <Td>Nam - Trưa</Td>
-                <Td> {moment("7/3/2024").format("DD/MM/YYYY")}</Td>
-                <Td></Td>
-              </Tr>
-              <Tr className={style.CustomerSegmentItem}>
-                <Td>5</Td>
-                <Td>Khách hàng trung niên</Td>
-                <Td>Nữ - Trưa</Td>
-                <Td> {moment("7/3/2024").format("DD/MM/YYYY")}</Td>
-                <Td></Td>
               </Tr>
               {/* )} */}
             </Tbody>
