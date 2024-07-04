@@ -12,33 +12,37 @@ import {
 import style from "./ModalFormCusSegment.module.scss";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { CustomerSegmentForm } from "../../../models/Segment.model";
+import { CustomerSegmentForm } from "../../../models/SegmentForm.model";
 import { capitalizeWords } from "../../../utils/functionHelper";
 import { isInteger } from "../../../utils/validation";
+import { customerSegmentUpdate } from "../../../payloads/requests/updateRequests.model";
+import { customerSegmentCreate } from "../../../payloads/requests/createRequests.model";
 
-interface ModalFormCategoryProps {
-  // id?: number;
-  // handleCreate?: (id: number, categoryName: string) => void;
-  // handleEdit?: (cateId: number, brandId: number, categoryName: string) => void;
+interface ModalFormCustomerSegmentProps {
+  formData: CustomerSegmentForm;
+  setFormData: React.Dispatch<React.SetStateAction<CustomerSegmentForm>>;
+  id?: number;
+  handleCreate?: (brandId: number, segment: customerSegmentCreate) => void;
+  handleEdit?: (
+    brandId: number,
+    segmentId: number,
+    segment: customerSegmentUpdate
+  ) => void;
   onClose: () => void;
   isEdit: boolean;
 }
 
-const ModalFormCustomerSegment: React.FC<ModalFormCategoryProps> = ({
-  // id,
+const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
+  formData,
+  setFormData,
+  id,
   onClose,
-  // handleCreate,
+  handleCreate,
   isEdit,
-  // handleEdit,
+  handleEdit,
 }) => {
   const brandId = Number(localStorage.getItem("BrandId"));
-  const [formData, setFormData] = useState<CustomerSegmentForm>({
-    segmentName: { value: "", errorMessage: "" },
-    gender: { value: "Male", errorMessage: "" },
-    sessions: { value: [], errorMessage: "" },
-    ageFrom: { value: "", errorMessage: "" },
-    ageTo: { value: "", errorMessage: "" },
-  });
+
 
   // useEffect(() => {
   //   if (isEdit && id) {
@@ -144,14 +148,40 @@ const ModalFormCustomerSegment: React.FC<ModalFormCategoryProps> = ({
       const capitalizedSegmentName = capitalizeWords(
         formData.segmentName.value
       );
-      console.log(formData);
 
-      // if (!isEdit) {
-      //   handleCreate?.(brandId, capitalizedCategoryName);
-      // } else {
-      //   handleEdit?.(id!, brandId, capitalizedCategoryName);
-      //   onClose();
-      // }
+      const genders = [];
+
+      if (
+        formData.gender.value.toLowerCase() === "nam" ||
+        formData.gender.value.toLowerCase() === "male"
+      ) {
+        genders.push(formData.gender.value);
+      } else if (
+        formData.gender.value.toLowerCase() === "nữ" ||
+        formData.gender.value.toLowerCase() === "female"
+      ) {
+        genders.push(formData.gender.value);
+      } else if (formData.gender.value.toLowerCase() === "both") {
+        genders.push("Male");
+        genders.push("Female");
+      } else if (formData.gender.value.toLowerCase() === "cả hai") {
+        genders.push("Nam");
+        genders.push("Nữ");
+      }
+
+      var customerSegmentcreate: customerSegmentCreate = {
+        segmentName: capitalizedSegmentName,
+        age: `${formData.ageFrom.value}-${formData.ageTo.value}`,
+        gender: genders,
+        session: formData.sessions.value,
+      };
+
+      if (!isEdit) {
+        handleCreate?.(brandId, customerSegmentcreate);
+      } else {
+        // handleEdit?.(brandId, id! , customerSegmentcreate);
+        onClose();
+      }
     }
   };
 

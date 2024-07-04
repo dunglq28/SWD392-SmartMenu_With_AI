@@ -546,59 +546,58 @@ INSERT INTO MenuList (MenuID, ListID, ListIndex, BrandID) VALUES
 
 --CustomerSegment
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trẻ', N'Nam-Sáng', '8/17/2023', '3/25/2024', 1, 21); --1--
+values (NewID(), N'Phân khúc già', N'Nam, Sáng', '8/17/2023', '3/25/2024', 1, 21); --1--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trẻ', N'Nữ-Sáng', '8/17/2023', '3/25/2024', 1, 21); --2--
+values (NewID(), N'Phân khúc già', N'Nữ, Sáng', '8/17/2023', '3/25/2024', 1, 21); --2--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trẻ', N'Nam-Trưa', '8/17/2023', '3/25/2024', 1, 21); --3--
+values (NewID(), N'Phân khúc già', N'Nam, Trưa', '8/17/2023', '3/25/2024', 1, 21); --3--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trẻ', N'Nữ-Trưa', '8/17/2023', '3/25/2024', 1, 21); --4--
+values (NewID(), N'Phân khúc già', N'Nữ, Trưa', '8/17/2023', '3/25/2024', 1, 21); --4--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trẻ', N'Nam-Chiều', '8/17/2023', '3/25/2024', 1, 21); --5--
+values (NewID(), N'Phân khúc già', N'Nam, Chiều', '8/17/2023', '3/25/2024', 1, 21); --5--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trẻ', N'Nữ-Chiều', '8/17/2023', '3/25/2024', 1, 21); --6--
+values (NewID(), N'Phân khúc già', N'Nữ, Chiều', '8/17/2023', '3/25/2024', 1, 21); --6--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trung niên', N'Nam-Sáng', '8/17/2023', '3/25/2024', 1, 21); --7--
+values (NewID(), N'Phân khúc trung niên', N'Nam, Sáng', '8/17/2023', '3/25/2024', 1, 21); --7--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trung niên', N'Nữ-Sáng', '8/17/2023', '3/25/2024', 1, 21); --8--
+values (NewID(), N'Phân khúc trung niên', N'Nữ, Sáng', '8/17/2023', '3/25/2024', 1, 21); --8--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trung niên', N'Nam-Trưa', '8/17/2023', '3/25/2024', 1, 21); --9--
+values (NewID(), N'Phân khúc trung niên', N'Nam, Trưa', '8/17/2023', '3/25/2024', 1, 21); --9--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trung niên', N'Nữ-Trưa', '8/17/2023', '3/25/2024', 1, 21); --10--
+values (NewID(), N'Phân khúc trung niên', N'Nữ, Trưa', '8/17/2023', '3/25/2024', 1, 21); --10--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trung niên', N'Nam-Chiều', '8/17/2023', '3/25/2024', 1, 21); --11--
+values (NewID(), N'Phân khúc trung niên', N'Nam, Chiều', '8/17/2023', '3/25/2024', 1, 21); --11--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trung niên', N'Nữ-Chiều', '8/17/2023', '3/25/2024', 1, 21); --12--
+values (NewID(), N'Phân khúc trung niên', N'Nữ, Chiều', '8/17/2023', '3/25/2024', 1, 21); --12--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc già', N'Nam-Sáng', '8/17/2023', '3/25/2024', 1, 21); --13--
+values (NewID(), N'Phân khúc trẻ', N'Nam, Sáng', '8/17/2023', '3/25/2024', 1, 21); --13--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc già', N'Nữ-Sáng', '8/17/2023', '3/25/2024', 1, 21); --14--
+values (NewID(), N'Phân khúc trẻ', N'Nữ, Sáng', '8/17/2023', '3/25/2024', 1, 21); --14--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc già', N'Nam-Trưa', '8/17/2023', '3/25/2024', 1, 21); --15--
+values (NewID(), N'Phân khúc trẻ', N'Nam, Trưa', '8/17/2023', '3/25/2024', 1, 21); --15--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc già', N'Nữ-Trưa', '8/17/2023', '3/25/2024', 1, 21); --16--
+values (NewID(), N'Phân khúc trẻ', N'Nữ, Trưa', '8/17/2023', '3/25/2024', 1, 21); --16--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc già', N'Nam-Chiều', '8/17/2023', '3/25/2024', 1, 21); --17--
+values (NewID(), N'Phân khúc trẻ', N'Nam, Chiều', '8/17/2023', '3/25/2024', 1, 21); --16--
 
 insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc già', N'Nữ-Chiều', '8/17/2023', '3/25/2024', 1, 21); --18--
-
+values (NewID(), N'Phân khúc trẻ', N'Nữ, Chiều', '8/17/2023', '3/25/2024', 1, 21); --17--
 					
 ------------------------------------
 
@@ -614,35 +613,36 @@ insert into Attribute ( AttributeCode, AttributeName, Description, Status, Creat
 
 
 --SegmentAttribute
---Phân khúc trẻ, độ tuổi
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (1, 1, '0-18', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (2, 1, '0-18', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (3, 1, '0-18', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (4, 1, '0-18', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (5, 1, '0-18', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (6, 1, '0-18', 21);
---Phân khúc trẻ, giới tính--
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (1, 2, 'Male', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (2, 2, 'Female', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (3, 2, 'Male', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (4, 2, 'Female', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (5, 2, 'Male', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (6, 2, 'Female', 21);
---Phân khúc trẻ, thời gian--
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (1, 3, 'Morning', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (3, 3, 'Afternoon', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (5, 3, 'Evening', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (2, 3, 'Morning', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (4, 3, 'Afternoon', 21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (6, 3, 'Evening', 21);
+
+--Phân khúc già, độ tuổi
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (1, 1, '36-99',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (2, 1, '36-99',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (3, 1, '36-99',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (4, 1, '36-99',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (5, 1, '36-99',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (6, 1, '36-99',21);
+--Phân khúc già, giới tính--
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (1, 2, 'Male',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (2, 2, 'Female',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (3, 2, 'Male',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (4, 2, 'Female',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (5, 2, 'Male',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (6, 2, 'Female',21);
+--Phân khúc già, thời gian--
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (1, 3, 'Morning',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (2, 3, 'Afternoon',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (3, 3, 'Evening',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (4, 3, 'Morning',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (5, 3, 'Afternoon',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (6, 3, 'Evening',21);
 
 --Phân khúc trung niên, độ tuổi
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (7, 1, '19-35',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (8, 1, '19-35',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (9, 1, '19-35',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (10, 1, '19-35',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (11, 1, '19-35',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (12, 1, '19-35',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (7, 1, '26-35',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (8, 1, '26-35',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (9, 1, '26-35',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (10, 1, '26-35',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (11, 1, '26-35',21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (12, 1, '26-35',21);
 --Phân khúc trung niên, giới tính--
 insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (7, 2, 'Male',21);
 insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (8, 2, 'Female',21);
@@ -658,27 +658,27 @@ insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (8,
 insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (10, 3, 'Afternoon',21);
 insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (12, 3, 'Evening',21);
 
---Phân khúc trung niên, độ tuổi
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (13, 1, '36-99',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (14, 1, '36-99',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (15, 1, '36-99',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (16, 1, '36-99',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (17, 1, '36-99',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (18, 1, '36-99',21);
---Phân khúc trung niên, giới tính--
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (13, 2, 'Male',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (14, 2, 'Female',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (15, 2, 'Male',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (16, 2, 'Female',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (17, 2, 'Male',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (18, 2, 'Female',21);
---Phân khúc trung niên, thời gian--
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (13, 3, 'Morning',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (15, 3, 'Afternoon',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (17, 3, 'Evening',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (14, 3, 'Morning',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (16, 3, 'Afternoon',21);
-insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (18, 3, 'Evening',21);
+--Phân khúc trẻ, độ tuổi
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (13, 1, '18-25', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (14, 1, '18-25', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (15, 1, '18-25', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (16, 1, '18-25', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (17, 1, '18-25', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (18, 1, '18-25', 21);
+--Phân khúc trẻ, giới tính--
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (13, 2, 'Male', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (14, 2, 'Female', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (15, 2, 'Male', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (16, 2, 'Female', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (17, 2, 'Male', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (18, 2, 'Female', 21);
+--Phân khúc trẻ, thời gian--
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (13, 3, 'Morning', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (14, 3, 'Afternoon', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (15, 3, 'Evening', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (16, 3, 'Morning', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (17, 3, 'Afternoon', 21);
+insert into SegmentAttribute (SegmentID, AttributeID, Value, BrandID) values (18, 3, 'Evening', 21);
 
 
 --MenuSegment

@@ -22,12 +22,16 @@ import { customerSegmentUpdate } from "../../../payloads/requests/updateRequests
 import ModalFormCustomerSegment from "../../Modals/ModalFormCustomerSegment/ModalFormCusSegment";
 
 interface ActionMenuProps {
-  // id: number;
+  id: number;
   onDelete: (id: number) => void;
-  onEdit: (id: number, customerSegment: customerSegmentUpdate) => void;
+  onEdit: (brandId: number, segmentId: number, segment: customerSegmentUpdate) => void;
 }
 
-const ActionMenuCustomerSegment: FC<ActionMenuProps> = ({ onDelete, onEdit }) => {
+const ActionMenuCustomerSegment: FC<ActionMenuProps> = ({
+  id,
+  onDelete,
+  onEdit,
+}) => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -56,11 +60,15 @@ const ActionMenuCustomerSegment: FC<ActionMenuProps> = ({ onDelete, onEdit }) =>
                 className={style.PopupButton}
                 onClick={() => onOpenCustomerSegment()}
               >
-                <Text className={style.PopupButtonText}>Edit Customer Segment</Text>
+                <Text className={style.PopupButtonText}>
+                  Edit Customer Segment
+                </Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text className={style.PopupButtonText}>Delete Customer Segment</Text>
+                <Text className={style.PopupButtonText}>
+                  Delete Customer Segment
+                </Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>
@@ -70,7 +78,7 @@ const ActionMenuCustomerSegment: FC<ActionMenuProps> = ({ onDelete, onEdit }) =>
       <CustomAlertDialog
         onClose={onClose}
         isOpen={isOpen}
-        id={1}
+        id={id}
         onDelete={onDelete}
         titleHeader="Delete Customer Segment"
         titleBody="Are you sure? You can't undo this action afterwards."
@@ -81,9 +89,9 @@ const ActionMenuCustomerSegment: FC<ActionMenuProps> = ({ onDelete, onEdit }) =>
         formBody={
           <ModalFormCustomerSegment
             onClose={onCloseCustomerSegment}
-            // handleEdit={onEdit}
+            handleEdit={onEdit}
             isEdit={true}
-            // id={id}
+            id={id}
           />
         }
         onClose={onCloseCustomerSegment}

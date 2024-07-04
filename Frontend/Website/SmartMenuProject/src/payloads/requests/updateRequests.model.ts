@@ -38,5 +38,5 @@ export interface customerSegmentUpdate {
   segmentName: string;
   age: string;
   gender: string;
-  phone: string;
+  session: string;
 }

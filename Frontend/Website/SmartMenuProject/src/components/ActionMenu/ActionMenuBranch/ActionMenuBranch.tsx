@@ -38,7 +38,7 @@ const ActionMenuBranch: FC<ActionMenuProps> = ({
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    isOpen: isOpenBrand,
+    isOpen: isOpenBranch,
     onOpen: onOpenBranch,
     onClose: onCloseBranch,
   } = useDisclosure();
@@ -168,8 +168,8 @@ const ActionMenuBranch: FC<ActionMenuProps> = ({
           />
         }
         onClose={onCloseBranch}
-        isOpen={isOpenBrand}
-        title={t("Update Brand")}
+        isOpen={isOpenBranch}
+        title={t("Update Branch")}
         updateBranchData={updateBranchData}
       />
     </>
