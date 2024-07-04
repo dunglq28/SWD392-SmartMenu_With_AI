@@ -63,7 +63,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             {
                 List = customerSegments.Select(segment => new ViewCustomerSegment
                 {
-                    CustomerSegmentID = segment.SegmentId,
+                    CustomerSegmentId = segment.SegmentId,
                     CustomerSegmentName = segment.SegmentName,
                     Demographic = segment.Demographics,
                     CreateDate = segment.CreateDate,
@@ -76,12 +76,25 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return paginatedSegments;
         }
 
-        public async Task<CustomerSegmentDTO?> GetByID(int SegmentId)
+        public async Task<ViewCustomerSegment?> GetByID(int SegmentId)
         {
-            Expression<Func<CustomerSegment, bool>> filterRecord = x => x.SegmentId == SegmentId && (x.Status == (int)Status.Exist);
-            var cusSegment = await _unitOfWork.CustomerSegmentRepository.GetByCondition(filterRecord);
-            var mapdto = _mapper.Map<CustomerSegmentDTO>(cusSegment);
-            return mapdto;
+            //Expression<Func<CustomerSegment, bool>> filterRecord = x => x.SegmentId == SegmentId && (x.Status == (int)Status.Exist);
+            //var cusSegment = await _unitOfWork.CustomerSegmentRepository.GetByCondition(filterRecord);
+            //var mapdto = _mapper.Map<CustomerSegmentDTO>(cusSegment);
+            //return mapdto;
+            Expression<Func<CustomerSegment, bool>> viewCustomerSegment = x => x.SegmentId == SegmentId && (x.Status == (int)Status.Exist);
+            var customerSegments = await _unitOfWork.CustomerSegmentRepository.Get(filter: viewCustomerSegment, includeProperties: "SegmentAttributes");
+            var viewCustomerSegmentList = new ViewCustomerSegment();
+            foreach (var segment in customerSegments)
+            {
+                viewCustomerSegmentList.CustomerSegmentId = segment.SegmentId;
+                viewCustomerSegmentList.CustomerSegmentName = segment.SegmentName;
+                viewCustomerSegmentList.Demographic = segment.Demographics;
+                viewCustomerSegmentList.CreateDate = segment.CreateDate;
+                viewCustomerSegmentList.UpdateDate = segment.UpdateDate;
+                viewCustomerSegmentList.Age = segment.SegmentAttributes.FirstOrDefault(attr => attr.AttributeId == 1)?.Value!;
+            }
+            return viewCustomerSegmentList;
         }
 
         public async Task<IEnumerable<ViewCustomerSegment>> Insert(string customerSegmentName, string age, List<string> genders, List<string> sessions, int brandID)
@@ -193,7 +206,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 {
                     viewCustomerSegmentList.Add(new ViewCustomerSegment
                     {
-                        CustomerSegmentID = segment.SegmentId,
+                        CustomerSegmentId = segment.SegmentId,
                         CustomerSegmentName = segment.SegmentName,
                         Demographic = segment.Demographics,
                         CreateDate = segment.CreateDate,
@@ -238,7 +251,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 {
                     viewCustomerSegmentList.Add(new ViewCustomerSegment
                     {
-                        CustomerSegmentID = segment.SegmentId,
+                        CustomerSegmentId = segment.SegmentId,
                         CustomerSegmentName = segment.SegmentName,
                         Demographic = segment.Demographics,
                         CreateDate = segment.CreateDate,
@@ -376,7 +389,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             {
                 viewCustomerSegmentList.Add(new ViewCustomerSegment
                 {
-                    CustomerSegmentID = segment.SegmentId,
+                    CustomerSegmentId = segment.SegmentId,
                     CustomerSegmentName = segment.SegmentName,
                     Demographic = segment.Demographics,
                     CreateDate = segment.CreateDate,

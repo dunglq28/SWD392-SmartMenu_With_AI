@@ -7,7 +7,7 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.CustomerSegment
     {
         [Required(ErrorMessage = "Thiếu ID phân khúc")]
         [JsonProperty("segment-id")]
-        public int SegmentID { get; set; }
+        public int SegmentId { get; set; }
         [Required(ErrorMessage = "Nhập tên phân khúc")]
         [StringLength(500, MinimumLength = 5)]
         [JsonProperty("segment-name")]
@@ -24,6 +24,6 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.CustomerSegment
         public string Session { get; set; }
         [Required(ErrorMessage = "Thiếu ID thương hiệu")]
         [JsonProperty("brand-id")]
-        public int BrandID { get; set; }
+        public int BrandId { get; set; }
     }
 }
