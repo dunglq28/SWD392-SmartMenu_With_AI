@@ -59,7 +59,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return mapdto;
         }
 
-        public async Task<List<MenuListDTO>> Insert(int MenuId, int BrandId ,List<CreateMenuListDTO> dto)
+        public async Task<List<MenuListDTO>> Insert(int MenuId, int BrandId, List<CreateMenuListDTO> dto)
         {
             var productMenus = _mapper.Map<List<MenuList>>(dto);
             foreach (var item in productMenus)
@@ -71,6 +71,25 @@ namespace FSU.SmartMenuWithAI.Service.Services
             if (await _unitOfWork.SaveAsync() > 0)
             {
                 return _mapper.Map<List<MenuListDTO>>(productMenus);
+            }
+            return null!;
+        }
+
+        public async Task<MenuListDTO> InsertNewListToMenu(MenuListDTO reqObj)
+        {
+            var menuLists = _mapper.Map<MenuList>(reqObj);
+            Expression<Func<MenuList,bool>> existIndexCondition = x=> x.MenuId == menuLists.MenuId 
+            && x.BrandId == menuLists.BrandId 
+            && x.ListIndex == menuLists.ListIndex;
+            var DuplicateIndex = await _unitOfWork.MenuListRepository.GetByCondition(existIndexCondition);
+            if (DuplicateIndex != null)
+            {
+                throw new Exception("Vị trí của list sản phẩm này đã tồn tại");
+            }
+            await _unitOfWork.MenuListRepository.Insert(menuLists);
+            if (await _unitOfWork.SaveAsync() > 0)
+            {
+                return reqObj;
             }
             return null!;
         }
