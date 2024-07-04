@@ -19,6 +19,6 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
         Task<bool> Delete(int SegmentId);
 
         Task<IEnumerable<ViewCustomerSegment>> Update(int segmentId, string segmentName);
-        Task<ViewCustomerSegment> UpdateSegmentValue(int segmentId, string age, string gender, string session);
+        Task<IEnumerable<ViewCustomerSegment>> UpdateSegmentValue(int segmentId, string age, string gender, string session, string segmentName, int brandID);
     }
 }
