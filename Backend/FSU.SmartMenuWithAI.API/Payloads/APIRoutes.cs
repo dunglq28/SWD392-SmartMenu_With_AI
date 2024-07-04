@@ -189,6 +189,8 @@
             public const string Delete = Base + "/menu-list/";
 
             public const string Add = Base + "/menu-list/";
+
+            public const string AddOneRow = Base + "/menu-list/add-one-list-to-menu";
         }
 
         public static class CustomerSegment
