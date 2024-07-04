@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Amazon.Rekognition.Model;
+using AutoMapper;
 using FSU.SmartMenuWithAI.Repository.Common.Enums;
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
@@ -7,6 +8,7 @@ using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.CustomerSegment;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
 using FSU.SmartMenuWithAI.Service.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
@@ -249,12 +251,60 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return null!;
         }
 
-        public async Task<ViewCustomerSegment> UpdateSegmentValue(int segmentId, string age, string gender, string session)
+        public async Task<IEnumerable<ViewCustomerSegment>> UpdateSegmentValue(int segmentId, string age, string gender, string session, string segmentName, int brandID)
         {
+            // Kiểm tra customerSegmentName
+            if (string.IsNullOrEmpty(segmentName) || segmentName.Length <= 5)
+            {
+                throw new ArgumentException("Tên phân khúc phải có độ dài lớn hơn 5 ký tự.");
+            }
+
+            // Kiểm tra age
+            if (!Regex.IsMatch(age, @"^\d{1,2}-\d{1,2}$"))
+            {
+                throw new ArgumentException("Độ tuổi phải có định dạng 'xx-xx'.");
+            }
+
+            var ageParts = age.Split('-');
+            var ageStart = int.Parse(ageParts[0]);
+            var ageEnd = int.Parse(ageParts[1]);
+
+            if (ageStart < 0 || ageStart > 99 || ageEnd < 0 || ageEnd > 99 || ageStart >= ageEnd)
+            {
+                throw new ArgumentException("Khoảng độ tuổi không hợp lệ.");
+            }
+
+            // Kiểm tra genders
+            var validGenders = new List<string> { "Nam", "Nữ" };
+
+            if (!validGenders.Contains(gender))
+            {
+                throw new ArgumentException("Giới tính không hợp lệ. Chỉ chấp nhận 'Nam' hoặc 'Nữ'.");
+            }
+
+
+            // Kiểm tra sessions
+            var validSessions = new List<string> { "Sáng", "Trưa", "Chiều" };
+
+            if (!validSessions.Contains(session))
+            {
+                throw new ArgumentException("Thời gian không hợp lệ. Chỉ chấp nhận 'Sáng', 'Trưa' hoặc 'Chiều'.");
+            }
+
             var cusSegToUpdate = await _unitOfWork.CustomerSegmentRepository.GetByID(segmentId);
             if (cusSegToUpdate == null || (cusSegToUpdate.Status == (int)Status.Deleted))
             {
                 throw new Exception("Không tìm thấy phân khúc khách hàng");
+            }
+            Expression<Func<CustomerSegment, bool>> duplicateName = x => x.SegmentName == segmentName && (x.Status == (int)Status.Exist) && x.SegmentId != segmentId && x.Demographics == cusSegToUpdate.Demographics;
+            var exist = await _unitOfWork.CustomerSegmentRepository.GetByCondition(duplicateName);
+            if (exist != null)
+            {
+                throw new DbUpdateException("Tên phân khúc đã tồn tại");
+            }
+            if (!string.IsNullOrEmpty(segmentName))
+            {
+                cusSegToUpdate.SegmentName = segmentName;
             }
             Expression<Func<SegmentAttribute, bool>> condition = x => x.SegmentId != segmentId && (x.AttributeId == 1 && x.Value == age);
             var segmentAttributes = await _unitOfWork.SegmentAttributeRepository1.Get(condition);
@@ -274,10 +324,12 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 if (matchingSegment != null)
                 {
                     throw new Exception($"Phân khúc khách hàng đã tồn tại: {matchingSegment.SegmentId}");
-                } 
+                }
             }
             cusSegToUpdate.Demographics = gender + " " + session;
+            cusSegToUpdate.UpdateDate = DateOnly.FromDateTime(DateTime.Now);
             _unitOfWork.CustomerSegmentRepository.Update(cusSegToUpdate);
+            await _unitOfWork.SaveAsync();
             for (var i = 1; i <= 3; i++)
             {
                 var segmentAttribute = new SegmentAttribute();
@@ -301,37 +353,36 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 //attributesToUpdate.Add(segmentAttribute);
                 try
                 {
-                    _unitOfWork.SegmentAttributeRepository1.Update(segmentAttribute);
-                    //await Task.Delay(100);
-                    //await _unitOfWork.SaveAsync();
+                    var segmentAttribute1 = await _unitOfWork.SegmentAttributeRepository1.GetByCondition(sa => sa.SegmentId == segmentId && sa.AttributeId == i);
+
+                    if (segmentAttribute1 != null)
+                    {
+                        _unitOfWork.SegmentAttributeRepository1.Delete(segmentAttribute1);
+                        await _unitOfWork.SaveAsync();
+                    }
+                    await _unitOfWork.SegmentAttributeRepository1.Insert(segmentAttribute);
+                    //await Task.Delay(10000);
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
                     throw new Exception("Cập nhật thuộc tính phân khúc thất bại do cạnh tranh cập nhật", ex);
                 }
             }
-            //try
-            //{
-            //    await _unitOfWork.SaveAsync();
-            //}
-            //catch (DbUpdateConcurrencyException ex)
-            //{
-            //    throw new Exception("Cập nhật thuộc tính phân khúc thất bại ở save", ex);
-            //}
-            // Batch update all attributes
-            //await _unitOfWork.SegmentAttributeRepository.BatchUpdate(attributesToUpdate);
-            //var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+            await _unitOfWork.SaveAsync();
             Expression<Func<CustomerSegment, bool>> viewCustomerSegment = x => x.SegmentId == segmentId && (x.Status == (int)Status.Exist);
             var customerSegments = await _unitOfWork.CustomerSegmentRepository.Get(filter: viewCustomerSegment, includeProperties: "SegmentAttributes");
-            var viewCustomerSegmentList = new ViewCustomerSegment();
+            var viewCustomerSegmentList = new List<ViewCustomerSegment>();
             foreach (var segment in customerSegments)
             {
-                viewCustomerSegmentList.CustomerSegmentID = segment.SegmentId;
-                viewCustomerSegmentList.CustomerSegmentName = segment.SegmentName;
-                viewCustomerSegmentList.Demographic = segment.Demographics;
-                viewCustomerSegmentList.CreateDate = segment.CreateDate;
-                viewCustomerSegmentList.UpdateDate = segment.UpdateDate;
-                viewCustomerSegmentList.Age = segment.SegmentAttributes.FirstOrDefault(attr => attr.AttributeId == 1)?.Value!;
+                viewCustomerSegmentList.Add(new ViewCustomerSegment
+                {
+                    CustomerSegmentID = segment.SegmentId,
+                    CustomerSegmentName = segment.SegmentName,
+                    Demographic = segment.Demographics,
+                    CreateDate = segment.CreateDate,
+                    UpdateDate = segment.UpdateDate,
+                    Age = age,
+                });
             }
             return viewCustomerSegmentList;
         }
