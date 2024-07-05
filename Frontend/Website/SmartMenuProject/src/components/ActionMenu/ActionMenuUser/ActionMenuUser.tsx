@@ -96,11 +96,11 @@ const ActionMenuUser: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
             <PopoverArrow />
             <PopoverBody>
               <Flex className={style.PopupButton} onClick={handleEditClick}>
-                <Text className={style.PopupButtonText}>Edit User</Text>
+                <Text className={style.PopupButtonText}>Cập nhật người dùng</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text className={style.PopupButtonText}>Delete User</Text>
+                <Text className={style.PopupButtonText}>Xoá người dùng</Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>
@@ -112,9 +112,9 @@ const ActionMenuUser: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
         isOpen={isOpen}
         id={id}
         onDelete={onDelete}
-        titleHeader="Delete User"
-        titleBody="Are you sure? You can't undo this action afterwards."
-        btnName=" Delete"
+        titleHeader="Xoá người dùng"
+        titleBody="Bạn có chắc không? Bạn không thể hoàn tác hành động này sau đó."
+        btnName="Xoá"
       />
 
       <ModalForm
@@ -128,7 +128,7 @@ const ActionMenuUser: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
         }
         onClose={onCloseUser}
         isOpen={isOpenUser}
-        title={t("Update user")}
+        title={t("Cập nhật người dùng")}
       />
     </>
   );

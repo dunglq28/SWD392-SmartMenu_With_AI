@@ -53,11 +53,11 @@ const ActionMenuProduct: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
                 className={style.PopupButton}
                 onClick={() => onOpenProduct()}
               >
-                <Text className={style.PopupButtonText}>Edit Product</Text>
+                <Text className={style.PopupButtonText}>Cập nhật sản phẩm</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text className={style.PopupButtonText}>Delete Product</Text>
+                <Text className={style.PopupButtonText}>Xoá sản phẩm</Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>
@@ -69,9 +69,9 @@ const ActionMenuProduct: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
         isOpen={isOpen}
         id={id}
         onDelete={onDelete}
-        titleHeader="Delete Product"
-        titleBody="Are you sure? You can't undo this action afterwards."
-        btnName=" Delete"
+        titleHeader="Xoá sản phẩm"
+        titleBody="Bạn có chắc không? Bạn không thể hoàn tác hành động này sau đó."
+        btnName="Xoá"
       />
 
       <ModalForm
@@ -85,7 +85,7 @@ const ActionMenuProduct: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
         }
         onClose={onCloseProduct}
         isOpen={isOpenProduct}
-        title={t("Update Product")}
+        title={t("Cập nhật sản phẩm")}
       />
     </>
   );

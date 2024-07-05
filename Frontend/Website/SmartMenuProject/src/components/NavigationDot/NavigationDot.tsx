@@ -147,7 +147,7 @@ const NavigationDot: React.FC<NavigationDotProps> = ({
       </Stack>
 
       <Stack direction="row" spacing={2} align="center" mr={10}>
-        <Text className={styles.NavDotText}>Rows per page</Text>
+        <Text className={styles.NavDotText}>Hàng trên mỗi trang</Text>
         <Select
           onChange={handleRowsPerPageChange}
           width="70px"

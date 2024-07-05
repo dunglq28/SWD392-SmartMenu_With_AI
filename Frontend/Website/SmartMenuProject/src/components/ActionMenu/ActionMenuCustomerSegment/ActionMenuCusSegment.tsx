@@ -70,13 +70,13 @@ const ActionMenuCustomerSegment: FC<ActionMenuProps> = ({
                 onClick={() => onOpenCustomerSegment()}
               >
                 <Text className={style.PopupButtonText}>
-                  Edit Customer Segment
+                  Cập nhật phân khúc khách hàng
                 </Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
                 <Text className={style.PopupButtonText}>
-                  Delete Customer Segment
+                  Xoá phân khúc khách hàng
                 </Text>
               </Flex>
             </PopoverBody>
@@ -89,9 +89,9 @@ const ActionMenuCustomerSegment: FC<ActionMenuProps> = ({
         isOpen={isOpen}
         id={id}
         onDelete={onDelete}
-        titleHeader="Delete Customer Segment"
-        titleBody="Are you sure? You can't undo this action afterwards."
-        btnName=" Delete"
+        titleHeader="Xóa phân khúc khách hàng"
+        titleBody="Bạn có chắc không? Bạn không thể hoàn tác hành động này sau đó."
+        btnName=" Xoá"
       />
 
       <ModalForm
@@ -107,7 +107,7 @@ const ActionMenuCustomerSegment: FC<ActionMenuProps> = ({
         }
         onClose={onCloseCustomerSegment}
         isOpen={isOpenCustomerSegment}
-        title={t("Update Customer Segment")}
+        title={t("Cập nhật phân khúc khách hàng")}
       />
     </>
   );

@@ -143,7 +143,7 @@ function Brand() {
                 <div className={style.wrapperText}>
                   <div className={style.header}>{brand.brandName}</div>
                   <div className={style.createDate}>
-                    Create on {moment(brand.createDate).format("DD/MM/YYYY")}
+                    Ngày tạo {moment(brand.createDate).format("DD/MM/YYYY")}
                   </div>
                 </div>
                 <div className={style.btnContainer}>

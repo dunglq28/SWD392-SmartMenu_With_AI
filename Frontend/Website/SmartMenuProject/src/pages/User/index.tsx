@@ -134,15 +134,15 @@ function User() {
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>
-                <Th className={style.HeaderTbl}>Full name</Th>
-                <Th className={style.HeaderTbl}>User name</Th>
-                <Th className={style.HeaderTbl}>DOB</Th>
-                <Th className={style.HeaderTbl}>Gender</Th>
-                <Th className={style.HeaderTbl}>Phone</Th>
-                <Th className={style.HeaderTbl}>Role</Th>
-                <Th className={style.HeaderTbl}>Created on</Th>
-                <Th className={style.HeaderTbl}>Is active</Th>
-                <Th className={style.HeaderTbl}>Settings</Th>
+                <Th className={style.HeaderTbl}>Họ và tên</Th>
+                <Th className={style.HeaderTbl}>Tên tài khoản</Th>
+                <Th className={style.HeaderTbl}>ngày sinh</Th>
+                <Th className={style.HeaderTbl}>giới tính</Th>
+                <Th className={style.HeaderTbl}>số điện thoại</Th>
+                <Th className={style.HeaderTbl}>vai trò</Th>
+                <Th className={style.HeaderTbl}>ngày tạo</Th>
+                <Th className={style.HeaderTbl}>đang hoạt động</Th>
+                <Th className={style.HeaderTbl}>cài đặt</Th>
               </Tr>
             </Thead>
             <Tbody>
