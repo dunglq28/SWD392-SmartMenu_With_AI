@@ -1,6 +1,6 @@
 import { Card, Flex, Image, Text } from "@chakra-ui/react";
 import style from "./MenuCard.module.scss";
-import FakeMenu from "../../../assets/images/menu/menuImg.svg";
+import FakeMenu from "../../../assets/images/menu/menuImg.png";
 
 interface MenuCardProps {
   title: string;
