@@ -17,7 +17,7 @@ import { capitalizeWords } from "../../../utils/functionHelper";
 interface ModalFormCategoryProps {
   id?: number;
   handleCreate?: (id: number, categoryName: string) => void;
-  handleEdit?: (cateId: number, brandId: number, categoryName: string) => void;
+  handleEdit?: (cateId: number, brandId: number, categoryName: string, onClose: () => void) => void;
   onClose: () => void;
   isEdit: boolean;
 }
@@ -90,8 +90,7 @@ const ModalFormCategory: React.FC<ModalFormCategoryProps> = ({
       if (!isEdit) {
         handleCreate?.(brandId, capitalizedCategoryName);
       } else {
-        handleEdit?.(id!, brandId, capitalizedCategoryName);
-        onClose();
+        handleEdit?.(id!, brandId, capitalizedCategoryName, onClose);
       }
     }
   };

@@ -6,17 +6,20 @@ import {
   Input,
   ModalBody,
   ModalFooter,
+  Radio,
+  RadioGroup,
   Select,
+  Stack,
   Text,
 } from "@chakra-ui/react";
 import style from "./ModalFormCusSegment.module.scss";
 import { toast } from "react-toastify";
-import moment from "moment";
 import { CustomerSegmentForm } from "../../../models/SegmentForm.model";
 import { capitalizeWords } from "../../../utils/functionHelper";
 import { isInteger } from "../../../utils/validation";
 import { customerSegmentUpdate } from "../../../payloads/requests/updateRequests.model";
 import { customerSegmentCreate } from "../../../payloads/requests/createRequests.model";
+import { getCustomerSegment } from "../../../services/CustomerSegmentService";
 
 interface ModalFormCustomerSegmentProps {
   formData: CustomerSegmentForm;
@@ -26,7 +29,8 @@ interface ModalFormCustomerSegmentProps {
   handleEdit?: (
     brandId: number,
     segmentId: number,
-    segment: customerSegmentUpdate
+    segment: customerSegmentUpdate,
+    onClose: () => void
   ) => void;
   onClose: () => void;
   isEdit: boolean;
@@ -43,31 +47,50 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
 }) => {
   const brandId = Number(localStorage.getItem("BrandId"));
 
+  useEffect(() => {
+    if (isEdit && id) {
+      const loadCustomerSegmentData = async () => {
+        try {
+          const customerSegment = await getCustomerSegment(id);
+          if (customerSegment) {
+            const [ageFrom, ageTo] = customerSegment.data.age.split("-");
 
-  // useEffect(() => {
-  //   if (isEdit && id) {
-  //     const loadCategoryData = async () => {
-  //       try {
-  //         const category = await getCategory(id);
-  //         if (category) {
-  //           setFormData({
-  //             categoryName: {
-  //               value: category.data.categoryName,
-  //               errorMessage: "",
-  //             },
-  //           });
-  //         } else {
-  //           throw new Error("Category not found");
-  //         }
-  //       } catch (err) {
-  //         console.error("Error fetching category data:", err);
-  //         toast.error("Error fetching category data");
-  //       }
-  //     };
+            const [gender, ...sessions] =
+              customerSegment.data.demographic.split(", ");
+            setFormData({
+              segmentName: {
+                value: customerSegment.data.customerSegmentName,
+                errorMessage: "",
+              },
+              ageFrom: {
+                value: ageFrom,
+                errorMessage: "",
+              },
+              ageTo: {
+                value: ageTo,
+                errorMessage: "",
+              },
+              gender: {
+                value: gender,
+                errorMessage: "",
+              },
+              sessions: {
+                value: sessions,
+                errorMessage: "",
+              },
+            });
+          } else {
+            throw new Error("Customer Segment not found");
+          }
+        } catch (err) {
+          console.error("Error fetching customer segment data:", err);
+          toast.error("Error fetching customer segment data");
+        }
+      };
 
-  //     loadCategoryData();
-  //   }
-  // }, []);
+      loadCustomerSegmentData();
+    }
+  }, []);
 
   const handleChange = (
     field: keyof CustomerSegmentForm,
@@ -92,6 +115,13 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
     });
   };
 
+  const handleRadioChange = (value: string) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      sessions: { value: [value], errorMessage: "" },
+    }));
+  };
+
   const handleSubmit = async () => {
     const errors = {
       segmentName: formData.segmentName.value ? "" : "Segment name is required",
@@ -99,6 +129,10 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
       ageFrom: "",
       ageTo: "",
     };
+
+    if (formData.segmentName.value && formData.segmentName.value.length < 5) {
+      errors.segmentName = "Segment name must be at least 5 characters";
+    }
 
     if (!formData.ageFrom.value) {
       errors.ageFrom = "Age From is required";
@@ -169,18 +203,23 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
         genders.push("Nữ");
       }
 
-      var customerSegmentcreate: customerSegmentCreate = {
-        segmentName: capitalizedSegmentName,
-        age: `${formData.ageFrom.value}-${formData.ageTo.value}`,
-        gender: genders,
-        session: formData.sessions.value,
-      };
-
       if (!isEdit) {
-        handleCreate?.(brandId, customerSegmentcreate);
+        var customerSegmentCreate: customerSegmentCreate = {
+          segmentName: capitalizedSegmentName,
+          age: `${formData.ageFrom.value}-${formData.ageTo.value}`,
+          gender: genders,
+          session: formData.sessions.value,
+        };
+
+        handleCreate?.(brandId, customerSegmentCreate);
       } else {
-        // handleEdit?.(brandId, id! , customerSegmentcreate);
-        onClose();
+        var customerSegmentUpdate: customerSegmentUpdate = {
+          segmentName: capitalizedSegmentName,
+          age: `${formData.ageFrom.value}-${formData.ageTo.value}`,
+          gender: formData.gender.value,
+          session: formData.sessions.value[0],
+        };
+        handleEdit?.(brandId, id!, customerSegmentUpdate, onClose);
       }
     }
   };
@@ -224,29 +263,43 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
           </Flex>
           <Flex className={style.ModalBodyItem}>
             <Text className={style.FieldTitle}>Sessions</Text>
-            <Flex className={style.CheckboxGroup}>
-              <Checkbox
-                className={style.checkboxItem}
-                isChecked={formData.sessions.value.includes("Morning")}
-                onChange={() => handleCheckboxChange("Morning")}
+            {!isEdit ? (
+              <Flex className={style.CheckboxGroup}>
+                <Checkbox
+                  className={style.checkboxItem}
+                  isChecked={formData.sessions.value.includes("Morning")}
+                  onChange={() => handleCheckboxChange("Morning")}
+                >
+                  Morning
+                </Checkbox>
+                <Checkbox
+                  className={style.checkboxItem}
+                  isChecked={formData.sessions.value.includes("Afternoon")}
+                  onChange={() => handleCheckboxChange("Afternoon")}
+                >
+                  Afternoon
+                </Checkbox>
+                <Checkbox
+                  className={style.checkboxItem}
+                  isChecked={formData.sessions.value.includes("Evening")}
+                  onChange={() => handleCheckboxChange("Evening")}
+                >
+                  Evening
+                </Checkbox>
+              </Flex>
+            ) : (
+              <RadioGroup
+                className={style.RadioGroup}
+                value={formData.sessions.value[0]}
+                onChange={handleRadioChange}
               >
-                Morning
-              </Checkbox>
-              <Checkbox
-                className={style.checkboxItem}
-                isChecked={formData.sessions.value.includes("Afternoon")}
-                onChange={() => handleCheckboxChange("Afternoon")}
-              >
-                Afternoon
-              </Checkbox>
-              <Checkbox
-                className={style.checkboxItem}
-                isChecked={formData.sessions.value.includes("Evening")}
-                onChange={() => handleCheckboxChange("Evening")}
-              >
-                Evening
-              </Checkbox>
-            </Flex>
+                <Stack direction="row">
+                  <Radio value="Morning">Morning</Radio>
+                  <Radio value="Afternoon">Afternoon</Radio>
+                  <Radio value="Evening">Evening</Radio>
+                </Stack>
+              </RadioGroup>
+            )}
             {formData.sessions.errorMessage && (
               <Text className={style.ErrorText}>
                 {formData.sessions.errorMessage}

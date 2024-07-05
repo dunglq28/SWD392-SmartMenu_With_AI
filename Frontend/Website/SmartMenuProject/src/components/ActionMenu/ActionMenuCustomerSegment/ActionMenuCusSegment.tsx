@@ -29,7 +29,8 @@ interface ActionMenuProps {
   onEdit: (
     brandId: number,
     segmentId: number,
-    segment: customerSegmentUpdate
+    segment: customerSegmentUpdate,
+    onClose: () => void
   ) => void;
 }
 

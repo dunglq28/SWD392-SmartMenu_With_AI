@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { ProductForm } from "../../../models/ProductForm.model";
 import { isImageFile } from "../../../utils/validation";
 import { getProduct } from "../../../services/ProductService";
+import { capitalizeWords } from "../../../utils/functionHelper";
 
 interface ModalFormProductProps {
   id?: number;
@@ -202,7 +203,11 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
         "CategoryId",
         formData.category.value?.toString() || ""
       );
-      productForm.append("ProductName", formData.productName.value);
+
+      productForm.append(
+        "ProductName",
+        capitalizeWords(formData.productName.value)
+      );
       productForm.append("Description", formData.description.value);
       productForm.append("Price", formData.price.value?.toString() || "");
       productForm.append("BrandId", brandId?.toString() || "");
@@ -320,9 +325,7 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
       </ModalBody>
       <ModalFooter>
         <Flex className={style.Footer}>
-          <Button onClick={() => onClose()}>
-            Cancel
-          </Button>
+          <Button onClick={() => onClose()}>Cancel</Button>
           <Button className={style.AddProductBtn} onClick={handleSubmit}>
             {isEdit ? "Save" : "Create"}
           </Button>

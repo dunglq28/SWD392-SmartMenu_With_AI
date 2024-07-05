@@ -22,7 +22,7 @@ import ModalFormCategory from "../../Modals/ModalFormCategory/ModalFormCategory"
 interface ActionMenuProps {
   id: number;
   onDelete: (id: number) => void;
-  onEdit: (cateId: number, brandId: number, categoryName: string) => void;
+  onEdit: (cateId: number, brandId: number, categoryName: string, onClose: () => void) => void;
 }
 
 const ActionMenuCategory: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {

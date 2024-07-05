@@ -42,6 +42,7 @@ import { createBrand } from "../../services/BrandService";
 import { getInitialUserData } from "../../utils/initialUserData";
 import { BranchForm } from "../../models/BranchForm.model";
 import { createBranch } from "../../services/BranchService";
+import { capitalizeWords } from "../../utils/functionHelper";
 
 function Sidebar() {
   const { t } = useTranslation();
@@ -242,7 +243,7 @@ function Sidebar() {
       const brandForm = new FormData();
 
       if (brandData.image.value && brandData.brandName.value) {
-        brandForm.append("BrandName", brandData.brandName.value);
+        brandForm.append("BrandName", capitalizeWords(brandData.brandName.value));
         brandForm.append("Image", brandData.image.value);
       }
 
@@ -254,7 +255,7 @@ function Sidebar() {
         const brandResult = await createBrand(brandForm);
 
         if (brandResult.statusCode === 200) {
-          await onCloseUser();
+          onCloseUser();
           const toastMessage = "Thêm thương hiệu mới thành công";
           const pathname = location.pathname;
           const formattedPathname = pathname.replace("/", "");

@@ -4,6 +4,7 @@ import { ApiResponse } from "../payloads/responses/ApiResponse.model";
 import { GetData } from "../payloads/responses/GetData.model";
 import { CustomerSegmentData } from "../payloads/responses/CustomerSegment.model";
 import { customerSegmentCreate } from "../payloads/requests/createRequests.model";
+import { customerSegmentUpdate } from "../payloads/requests/updateRequests.model";
 
 export const getCustomerSegments = async (
   brandId: number,
@@ -60,7 +61,7 @@ export const createCustomerSegment = async (
 export const updateCustomerSegment = async (
   segmentId: number,
   brandId: number,
-  customerSegment: customerSegmentCreate,
+  customerSegment: customerSegmentUpdate,
 ): Promise<ApiResponse<Object>> => {
   try {
     const res = await axiosAuth.put(`customer-segment/update-value`, {

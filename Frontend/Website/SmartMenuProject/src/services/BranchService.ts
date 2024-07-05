@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosAuth from "../api/axiosAuth";
 import { BranchForm } from "../models/BranchForm.model";
 import { branchUpdate } from "../payloads/requests/updateRequests.model";
@@ -23,7 +24,9 @@ export const getBranches = async (
   return apiResponse.data as GetData<BranchData>;
 };
 
-export const getBranch = async (id: number): Promise<ApiResponse<BranchData>> => {
+export const getBranch = async (
+  id: number
+): Promise<ApiResponse<BranchData>> => {
   const res = await axiosAuth.get("stores/get-by-id", {
     params: {
       id: id,
@@ -50,16 +53,25 @@ export const createBranch = async (
 export const updateBranch = async (
   branch: branchUpdate
 ): Promise<ApiResponse<Object>> => {
-  const res = await axiosAuth.put(`stores?id=${branch.id}`, {
-    city: branch.city,
-    address: `${branch.address}, Phường ${branch.ward}, Quận ${branch.district}`,
-    isActive: branch.isActive
-  });
-  const apiResponse = res.data as ApiResponse<Object>;
-  return apiResponse;
+  try {
+    const res = await axiosAuth.put(`stores?id=${branch.id}`, {
+      city: branch.city,
+      address: `${branch.address}, Phường ${branch.ward}, Quận ${branch.district}`,
+      isActive: branch.isActive,
+    });
+    const apiResponse = res.data as ApiResponse<Object>;
+    return apiResponse;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return error.response.data as ApiResponse<Object>;
+    }
+    throw new Error("Unexpected error");
+  }
 };
 
-export const deleteBranch = async (id: number): Promise<ApiResponse<Object>> => {
+export const deleteBranch = async (
+  id: number
+): Promise<ApiResponse<Object>> => {
   const res = await axiosAuth.delete("stores", {
     params: {
       id: id,

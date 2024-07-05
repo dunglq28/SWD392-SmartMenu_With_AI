@@ -22,6 +22,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+
         public CustomerSegmentService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -317,20 +318,20 @@ namespace FSU.SmartMenuWithAI.Service.Services
             }
 
             // Kiểm tra genders
-            var validGenders = new List<string> { "Nam", "Nữ" };
+            var validGenders = new List<string> { "Nam", "Nữ", "Male", "Female" };
 
             if (!validGenders.Contains(gender))
             {
-                throw new ArgumentException("Giới tính không hợp lệ. Chỉ chấp nhận 'Nam' hoặc 'Nữ'.");
+                throw new ArgumentException("Giới tính không hợp lệ.");
             }
 
 
             // Kiểm tra sessions
-            var validSessions = new List<string> { "Sáng", "Trưa", "Chiều" };
+            var validSessions = new List<string> { "Sáng", "Trưa", "Chiều", "Morning", "Afternoon", "Evening" };
 
             if (!validSessions.Contains(session))
             {
-                throw new ArgumentException("Thời gian không hợp lệ. Chỉ chấp nhận 'Sáng', 'Trưa' hoặc 'Chiều'.");
+                throw new ArgumentException("Thời gian không hợp lệ.");
             }
 
             var cusSegToUpdate = await _unitOfWork.CustomerSegmentRepository.GetByID(segmentId);
@@ -359,7 +360,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                     .GetByCondition(cs =>
                         cs.SegmentId != segmentId &&
                         cs.SegmentName == cusSegToUpdate.SegmentName &&
-                        cs.Demographics == gender + " " + session &&
+                        cs.Demographics == gender + ", " + session &&
                         cs.SegmentId == segmentAttribute.SegmentId
                     );
 
@@ -368,7 +369,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                     throw new Exception($"Phân khúc khách hàng đã tồn tại: {matchingSegment.SegmentId}");
                 }
             }
-            cusSegToUpdate.Demographics = gender + " " + session;
+            cusSegToUpdate.Demographics = gender + ", " + session;
             cusSegToUpdate.UpdateDate = DateOnly.FromDateTime(DateTime.Now);
             _unitOfWork.CustomerSegmentRepository.Update(cusSegToUpdate);
             await _unitOfWork.SaveAsync();
