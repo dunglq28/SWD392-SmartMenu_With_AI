@@ -1,7 +1,11 @@
+import axios from "axios";
 import axiosAuth from "../api/axiosAuth";
 import axiosMultipartForm from "../api/axiosMultipartForm";
-import { brandUpdate } from "../payloads/requests/updateBrand.model";
-import { ApiResponse, ApiResponseNotPagin } from "../payloads/responses/ApiResponse.model";
+import { brandUpdate } from "../payloads/requests/updateRequests.model";
+import {
+  ApiResponse,
+  ApiResponseNotPagin,
+} from "../payloads/responses/ApiResponse.model";
 import { BrandData } from "../payloads/responses/BrandData.model";
 import { GetData } from "../payloads/responses/GetData.model";
 
@@ -19,7 +23,9 @@ export const getBrands = async (
   return apiResponse.data as GetData<BrandData>;
 };
 
-export const getAllBrandName = async (): Promise<ApiResponseNotPagin<BrandData>> => {
+export const getAllBrandName = async (): Promise<
+  ApiResponseNotPagin<BrandData>
+> => {
   const res = await axiosAuth.get("brands/get-all-name");
   const apiResponse = res.data as ApiResponseNotPagin<Object>;
   return apiResponse as ApiResponseNotPagin<BrandData>;
@@ -35,7 +41,9 @@ export const getBrand = async (id: number): Promise<ApiResponse<BrandData>> => {
   return apiResponse;
 };
 
-export const getBrandByUserId = async (id: number): Promise<ApiResponse<BrandData>> => {
+export const getBrandByUserId = async (
+  id: number
+): Promise<ApiResponse<BrandData>> => {
   const res = await axiosAuth.get(`brands/get-by-user-id`, {
     params: {
       userId: id,
@@ -56,9 +64,16 @@ export const createBrand = async (
 export const updateBrand = async (
   brand: brandUpdate
 ): Promise<ApiResponse<Object>> => {
-  const res = await axiosMultipartForm.put("brands/update", brand);
-  const apiResponse = res.data as ApiResponse<Object>;
-  return apiResponse;
+  try {
+    const res = await axiosMultipartForm.put("brands/update", brand);
+    const apiResponse = res.data as ApiResponse<Object>;
+    return apiResponse;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return error.response.data as ApiResponse<Object>;
+    }
+    throw new Error("Unexpected error");
+  }
 };
 
 export const deleteBrand = async (id: number): Promise<ApiResponse<Object>> => {

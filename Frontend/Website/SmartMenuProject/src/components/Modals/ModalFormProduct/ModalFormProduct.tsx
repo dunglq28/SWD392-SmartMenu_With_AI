@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { ProductForm } from "../../../models/ProductForm.model";
 import { isImageFile } from "../../../utils/validation";
 import { getProduct } from "../../../services/ProductService";
+import { capitalizeWords } from "../../../utils/functionHelper";
 
 interface ModalFormProductProps {
   id?: number;
@@ -202,7 +203,11 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
         "CategoryId",
         formData.category.value?.toString() || ""
       );
-      productForm.append("ProductName", formData.productName.value);
+
+      productForm.append(
+        "ProductName",
+        capitalizeWords(formData.productName.value)
+      );
       productForm.append("Description", formData.description.value);
       productForm.append("Price", formData.price.value?.toString() || "");
       productForm.append("BrandId", brandId?.toString() || "");
@@ -227,7 +232,7 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
       <ModalBody>
         <Flex className={style.ModalBody}>
           <Flex className={style.ModalBodyItem}>
-            <Text className={style.FieldTitle}>Category</Text>
+            <Text className={style.FieldTitle}>Loại</Text>
             <Select
               options={categoryOptions}
               closeMenuOnSelect={true}
@@ -246,10 +251,10 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
             )}
           </Flex>
           <Flex className={style.ModalBodyItem}>
-            <Text className={style.FieldTitle}>Product Name</Text>
+            <Text className={style.FieldTitle}>Tên sản phẩm</Text>
             <Input
               className={style.InputField}
-              placeholder="Product name"
+              placeholder="VD: Hồng Trà"
               value={formData.productName.value}
               onChange={(e) => handleChange("productName", e.target.value)}
             />
@@ -260,7 +265,7 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
             )}
           </Flex>
           <Flex className={style.ModalBodyItem}>
-            <Text className={style.FieldTitle}>Image</Text>
+            <Text className={style.FieldTitle}>Hình ảnh</Text>
             {!formData.image.value && !formData.imageUrl?.value && (
               <Input
                 type="file"
@@ -271,7 +276,7 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
             {(formData.image.value ||
               (formData.imageUrl && formData.imageUrl.value)) && (
               <Button onClick={handleRemoveImage} w={40}>
-                Remove
+                Xoá
               </Button>
             )}
             {(formData.image.value ||
@@ -289,10 +294,10 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
             )}
           </Flex>
           <Flex className={style.ModalBodyItem}>
-            <Text className={style.FieldTitle}>Description</Text>
+            <Text className={style.FieldTitle}>Mô tả</Text>
             <Textarea
               className={style.InputField}
-              placeholder="Description"
+              placeholder="Mô tả"
               value={formData.description.value}
               onChange={(e) => handleChange("description", e.target.value)}
             />
@@ -303,10 +308,10 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
             )}
           </Flex>
           <Flex className={style.ModalBodyItem}>
-            <Text className={style.FieldTitle}>Price</Text>
+            <Text className={style.FieldTitle}>Giá</Text>
             <Input
               className={style.InputField}
-              placeholder="Price: 100000"
+              placeholder="Giá: 100000"
               value={formData.price.value?.toString()}
               onChange={(e) => handleChange("price", e.target.value)}
             />
@@ -320,11 +325,9 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
       </ModalBody>
       <ModalFooter>
         <Flex className={style.Footer}>
-          <Button onClick={() => onClose()}>
-            Cancel
-          </Button>
+          <Button onClick={() => onClose()}>Huỷ</Button>
           <Button className={style.AddProductBtn} onClick={handleSubmit}>
-            {isEdit ? "Save" : "Create"}
+            {isEdit ? "Lưu" : "Tạo mới"}
           </Button>
         </Flex>
       </ModalFooter>

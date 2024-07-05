@@ -26,8 +26,8 @@ import { useTranslation } from "react-i18next";
 import { UserForm } from "../../../models/UserForm.model";
 import { getInitialUserData } from "../../../utils/initialUserData";
 import { getUser } from "../../../services/UserService";
-import { userUpdate } from "../../../payloads/requests/updateUser.model";
 import CustomAlertDialog from "../../AlertDialog";
+import { userUpdate } from "../../../payloads/requests/updateRequests.model";
 
 interface ActionMenuProps {
   id: number;
@@ -48,7 +48,7 @@ const ActionMenuUser: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
   const [userData, setUserData] = useState<UserForm>(getInitialUserData());
 
   const handleEditClick = async () => {
-    var result = await getUser(id);    
+    var result = await getUser(id);
 
     if (result.statusCode === 200) {
       const { fullname, userName, phone, dob, gender, isActive } = result.data;
@@ -96,11 +96,11 @@ const ActionMenuUser: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
             <PopoverArrow />
             <PopoverBody>
               <Flex className={style.PopupButton} onClick={handleEditClick}>
-                <Text>Edit User</Text>
+                <Text className={style.PopupButtonText}>Cập nhật người dùng</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text>Delete User</Text>
+                <Text className={style.PopupButtonText}>Xoá người dùng</Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>
@@ -112,9 +112,9 @@ const ActionMenuUser: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
         isOpen={isOpen}
         id={id}
         onDelete={onDelete}
-        titleHeader="Delete User"
-        titleBody="Are you sure? You can't undo this action afterwards."
-        btnName=" Delete"
+        titleHeader="Xoá người dùng"
+        titleBody="Bạn có chắc không? Bạn không thể hoàn tác hành động này sau đó."
+        btnName="Xoá"
       />
 
       <ModalForm
@@ -128,7 +128,7 @@ const ActionMenuUser: FC<ActionMenuProps> = ({ id, onEdit, onDelete }) => {
         }
         onClose={onCloseUser}
         isOpen={isOpenUser}
-        title={t("Update user")}
+        title={t("Cập nhật người dùng")}
       />
     </>
   );

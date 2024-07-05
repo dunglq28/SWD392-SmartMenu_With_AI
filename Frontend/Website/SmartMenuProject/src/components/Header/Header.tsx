@@ -25,9 +25,7 @@ import { FaRegBell } from "react-icons/fa";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import i18n from "../../i18n/i18n";
-import { ChevronRightIcon } from "@chakra-ui/icons";
-import Searchbar from "../Searchbar";
-import { getRoleName } from "../../utils/getRoleName";
+import { getRoleName } from "../../utils/functionHelper";
 
 function Header() {
   const location = useLocation();

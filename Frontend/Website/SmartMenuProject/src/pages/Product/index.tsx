@@ -23,7 +23,6 @@ import {
   getProducts,
   updateProduct,
 } from "../../services/ProductService";
-import { getOptions } from "../../utils/getRowPerPage";
 import { toast } from "react-toastify";
 import moment from "moment";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
@@ -31,9 +30,9 @@ import Loading from "../../components/Loading";
 import ModalForm from "../../components/Modals/ModalForm/ModalForm";
 import ModalFormProduct from "../../components/Modals/ModalFormProduct/ModalFormProduct";
 import Searchbar from "../../components/Searchbar";
-import { formatCurrency } from "../../utils/formatCurrency";
 import { useLocation, useNavigate } from "react-router-dom";
 import ActionMenuProduct from "../../components/ActionMenu/ActionMenuProduct/ActionMenuProduct";
+import { formatCurrency, getOptions } from "../../utils/functionHelper";
 
 function Product() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -182,7 +181,7 @@ function Product() {
           <Text as="span" fontSize="25px" me={3}>
             <IoAddCircleOutline />
           </Text>
-          Create product
+          Tạo sản phẩm
         </Button>
         <ModalForm
           formBody={
@@ -194,7 +193,7 @@ function Product() {
           }
           onClose={onCloseProduct}
           isOpen={isOpenProduct}
-          title={"Add New Product"}
+          title={"Tạo mới sản phẩm"}
         />
       </Flex>
       <Flex className={style.Product}>
@@ -204,13 +203,13 @@ function Product() {
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>
-                <Th className={style.HeaderTbl}>Name</Th>
-                <Th className={style.HeaderTbl}>Image</Th>
-                <Th className={style.HeaderTbl}>Category</Th>
-                <Th className={style.HeaderTbl}>Price</Th>
-                <Th className={style.HeaderTbl}>Description</Th>
-                <Th className={style.HeaderTbl}>Created on</Th>
-                <Th className={style.HeaderTbl}>Settings</Th>
+                <Th className={style.HeaderTbl}>Tên sản phẩm</Th>
+                <Th className={style.HeaderTbl}>Hình ảnh</Th>
+                <Th className={style.HeaderTbl}>Loại</Th>
+                <Th className={style.HeaderTbl}>Giá</Th>
+                <Th className={style.HeaderTbl}>Mô tả</Th>
+                <Th className={style.HeaderTbl}>Ngày tạo</Th>
+                <Th className={style.HeaderTbl}>Cài đặt</Th>
               </Tr>
             </Thead>
             <Tbody>

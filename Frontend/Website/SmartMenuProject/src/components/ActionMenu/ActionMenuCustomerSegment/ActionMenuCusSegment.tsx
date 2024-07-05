@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   Button,
   Divider,
@@ -12,31 +12,47 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { RiSettings3Line } from "react-icons/ri";
-import style from "./ActionMenuProduct.module.scss";
+
+import style from "./ActionMenuCusSegment.module.scss";
 import { useTranslation } from "react-i18next";
 import CustomAlertDialog from "../../AlertDialog";
 import ModalForm from "../../Modals/ModalForm/ModalForm";
-import ModalFormProduct from "../../Modals/ModalFormProduct/ModalFormProduct";
+import { customerSegmentUpdate } from "../../../payloads/requests/updateRequests.model";
+import ModalFormCustomerSegment from "../../Modals/ModalFormCustomerSegment/ModalFormCusSegment";
+import { CustomerSegmentForm } from "../../../models/SegmentForm.model";
 
 interface ActionMenuProps {
+  formData: CustomerSegmentForm;
+  setFormData: React.Dispatch<React.SetStateAction<CustomerSegmentForm>>;
   id: number;
   onDelete: (id: number) => void;
-  onEdit: (id: number, product: FormData) => void;
+  onEdit: (
+    brandId: number,
+    segmentId: number,
+    segment: customerSegmentUpdate,
+    onClose: () => void
+  ) => void;
 }
 
-const ActionMenuProduct: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
+const ActionMenuCustomerSegment: FC<ActionMenuProps> = ({
+  formData,
+  setFormData,
+  id,
+  onDelete,
+  onEdit,
+}) => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    isOpen: isOpenProduct,
-    onOpen: onOpenProduct,
-    onClose: onCloseProduct,
+    isOpen: isOpenCustomerSegment,
+    onOpen: onOpenCustomerSegment,
+    onClose: onCloseCustomerSegment,
   } = useDisclosure();
   const cancelRef: React.LegacyRef<HTMLButtonElement> = React.useRef(null);
 
   return (
     <>
-      <Flex className={style.SettingBranch}>
+      <Flex className={style.SettingCustomerSegment}>
         <Popover>
           <PopoverTrigger>
             <Button className={style.SettingsIconBtn}>
@@ -51,13 +67,17 @@ const ActionMenuProduct: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
               <Divider />
               <Flex
                 className={style.PopupButton}
-                onClick={() => onOpenProduct()}
+                onClick={() => onOpenCustomerSegment()}
               >
-                <Text className={style.PopupButtonText}>Cập nhật sản phẩm</Text>
+                <Text className={style.PopupButtonText}>
+                  Cập nhật phân khúc khách hàng
+                </Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text className={style.PopupButtonText}>Xoá sản phẩm</Text>
+                <Text className={style.PopupButtonText}>
+                  Xoá phân khúc khách hàng
+                </Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>
@@ -69,26 +89,28 @@ const ActionMenuProduct: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
         isOpen={isOpen}
         id={id}
         onDelete={onDelete}
-        titleHeader="Xoá sản phẩm"
+        titleHeader="Xóa phân khúc khách hàng"
         titleBody="Bạn có chắc không? Bạn không thể hoàn tác hành động này sau đó."
-        btnName="Xoá"
+        btnName=" Xoá"
       />
 
       <ModalForm
         formBody={
-          <ModalFormProduct
-            onClose={onCloseProduct}
+          <ModalFormCustomerSegment
+            onClose={onCloseCustomerSegment}
             handleEdit={onEdit}
             isEdit={true}
+            formData={formData}
+            setFormData={setFormData}
             id={id}
           />
         }
-        onClose={onCloseProduct}
-        isOpen={isOpenProduct}
-        title={t("Cập nhật sản phẩm")}
+        onClose={onCloseCustomerSegment}
+        isOpen={isOpenCustomerSegment}
+        title={t("Cập nhật phân khúc khách hàng")}
       />
     </>
   );
 };
 
-export default ActionMenuProduct;
+export default ActionMenuCustomerSegment;

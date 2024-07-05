@@ -12,7 +12,6 @@ import {
 
 import styles from "./ModalFormBrand.module.scss";
 import { BrandForm } from "../../../models/BrandForm.model";
-import { themeColors } from "../../../constants/GlobalStyles";
 import { isImageFile } from "../../../utils/validation";
 
 interface ModalFormBrandProps {
@@ -138,7 +137,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
           <Flex justify="space-between" mb={3}>
             <Box flex="1" ml={2}>
               <Text className={styles.textFontWeight600} py={3} pr={3}>
-                Brand Name
+                Tên thương hiệu
               </Text>
               <Input
                 value={formData.brandName.value}
@@ -151,7 +150,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
               )}
               <Box mt={2}>
                 <Text className={styles.textFontWeight600} py={3} pr={3}>
-                  Upload Brand Logo
+                  Logo thương hiệu
                 </Text>
                 <Flex align="center">
                   {!formData.image.value && !formData.imageUrl?.value && (
@@ -164,7 +163,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
                   {(formData.image.value ||
                     (formData.imageUrl && formData.imageUrl.value)) && (
                     <Button onClick={handleRemoveImage} ml={3}>
-                      Remove
+                      Xoá
                     </Button>
                   )}
                 </Flex>
@@ -190,10 +189,10 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
             className={styles.CancelBtn}
             onClick={cancelHandler}
           >
-            Cancel
+            Huỷ
           </Button>
           <Button  onClick={handleNextForm} className={styles.MainBtn}>
-            {isEdit ? "Save" : "Next"}
+            {isEdit ? "Lưu" : "Tiếp tục"}
           </Button>
         </Flex>
       </ModalFooter>

@@ -6,6 +6,12 @@
   .searchWrapper {
     @extend .searchWrapper;
   }
+
+  
+  .AddCustomerSegmentBtn {
+    @extend .primaryButton;
+    @extend .addButton;
+  }
   
   .CustomerSegment {
     @extend .table;

@@ -9,14 +9,15 @@ import {
 } from "@chakra-ui/react";
 import style from "./ModalFormCategory.module.scss";
 import { toast } from "react-toastify";
-import { CategoryForm } from "../../../models/CategoryForm";
+import { CategoryForm } from "../../../models/CategoryForm.model";
 import moment from "moment";
 import { getCategory } from "../../../services/CategoryService";
+import { capitalizeWords } from "../../../utils/functionHelper";
 
 interface ModalFormCategoryProps {
   id?: number;
   handleCreate?: (id: number, categoryName: string) => void;
-  handleEdit?: (cateId: number, brandId: number, categoryName: string) => void;
+  handleEdit?: (cateId: number, brandId: number, categoryName: string, onClose: () => void) => void;
   onClose: () => void;
   isEdit: boolean;
 }
@@ -65,14 +66,6 @@ const ModalFormCategory: React.FC<ModalFormCategoryProps> = ({
     }));
   };
 
-  const capitalizeWords = (str: string) => {
-    return str
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
-
   const handleSubmit = async () => {
     const errors = {
       categoryName: formData.categoryName.value
@@ -97,8 +90,7 @@ const ModalFormCategory: React.FC<ModalFormCategoryProps> = ({
       if (!isEdit) {
         handleCreate?.(brandId, capitalizedCategoryName);
       } else {
-        handleEdit?.(id!, brandId, capitalizedCategoryName);
-        onClose();
+        handleEdit?.(id!, brandId, capitalizedCategoryName, onClose);
       }
     }
   };
@@ -108,10 +100,10 @@ const ModalFormCategory: React.FC<ModalFormCategoryProps> = ({
       <ModalBody>
         <Flex className={style.ModalBody}>
           <Flex className={style.ModalBodyItem}>
-            <Text className={style.FieldTitle}>Category Name</Text>
+            <Text className={style.FieldTitle}>Tên danh mục</Text>
             <Input
               className={style.InputField}
-              placeholder="Category name"
+              placeholder="VD: Trà"
               value={formData.categoryName.value}
               onChange={(e) => handleChange("categoryName", e.target.value)}
             />
@@ -124,7 +116,7 @@ const ModalFormCategory: React.FC<ModalFormCategoryProps> = ({
           <Flex className={style.ModalBodyItem}>
             <Text className={style.FieldTitle}>
               {" "}
-              {isEdit ? "Update on" : "Create on"}
+              {isEdit ? "Ngày cập nhật" : "Ngày tạo"}
             </Text>
             <Input
               className={style.InputField}
@@ -139,10 +131,10 @@ const ModalFormCategory: React.FC<ModalFormCategoryProps> = ({
       <ModalFooter>
         <Flex className={style.Footer}>
           <Button onClick={() => onClose()}>
-            Cancel
+            Huỷ
           </Button>
           <Button className={style.AddCategoryBtn} onClick={handleSubmit}>
-            {isEdit ? "Save" : "Create"}
+            {isEdit ? "Lưu" : "Tạo mới"}
           </Button>
         </Flex>
       </ModalFooter>

@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import style from "./Brand.module.scss";
 import { Image } from "@chakra-ui/react";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
-import { getBrandOptions } from "../../utils/getRowPerPage";
 import {
   deleteBrand,
   getBrands,
@@ -14,8 +13,9 @@ import {
 import { BrandData } from "../../payloads/responses/BrandData.model";
 import moment from "moment";
 import Loading from "../../components/Loading";
-import { brandUpdate } from "../../payloads/requests/updateBrand.model";
 import ActionMenuBrand from "../../components/ActionMenu/ActionMenuBrand/ActionMenuBrand";
+import { brandUpdate } from "../../payloads/requests/updateRequests.model";
+import { getBrandOptions } from "../../utils/functionHelper";
 
 function Brand() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -107,6 +107,8 @@ function Brand() {
       if (result.statusCode === 200) {
         fetchData();
         toast.success("Cập nhật thương hiệu thành công");
+      } else {
+        toast.error(result.message);
       }
     } catch {
       toast.error("Cập nhật thương hiệu thất bại");
@@ -141,7 +143,7 @@ function Brand() {
                 <div className={style.wrapperText}>
                   <div className={style.header}>{brand.brandName}</div>
                   <div className={style.createDate}>
-                    Create on {moment(brand.createDate).format("DD/MM/YYYY")}
+                    Ngày tạo {moment(brand.createDate).format("DD/MM/YYYY")}
                   </div>
                 </div>
                 <div className={style.btnContainer}>

@@ -42,6 +42,7 @@ import { createBrand } from "../../services/BrandService";
 import { getInitialUserData } from "../../utils/initialUserData";
 import { BranchForm } from "../../models/BranchForm.model";
 import { createBranch } from "../../services/BranchService";
+import { capitalizeWords } from "../../utils/functionHelper";
 
 function Sidebar() {
   const { t } = useTranslation();
@@ -138,13 +139,6 @@ function Sidebar() {
       permissionRole: UserRole.Admin,
     },
     {
-      icon: AiOutlineCustomerService,
-      label: t("customer segment"),
-      divider: true,
-      to: "/customerSegment",
-      permissionRole: UserRole.Admin,
-    },
-    {
       icon: AiOutlineProduct,
       label: t("products"),
       to: "/products",
@@ -154,6 +148,13 @@ function Sidebar() {
       icon: MdOutlineCategory,
       label: t("categories"),
       to: "/categories",
+      permissionRole: [UserRole.BrandManager, UserRole.BranchManager],
+    },
+    {
+      icon: AiOutlineCustomerService,
+      label: t("customer segment"),
+      divider: true,
+      to: "/customerSegment",
       permissionRole: [UserRole.BrandManager, UserRole.BranchManager],
     },
     {
@@ -242,7 +243,7 @@ function Sidebar() {
       const brandForm = new FormData();
 
       if (brandData.image.value && brandData.brandName.value) {
-        brandForm.append("BrandName", brandData.brandName.value);
+        brandForm.append("BrandName", capitalizeWords(brandData.brandName.value));
         brandForm.append("Image", brandData.image.value);
       }
 
@@ -254,7 +255,7 @@ function Sidebar() {
         const brandResult = await createBrand(brandForm);
 
         if (brandResult.statusCode === 200) {
-          await onCloseUser();
+          onCloseUser();
           const toastMessage = "Thêm thương hiệu mới thành công";
           const pathname = location.pathname;
           const formattedPathname = pathname.replace("/", "");
@@ -365,7 +366,7 @@ function Sidebar() {
 
       <Flex className={style.Profile} onClick={logoutHandler}>
         <MdLogout className={style.LogoutIcon} />
-        {isExpanded && <Text className={style.LogoutText}>Logout</Text>}
+        {isExpanded && <Text className={style.LogoutText}>Đăng Xuất</Text>}
       </Flex>
 
       <ModalForm
@@ -380,7 +381,7 @@ function Sidebar() {
         }
         onClose={onCloseBrand}
         isOpen={isOpenBrand}
-        title={t("Add New Brand")}
+        title={t("Tạo thương hiệu mới")}
         updateBrandData={updateBrandData}
       />
 
@@ -396,7 +397,7 @@ function Sidebar() {
         }
         onClose={onCloseBranch}
         isOpen={isOpenBranch}
-        title={t("Add New Branch")}
+        title={t("Tạo chi nhánh mới")}
       />
 
       <ModalForm
@@ -419,7 +420,7 @@ function Sidebar() {
         }
         onClose={onCloseUser}
         isOpen={isOpenUser}
-        title={t("Add New User")}
+        title={t("Thêm người dùng mới")}
         updateBrandData={updateBrandData}
       />
     </Flex>

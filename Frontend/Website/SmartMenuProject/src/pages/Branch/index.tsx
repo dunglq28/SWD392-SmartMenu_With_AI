@@ -16,16 +16,16 @@ import {
 } from "@chakra-ui/react";
 import Loading from "../../components/Loading";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
-import { getOptions } from "../../utils/getRowPerPage";
 import {
   deleteBranch,
   getBranches,
   updateBranch,
 } from "../../services/BranchService";
 import moment from "moment";
-import { branchUpdate } from "../../payloads/requests/updateBranch.model";
 import Searchbar from "../../components/Searchbar";
 import ActionMenuBranch from "../../components/ActionMenu/ActionMenuBranch/ActionMenuBranch";
+import { branchUpdate } from "../../payloads/requests/updateRequests.model";
+import { getOptions } from "../../utils/functionHelper";
 
 function Branch() {
   const location = useLocation();
@@ -158,6 +158,8 @@ function Branch() {
       if (result.statusCode === 200) {
         fetchData();
         toast.success("Cập nhật chi nhánh thành công");
+      } else {
+        toast.error(result.message);
       }
     } catch {
       toast.error("Cập nhật chi nhánh thất bại");
@@ -186,11 +188,11 @@ function Branch() {
                 <Thead>
                   <Tr>
                     <Th className={style.HeaderTbl}>Id</Th>
-                    <Th className={style.HeaderTbl}>City</Th>
-                    <Th className={style.HeaderTbl}>Address</Th>
-                    <Th className={style.HeaderTbl}>Create on</Th>
-                    <Th className={style.HeaderTbl}>Is active</Th>
-                    <Th className={style.HeaderTbl}>Settings</Th>
+                    <Th className={style.HeaderTbl}>Thành phố</Th>
+                    <Th className={style.HeaderTbl}>Địa chỉ</Th>
+                    <Th className={style.HeaderTbl}>Ngày tạo</Th>
+                    <Th className={style.HeaderTbl}>Đang hoạt động</Th>
+                    <Th className={style.HeaderTbl}>Cài đặt</Th>
                   </Tr>
                 </Thead>
                 <Tbody>

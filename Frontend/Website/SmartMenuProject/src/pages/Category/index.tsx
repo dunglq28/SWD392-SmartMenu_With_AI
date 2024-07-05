@@ -17,7 +17,6 @@ import Searchbar from "../../components/Searchbar";
 import { useCallback, useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { CategoryData } from "../../payloads/responses/CategoryData.model";
-import { getOptions } from "../../utils/getRowPerPage";
 import {
   createCategory,
   deleteCategory,
@@ -31,6 +30,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import ModalForm from "../../components/Modals/ModalForm/ModalForm";
 import ModalFormCategory from "../../components/Modals/ModalFormCategory/ModalFormCategory";
 import ActionMenuCategory from "../../components/ActionMenu/ActionMenuCategory/ActionMenuCategory";
+import { getOptions } from "../../utils/functionHelper";
 
 function Category() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -145,12 +145,13 @@ function Category() {
     }
   }
 
-  async function handleEdit(cateId: number, brandId: number, categoryName: string) {
+  async function handleEdit(cateId: number, brandId: number, categoryName: string, onClose: () => void) {
     try { 
       var result = await updateCategory(cateId, brandId, categoryName);
       if (result.statusCode === 200) {
         fetchData();
         toast.success("Cập nhật loại sản phẩm thành công");
+        onClose();
       } else {
         toast.error(result.message);
       }
@@ -171,7 +172,7 @@ function Category() {
           <Text as="span" fontSize="25px" me={3}>
             <IoAddCircleOutline />
           </Text>
-          Create Category
+          Tạo danh mục
         </Button>
         <ModalForm
           formBody={
@@ -183,7 +184,7 @@ function Category() {
           }
           onClose={onCloseCategory}
           isOpen={isOpenCategory}
-          title={"Add New Category"}
+          title={"Tạo mới danh mục"}
         />
       </Flex>
       <Flex className={style.Category}>
@@ -193,9 +194,9 @@ function Category() {
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>
-                <Th className={style.HeaderTbl}>Name</Th>
-                <Th className={style.HeaderTbl}>Created on</Th>
-                <Th className={style.HeaderTbl}>Settings</Th>
+                <Th className={style.HeaderTbl}>Tên danh mục</Th>
+                <Th className={style.HeaderTbl}>Ngày tạo</Th>
+                <Th className={style.HeaderTbl}>Cài đặt</Th>
               </Tr>
             </Thead>
             <Tbody>

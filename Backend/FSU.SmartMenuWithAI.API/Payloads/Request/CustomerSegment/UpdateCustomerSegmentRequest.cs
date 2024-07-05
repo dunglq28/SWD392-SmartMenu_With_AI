@@ -1,13 +1,13 @@
-﻿using FSU.SmartMenuWithAI.Service.Models;
-using FSU.SmartMenuWithAI.Service.Models.CustomerSegment;
-using FSU.SmartMenuWithAI.Service.Models.MenuList;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace FSU.SmartMenuWithAI.API.Payloads.Request.CustomerSegment
 {
-    public class AddCusSegmentRequest
+    public class UpdateCustomerSegmentRequest
     {
+        [Required(ErrorMessage = "Thiếu ID phân khúc")]
+        [JsonProperty("segment-id")]
+        public int SegmentId { get; set; }
         [Required(ErrorMessage = "Nhập tên phân khúc")]
         [StringLength(500, MinimumLength = 5)]
         [JsonProperty("segment-name")]
@@ -18,10 +18,10 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.CustomerSegment
         public string Age { get; set; }
         [Required(ErrorMessage = "Chọn giới tính")]
         [JsonProperty("gender")]
-        public List<string> Gender { get; set; }
+        public string Gender { get; set; }
         [Required(ErrorMessage = "Chọn thời gian")]
         [JsonProperty("session")]
-        public List<string> Session { get; set; }
+        public string Session { get; set; }
         [Required(ErrorMessage = "Thiếu ID thương hiệu")]
         [JsonProperty("brand-id")]
         public int BrandId { get; set; }

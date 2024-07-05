@@ -22,7 +22,7 @@ import ModalFormCategory from "../../Modals/ModalFormCategory/ModalFormCategory"
 interface ActionMenuProps {
   id: number;
   onDelete: (id: number) => void;
-  onEdit: (cateId: number, brandId: number, categoryName: string) => void;
+  onEdit: (cateId: number, brandId: number, categoryName: string, onClose: () => void) => void;
 }
 
 const ActionMenuCategory: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
@@ -54,11 +54,11 @@ const ActionMenuCategory: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
                 className={style.PopupButton}
                 onClick={() => onOpenCategory()}
               >
-                <Text>Edit Category</Text>
+                <Text className={style.PopupButtonText}>Cập nhật danh mục</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text>Delete Category</Text>
+                <Text className={style.PopupButtonText}>Xóa danh mục</Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>
@@ -70,9 +70,9 @@ const ActionMenuCategory: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
         isOpen={isOpen}
         id={id}
         onDelete={onDelete}
-        titleHeader="Delete Category"
-        titleBody="Are you sure? You can't undo this action afterwards."
-        btnName=" Delete"
+        titleHeader="Xóa danh mục"
+        titleBody="Bạn có chắc không? Bạn không thể hoàn tác hành động này sau đó."
+        btnName="Xoá"
       />
 
       <ModalForm
@@ -86,7 +86,7 @@ const ActionMenuCategory: FC<ActionMenuProps> = ({ id, onDelete, onEdit }) => {
         }
         onClose={onCloseCategory}
         isOpen={isOpenCategory}
-        title={t("Update Category")}
+        title={t("Cập nhật danh mục")}
       />
     </>
   );

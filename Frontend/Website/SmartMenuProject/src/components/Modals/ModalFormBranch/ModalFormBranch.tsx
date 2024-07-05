@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 
 import styles from "./ModalFormBranch.module.scss";
-import { themeColors } from "../../../constants/GlobalStyles";
 import { BranchForm } from "../../../models/BranchForm.model";
 import { City } from "../../../models/City.model";
 import { District } from "../../../models/District.model";
@@ -151,19 +150,21 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
 
   const handleCityChange = async (citySelected: string) => {
     try {
-      const cityId = citySelected.split(",")[0].trim();
-      const districtData = await fetchDistricts(cityId);
-      setDistricts(districtData);
-      setFormData((prevData) => ({
-        ...prevData,
-        city: {
-          id: cityId,
-          name: citySelected.split(",")[1].trim(),
-          errorMessage: "",
-        },
-        district: { id: "", name: "", errorMessage: "" },
-        ward: { id: "", name: "", errorMessage: "" },
-      }));
+      if (citySelected != "") {
+        const cityId = citySelected.split(",")[0].trim();
+        const districtData = await fetchDistricts(cityId);
+        setDistricts(districtData);
+        setFormData((prevData) => ({
+          ...prevData,
+          city: {
+            id: cityId,
+            name: citySelected.split(",")[1].trim(),
+            errorMessage: "",
+          },
+          district: { id: "", name: "", errorMessage: "" },
+          ward: { id: "", name: "", errorMessage: "" },
+        }));
+      }
     } catch (error) {
       console.error("Error fetching districts:", error);
     }
@@ -171,18 +172,20 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
 
   const handleDistrictChange = async (districtSelected: string) => {
     try {
-      const districtId = districtSelected.split(",")[0].trim();
-      const wardData = await fetchWards(districtId);
-      setWards(wardData);
-      setFormData((prevData) => ({
-        ...prevData,
-        district: {
-          id: districtId,
-          name: districtSelected.split(",")[1].trim(),
-          errorMessage: "",
-        },
-        ward: { id: "", name: "", errorMessage: "" },
-      }));
+      if (districtSelected != "") {
+        const districtId = districtSelected.split(",")[0].trim();
+        const wardData = await fetchWards(districtId);
+        setWards(wardData);
+        setFormData((prevData) => ({
+          ...prevData,
+          district: {
+            id: districtId,
+            name: districtSelected.split(",")[1].trim(),
+            errorMessage: "",
+          },
+          ward: { id: "", name: "", errorMessage: "" },
+        }));
+      }
     } catch (error) {
       console.error("Error fetching wards:", error);
     }
@@ -190,14 +193,16 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
 
   const handleWardChange = async (wardSelected: string) => {
     try {
-      setFormData((prevData) => ({
-        ...prevData,
-        ward: {
-          id: wardSelected.split(",")[0].trim(),
-          name: wardSelected.split(",")[1].trim(),
-          errorMessage: "",
-        },
-      }));
+      if (wardSelected != "") {
+        setFormData((prevData) => ({
+          ...prevData,
+          ward: {
+            id: wardSelected.split(",")[0].trim(),
+            name: wardSelected.split(",")[1].trim(),
+            errorMessage: "",
+          },
+        }));
+      }
     } catch (error) {
       console.error("Error fetching wards:", error);
     }
@@ -248,7 +253,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
         ...prevData,
         brandName: {
           ...prevData.brandName,
-          errorMessage: "Brand Name is required",
+          errorMessage: "Tên thương hiệu là bắt buộc",
         },
       }));
       hasError = true;
@@ -259,7 +264,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
         ...prevData,
         city: {
           ...prevData.city,
-          errorMessage: "City is required",
+          errorMessage: "Thành phố là bắt buộc",
         },
       }));
       hasError = true;
@@ -270,7 +275,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
         ...prevData,
         district: {
           ...prevData.district,
-          errorMessage: "District is required",
+          errorMessage: "Quận là bắt buộc",
         },
       }));
       hasError = true;
@@ -281,7 +286,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
         ...prevData,
         ward: {
           ...prevData.ward,
-          errorMessage: "Ward is required",
+          errorMessage: "Phường là bắt buộc",
         },
       }));
       hasError = true;
@@ -292,7 +297,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
         ...prevData,
         address: {
           ...prevData.address,
-          errorMessage: "Address is required",
+          errorMessage: "Địa chỉ là bắt buộc",
         },
       }));
       hasError = true;
@@ -323,7 +328,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
               <Flex justify="space-between" mb={3}>
                 <Box flex="1" ml={2}>
                   <Text className={styles.textFontWeight600} py={3} pr={3}>
-                    Brand Name
+                    Tên thương hiệu
                   </Text>
                   {isEdit ? (
                     <Input
@@ -339,7 +344,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
                       onChange={(e) =>
                         handleInputChange("brandName", e.target.value)
                       }
-                      placeholder="Select brand"
+                      placeholder="Chọn Thương Hiệu"
                     >
                       {brandNames.map((brandName) => (
                         <option
@@ -358,7 +363,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
                   )}
 
                   <Text className={styles.textFontWeight600} py={3} pr={3}>
-                    City
+                    Thành phố
                   </Text>
                   <Select
                     id="city"
@@ -368,7 +373,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
                       handleInputChange("city", e.target.value);
                       handleCityChange(e.target.value);
                     }}
-                    placeholder="Select city"
+                    placeholder="Chọn Thành Phố"
                   >
                     {cities.map((city) => (
                       <option key={city.id} value={`${city.id}, ${city.name}`}>
@@ -383,7 +388,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
                   <Flex justify="space-between" mb={3}>
                     <Box flex="1">
                       <Text className={styles.textFontWeight600} py={3} pr={3}>
-                        District
+                        Quận
                       </Text>
                       <Select
                         id="district"
@@ -393,7 +398,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
                           handleInputChange("district", e.target.value);
                           handleDistrictChange(e.target.value);
                         }}
-                        placeholder="Select district"
+                        placeholder="Chọn Quận"
                       >
                         {districts.map((district) => (
                           <option
@@ -413,7 +418,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
 
                     <Box flex="1" ml={3}>
                       <Text className={styles.textFontWeight600} py={3} pr={3}>
-                        Ward
+                        Phường
                       </Text>
                       <Select
                         id="ward"
@@ -423,7 +428,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
                           handleInputChange("ward", e.target.value);
                           handleWardChange(e.target.value);
                         }}
-                        placeholder="Select ward"
+                        placeholder="Chọn Phường"
                       >
                         {wards.map((ward) => (
                           <option
@@ -443,10 +448,10 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
                   </Flex>
 
                   <Text className={styles.textFontWeight600} py={3} pr={3}>
-                    Address
+                    Địa chỉ
                   </Text>
                   <Input
-                    placeholder="Address"
+                    placeholder="Địa chỉ"
                     pl={3}
                     value={formData.address.value}
                     onChange={(e) =>
@@ -464,10 +469,10 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
           <ModalFooter>
             <Flex>
               <Button className={styles.CancelBtn} onClick={cancelHandler}>
-                Cancel
+                Huỷ
               </Button>
               <Button onClick={handleNextForm} className={styles.MainBtn}>
-                {isEdit ? "Save" : "Next"}
+                {isEdit ? "Lưu" : "Tiếp tục"}
               </Button>
             </Flex>
           </ModalFooter>

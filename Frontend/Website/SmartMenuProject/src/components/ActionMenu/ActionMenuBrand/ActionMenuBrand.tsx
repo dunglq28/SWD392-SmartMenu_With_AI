@@ -19,9 +19,10 @@ import { useNavigate } from "react-router-dom";
 import ModalForm from "../../Modals/ModalForm/ModalForm";
 import ModalFormBrand from "../../Modals/ModalFormBrand/ModalFormBrand";
 import { BrandForm } from "../../../models/BrandForm.model";
-import { brandUpdate } from "../../../payloads/requests/updateBrand.model";
 import { getBrand } from "../../../services/BrandService";
 import CustomAlertDialog from "../../AlertDialog";
+import { brandUpdate } from "../../../payloads/requests/updateRequests.model";
+import { capitalizeWords } from "../../../utils/functionHelper";
 
 interface ActionMenuProps {
   id: number;
@@ -60,7 +61,7 @@ const ActionMenuBrand: FC<ActionMenuProps> = ({
   const updateBrandData = (brand: BrandForm, isSave: boolean) => {
     var brandUpdate: brandUpdate = {
       id: id,
-      brandName: brand.brandName.value,
+      brandName: capitalizeWords(brand.brandName.value),
       image: brand.image.value,
     };
     if (isSave) {
@@ -102,15 +103,15 @@ const ActionMenuBrand: FC<ActionMenuProps> = ({
             <PopoverArrow />
             <PopoverBody>
               <Flex className={style.PopupButton} onClick={handleViewClick}>
-                <Text>View Branch</Text>
+                <Text className={style.PopupButtonText}>Xem chi nhánh</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={handleEditClick}>
-                <Text>Edit Brand</Text>
+                <Text className={style.PopupButtonText}>Cập nhật thương hiệu</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text>Delete Brand</Text>
+                <Text className={style.PopupButtonText}>Xoá thương hiệu</Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>
@@ -122,9 +123,9 @@ const ActionMenuBrand: FC<ActionMenuProps> = ({
         isOpen={isOpen}
         id={id}
         onDelete={onDelete}
-        titleHeader="Delete Brand"
-        titleBody="Are you sure? You can't undo this action afterwards."
-        btnName=" Delete"
+        titleHeader="Xoá thương hiệu"
+        titleBody="Bạn có chắc không? Bạn không thể hoàn tác hành động này sau đó."
+        btnName="Xoá"
       />
 
       <ModalForm
@@ -138,7 +139,7 @@ const ActionMenuBrand: FC<ActionMenuProps> = ({
         }
         onClose={onCloseBrand}
         isOpen={isOpenBrand}
-        title={t("Update Brand")}
+        title={t("Cập nhật thương hiệu")}
         updateBrandData={updateBrandData}
       />
     </>
