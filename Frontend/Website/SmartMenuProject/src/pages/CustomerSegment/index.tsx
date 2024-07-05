@@ -31,6 +31,7 @@ import {
   createCustomerSegment,
   deleteCustomerSegment,
   getCustomerSegments,
+  updateCustomerSegment,
 } from "../../services/CustomerSegmentService";
 import { CustomerSegmentData } from "../../payloads/responses/CustomerSegment.model";
 import { customerSegmentCreate } from "../../payloads/requests/createRequests.model";
@@ -51,13 +52,15 @@ function CustomerSegment() {
   const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
   const [totalPages, setTotalPages] = useState<number>(10);
   const [totalRecords, setTotalRecords] = useState<number>(0);
-  const [segmentFormData, setSegmentFormData] = useState<CustomerSegmentForm>({
+  const initialFormData: CustomerSegmentForm = {
     segmentName: { value: "", errorMessage: "" },
     gender: { value: "Male", errorMessage: "" },
     sessions: { value: [], errorMessage: "" },
     ageFrom: { value: "", errorMessage: "" },
     ageTo: { value: "", errorMessage: "" },
-  });
+  };
+  const [segmentFormData, setSegmentFormData] =
+    useState<CustomerSegmentForm>(initialFormData);
   const [isErrorCusSegment, setIsErrorCusSegment] = useState<ErrorState>({
     hasError: false,
     errorMessage: "",
@@ -140,6 +143,10 @@ function CustomerSegment() {
     [setCurrentPage, setRowsPerPage]
   );
 
+  function resetFormData() {
+    setSegmentFormData(initialFormData);
+  }
+
   async function handleCreate(brandId: number, segment: customerSegmentCreate) {
     try {
       setIsLoading(true);
@@ -183,21 +190,40 @@ function CustomerSegment() {
   async function handleEdit(
     brandId: number,
     segmentId: number,
-    segment: customerSegmentUpdate
+    segment: customerSegmentUpdate,
+    onClose: () => void
   ) {
-    // try {
-    //   var result = await updateUser(id, user);
-    //   if (result.statusCode === 200) {
-    //     fetchData();
-    //     toast.success("Cập nhật thành công");
-    //   }
-    // } catch {
-    //   toast.error("Cập nhật thất bại");
-    // }
+    try {
+      setIsLoading(true);
+      var result = await updateCustomerSegment(segmentId, brandId, segment);
+      if (result.statusCode === 200) {
+        fetchData();
+        toast.success("Cập nhật phân khúc khách hàng thành công");
+        onClose();
+      } else {
+        toast.error(result.message);
+      }
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    }
   }
 
   async function handleSearch(value: string) {
     fetchData(value);
+  }
+
+  function onOpenCustomerSegmentHandler() {
+    if (
+      segmentFormData.segmentName.value !== "" ||
+      segmentFormData.sessions.value.length > 0 ||
+      segmentFormData.ageFrom.value !== "" ||
+      segmentFormData.ageTo.value !== ""
+    ) {
+      resetFormData();
+    }
+    onOpenCustomerSegment();
   }
 
   return (
@@ -205,7 +231,7 @@ function CustomerSegment() {
       <Flex className={style.searchWrapper}>
         <Searchbar onSearch={handleSearch} />
         <Button
-          onClick={onOpenCustomerSegment}
+          onClick={onOpenCustomerSegmentHandler}
           className={style.AddCustomerSegmentBtn}
         >
           <Text as="span" fontSize="25px" me={3}>

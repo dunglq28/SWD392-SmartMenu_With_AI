@@ -22,6 +22,7 @@ import { BrandForm } from "../../../models/BrandForm.model";
 import { getBrand } from "../../../services/BrandService";
 import CustomAlertDialog from "../../AlertDialog";
 import { brandUpdate } from "../../../payloads/requests/updateRequests.model";
+import { capitalizeWords } from "../../../utils/functionHelper";
 
 interface ActionMenuProps {
   id: number;
@@ -60,7 +61,7 @@ const ActionMenuBrand: FC<ActionMenuProps> = ({
   const updateBrandData = (brand: BrandForm, isSave: boolean) => {
     var brandUpdate: brandUpdate = {
       id: id,
-      brandName: brand.brandName.value,
+      brandName: capitalizeWords(brand.brandName.value),
       image: brand.image.value,
     };
     if (isSave) {

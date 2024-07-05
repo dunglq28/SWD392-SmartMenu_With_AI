@@ -107,6 +107,8 @@ function Brand() {
       if (result.statusCode === 200) {
         fetchData();
         toast.success("Cập nhật thương hiệu thành công");
+      } else {
+        toast.error(result.message);
       }
     } catch {
       toast.error("Cập nhật thương hiệu thất bại");

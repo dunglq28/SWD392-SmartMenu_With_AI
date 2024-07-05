@@ -136,7 +136,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       },
       false
     );
-    onClose();
+    // onClose();
   };
 
   const openFormPreviousHandler = () => {
@@ -214,7 +214,6 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         } else if (formPrevious === CurrentForm.BRANCH) {
           saveBranchHandle?.(formData);
         }
-        cancelHandler();
       }
     }
   };

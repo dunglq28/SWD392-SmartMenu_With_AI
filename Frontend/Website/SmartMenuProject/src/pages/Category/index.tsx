@@ -145,12 +145,13 @@ function Category() {
     }
   }
 
-  async function handleEdit(cateId: number, brandId: number, categoryName: string) {
+  async function handleEdit(cateId: number, brandId: number, categoryName: string, onClose: () => void) {
     try { 
       var result = await updateCategory(cateId, brandId, categoryName);
       if (result.statusCode === 200) {
         fetchData();
         toast.success("Cập nhật loại sản phẩm thành công");
+        onClose();
       } else {
         toast.error(result.message);
       }

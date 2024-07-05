@@ -158,6 +158,8 @@ function Branch() {
       if (result.statusCode === 200) {
         fetchData();
         toast.success("Cập nhật chi nhánh thành công");
+      } else {
+        toast.error(result.message);
       }
     } catch {
       toast.error("Cập nhật chi nhánh thất bại");
