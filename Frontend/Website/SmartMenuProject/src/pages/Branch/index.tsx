@@ -188,11 +188,11 @@ function Branch() {
                 <Thead>
                   <Tr>
                     <Th className={style.HeaderTbl}>Id</Th>
-                    <Th className={style.HeaderTbl}>City</Th>
-                    <Th className={style.HeaderTbl}>Address</Th>
-                    <Th className={style.HeaderTbl}>Create on</Th>
-                    <Th className={style.HeaderTbl}>Is active</Th>
-                    <Th className={style.HeaderTbl}>Settings</Th>
+                    <Th className={style.HeaderTbl}>Thành phố</Th>
+                    <Th className={style.HeaderTbl}>Địa chỉ</Th>
+                    <Th className={style.HeaderTbl}>Ngày tạo</Th>
+                    <Th className={style.HeaderTbl}>Đang hoạt động</Th>
+                    <Th className={style.HeaderTbl}>Cài đặt</Th>
                   </Tr>
                 </Thead>
                 <Tbody>

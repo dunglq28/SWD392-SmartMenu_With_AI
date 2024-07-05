@@ -366,7 +366,7 @@ function Sidebar() {
 
       <Flex className={style.Profile} onClick={logoutHandler}>
         <MdLogout className={style.LogoutIcon} />
-        {isExpanded && <Text className={style.LogoutText}>Logout</Text>}
+        {isExpanded && <Text className={style.LogoutText}>Đăng Xuất</Text>}
       </Flex>
 
       <ModalForm
@@ -381,7 +381,7 @@ function Sidebar() {
         }
         onClose={onCloseBrand}
         isOpen={isOpenBrand}
-        title={t("Add New Brand")}
+        title={t("Tạo thương hiệu mới")}
         updateBrandData={updateBrandData}
       />
 
@@ -397,7 +397,7 @@ function Sidebar() {
         }
         onClose={onCloseBranch}
         isOpen={isOpenBranch}
-        title={t("Add New Branch")}
+        title={t("Tạo chi nhánh mới")}
       />
 
       <ModalForm
@@ -420,7 +420,7 @@ function Sidebar() {
         }
         onClose={onCloseUser}
         isOpen={isOpenUser}
-        title={t("Add New User")}
+        title={t("Thêm người dùng mới")}
         updateBrandData={updateBrandData}
       />
     </Flex>

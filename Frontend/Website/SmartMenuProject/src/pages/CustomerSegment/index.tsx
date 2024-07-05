@@ -237,7 +237,7 @@ function CustomerSegment() {
           <Text as="span" fontSize="25px" me={3}>
             <IoAddCircleOutline />
           </Text>
-          Create Customer Segment
+          Tạo phân khúc khách hàng
         </Button>
         <ModalForm
           formBody={
@@ -251,7 +251,7 @@ function CustomerSegment() {
           }
           onClose={onCloseCustomerSegment}
           isOpen={isOpenCustomerSegment}
-          title={"Add New Customer Segment"}
+          title={"Tạo mới phân khúc khách hàng"}
         />
       </Flex>
       <Flex className={style.CustomerSegment}>
@@ -261,10 +261,10 @@ function CustomerSegment() {
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>
-                <Th className={style.HeaderTbl}>Customer Segment Name</Th>
-                <Th className={style.HeaderTbl}>Demographics</Th>
-                <Th className={style.HeaderTbl}>Created on</Th>
-                <Th className={style.HeaderTbl}>Settings</Th>
+                <Th className={style.HeaderTbl}>Tên phân khúc khách hàng</Th>
+                <Th className={style.HeaderTbl}>Nhân khẩu học</Th>
+                <Th className={style.HeaderTbl}>Ngày tạo</Th>
+                <Th className={style.HeaderTbl}>Cài đặt</Th>
               </Tr>
             </Thead>
             <Tbody>

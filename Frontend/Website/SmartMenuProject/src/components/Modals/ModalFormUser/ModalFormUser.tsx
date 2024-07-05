@@ -229,10 +229,10 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
           <Flex justify="space-between" mb={3}>
             <Box flex="1" ml={2}>
               <Text className={styles.textFontWeight600} py={3} pr={3}>
-                Full Name
+                Họ và tên
               </Text>
               <Input
-                placeholder="Full name"
+                placeholder="Họ và tên"
                 pl={3}
                 value={formData.fullName.value}
                 onChange={(e) => handleInputChange("fullName", e.target.value)}
@@ -246,11 +246,11 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
           <Flex justify="space-between" mb={3}>
             <Box flex="1" ml={2}>
               <Text className={styles.textFontWeight600} py={3} pr={3}>
-                Username
+                Tên tài khoản
               </Text>
               <Input
                 readOnly
-                placeholder="Username"
+                placeholder="Tên tài khoản"
                 pl={3}
                 value={formData.userName.value}
               />
@@ -260,10 +260,10 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
           <Flex justify="space-between" mb={3} ml={2}>
             <Box flex="1">
               <Text className={styles.textFontWeight600} py={3} pr={3}>
-                Phone Number
+                Số điện thoại
               </Text>
               <Input
-                placeholder="Phone number"
+                placeholder="Số điện thoại"
                 pl={3}
                 value={formData.phoneNumber.value}
                 onChange={(e) =>
@@ -277,7 +277,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
 
             <Box flex="1" ml={3}>
               <Text className={styles.textFontWeight600} py={3} pr={3}>
-                Date of Birth
+                Ngày sinh
               </Text>
               <Input
                 type="date"
@@ -298,7 +298,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
           <Flex justify="space-between" mb={3}>
             <Box flex="1" ml={3}>
               <Text className={styles.textFontWeight600} py={3} pr={3} mb={2}>
-                Gender
+                Giới tính
               </Text>
               <RadioGroup
                 value={formData.gender.value}
@@ -316,7 +316,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
             </Box>
             <Box flex="1" ml={3}>
               <Text className={styles.textFontWeight600} py={3} pr={3}>
-                Is Active
+                Đang hoạt động
               </Text>
               <Select
                 id="isActive"
@@ -327,8 +327,8 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
                 <option disabled hidden value="">
                   Select one
                 </option>
-                <option value="1">Active</option>
-                <option value="0">Inactive</option>
+                <option value="1">Hoạt đông</option>
+                <option value="0">Không hoạt động</option>
               </Select>
             </Box>
           </Flex>
@@ -341,16 +341,16 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
             color="white"
             onClick={openFormPreviousHandler}
           >
-            Back
+            Quay lại
           </Button>
         )}
 
         <Flex>
           <Button className={styles.CancelBtn} onClick={cancelHandler}>
-            Cancel
+            Huỷ
           </Button>
           <Button onClick={handleSaveForm} className={styles.MainBtn}>
-            Save
+            Lưu
           </Button>
         </Flex>
       </ModalFooter>

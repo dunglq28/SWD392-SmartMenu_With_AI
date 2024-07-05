@@ -230,11 +230,11 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
         <Flex className={style.ModalBody}>
           <Flex className={style.Row}>
             <Flex className={style.ModalBodyItem}>
-              <Text className={style.FieldTitle}>Segment Name</Text>
+              <Text className={style.FieldTitle}>Tên phân khúc khách hàng</Text>
               <Input
                 className={style.InputField}
                 value={formData.segmentName.value}
-                placeholder="Segment Name"
+                placeholder="VD: Phân Khúc Trẻ"
                 onChange={(e) => handleChange("segmentName", e.target.value)}
               />
               {formData.segmentName.errorMessage && (
@@ -244,15 +244,15 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
               )}
             </Flex>
             <Flex className={style.ModalBodyItem}>
-              <Text className={style.FieldTitle}>Gender</Text>
+              <Text className={style.FieldTitle}>Giới tính</Text>
               <Select
                 className={style.InputField}
                 value={formData.gender.value}
                 onChange={(e) => handleChange("gender", e.target.value)}
               >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                {!isEdit && <option value="Both">Both</option>}
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                {!isEdit && <option value="Cả hai">Cả hai</option>}
               </Select>
               {formData.gender.errorMessage && (
                 <Text className={style.ErrorText}>
@@ -262,29 +262,29 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
             </Flex>
           </Flex>
           <Flex className={style.ModalBodyItem}>
-            <Text className={style.FieldTitle}>Sessions</Text>
+            <Text className={style.FieldTitle}>Thời gian</Text>
             {!isEdit ? (
               <Flex className={style.CheckboxGroup}>
                 <Checkbox
                   className={style.checkboxItem}
-                  isChecked={formData.sessions.value.includes("Morning")}
-                  onChange={() => handleCheckboxChange("Morning")}
+                  isChecked={formData.sessions.value.includes("Sáng")}
+                  onChange={() => handleCheckboxChange("Sáng")}
                 >
-                  Morning
+                  Buổi sáng
                 </Checkbox>
                 <Checkbox
                   className={style.checkboxItem}
-                  isChecked={formData.sessions.value.includes("Afternoon")}
-                  onChange={() => handleCheckboxChange("Afternoon")}
+                  isChecked={formData.sessions.value.includes("Trưa")}
+                  onChange={() => handleCheckboxChange("Trưa")}
                 >
-                  Afternoon
+                  Buối trưa
                 </Checkbox>
                 <Checkbox
                   className={style.checkboxItem}
-                  isChecked={formData.sessions.value.includes("Evening")}
-                  onChange={() => handleCheckboxChange("Evening")}
+                  isChecked={formData.sessions.value.includes("Chiều")}
+                  onChange={() => handleCheckboxChange("Chiều")}
                 >
-                  Evening
+                  Buổi chiều
                 </Checkbox>
               </Flex>
             ) : (
@@ -294,9 +294,9 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
                 onChange={handleRadioChange}
               >
                 <Stack direction="row">
-                  <Radio value="Morning">Morning</Radio>
-                  <Radio value="Afternoon">Afternoon</Radio>
-                  <Radio value="Evening">Evening</Radio>
+                  <Radio value="Sáng">Buổi sáng</Radio>
+                  <Radio value="Trưa">Buổi trưa</Radio>
+                  <Radio value="Chiều">Buổi chiều</Radio>
                 </Stack>
               </RadioGroup>
             )}
@@ -309,7 +309,7 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
 
           <Flex className={style.Row}>
             <Flex className={style.ModalBodyItem}>
-              <Text className={style.FieldTitle}>Age From</Text>
+              <Text className={style.FieldTitle}>Tuổi bắt đầu</Text>
               <Input
                 className={style.InputField}
                 value={formData.ageFrom.value}
@@ -323,7 +323,7 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
               )}
             </Flex>
             <Flex className={style.ModalBodyItem}>
-              <Text className={style.FieldTitle}>Age To</Text>
+              <Text className={style.FieldTitle}>Tuổi kết thúc</Text>
               <Input
                 className={style.InputField}
                 value={formData.ageTo.value}
@@ -346,10 +346,10 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
             backgroundColor="#ccc"
             onClick={() => onClose()}
           >
-            Cancel
+            Huỷ
           </Button>
           <Button className={style.AddSegmentBtn} onClick={handleSubmit}>
-            {isEdit ? "Save" : "Create"}
+            {isEdit ? "Lưu" : "Tạo mới"}
           </Button>
         </Flex>
       </ModalFooter>

@@ -46,7 +46,7 @@ const CustomAlertDialog: React.FC<AlertDialogProps> = ({
 
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onClose}>
-              Cancel
+              Huỷ
             </Button>
             <Button
               colorScheme="red"

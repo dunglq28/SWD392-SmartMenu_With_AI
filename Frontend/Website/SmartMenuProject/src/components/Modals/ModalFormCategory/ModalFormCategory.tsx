@@ -100,10 +100,10 @@ const ModalFormCategory: React.FC<ModalFormCategoryProps> = ({
       <ModalBody>
         <Flex className={style.ModalBody}>
           <Flex className={style.ModalBodyItem}>
-            <Text className={style.FieldTitle}>Category Name</Text>
+            <Text className={style.FieldTitle}>Tên danh mục</Text>
             <Input
               className={style.InputField}
-              placeholder="Category name"
+              placeholder="VD: Trà"
               value={formData.categoryName.value}
               onChange={(e) => handleChange("categoryName", e.target.value)}
             />
@@ -116,7 +116,7 @@ const ModalFormCategory: React.FC<ModalFormCategoryProps> = ({
           <Flex className={style.ModalBodyItem}>
             <Text className={style.FieldTitle}>
               {" "}
-              {isEdit ? "Update on" : "Create on"}
+              {isEdit ? "Ngày cập nhật" : "Ngày tạo"}
             </Text>
             <Input
               className={style.InputField}
@@ -131,10 +131,10 @@ const ModalFormCategory: React.FC<ModalFormCategoryProps> = ({
       <ModalFooter>
         <Flex className={style.Footer}>
           <Button onClick={() => onClose()}>
-            Cancel
+            Huỷ
           </Button>
           <Button className={style.AddCategoryBtn} onClick={handleSubmit}>
-            {isEdit ? "Save" : "Create"}
+            {isEdit ? "Lưu" : "Tạo mới"}
           </Button>
         </Flex>
       </ModalFooter>

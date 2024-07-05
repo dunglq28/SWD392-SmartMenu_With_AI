@@ -137,11 +137,11 @@ const ActionMenuBranch: FC<ActionMenuProps> = ({
             <PopoverBody>
               <Divider />
               <Flex className={style.PopupButton} onClick={handleEditClick}>
-                <Text className={style.PopupButtonText}>Edit Branch</Text>
+                <Text className={style.PopupButtonText}>Cập nhật chi nhánh</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>
-                <Text className={style.PopupButtonText}>Delete Branch</Text>
+                <Text className={style.PopupButtonText}>Xoá chi nhánh</Text>
               </Flex>
             </PopoverBody>
           </PopoverContent>
@@ -153,9 +153,9 @@ const ActionMenuBranch: FC<ActionMenuProps> = ({
         isOpen={isOpen}
         id={id}
         onDelete={onDelete}
-        titleHeader="Delete Branch"
-        titleBody="Are you sure? You can't undo this action afterwards."
-        btnName=" Delete"
+        titleHeader="Xoá chi nhánh"
+        titleBody="Bạn có chắc không? Bạn không thể hoàn tác hành động này sau đó."
+        btnName="Xoá"
       />
 
       <ModalForm
@@ -169,7 +169,7 @@ const ActionMenuBranch: FC<ActionMenuProps> = ({
         }
         onClose={onCloseBranch}
         isOpen={isOpenBranch}
-        title={t("Update Branch")}
+        title={t("Cập nhật chi nhánh")}
         updateBranchData={updateBranchData}
       />
     </>

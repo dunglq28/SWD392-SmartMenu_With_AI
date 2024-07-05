@@ -172,7 +172,7 @@ function Category() {
           <Text as="span" fontSize="25px" me={3}>
             <IoAddCircleOutline />
           </Text>
-          Create Category
+          Tạo danh mục
         </Button>
         <ModalForm
           formBody={
@@ -184,7 +184,7 @@ function Category() {
           }
           onClose={onCloseCategory}
           isOpen={isOpenCategory}
-          title={"Add New Category"}
+          title={"Tạo mới danh mục"}
         />
       </Flex>
       <Flex className={style.Category}>
@@ -194,9 +194,9 @@ function Category() {
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>
-                <Th className={style.HeaderTbl}>Name</Th>
-                <Th className={style.HeaderTbl}>Created on</Th>
-                <Th className={style.HeaderTbl}>Settings</Th>
+                <Th className={style.HeaderTbl}>Tên danh mục</Th>
+                <Th className={style.HeaderTbl}>Ngày tạo</Th>
+                <Th className={style.HeaderTbl}>Cài đặt</Th>
               </Tr>
             </Thead>
             <Tbody>
