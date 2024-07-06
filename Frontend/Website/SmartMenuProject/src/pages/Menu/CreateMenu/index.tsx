@@ -16,10 +16,17 @@ function CreateMenu() {
   const [selectedProducts2, setSelectedProducts2] = React.useState<
     ProductData[]
   >([]);
+  const [selectedProducts3, setSelectedProducts3] = React.useState<
+    ProductData[]
+  >([]);
+  const [selectedProducts4, setSelectedProducts4] = React.useState<
+    ProductData[]
+  >([]);
   const [currentListProduct, setCurrentListProduct] = React.useState<
     ProductData[]
   >([]);
   const [currentListIndex, setCurrentIndex] = useState(0);
+  const [maxProduct, setMaxProduct] = useState(0);
 
   const onOpenCreateMenu = () => setIsOpenCreateMenu(true);
   const onCloseCreateMenu = () => setIsOpenCreateMenu(false);
@@ -28,9 +35,19 @@ function CreateMenu() {
     switch (Index) {
       case 1:
         setCurrentListProduct(selectedProducts1);
+        setMaxProduct(4);
         break;
       case 2:
         setCurrentListProduct(selectedProducts2);
+        setMaxProduct(4);
+        break;
+      case 3:
+        setCurrentListProduct(selectedProducts3);
+        setMaxProduct(4);
+        break;
+      case 4:
+        setCurrentListProduct(selectedProducts4);
+        setMaxProduct(2);
         break;
     }
     setIsOpenListProduct(true);
@@ -46,6 +63,12 @@ function CreateMenu() {
         break;
       case 2:
         setSelectedProducts2(products);
+        break;
+      case 3:
+        setSelectedProducts3(products);
+        break;
+      case 4:
+        setSelectedProducts4(products);
         break;
     }
     onCloseListProduct();
@@ -67,6 +90,8 @@ function CreateMenu() {
         onOpenListProduct={onOpenListProduct}
         selectedProducts1={selectedProducts1}
         selectedProducts2={selectedProducts2}
+        selectedProducts3={selectedProducts3}
+        selectedProducts4={selectedProducts4}
       />
       <DrawerComponent
         isOpen={isOpenListProduct}
@@ -75,6 +100,7 @@ function CreateMenu() {
         IndexList={currentListIndex}
         products={fakeProductList}
         currentListProducts={currentListProduct}
+        MaxProduct={maxProduct}
       />
     </Flex>
   );

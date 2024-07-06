@@ -22,6 +22,7 @@ interface DrawerProps {
   products: ProductData[];
   currentListProducts: ProductData[];
   IndexList: number;
+  MaxProduct: number;
 }
 
 const DrawerComponent: React.FC<DrawerProps> = ({
@@ -31,6 +32,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
   products, // Sử dụng danh sách sản phẩm từ prop
   currentListProducts,
   IndexList,
+  MaxProduct,
 }) => {
   const [selectedProducts, setSelectedProducts] = useState<ProductData[]>([]);
 
@@ -39,8 +41,11 @@ const DrawerComponent: React.FC<DrawerProps> = ({
   }, [currentListProducts]);
   // Function để thêm sản phẩm đã chọn vào danh sách
   const handleAddToSelectedProducts = (product: ProductData) => {
-    // Kiểm tra nếu sản phẩm chưa được chọn
-    if (!selectedProducts.find((p) => p.productId === product.productId)) {
+    // Kiểm tra nếu sản phẩm chưa được chọn và chưa đạt MaxProduct
+    if (
+      !selectedProducts.find((p) => p.productId === product.productId) &&
+      selectedProducts.length < MaxProduct
+    ) {
       setSelectedProducts([...selectedProducts, product]);
     }
   };
