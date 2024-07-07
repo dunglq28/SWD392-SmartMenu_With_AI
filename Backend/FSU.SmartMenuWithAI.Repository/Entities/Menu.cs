@@ -13,6 +13,10 @@ public partial class Menu
 
     public bool IsActive { get; set; }
 
+    public string? MenuImage { get; set; }
+
+    public string? Description { get; set; }
+
     public int BrandId { get; set; }
 
     public virtual Brand Brand { get; set; } = null!;

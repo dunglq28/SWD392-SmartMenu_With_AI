@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FSU.SmartMenuWithAI.API.Common.Constants
+namespace FSU.SmartMenuWithAI.Service.Common.Constants
 {
     public class FolderRootImg
     {

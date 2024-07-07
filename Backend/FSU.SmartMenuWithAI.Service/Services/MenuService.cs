@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
+using FSU.SmartMenuWithAI.Service.Common.Constants;
 using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
@@ -56,23 +57,39 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<MenuDTO?> GetAsync(int id)
         {
-            var menu = await _unitOfWork.MenuRepository.GetByID(id);
-            var mapDTO = _mapper.Map<MenuDTO>(menu);
-            mapDTO.BrandName = menu.Brand.BrandName;
-            return mapDTO;
+            Expression<Func<Menu, bool>> filter = x => x.MenuId == id;
+            string includeProperties = "Brand";
+
+            var menu = await _unitOfWork.MenuRepository.GetByCondition(filter, includeProperties);
+            if (menu != null)
+            {
+                var mapDTO = _mapper.Map<MenuDTO>(menu);
+                mapDTO.BrandName = menu.Brand.BrandName;
+                return mapDTO;
+            }
+            return null;
         }
 
-        public async Task<bool> Insert(MenuDTO reqObj)
+        public async Task<MenuDTO> Insert(MenuDTO reqObj)
         {
             var menu = new Menu();
-            menu.MenuCode = Guid.NewGuid().ToString();
+            menu.MenuCode = CodeHelper.GenerateCode();
             menu.CreateDate = DateOnly.FromDateTime(DateTime.Now);
             menu.IsActive = reqObj.IsActive!.Value;
             menu.BrandId = reqObj.BrandId!.Value;
-
+            menu.Description = reqObj.Description;
+            menu.MenuImage = _s3Service.GetPreSignedURL(reqObj.BrandId + menu.MenuCode, FolderRootImg.Menu);
             await _unitOfWork.MenuRepository.Insert(menu);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
-            return result;
+            if (result == true)
+            {
+                // nếu kiểm tra đã thêm xuống db thì lấy lại menu đó từ db bằng code.
+                Expression<Func<Menu, bool>> getByCode = x => x.MenuCode == menu.MenuCode && x.BrandId == menu.BrandId;
+                var menuInDb = await _unitOfWork.MenuRepository.GetByCondition(getByCode);
+                var mapdto = _mapper.Map<MenuDTO>(menuInDb);
+                return mapdto;
+            }
+            return null!;
         }
 
         public async Task<bool> UpdateAsync(int id, bool isActive)
@@ -105,7 +122,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 var mapdto1 = _mapper.Map<MenuDTO>(menuRecomend);
                 return mapdto1;
             }
-            var menuDefault = await _unitOfWork.MenuRepository.GetAllNoPaging(x=> x.BrandId == brandId, x => x.OrderByDescending(x => x.MenuId));
+            var menuDefault = await _unitOfWork.MenuRepository.GetAllNoPaging(x => x.BrandId == brandId, x => x.OrderByDescending(x => x.MenuId));
             var mapdto2 = _mapper.Map<MenuDTO>(menuDefault.FirstOrDefault());
             return mapdto2;
         }

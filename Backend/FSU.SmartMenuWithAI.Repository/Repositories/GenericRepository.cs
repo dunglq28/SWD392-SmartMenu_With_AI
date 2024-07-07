@@ -66,9 +66,25 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
             return await dbSet.FindAsync(id)!;
         }
 
-        public virtual async Task<TEntity> GetByCondition(Expression<Func<TEntity, bool>> filter)
+        public virtual async Task<TEntity> GetByCondition(Expression<Func<TEntity, bool>> filter , string includeProperties = "")
         {
-            return await dbSet.FirstOrDefaultAsync(filter);
+            IQueryable<TEntity> query = dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            if (!includeProperties.IsNullOrEmpty())
+            {
+
+                foreach (var includeProperty in includeProperties.Split
+                    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            return await query.FirstOrDefaultAsync()!;
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAllNoPaging(

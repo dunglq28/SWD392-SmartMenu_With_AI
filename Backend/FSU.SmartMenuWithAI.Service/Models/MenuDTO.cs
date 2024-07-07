@@ -18,6 +18,10 @@ namespace FSU.SmartMenuWithAI.Service.Models
 
         public int? BrandId { get; set; }
 
+        public string? MenuImage { get; set; }
+
         public string? BrandName { get; set; }
+
+        public string? Description { get; set; }
     }
 }
