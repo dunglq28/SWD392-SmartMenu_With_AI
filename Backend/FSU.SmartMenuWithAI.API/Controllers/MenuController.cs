@@ -23,31 +23,65 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         public MenuController(IMenuService menuService, IS3Service s3Service)
         {
-            _menuService = menuService; 
+            _menuService = menuService;
             _imageFileValidator = new ImageFileValidator();
             _s3Service = s3Service;
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPost(APIRoutes.Menu.Add, Name = "AddMenuAsync")]
-        public async Task<IActionResult> AddAsync([FromBody] AddMenuRequest reqObj)
+        public async Task<IActionResult> AddAsync([FromForm] AddMenuRequest reqObj)
         {
             try
             {
+                if (reqObj.MenuImage != null)
+                {
+
+                    var validationImg = await _imageFileValidator.ValidateAsync(reqObj.MenuImage!);
+                    if (!validationImg.IsValid)
+                    {
+                        return BadRequest(new BaseResponse
+                        {
+                            StatusCode = StatusCodes.Status400BadRequest,
+                            Message = "File không phải là hình ảnh hợp lệ",
+                            Data = null,
+                            IsSuccess = false
+                        });
+                    }
+
+                }
                 var dto = new MenuDTO
                 {
                     BrandId = reqObj.BrandId,
                     IsActive = reqObj.IsActive,
+                    Description = reqObj.Description,
                 };
-                var UserAdd = await _menuService.Insert(dto);
-                return Ok(new BaseResponse
-                {
-                    StatusCode = StatusCodes.Status200OK,
-                    Message = "Thêm Menu thành công",
-                    Data = UserAdd,
-                    IsSuccess = true
-                });
+                var menuAdd = await _menuService.Insert(dto);
 
+
+                // tạo thành công
+                if (menuAdd != null)
+                {
+                    if (reqObj.MenuImage != null)
+                    {
+                        await _s3Service.UploadItemAsync(reqObj.MenuImage, menuAdd.MenuCode!, FolderRootImg.Menu);
+                    }
+                    return Ok(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status200OK,
+                        Message = "Thêm Menu thành công",
+                        Data = menuAdd,
+                        IsSuccess = true
+                    });
+                }
+                // thất bại
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Lỗi khi tạo Menu.",
+                    Data = null,
+                    IsSuccess = false
+                });
 
             }
             catch (Exception ex)
@@ -101,19 +135,24 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Menu.Update, Name = "UpdateMenuAsync")]
-        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] bool isActive)
+        public async Task<IActionResult> UpdateUserAsync([FromQuery(Name = "menu-id")] int menuId, UpdateMenuRequest reqObj)
         {
             try
             {
+                var menuInDB = await _menuService.GetAsync(menuId);
+                if (reqObj.MenuImage != null && menuInDB != null)
+                {
+                    await _s3Service.UploadItemAsync(reqObj.MenuImage, menuInDB!.MenuCode!, FolderRootImg.Menu);
+                }
+                // không cần update hình ở db vì đè lên đường dẫn cũ trên aws là hình thay đổi mà vẫn giữ tên
+                var result = await _menuService.UpdateAsync(menuId, reqObj.isActive);
 
-                var result = await _menuService.UpdateAsync(id, isActive);
-
-                if (result)
+                if (result == false)
                 {
                     return NotFound(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status404NotFound,
-                        Message = "Không tìm thấy thông tin menu",
+                        Message = "Cập nhật thất bại.",
                         Data = null,
                         IsSuccess = false
                     });
@@ -174,9 +213,9 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         {
             try
             {
-                var user = await _menuService.GetAsync(Id);
+                var menu = await _menuService.GetAsync(Id);
 
-                if (user == null)
+                if (menu == null)
                 {
                     return NotFound(new BaseResponse
                     {
@@ -190,7 +229,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     StatusCode = StatusCodes.Status200OK,
                     Message = "Lấy thông tin thành công",
-                    Data = user,
+                    Data = menu,
                     IsSuccess = true
                 });
             }

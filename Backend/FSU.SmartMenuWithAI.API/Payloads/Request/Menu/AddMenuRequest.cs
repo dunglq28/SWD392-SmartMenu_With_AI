@@ -12,12 +12,18 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Menu
     public class AddMenuRequest
     {
         [Required]
-        [JsonProperty("is-activee")]
+        [JsonProperty("is-active")]
         public bool IsActive { get; set; }
 
         [Required]
         [JsonProperty("brand-id")]
         [Range(1, int.MaxValue, ErrorMessage = "Brand ID must be a positive integer.")]
         public int BrandId { get; set; }
+
+        [JsonProperty("description")]
+        public string? Description { get; set; }
+
+        [JsonProperty("menu-image")]
+        public IFormFile? MenuImage { get; set; }
     }
 }
