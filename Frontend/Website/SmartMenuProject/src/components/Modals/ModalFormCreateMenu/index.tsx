@@ -147,7 +147,22 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   };
 
   const handleCloseForm = () => {
+    setCurrentTab(0);
     onCloseAlertCancelForm();
+    onClose();
+  };
+
+  const getCurrentDate = () => {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const year = now.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  };
+
+  const handleDonebtn = () => {
+    setCurrentTab(0);
     onClose();
   };
 
@@ -983,15 +998,60 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                   <Image src={capturedImage} alt="enter" />
                 </TabPanel>
                 <TabPanel>
-                  <Flex justifyContent="center" width="100%">
-                    <Flex flexDirection="column" rowGap="20px" width="50%">
-                      <Text as="b" fontSize="20px">
-                        Phân khúc khách hàng
-                      </Text>
-                      <Select
-                        options={CustomerSegmentList}
-                        closeMenuOnSelect={true}
-                      />
+                  <Flex width="100%" justifyContent="center">
+                    <Flex
+                      justifyContent="center"
+                      width="60%"
+                      flexDirection="column"
+                      alignItems="center"
+                      rowGap="2vw"
+                      boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px;"
+                      height="26vw"
+                      transition="0.3s"
+                      borderRadius="10px"
+                      _hover={{
+                        boxShadow:
+                          "rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px",
+                      }}
+                    >
+                      <Flex flexDirection="column" rowGap="1vw" width="50%">
+                        <Text as="b" fontSize="20px">
+                          Phân khúc khách hàng
+                        </Text>
+                        <Select
+                          options={CustomerSegmentList}
+                          closeMenuOnSelect={true}
+                          styles={{
+                            control: (styles) => ({
+                              ...styles,
+                              border: "2px solid #55ad9b",
+                            }),
+                          }}
+                        />
+                      </Flex>
+                      <Flex flexDirection="column" rowGap="1vw" width="50%">
+                        <Text as="b" fontSize="20px">
+                          Mô tả menu
+                        </Text>
+                        <Input
+                          border="2px solid #55ad9b"
+                          _focus={{ border: "2px solid #95d2b3" }}
+                          _hover={{ border: "2px solid #95d2b3" }}
+                        />
+                      </Flex>
+                      <Flex flexDirection="column" rowGap="1vw" width="50%">
+                        <Text as="b" fontSize="20px">
+                          Ngày tạo
+                        </Text>
+                        <Input
+                          userSelect="none"
+                          isReadOnly
+                          border="2px solid #55ad9b"
+                          placeholder="Select Date"
+                          size="md"
+                          value={getCurrentDate()}
+                        />
+                      </Flex>
                     </Flex>
                   </Flex>
                 </TabPanel>
@@ -1004,7 +1064,11 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                 Cancel
               </Button>
               <Button onClick={handlePreviousTab}>Back</Button>
-              <Button onClick={handleNextTab}>Next</Button>
+              {currentTab === 2 ? (
+                <Button onClick={handleDonebtn}>Create menu</Button>
+              ) : (
+                <Button onClick={handleNextTab}>Next</Button>
+              )}
             </Flex>
           </ModalFooter>
         </ModalContent>
