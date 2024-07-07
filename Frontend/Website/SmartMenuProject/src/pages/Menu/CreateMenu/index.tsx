@@ -22,6 +22,8 @@ function CreateMenu() {
   const [selectedProducts4, setSelectedProducts4] = React.useState<
     ProductData[]
   >([]);
+  const [selectedProductspotLight, setSelectedProductspotLight] =
+    React.useState<ProductData[]>([]);
   const [currentListProduct, setCurrentListProduct] = React.useState<
     ProductData[]
   >([]);
@@ -49,6 +51,10 @@ function CreateMenu() {
         setCurrentListProduct(selectedProducts4);
         setMaxProduct(2);
         break;
+      case 5:
+        setCurrentListProduct(selectedProductspotLight);
+        setMaxProduct(1);
+        break;
     }
     setIsOpenListProduct(true);
   };
@@ -69,6 +75,9 @@ function CreateMenu() {
         break;
       case 4:
         setSelectedProducts4(products);
+        break;
+      case 5:
+        setSelectedProductspotLight(products);
         break;
     }
     onCloseListProduct();
@@ -92,6 +101,7 @@ function CreateMenu() {
         selectedProducts2={selectedProducts2}
         selectedProducts3={selectedProducts3}
         selectedProducts4={selectedProducts4}
+        selectedProductspotLight={selectedProductspotLight}
       />
       <DrawerComponent
         isOpen={isOpenListProduct}

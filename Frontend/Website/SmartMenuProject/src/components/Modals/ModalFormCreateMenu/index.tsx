@@ -44,6 +44,7 @@ interface ModalProps {
   selectedProducts2: ProductData[];
   selectedProducts3: ProductData[];
   selectedProducts4: ProductData[];
+  selectedProductspotLight: ProductData[];
 }
 
 const ModalFormCreateMenu: React.FC<ModalProps> = ({
@@ -54,6 +55,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   selectedProducts2,
   selectedProducts3,
   selectedProducts4,
+  selectedProductspotLight,
 }) => {
   const [currentTab, setCurrentTab] = React.useState(0);
   const [IsDraggable, setIsDraggable] = React.useState(false);
@@ -66,6 +68,8 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     onClose: onCloseAlertCancelForm,
   } = useDisclosure();
   const cancelRef = React.useRef<HTMLButtonElement>(null);
+  const [spotLightProduct, setSpotLightProduct] =
+    React.useState<ProductData | null>(null);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -83,6 +87,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  React.useEffect(() => {
+    if (selectedProductspotLight.length > 0) {
+      setSpotLightProduct(selectedProductspotLight[0]);
+    }
+  }, [selectedProductspotLight]);
 
   const handleImageLoad = () => {
     if (imageRef.current) {
@@ -202,7 +212,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     ? "1px solid black"
                                     : "1px solid transparent"
                                 }
-                                contentEditable
+                                contentEditable={true}
                                 spellCheck={false}
                                 color="#7AD7F4"
                                 fontSize="1.05vw"
@@ -310,7 +320,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     ? "1px solid black"
                                     : "1px solid transparent"
                                 }
-                                contentEditable
+                                contentEditable={true}
                                 spellCheck={false}
                                 color="#7AD7F4"
                                 fontSize="1.05vw"
@@ -422,7 +432,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     ? "1px solid black"
                                     : "1px solid transparent"
                                 }
-                                contentEditable
+                                contentEditable={true}
                                 spellCheck={false}
                                 color="#7AD7F4"
                                 fontSize="1.05vw"
@@ -527,7 +537,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     ? "1px solid black"
                                     : "1px solid transparent"
                                 }
-                                contentEditable
+                                contentEditable={true}
                                 spellCheck={false}
                                 color="#7AD7F4"
                                 fontSize="1.05vw"
@@ -640,7 +650,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontSize="0.7vw"
                                 fontWeight="bold"
                                 color="#5A3D41"
-                                contentEditable
+                                contentEditable={true}
                                 spellCheck={false}
                               >
                                 YOUR ADDRESS HERE IN THIS LINE
@@ -649,7 +659,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontSize="0.7vw"
                                 fontWeight="bold"
                                 color="#5A3D41"
-                                contentEditable
+                                contentEditable={true}
                                 spellCheck={false}
                                 userSelect="auto"
                               >
@@ -691,7 +701,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                   fontSize="1.4vw"
                                   fontWeight="bold"
                                   color="#5A3D41"
-                                  contentEditable
+                                  contentEditable={true}
                                   spellCheck={false}
                                 >
                                   0123456789
@@ -721,7 +731,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                             justifyContent="space-between"
                           >
                             <Draggable disabled={IsDraggable}>
-                              <Flex>
+                              <Flex cursor="pointer">
                                 <Image
                                   src={component1}
                                   height="3.3vw"
@@ -742,15 +752,17 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 <Text
                                   className={style.SpotligtTitle}
                                   textAlign="center"
-                                  contentEditable
+                                  contentEditable={true}
                                   spellCheck={false}
                                 >
-                                  Cà Phê Late
+                                  {spotLightProduct
+                                    ? spotLightProduct.productName
+                                    : "Sản Phẩm Spotlight"}
                                 </Text>
                               </Draggable>
                             </Flex>
                             <Draggable disabled={IsDraggable}>
-                              <Flex>
+                              <Flex cursor="pointer">
                                 <Image
                                   src={component2}
                                   height="3.2vw"
@@ -784,14 +796,25 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                               alignItems="center"
                               bg="#fff"
                             >
-                              {/* <FaPlus
-                                style={{
-                                  height: "4vw",
-                                  width: "4vw",
-                                  color: "#444444",
-                                  cursor: "pointer",
-                                }}
-                              /> */}
+                              {spotLightProduct ? (
+                                // <Image
+                                //   src={spotLightProduct.spotlightVideoImageUrl}
+                                // />
+                                <Image
+                                  src={freezeTraXanh}
+                                  onClick={() => onOpenListProduct(5)}
+                                />
+                              ) : (
+                                <FaPlus
+                                  onClick={() => onOpenListProduct(5)}
+                                  style={{
+                                    height: "4vw",
+                                    width: "4vw",
+                                    color: "#444444",
+                                    cursor: "pointer",
+                                  }}
+                                />
+                              )}
                             </Flex>
                           </Flex>
                           <Flex
@@ -814,6 +837,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                   width="41%"
                                   height="90%"
                                   justifyContent="center"
+                                  alignItems="center"
                                   flexDirection="column"
                                 >
                                   <Text fontSize="0.5vw" color="#fff">
@@ -823,9 +847,10 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     fontSize="1vw"
                                     color="#7DD7F3"
                                     fontWeight="bold"
-                                    contentEditable
+                                    contentEditable={true}
                                     spellCheck={false}
                                     textAlign="center"
+                                    whiteSpace="nowrap"
                                   >
                                     08 AM
                                   </Text>
@@ -843,9 +868,10 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     fontSize="1vw"
                                     color="#7DD7F3"
                                     fontWeight="bold"
-                                    contentEditable
+                                    contentEditable={true}
                                     spellCheck={false}
                                     textAlign="center"
+                                    whiteSpace="nowrap"
                                   >
                                     09 PM
                                   </Text>
@@ -857,7 +883,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontSize="0.9vw"
                                 fontWeight="bold"
                                 color="#5A3D41"
-                                contentEditable
+                                contentEditable={true}
                                 spellCheck={false}
                               >
                                 ORDER NOW
@@ -868,7 +894,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontSize="0.6vw"
                                 fontWeight="bold"
                                 color="#5A3D41"
-                                contentEditable
+                                contentEditable={true}
                                 spellCheck={false}
                                 textAlign="center"
                                 width="70%"
@@ -895,7 +921,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     fontSize="1vw"
                                     fontWeight="bold"
                                     color="#5A3D41"
-                                    contentEditable
+                                    contentEditable={true}
                                     spellCheck={false}
                                   >
                                     0123456789
@@ -918,7 +944,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     fontSize="0.8vw"
                                     fontWeight="bold"
                                     color="#5A3D41"
-                                    contentEditable
+                                    contentEditable={true}
                                     spellCheck={false}
                                   >
                                     www.example.com
