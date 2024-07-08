@@ -9,8 +9,6 @@ public partial class ProductList
 
     public int ListId { get; set; }
 
-    public int Price { get; set; }
-
     public int IndexInList { get; set; }
 
     public int BrandId { get; set; }

@@ -15,6 +15,8 @@ public partial class ListPosition
 
     public int BrandId { get; set; }
 
+    public string? ListName { get; set; }
+
     public virtual ICollection<MenuList> MenuLists { get; set; } = new List<MenuList>();
 
     public virtual ICollection<ProductList> ProductLists { get; set; } = new List<ProductList>();
