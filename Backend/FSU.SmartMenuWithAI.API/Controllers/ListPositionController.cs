@@ -94,7 +94,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         {
             try
             {
-                var createdListPosition = await _listPositionService.Insert(request.TotalProduct, request.BrandId);
+                var createdListPosition = await _listPositionService.Insert(request.TotalProduct, request.BrandId, request.ListName);
                 return Ok(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status201Created,
@@ -116,11 +116,11 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles)]
         [HttpPut(APIRoutes.ListPosition.Update, Name = "UpdateListPosition")]
-        public async Task<IActionResult> UpdateAsync([FromForm] int id, [FromForm(Name = "total-product")] int totalProduct)
+        public async Task<IActionResult> UpdateAsync([FromForm] int id, [FromForm(Name = "total-product")] int totalProduct, [FromForm(Name = "list-name")] string listName)
         {
             try
             {
-                var updatedListPosition = await _listPositionService.UpdateAsync(id, totalProduct);
+                var updatedListPosition = await _listPositionService.UpdateAsync(id, totalProduct, listName);
                 if (updatedListPosition == null)
                 {
                     return NotFound(new BaseResponse
