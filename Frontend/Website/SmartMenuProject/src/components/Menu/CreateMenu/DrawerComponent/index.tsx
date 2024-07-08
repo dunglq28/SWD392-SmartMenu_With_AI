@@ -14,6 +14,8 @@ import HeaderImg from "../../../../assets/images/menu/CreateMenu/HeaderBackgroun
 import ProductCard from "./ProductCard";
 import matcha from "../../../../assets/images/menu/CreateMenu/FREEZE-TRA-XANH.png";
 import { ProductData } from "../../../../payloads/responses/ProductData.model";
+import { CategoryData } from "../../../../payloads/responses/CategoryData.model";
+import { formatCurrency } from "../../../../utils/functionHelper";
 
 interface DrawerProps {
   isOpen: boolean;
@@ -23,6 +25,9 @@ interface DrawerProps {
   currentListProducts: ProductData[];
   IndexList: number;
   MaxProduct: number;
+  handleChangeProductByCate: (cateId: number) => void;
+  categoryOptions: CategoryData[];
+  currentCategory: number;
 }
 
 const DrawerComponent: React.FC<DrawerProps> = ({
@@ -33,6 +38,9 @@ const DrawerComponent: React.FC<DrawerProps> = ({
   currentListProducts,
   IndexList,
   MaxProduct,
+  handleChangeProductByCate,
+  categoryOptions,
+  currentCategory,
 }) => {
   const [selectedProducts, setSelectedProducts] = useState<ProductData[]>([]);
 
@@ -104,9 +112,28 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                 rowGap="5px"
               >
                 {/* Replace with your actual category buttons */}
-                <Button height="60px" w="100%" border="1px solid #ccc">
-                  Freeze
-                </Button>
+                {categoryOptions.map((cate) => (
+                  <Button
+                    key={cate.categoryId}
+                    height="60px"
+                    marginBottom="10px"
+                    w="100%"
+                    border="1px solid #ccc"
+                    bg={
+                      currentCategory === cate.categoryId ? "#466d6b" : "white"
+                    }
+                    color={
+                      currentCategory === cate.categoryId ? "white" : "black"
+                    }
+                    _hover={{
+                      bg: "#466d6b",
+                      color: "#fff",
+                    }}
+                    onClick={() => handleChangeProductByCate(cate.categoryId)}
+                  >
+                    {cate.categoryName}
+                  </Button>
+                ))}
               </Flex>
             </Flex>
             {/* Center panel for product list */}
@@ -147,12 +174,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                 {products.map((product) => (
                   <ProductCard
                     key={product.productId}
-                    product={{
-                      id: product.productId,
-                      name: product.productName,
-                      price: product.price,
-                      description: product.description,
-                    }}
+                    product={product}
                     isSelected={selectedProducts.some(
                       (p) => p.productId === product.productId
                     )}
@@ -220,7 +242,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                         handleRemoveFromSelectedProducts(product.productId)
                       }
                     >
-                      <Image src={matcha} height="80%" />
+                      <Image src={product.imageUrl} height="80%" />
                       <Flex flexDirection="column" w="80%">
                         <Flex justifyContent="space-between">
                           <Text
@@ -235,7 +257,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                             fontWeight="bold"
                             color="#5A3D41"
                           >
-                            Giá {product.price}
+                            Giá {formatCurrency(product.price.toString())}
                           </Text>
                         </Flex>
                         <Text
