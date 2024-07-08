@@ -166,7 +166,8 @@ ListID INT NOT NULL IDENTITY(1,1),
 ListCode NVARCHAR(36) NOT NULL,
 TotalProduct INT NULL,
 CreateDate DATE NOT NULL,
-BrandID INT NOT NULL
+BrandID INT NOT NULL,
+ListName NVARCHAR(100), 
 PRIMARY KEY (ListID),
 );
 
@@ -174,7 +175,7 @@ CREATE TABLE ProductList
 (
   ProductID INT NOT NULL,
   ListID INT NOT NULL,
-  Price INT NOT NULL,
+  --Price INT NOT NULL,
   IndexInList INT NOT NULL,
   BrandID INT NOT NULL,
   PRIMARY KEY (ProductID, ListID),

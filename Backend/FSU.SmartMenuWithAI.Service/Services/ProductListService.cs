@@ -26,7 +26,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             var entity = await _unitOfWork.ProductListRepository.GetByCondition(condition);
             return _mapper?.Map<ProductListDTO?>(entity)!;
         }
-        public async Task<ProductListDTO> Insert(int productId, int listId, int price, int indexInList, int brandId)
+        public async Task<ProductListDTO> Insert(int productId, int listId, int indexInList, int brandId)
         {
             // Check if the listId exists in the ListPosition table
             var listPosition = await _unitOfWork.ListPositionRepository.GetByID(listId);
@@ -61,16 +61,10 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 throw new Exception("Index không hợp lệ.");
             }
 
-            // Check if price is valid
-            if (price < 0)
-            {
-                throw new Exception("Price phải lớn hơn 0.");
-            }
             var productList = new ProductList
             {
                 ProductId = productId,
                 ListId = listId,
-                Price = price,
                 IndexInList = indexInList,
                 BrandId = brandId
             };
@@ -83,7 +77,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             }
             return null!;
         }
-        public async Task<ProductListDTO> UpdateAsync(int productId, int listId, int index, int price, int newProductId)
+        public async Task<ProductListDTO> UpdateAsync(int productId, int listId, int index, int newProductId)
         {
             // Retrieve the existing product list item from the repository
             var existingProductList = await _unitOfWork.ProductListRepository.GetByCondition(p => p.ProductId == productId && p.ListId == listId);
@@ -121,7 +115,6 @@ namespace FSU.SmartMenuWithAI.Service.Services
                         ProductId = newProductId,
                         ListId = listId,
                         IndexInList = existingProductList.IndexInList,
-                        Price = existingProductList.Price,
                         BrandId = existingProductList.BrandId,
                     };
 
@@ -131,10 +124,6 @@ namespace FSU.SmartMenuWithAI.Service.Services
                         newProductList.IndexInList = index;
                     }
 
-                    if (price > 0)
-                    {
-                        newProductList.Price = price;
-                    }
                     // Remove the existing product from the list
                     _unitOfWork.ProductListRepository.Delete(existingProductList);
                     await _unitOfWork.ProductListRepository.Insert(newProductList);
@@ -159,10 +148,6 @@ namespace FSU.SmartMenuWithAI.Service.Services
                     existingProductList.IndexInList = index;
                 }
 
-                if (price > 0)
-                {
-                    existingProductList.Price = price;
-                }
                 // Perform the update in the repository
                 _unitOfWork.ProductListRepository.Update(existingProductList);
 

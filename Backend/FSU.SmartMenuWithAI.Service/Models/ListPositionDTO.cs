@@ -11,5 +11,6 @@
         public DateOnly CreateDate { get; set; }
 
         public int BrandId { get; set; }
+        public string? ListName { get; set; }
     }
 }
