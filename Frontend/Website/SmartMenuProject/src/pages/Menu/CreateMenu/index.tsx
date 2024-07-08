@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, Text, Image } from "@chakra-ui/react";
 import ModalFormCreateMenu from "../../../components/Modals/ModalFormCreateMenu";
 import DrawerComponent from "../../../components/Menu/CreateMenu/DrawerComponent";
@@ -6,6 +6,10 @@ import style from "./CreateMenu.module.scss";
 import fakeMenu from "../../../assets/images/menu/menuImg.png";
 import { ProductData } from "../../../payloads/responses/ProductData.model";
 import fakeProductList from "./fakeProductList";
+import { CategoryData } from "../../../payloads/responses/CategoryData.model";
+import { getCategoriesByBrandId } from "../../../services/CategoryService";
+import { toast } from "react-toastify";
+import { getProductsByCategory } from "../../../services/ProductService";
 
 function CreateMenu() {
   const [isOpenCreateMenu, setIsOpenCreateMenu] = React.useState(false);
@@ -27,8 +31,12 @@ function CreateMenu() {
   const [currentListProduct, setCurrentListProduct] = React.useState<
     ProductData[]
   >([]);
+  const brandId = Number(localStorage.getItem("BrandId"));
   const [currentListIndex, setCurrentIndex] = useState(0);
   const [maxProduct, setMaxProduct] = useState(0);
+  const [categoryOptions, setCategoryOptions] = useState<CategoryData[]>([]);
+  const [products, setProducts] = useState<ProductData[]>([]);
+  const [currentCategory, setCurrentCategory] = useState<number>(1);
 
   const onOpenCreateMenu = () => setIsOpenCreateMenu(true);
   const onCloseCreateMenu = () => setIsOpenCreateMenu(false);
@@ -83,6 +91,46 @@ function CreateMenu() {
     onCloseListProduct();
   };
 
+  function handleChangeProductByCate(cateId: number) {
+    const loadData = async () => {
+      try {
+        const result = await getProductsByCategory(brandId, cateId);
+        if (result) {
+          setProducts(result.list);
+          setCurrentCategory(cateId);
+        } else {
+          throw new Error("Invalid response format");
+        }
+      } catch (err) {
+        toast.error("Error fetching data");
+      }
+    };
+
+    loadData();
+  }
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const result = await getCategoriesByBrandId(brandId);
+        if (result) {
+          setCategoryOptions(result.list);
+          if (result.list.length > 0) {
+            const initialCategoryId = result.list[0].categoryId;
+            handleChangeProductByCate(initialCategoryId);
+            setCurrentCategory(initialCategoryId);
+          }
+        } else {
+          throw new Error("Invalid response format");
+        }
+      } catch (err) {
+        toast.error("Error fetching data");
+      }
+    };
+
+    loadData();
+  }, []);
+
   return (
     <Flex className={style.Container}>
       <Text as="b" fontSize="30px">
@@ -108,9 +156,12 @@ function CreateMenu() {
         onClose={onCloseListProduct}
         onAddToMenu={handleAddToMenu}
         IndexList={currentListIndex}
-        products={fakeProductList}
+        products={products}
         currentListProducts={currentListProduct}
         MaxProduct={maxProduct}
+        handleChangeProductByCate={handleChangeProductByCate}
+        categoryOptions={categoryOptions}
+        currentCategory={currentCategory}
       />
     </Flex>
   );

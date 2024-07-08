@@ -35,6 +35,7 @@ import { AiOutlineGlobal } from "react-icons/ai";
 
 import { MdPhoneInTalk } from "react-icons/md";
 import html2canvas from "html2canvas";
+import { formatCurrency } from "../../../utils/functionHelper";
 
 interface ModalProps {
   isOpen: boolean;
@@ -277,7 +278,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                       height="100%"
                                       justifyContent="center"
                                     >
-                                      <Image src={freezeTraXanh} />
+                                      <Image src={product.imageUrl} />
                                     </Flex>
                                     <Flex
                                       width="70%"
@@ -301,7 +302,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                           fontSize="0.8vw"
                                           color="#5A3D41"
                                         >
-                                          {product.price}
+                                          {formatCurrency(
+                                            product.price.toString()
+                                          )}
                                         </Text>
                                       </Flex>
                                       <Text fontSize="0.6vw" color="#5A3D41">
@@ -380,7 +383,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     }
                                   >
                                     <Flex height="50%" w="50%">
-                                      <Image src={freezeTraXanh} />
+                                      <Image src={product.imageUrl} />
                                     </Flex>
                                     <Flex
                                       height="50%"
@@ -404,12 +407,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                           fontSize="0.8vw"
                                           color="#5A3D41"
                                         >
-                                          {product.price}
+                                          {formatCurrency(
+                                            product.price.toString()
+                                          )}
                                         </Text>
                                       </Flex>
                                       <Text fontSize="0.6vw" color="#5A3D41">
-                                        {product.description}
-                                        {product.description}
                                         {product.description}
                                       </Text>
                                     </Flex>
@@ -492,7 +495,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     }
                                   >
                                     <Flex height="50%" w="50%">
-                                      <Image src={freezeTraXanh} />
+                                      <Image src={product.imageUrl} />
                                     </Flex>
                                     <Flex
                                       height="50%"
@@ -516,12 +519,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                           fontSize="0.8vw"
                                           color="#5A3D41"
                                         >
-                                          {product.price}
+                                          {formatCurrency(
+                                            product.price.toString()
+                                          )}
                                         </Text>
                                       </Flex>
                                       <Text fontSize="0.6vw" color="#5A3D41">
-                                        {product.description}
-                                        {product.description}
                                         {product.description}
                                       </Text>
                                     </Flex>
@@ -596,7 +599,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     }
                                   >
                                     <Flex height="50%" w="50%">
-                                      <Image src={freezeTraXanh} />
+                                      <Image src={product.imageUrl} />
                                     </Flex>
                                     <Flex
                                       height="50%"
@@ -620,12 +623,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                           fontSize="0.8vw"
                                           color="#5A3D41"
                                         >
-                                          {product.price}
+                                          {formatCurrency(
+                                            product.price.toString()
+                                          )}
                                         </Text>
                                       </Flex>
                                       <Text fontSize="0.6vw" color="#5A3D41">
-                                        {product.description}
-                                        {product.description}
                                         {product.description}
                                       </Text>
                                     </Flex>
@@ -816,7 +819,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 //   src={spotLightProduct.spotlightVideoImageUrl}
                                 // />
                                 <Image
-                                  src={freezeTraXanh}
+                                  src={spotLightProduct.imageUrl}
                                   onClick={() => onOpenListProduct(5)}
                                 />
                               ) : (
