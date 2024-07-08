@@ -21,6 +21,7 @@ import {
   AlertDialogBody,
   AlertDialogFooter,
   useDisclosure,
+  Textarea,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
 import Draggable from "react-draggable";
@@ -28,7 +29,6 @@ import Select from "react-select";
 import template from "../../../assets/images/menu/CreateMenu/menuTemplate1.svg";
 import { ProductData } from "../../../payloads/responses/ProductData.model";
 import style from "./ModalFormCreateMenu.module.scss";
-import freezeTraXanh from "../../../assets/images/menu/CreateMenu/FREEZE-TRA-XANH.png";
 import component1 from "../../../assets/images/menu/CreateMenu/Component1.svg";
 import component2 from "../../../assets/images/menu/CreateMenu/Component2.svg";
 import { AiOutlineGlobal } from "react-icons/ai";
@@ -36,6 +36,7 @@ import { AiOutlineGlobal } from "react-icons/ai";
 import { MdPhoneInTalk } from "react-icons/md";
 import html2canvas from "html2canvas";
 import { formatCurrency } from "../../../utils/functionHelper";
+import { toast } from "react-toastify";
 
 interface ModalProps {
   isOpen: boolean;
@@ -46,6 +47,7 @@ interface ModalProps {
   selectedProducts3: ProductData[];
   selectedProducts4: ProductData[];
   selectedProductspotLight: ProductData[];
+  resetLists: () => void;
 }
 
 const ModalFormCreateMenu: React.FC<ModalProps> = ({
@@ -57,6 +59,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   selectedProducts3,
   selectedProducts4,
   selectedProductspotLight,
+  resetLists,
 }) => {
   const [currentTab, setCurrentTab] = React.useState(0);
   const [IsDraggable, setIsDraggable] = React.useState(false);
@@ -69,8 +72,8 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     onClose: onCloseAlertCancelForm,
   } = useDisclosure();
   const cancelRef = React.useRef<HTMLButtonElement>(null);
-  const [spotLightProduct, setSpotLightProduct] =
-    React.useState<ProductData | null>(null);
+  // const [spotLightProduct, setSpotLightProduct] =
+  //   React.useState<ProductData | null>(null);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -89,11 +92,11 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     };
   }, []);
 
-  React.useEffect(() => {
-    if (selectedProductspotLight.length > 0) {
-      setSpotLightProduct(selectedProductspotLight[0]);
-    }
-  }, [selectedProductspotLight]);
+  // React.useEffect(() => {
+  //   if (selectedProductspotLight.length > 0) {
+  //     setSpotLightProduct(selectedProductspotLight[0]);
+  //   }
+  // }, [selectedProductspotLight]);
 
   const handleImageLoad = () => {
     if (imageRef.current) {
@@ -112,6 +115,16 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   };
 
   const handleNextTab = () => {
+    if (
+      selectedProducts1.length == 0 ||
+      selectedProducts2.length == 0 ||
+      selectedProducts3.length == 0 ||
+      selectedProducts4.length == 0 ||
+      selectedProductspotLight.length == 0
+    ) {
+      toast.error("Vui lòng chọn đầy đủ các danh sách");
+      return;
+    }
     handleCaptureAndDisplay();
     setCurrentTab((prevTab) => (prevTab < 2 ? prevTab + 1 : prevTab));
   };
@@ -150,6 +163,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   const handleCloseForm = () => {
     setCurrentTab(0);
     onCloseAlertCancelForm();
+    resetLists();
     onClose();
   };
 
@@ -183,6 +197,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                 <Button onClick={handleBorder}>
                   Border: {(!isBorder).toString()}
                 </Button>
+                <Button onClick={() => resetLists()}>Đặt lại menu</Button>
               </Flex>
             ) : currentTab === 1 ? (
               <Text as="b" fontSize="30px">
@@ -773,8 +788,8 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                   contentEditable={true}
                                   spellCheck={false}
                                 >
-                                  {spotLightProduct
-                                    ? spotLightProduct.productName
+                                  {selectedProductspotLight.length !== 0
+                                    ? selectedProductspotLight[0].productName
                                     : "Sản Phẩm Spotlight"}
                                 </Text>
                               </Draggable>
@@ -814,12 +829,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                               alignItems="center"
                               bg="#fff"
                             >
-                              {spotLightProduct ? (
+                              {selectedProductspotLight.length !== 0 ? (
                                 // <Image
                                 //   src={spotLightProduct.spotlightVideoImageUrl}
                                 // />
                                 <Image
-                                  src={spotLightProduct.imageUrl}
+                                  src={selectedProductspotLight[0].imageUrl}
                                   onClick={() => onOpenListProduct(5)}
                                 />
                               ) : (
@@ -1036,7 +1051,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                         <Text as="b" fontSize="20px">
                           Mô tả menu
                         </Text>
-                        <Input
+                        <Textarea
                           border="2px solid #55ad9b"
                           _focus={{ border: "2px solid #95d2b3" }}
                           _hover={{ border: "2px solid #95d2b3" }}

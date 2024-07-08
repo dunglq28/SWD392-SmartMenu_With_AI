@@ -31,11 +31,15 @@ function CreateMenu() {
   const [currentListProduct, setCurrentListProduct] = React.useState<
     ProductData[]
   >([]);
+  const [allSelectedProducts, setAllSelectedProducts] = React.useState<
+    ProductData[]
+  >([]);
   const brandId = Number(localStorage.getItem("BrandId"));
   const [currentListIndex, setCurrentIndex] = useState(0);
   const [maxProduct, setMaxProduct] = useState(0);
   const [categoryOptions, setCategoryOptions] = useState<CategoryData[]>([]);
   const [products, setProducts] = useState<ProductData[]>([]);
+  const [startCategory, setStartCategory] = useState<number>(1);
   const [currentCategory, setCurrentCategory] = useState<number>(1);
 
   const onOpenCreateMenu = () => setIsOpenCreateMenu(true);
@@ -64,6 +68,15 @@ function CreateMenu() {
         setMaxProduct(1);
         break;
     }
+    const allSelectedProducts = [
+      ...selectedProducts1,
+      ...selectedProducts2,
+      ...selectedProducts3,
+      ...selectedProducts4,
+      ...selectedProductspotLight,
+    ];
+    handleChangeProductByCate(startCategory);
+    setAllSelectedProducts(allSelectedProducts);
     setIsOpenListProduct(true);
   };
   const onCloseListProduct = () => setIsOpenListProduct(false);
@@ -118,6 +131,7 @@ function CreateMenu() {
           if (result.list.length > 0) {
             const initialCategoryId = result.list[0].categoryId;
             handleChangeProductByCate(initialCategoryId);
+            setStartCategory(initialCategoryId);
             setCurrentCategory(initialCategoryId);
           }
         } else {
@@ -130,6 +144,15 @@ function CreateMenu() {
 
     loadData();
   }, []);
+
+  const resetLists = () => {
+    setSelectedProducts1([]);
+    setSelectedProducts2([]);
+    setSelectedProducts3([]);
+    setSelectedProducts4([]);
+    setSelectedProductspotLight([]);
+    setAllSelectedProducts([]);
+  };
 
   return (
     <Flex className={style.Container}>
@@ -150,6 +173,7 @@ function CreateMenu() {
         selectedProducts3={selectedProducts3}
         selectedProducts4={selectedProducts4}
         selectedProductspotLight={selectedProductspotLight}
+        resetLists={resetLists}
       />
       <DrawerComponent
         isOpen={isOpenListProduct}
@@ -157,6 +181,7 @@ function CreateMenu() {
         onAddToMenu={handleAddToMenu}
         IndexList={currentListIndex}
         products={products}
+        allSelectedProducts={allSelectedProducts}
         currentListProducts={currentListProduct}
         MaxProduct={maxProduct}
         handleChangeProductByCate={handleChangeProductByCate}
