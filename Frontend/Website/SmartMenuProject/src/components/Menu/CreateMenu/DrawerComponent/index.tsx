@@ -10,7 +10,7 @@ import {
   Button,
   Text,
 } from "@chakra-ui/react";
-import style from "./Drawer.module.scss"
+import style from "./Drawer.module.scss";
 
 import HeaderImg from "../../../../assets/images/menu/CreateMenu/HeaderBackground.svg";
 import ProductCard from "./ProductCard";
@@ -46,8 +46,12 @@ const DrawerComponent: React.FC<DrawerProps> = ({
   categoryOptions,
   currentCategory,
 }) => {
-  const [selectedProductsOfMenu, setSelectedProductsOfMenu] = useState<ProductData[]>([]);
-  const [selectedProductsOfList, setSelectedProductsOfList] = useState<ProductData[]>([]);
+  const [selectedProductsOfMenu, setSelectedProductsOfMenu] = useState<
+    ProductData[]
+  >([]);
+  const [selectedProductsOfList, setSelectedProductsOfList] = useState<
+    ProductData[]
+  >([]);
 
   useEffect(() => {
     setSelectedProductsOfMenu(allSelectedProducts);
@@ -65,7 +69,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
       !selectedProductsOfMenu.find((p) => p.productId === product.productId) &&
       selectedProductsOfList.length < MaxProduct
     ) {
-      setSelectedProductsOfMenu([...selectedProductsOfMenu, product])
+      setSelectedProductsOfMenu([...selectedProductsOfMenu, product]);
       setSelectedProductsOfList([...selectedProductsOfList, product]);
     }
   };
@@ -78,7 +82,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     const updatedProductsOfMenu = selectedProductsOfMenu.filter(
       (product) => product.productId !== productId
     );
-    setSelectedProductsOfMenu(updatedProductsOfMenu)
+    setSelectedProductsOfMenu(updatedProductsOfMenu);
     setSelectedProductsOfList(updatedProducts);
   };
 
@@ -87,7 +91,8 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     if (selectedProductsOfList.length != MaxProduct) {
       toast.error(`Vui lòng chọn đủ ${MaxProduct} sản phẩm`);
       return;
-    }
+    } 
+
     onAddToMenu(selectedProductsOfList, IndexList);
     setSelectedProductsOfList([]); // Xóa danh sách sản phẩm đã chọn sau khi thêm vào menu
     onClose(); // Đóng Drawer sau khi thêm vào menu
