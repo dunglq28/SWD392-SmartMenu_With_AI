@@ -135,6 +135,57 @@ function CreateMenu() {
     loadData();
   };
 
+  const checkListNamesNotEmpty = () => {
+    return (
+      selectedProducts1.listName.trim() !== "" &&
+      selectedProducts2.listName.trim() !== "" &&
+      selectedProducts3.listName.trim() !== "" &&
+      selectedProducts4.listName.trim() !== ""
+    );
+  };
+
+  const handleChangeTitle = (listName: string, Index: number) => {
+    let updatedMenuList: MenuList;
+
+    switch (Index) {
+      case 1:
+        updatedMenuList = {
+          ...selectedProducts1,
+          listName: listName,
+        };
+        setSelectedProducts1(updatedMenuList);
+        break;
+      case 2:
+        updatedMenuList = {
+          ...selectedProducts2,
+          listName: listName,
+        };
+        setSelectedProducts2(updatedMenuList);
+        break;
+      case 3:
+        updatedMenuList = {
+          ...selectedProducts3,
+          listName: listName,
+        };
+        setSelectedProducts3(updatedMenuList);
+        break;
+      case 4:
+        updatedMenuList = {
+          ...selectedProducts4,
+          listName: listName,
+        };
+        setSelectedProducts4(updatedMenuList);
+        break;
+      case 5:
+        updatedMenuList = {
+          ...selectedProductspotLight,
+          listName: listName,
+        };
+        setSelectedProductspotLight(updatedMenuList);
+        break;
+    }
+  };
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -185,11 +236,13 @@ function CreateMenu() {
         isOpen={isOpenCreateMenu}
         onClose={onCloseCreateMenu}
         onOpenListProduct={onOpenListProduct}
-        selectedProducts1={selectedProducts1.productData}
-        selectedProducts2={selectedProducts2.productData}
-        selectedProducts3={selectedProducts3.productData}
-        selectedProducts4={selectedProducts4.productData}
-        selectedProductspotLight={selectedProductspotLight.productData}
+        selectedProducts1={selectedProducts1}
+        selectedProducts2={selectedProducts2}
+        selectedProducts3={selectedProducts3}
+        selectedProducts4={selectedProducts4}
+        selectedProductspotLight={selectedProductspotLight}
+        checkListNamesNotEmpty={checkListNamesNotEmpty}
+        handleChangeTitle={handleChangeTitle}
         resetLists={resetLists}
       />
       <DrawerComponent
