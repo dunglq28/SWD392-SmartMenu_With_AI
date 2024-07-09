@@ -237,24 +237,24 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                               marginTop="7px"
                               marginLeft="35%"
                             >
-                              <Text
+                              <Input
                                 border={
                                   isBorder
                                     ? "1px solid black"
                                     : "1px solid transparent"
                                 }
-                                contentEditable={true}
+                                // contentEditable={true}
                                 spellCheck={false}
                                 color="#7AD7F4"
                                 fontSize="1.05vw"
-                                w="5.1vw"
+                                w="6vw"
                                 height="1.5vw"
                                 whiteSpace="nowrap"
                                 fontWeight="bold"
                                 textAlign="center"
-                              >
-                                Menu Title
-                              </Text>
+                                placeholder="Menu Title"
+                              />
+                                {/* Menu Title */}
                             </Flex>
                           </Draggable>
                           <Draggable disabled={IsDraggable}>
