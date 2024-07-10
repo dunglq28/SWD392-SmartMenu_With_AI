@@ -9,7 +9,8 @@ import { CategoryData } from "../../../payloads/responses/CategoryData.model";
 import { getCategoriesByBrandId } from "../../../services/CategoryService";
 import { toast } from "react-toastify";
 import { getProductsByCategory } from "../../../services/ProductService";
-import { MenuList } from "../../../models/MenuList.model";
+import { CustomerSegmentData } from "../../../payloads/responses/CustomerSegment.model";
+import { MenuList } from "../../../models/Menu.model";
 
 function CreateMenu() {
   const [isOpenCreateMenu, setIsOpenCreateMenu] = useState(false);
@@ -209,6 +210,16 @@ function CreateMenu() {
     loadData();
   }, []);
 
+  const handleCreateMenu = (customerSegment: number, description: string) => {
+    console.log(selectedProducts1);
+    console.log(selectedProducts2);
+    console.log(selectedProducts3);
+    console.log(selectedProducts4);
+    console.log(selectedProductspotLight);
+    console.log(customerSegment);
+    console.log(description);
+  };
+
   const resetLists = () => {
     setSelectedProducts1({ listName: "", productData: [], listIndex: 1 });
     setSelectedProducts2({ listName: "", productData: [], listIndex: 2 });
@@ -243,6 +254,7 @@ function CreateMenu() {
         selectedProductspotLight={selectedProductspotLight}
         checkListNamesNotEmpty={checkListNamesNotEmpty}
         handleChangeTitle={handleChangeTitle}
+        handleCreateMenu={handleCreateMenu}
         resetLists={resetLists}
       />
       <DrawerComponent
