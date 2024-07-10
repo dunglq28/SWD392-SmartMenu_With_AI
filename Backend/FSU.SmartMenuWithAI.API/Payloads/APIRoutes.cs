@@ -108,6 +108,7 @@
             public const string RecomendMenu = Base + "/menus/recomend-menu";
 
         }
+
         public static class GroupAttribute
         {
             public const string GetAll = Base + "/group-attributes/";
