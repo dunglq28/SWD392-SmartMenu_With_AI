@@ -192,6 +192,7 @@ CREATE TABLE Menu
   IsActive BIT NOT NULL,
   MenuImage NVARCHAR(MAX) NULL,
   Description NVARCHAR(MAX) NULL,
+  Priority INT NULL,
   BrandID INT NOT NULL,
   PRIMARY KEY (MenuID),
   FOREIGN KEY (BrandID) REFERENCES Brand(BrandID)
