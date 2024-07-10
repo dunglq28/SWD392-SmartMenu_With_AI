@@ -14,6 +14,7 @@ namespace FSU.SmartMenuWithAI.Service.Models
 
         public int SegmentId { get; set; }
 
-        public List<Repository.Entities.CustomerSegment> CustomerSegments {  get; set; } = new List<Repository.Entities.CustomerSegment>();
+        public int brandId { get; set; }
+
     }
 }

@@ -56,7 +56,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     IsActive = reqObj.IsActive,
                     Description = reqObj.Description,
                 };
-                var menuAdd = await _menuService.Insert(dto);
+                var menuAdd = await _menuService.Insert(dto, priority:reqObj.Priority, segmentIds: reqObj.SegmentIds);
 
 
                 // tạo thành công
@@ -64,7 +64,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     if (reqObj.MenuImage != null)
                     {
-                        await _s3Service.UploadItemAsync(reqObj.MenuImage, menuAdd.MenuCode!, FolderRootImg.Menu);
+                        await _s3Service.UploadItemAsync(reqObj.MenuImage,menuAdd.MenuCode!, FolderRootImg.Menu);
                     }
                     return Ok(new BaseResponse
                     {
