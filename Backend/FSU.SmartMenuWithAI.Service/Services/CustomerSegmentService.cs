@@ -78,7 +78,22 @@ namespace FSU.SmartMenuWithAI.Service.Services
             };
             return paginatedSegments;
         }
-
+        public async Task<IEnumerable<ViewCustomerSegment>> GetAllNoPaingAsync(int brandId)
+        {
+            Expression<Func<CustomerSegment, bool>> filter = x => x.BrandId == brandId && x.Status != (int)Status.Deleted;
+            Func<IQueryable<CustomerSegment>, IOrderedQueryable<CustomerSegment>> orderBy = q => q.OrderByDescending(x => x.SegmentId);
+            var customerSegments = await _unitOfWork.CustomerSegmentRepository.Get(filter: filter, orderBy: orderBy, includeProperties: "SegmentAttributes");
+            var list = customerSegments.Select(segment => new ViewCustomerSegment
+            {
+                CustomerSegmentId = segment.SegmentId,
+                CustomerSegmentName = segment.SegmentName,
+                Demographic = segment.Demographics,
+                CreateDate = segment.CreateDate,
+                UpdateDate = segment.UpdateDate,
+                Age = segment.SegmentAttributes.FirstOrDefault(attr => attr.AttributeId == 1)?.Value! // Lấy giá trị Age từ SegmentAttributes với AttributeId = 1
+            }).ToList();
+            return list;
+        }
         public async Task<ViewCustomerSegment?> GetByID(int SegmentId)
         {
             //Expression<Func<CustomerSegment, bool>> filterRecord = x => x.SegmentId == SegmentId && (x.Status == (int)Status.Exist);
