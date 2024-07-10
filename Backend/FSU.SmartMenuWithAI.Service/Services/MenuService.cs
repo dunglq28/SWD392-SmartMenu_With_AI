@@ -28,12 +28,13 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<bool> Delete(int id)
         {
-            var deleteMenu = await _unitOfWork.MenuRepository.GetByID(id);
+            string includeProperties = "MenuLists,MenuSegments";
+            var deleteMenu = await _unitOfWork.MenuRepository.GetByCondition(x => x.MenuId == id, includeProperties);
             if (deleteMenu == null)
             {
                 return false;
             }
-            _unitOfWork.MenuRepository.Delete(id);
+            _unitOfWork.MenuRepository.Delete(deleteMenu);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             return result;
         }
@@ -43,7 +44,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Expression<Func<Menu, bool>> filter = brandID > 0 ? x => x.BrandId == brandID : null!;
 
             Func<IQueryable<Menu>, IOrderedQueryable<Menu>> orderBy = q => q.OrderByDescending(x => x.MenuId);
-            string includeProperties = "Brand";
+            string includeProperties = "Brand,MenuLists,MenuSegments";
 
             var entities = await _unitOfWork.MenuRepository
                 .Get(filter: filter, orderBy: orderBy, includeProperties: includeProperties, pageIndex: pageIndex, pageSize: pageSize);
@@ -98,6 +99,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             CreateDate = DateOnly.FromDateTime(DateTime.Now),
             IsActive = reqObj.IsActive!.Value,
             BrandId = reqObj.BrandId!.Value,
+            Priority = priority,
             Description = reqObj.Description,
             MenuImage = _s3Service.GetPreSignedURL(generateCode, FolderRootImg.Menu),
             MenuSegments = menuSegments

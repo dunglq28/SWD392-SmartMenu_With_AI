@@ -17,6 +17,8 @@ public partial class Menu
 
     public string? Description { get; set; }
 
+    public int? Priority { get; set; }
+
     public int BrandId { get; set; }
 
     public virtual Brand Brand { get; set; } = null!;
