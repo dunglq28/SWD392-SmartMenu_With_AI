@@ -37,7 +37,7 @@ import { MdPhoneInTalk } from "react-icons/md";
 import html2canvas from "html2canvas";
 import { formatCurrency } from "../../../utils/functionHelper";
 import { toast } from "react-toastify";
-import { getCustomerSegments } from "../../../services/CustomerSegmentService";
+import { getCustomerSegmentsNoPaging } from "../../../services/CustomerSegmentService";
 import { CustomerSegmentData } from "../../../payloads/responses/CustomerSegment.model";
 import { Menu, MenuList } from "../../../models/Menu.model";
 
@@ -96,7 +96,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   useEffect(() => {
     const loadData = async () => {
       try {
-        const segments = await getCustomerSegments(brandId, 1, 100, "");
+        const segments = await getCustomerSegmentsNoPaging(brandId);
         if (segments) {
           const options = segments.list.map((segment) => ({
             value: segment.customerSegmentId,
@@ -235,7 +235,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   const handleDonebtn = () => {
     // console.log(menu);
     console.log(capturedImageFile);
-    
+
     // handleCreateMenu(, description);
     // setCurrentTab(0);
     // onClose();

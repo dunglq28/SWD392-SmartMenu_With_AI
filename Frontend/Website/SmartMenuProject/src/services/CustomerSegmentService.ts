@@ -24,6 +24,18 @@ export const getCustomerSegments = async (
   return apiResponse.data as GetData<CustomerSegmentData>;
 };
 
+export const getCustomerSegmentsNoPaging = async (
+  brandId: number,
+): Promise<GetData<CustomerSegmentData>> => {
+  const res = await axiosAuth.get("customer-segment/no-paging", {
+    params: {
+      brandId: brandId,
+    },
+  });
+  const apiResponse = res.data as ApiResponse<Object>;
+  return apiResponse.data as GetData<CustomerSegmentData>;
+};
+
 export const getCustomerSegment = async (
   id: number
 ): Promise<ApiResponse<CustomerSegmentData>> => {
