@@ -25,5 +25,10 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Menu
 
         [JsonProperty("menu-image")]
         public IFormFile? MenuImage { get; set; }
+
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
+        [JsonProperty("segment-ids")]
+        public List<int> SegmentIds { get; set; }
     }
 }

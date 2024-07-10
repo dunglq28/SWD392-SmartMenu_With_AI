@@ -19,14 +19,14 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
             CreateMap<AppUser, AppUserDTO>().ReverseMap();
             CreateMap<Token, TokenDto>().ReverseMap();
             CreateMap<RefreshToken, RefreshTokenDTO>().ReverseMap();
-            // menu
-            CreateMap<Menu, MenuDTO>().ReverseMap();
             // store
             CreateMap<Store, StoreDTO>().ReverseMap();
             // brand
             CreateMap<Brand, BrandDTO>().ReverseMap();
             // menu
-            CreateMap<Menu, MenuDTO>().ReverseMap();
+            CreateMap<Menu, MenuDTO>()
+                .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.Brand.BrandName))
+                .ReverseMap();
             // category
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<Category, CategoryViewModel>().ReverseMap();
@@ -52,6 +52,10 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
             CreateMap<SegmentAttribute, AddAttributeSegmentDTO>().ReverseMap();
             //productlist
             CreateMap<ProductList, ProductListDTO>().ReverseMap();
+            //menu segment
+            CreateMap<MenuSegment, MenuSegmentDTO>()
+                .ForMember(dest => dest.brandId, opt => opt.MapFrom(src => src.Menu.BrandId))
+                .ReverseMap();
 
         }
     }
