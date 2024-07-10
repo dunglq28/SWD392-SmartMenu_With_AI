@@ -13,10 +13,10 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.ProductList
         [JsonProperty("list-id")]
         public int ListId { get; set; }
 
-        [Required(ErrorMessage = "Price là bắt buộc.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Price phải là một số không âm.")]
-        [JsonProperty("price")]
-        public int Price { get; set; }
+        //[Required(ErrorMessage = "Price là bắt buộc.")]
+        //[Range(0, int.MaxValue, ErrorMessage = "Price phải là một số không âm.")]
+        //[JsonProperty("price")]
+        //public int Price { get; set; }
 
         [Required(ErrorMessage = "IndexInList là bắt buộc.")]
         [Range(0, int.MaxValue, ErrorMessage = "IndexInList phải là một số không âm.")]

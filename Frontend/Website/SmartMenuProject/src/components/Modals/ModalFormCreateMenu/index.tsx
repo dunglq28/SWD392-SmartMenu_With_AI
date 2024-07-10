@@ -21,6 +21,7 @@ import {
   AlertDialogBody,
   AlertDialogFooter,
   useDisclosure,
+  Textarea,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
 import Draggable from "react-draggable";
@@ -28,23 +29,28 @@ import Select from "react-select";
 import template from "../../../assets/images/menu/CreateMenu/menuTemplate1.svg";
 import { ProductData } from "../../../payloads/responses/ProductData.model";
 import style from "./ModalFormCreateMenu.module.scss";
-import freezeTraXanh from "../../../assets/images/menu/CreateMenu/FREEZE-TRA-XANH.png";
 import component1 from "../../../assets/images/menu/CreateMenu/Component1.svg";
 import component2 from "../../../assets/images/menu/CreateMenu/Component2.svg";
 import { AiOutlineGlobal } from "react-icons/ai";
 
 import { MdPhoneInTalk } from "react-icons/md";
 import html2canvas from "html2canvas";
+import { formatCurrency } from "../../../utils/functionHelper";
+import { toast } from "react-toastify";
+import { MenuList } from "../../../models/MenuList.model";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenListProduct: (Index: number) => void;
-  selectedProducts1: ProductData[];
-  selectedProducts2: ProductData[];
-  selectedProducts3: ProductData[];
-  selectedProducts4: ProductData[];
-  selectedProductspotLight: ProductData[];
+  selectedProducts1: MenuList;
+  selectedProducts2: MenuList;
+  selectedProducts3: MenuList;
+  selectedProducts4: MenuList;
+  selectedProductspotLight: MenuList;
+  checkListNamesNotEmpty: () => boolean;
+  handleChangeTitle: (listName: string, index: number) => void;
+  resetLists: () => void;
 }
 
 const ModalFormCreateMenu: React.FC<ModalProps> = ({
@@ -56,6 +62,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   selectedProducts3,
   selectedProducts4,
   selectedProductspotLight,
+  checkListNamesNotEmpty,
+  handleChangeTitle,
+  resetLists,
 }) => {
   const [currentTab, setCurrentTab] = React.useState(0);
   const [IsDraggable, setIsDraggable] = React.useState(false);
@@ -68,8 +77,6 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     onClose: onCloseAlertCancelForm,
   } = useDisclosure();
   const cancelRef = React.useRef<HTMLButtonElement>(null);
-  const [spotLightProduct, setSpotLightProduct] =
-    React.useState<ProductData | null>(null);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -88,12 +95,6 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     };
   }, []);
 
-  React.useEffect(() => {
-    if (selectedProductspotLight.length > 0) {
-      setSpotLightProduct(selectedProductspotLight[0]);
-    }
-  }, [selectedProductspotLight]);
-
   const handleImageLoad = () => {
     if (imageRef.current) {
       setDimensions({
@@ -111,6 +112,20 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   };
 
   const handleNextTab = () => {
+    if (
+      selectedProducts1.productData.length == 0 ||
+      selectedProducts2.productData.length == 0 ||
+      selectedProducts3.productData.length == 0 ||
+      selectedProducts4.productData.length == 0 ||
+      selectedProductspotLight.productData.length == 0
+    ) {
+      toast.error("Vui lòng chọn đầy đủ các danh sách");
+      return;
+    }
+    if (!checkListNamesNotEmpty()) {
+      toast.error("Vui lòng điền đẩy đủ tiêu đề");
+      return;
+    }
     handleCaptureAndDisplay();
     setCurrentTab((prevTab) => (prevTab < 2 ? prevTab + 1 : prevTab));
   };
@@ -149,6 +164,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   const handleCloseForm = () => {
     setCurrentTab(0);
     onCloseAlertCancelForm();
+    resetLists();
     onClose();
   };
 
@@ -182,6 +198,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                 <Button onClick={handleBorder}>
                   Border: {(!isBorder).toString()}
                 </Button>
+                <Button onClick={() => resetLists()}>Đặt lại menu</Button>
               </Flex>
             ) : currentTab === 1 ? (
               <Text as="b" fontSize="30px">
@@ -221,24 +238,24 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                               marginTop="7px"
                               marginLeft="35%"
                             >
-                              <Text
+                              <Input
                                 border={
                                   isBorder
                                     ? "1px solid black"
                                     : "1px solid transparent"
                                 }
-                                contentEditable={true}
+                                // contentEditable={true}
                                 spellCheck={false}
                                 color="#7AD7F4"
                                 fontSize="1.05vw"
-                                w="5.1vw"
+                                w="6vw"
                                 height="1.5vw"
                                 whiteSpace="nowrap"
                                 fontWeight="bold"
                                 textAlign="center"
-                              >
-                                Menu Title
-                              </Text>
+                                placeholder="Tiêu đề"
+                                onChange={(e) => handleChangeTitle(e.target.value, 1)}
+                              />
                             </Flex>
                           </Draggable>
                           <Draggable disabled={IsDraggable}>
@@ -257,8 +274,8 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                               borderRadius="8px"
                               flexDirection="column"
                             >
-                              {selectedProducts1.length !== 0 &&
-                                selectedProducts1.map((product) => (
+                              {selectedProducts1.productData.length !== 0 &&
+                                selectedProducts1.productData.map((product) => (
                                   <Flex
                                     key={product.productId}
                                     height="23%"
@@ -267,7 +284,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     alignItems="center"
                                     cursor="pointer"
                                     onClick={
-                                      selectedProducts1.length === 4
+                                      selectedProducts1.productData.length === 4
                                         ? () => onOpenListProduct(1)
                                         : () => {}
                                     }
@@ -277,7 +294,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                       height="100%"
                                       justifyContent="center"
                                     >
-                                      <Image src={freezeTraXanh} />
+                                      <Image src={product.imageUrl} />
                                     </Flex>
                                     <Flex
                                       width="70%"
@@ -301,7 +318,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                           fontSize="0.8vw"
                                           color="#5A3D41"
                                         >
-                                          {product.price}
+                                          {formatCurrency(
+                                            product.price.toString()
+                                          )}
                                         </Text>
                                       </Flex>
                                       <Text fontSize="0.6vw" color="#5A3D41">
@@ -310,7 +329,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     </Flex>
                                   </Flex>
                                 ))}
-                              {selectedProducts1.length !== 4 && (
+                              {selectedProducts1.productData.length !== 4 && (
                                 <FaPlus
                                   onClick={() => onOpenListProduct(1)}
                                   style={{
@@ -329,24 +348,24 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                         <Flex w="100%" height="52%" flexDirection="column">
                           <Draggable disabled={IsDraggable}>
                             <Flex height="20px" marginLeft="36%">
-                              <Text
+                              <Input
                                 border={
                                   isBorder
                                     ? "1px solid black"
                                     : "1px solid transparent"
                                 }
-                                contentEditable={true}
+                                // contentEditable={true}
                                 spellCheck={false}
                                 color="#7AD7F4"
                                 fontSize="1.05vw"
-                                w="5.1vw"
+                                w="6vw"
                                 height="1.5vw"
                                 whiteSpace="nowrap"
                                 fontWeight="bold"
                                 textAlign="center"
-                              >
-                                Menu Title
-                              </Text>
+                                placeholder="Tiêu đề"
+                                onChange={(e) => handleChangeTitle(e.target.value, 2)}
+                              />
                             </Flex>
                           </Draggable>
                           <Draggable disabled={IsDraggable}>
@@ -365,8 +384,8 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                               borderRadius="8px"
                               flexWrap="wrap"
                             >
-                              {selectedProducts2.length !== 0 &&
-                                selectedProducts2.map((product) => (
+                              {selectedProducts2.productData.length !== 0 &&
+                                selectedProducts2.productData.map((product) => (
                                   <Flex
                                     key={product.productId}
                                     height="43%"
@@ -374,13 +393,13 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     flexDirection="column"
                                     cursor="pointer"
                                     onClick={
-                                      selectedProducts2.length === 4
+                                      selectedProducts2.productData.length === 4
                                         ? () => onOpenListProduct(2)
                                         : () => {}
                                     }
                                   >
                                     <Flex height="50%" w="50%">
-                                      <Image src={freezeTraXanh} />
+                                      <Image src={product.imageUrl} />
                                     </Flex>
                                     <Flex
                                       height="50%"
@@ -404,18 +423,18 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                           fontSize="0.8vw"
                                           color="#5A3D41"
                                         >
-                                          {product.price}
+                                          {formatCurrency(
+                                            product.price.toString()
+                                          )}
                                         </Text>
                                       </Flex>
                                       <Text fontSize="0.6vw" color="#5A3D41">
-                                        {product.description}
-                                        {product.description}
                                         {product.description}
                                       </Text>
                                     </Flex>
                                   </Flex>
                                 ))}
-                              {selectedProducts2.length !== 4 && (
+                              {selectedProducts2.productData.length !== 4 && (
                                 <FaPlus
                                   onClick={() => onOpenListProduct(2)}
                                   style={{
@@ -441,24 +460,24 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                         <Flex w="100%" height="47%" flexDirection="column">
                           <Draggable disabled={IsDraggable}>
                             <Flex height="20px" marginLeft="36%">
-                              <Text
+                              <Input
                                 border={
                                   isBorder
                                     ? "1px solid black"
                                     : "1px solid transparent"
                                 }
-                                contentEditable={true}
+                                // contentEditable={true}
                                 spellCheck={false}
                                 color="#7AD7F4"
                                 fontSize="1.05vw"
-                                w="5.1vw"
+                                w="6vw"
                                 height="1.5vw"
                                 whiteSpace="nowrap"
                                 fontWeight="bold"
                                 textAlign="center"
-                              >
-                                Menu Title
-                              </Text>
+                                placeholder="Tiêu đề"
+                                onChange={(e) => handleChangeTitle(e.target.value, 3)}
+                              />
                             </Flex>
                           </Draggable>
                           <Draggable disabled={IsDraggable}>
@@ -477,8 +496,8 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                               borderRadius="8px"
                               flexWrap="wrap"
                             >
-                              {selectedProducts3.length !== 0 &&
-                                selectedProducts3.map((product) => (
+                              {selectedProducts3.productData.length !== 0 &&
+                                selectedProducts3.productData.map((product) => (
                                   <Flex
                                     key={product.productId}
                                     height="43%"
@@ -486,13 +505,13 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     flexDirection="column"
                                     cursor="pointer"
                                     onClick={
-                                      selectedProducts3.length === 4
+                                      selectedProducts3.productData.length === 4
                                         ? () => onOpenListProduct(3)
                                         : () => {}
                                     }
                                   >
                                     <Flex height="50%" w="50%">
-                                      <Image src={freezeTraXanh} />
+                                      <Image src={product.imageUrl} />
                                     </Flex>
                                     <Flex
                                       height="50%"
@@ -516,18 +535,18 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                           fontSize="0.8vw"
                                           color="#5A3D41"
                                         >
-                                          {product.price}
+                                          {formatCurrency(
+                                            product.price.toString()
+                                          )}
                                         </Text>
                                       </Flex>
                                       <Text fontSize="0.6vw" color="#5A3D41">
-                                        {product.description}
-                                        {product.description}
                                         {product.description}
                                       </Text>
                                     </Flex>
                                   </Flex>
                                 ))}
-                              {selectedProducts3.length !== 4 && (
+                              {selectedProducts3.productData.length !== 4 && (
                                 <FaPlus
                                   onClick={() => onOpenListProduct(3)}
                                   style={{
@@ -546,24 +565,24 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                         <Flex w="100%" height="50%" flexDirection="column">
                           <Draggable disabled={IsDraggable}>
                             <Flex height="20px" marginLeft="36%">
-                              <Text
+                              <Input
                                 border={
                                   isBorder
                                     ? "1px solid black"
                                     : "1px solid transparent"
                                 }
-                                contentEditable={true}
+                                // contentEditable={true}
                                 spellCheck={false}
                                 color="#7AD7F4"
                                 fontSize="1.05vw"
-                                w="5.1vw"
+                                w="6vw"
                                 height="1.5vw"
                                 whiteSpace="nowrap"
                                 fontWeight="bold"
                                 textAlign="center"
-                              >
-                                Menu Title
-                              </Text>
+                                placeholder="Tiêu đề"
+                                onChange={(e) => handleChangeTitle(e.target.value, 4)}
+                              />
                             </Flex>
                           </Draggable>
                           <Draggable disabled={IsDraggable}>
@@ -581,8 +600,8 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                               borderRadius="8px"
                               flexWrap="wrap"
                             >
-                              {selectedProducts4.length !== 0 &&
-                                selectedProducts4.map((product) => (
+                              {selectedProducts4.productData.length !== 0 &&
+                                selectedProducts4.productData.map((product) => (
                                   <Flex
                                     key={product.productId}
                                     height="53%"
@@ -590,13 +609,13 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                     flexDirection="column"
                                     cursor="pointer"
                                     onClick={
-                                      selectedProducts4.length === 2
+                                      selectedProducts4.productData.length === 2
                                         ? () => onOpenListProduct(4)
                                         : () => {}
                                     }
                                   >
                                     <Flex height="50%" w="50%">
-                                      <Image src={freezeTraXanh} />
+                                      <Image src={product.imageUrl} />
                                     </Flex>
                                     <Flex
                                       height="50%"
@@ -620,18 +639,18 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                           fontSize="0.8vw"
                                           color="#5A3D41"
                                         >
-                                          {product.price}
+                                          {formatCurrency(
+                                            product.price.toString()
+                                          )}
                                         </Text>
                                       </Flex>
                                       <Text fontSize="0.6vw" color="#5A3D41">
-                                        {product.description}
-                                        {product.description}
                                         {product.description}
                                       </Text>
                                     </Flex>
                                   </Flex>
                                 ))}
-                              {selectedProducts4.length !== 2 && (
+                              {selectedProducts4.productData.length !== 2 && (
                                 <FaPlus
                                   onClick={() => onOpenListProduct(4)}
                                   style={{
@@ -770,8 +789,8 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                   contentEditable={true}
                                   spellCheck={false}
                                 >
-                                  {spotLightProduct
-                                    ? spotLightProduct.productName
+                                  {selectedProductspotLight.productData.length !== 0
+                                    ? selectedProductspotLight.productData[0].productName
                                     : "Sản Phẩm Spotlight"}
                                 </Text>
                               </Draggable>
@@ -811,12 +830,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                               alignItems="center"
                               bg="#fff"
                             >
-                              {spotLightProduct ? (
+                              {selectedProductspotLight.productData.length !== 0 ? (
                                 // <Image
                                 //   src={spotLightProduct.spotlightVideoImageUrl}
                                 // />
                                 <Image
-                                  src={freezeTraXanh}
+                                  src={selectedProductspotLight.productData[0].imageUrl}
                                   onClick={() => onOpenListProduct(5)}
                                 />
                               ) : (
@@ -1033,7 +1052,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                         <Text as="b" fontSize="20px">
                           Mô tả menu
                         </Text>
-                        <Input
+                        <Textarea
                           border="2px solid #55ad9b"
                           _focus={{ border: "2px solid #95d2b3" }}
                           _hover={{ border: "2px solid #95d2b3" }}

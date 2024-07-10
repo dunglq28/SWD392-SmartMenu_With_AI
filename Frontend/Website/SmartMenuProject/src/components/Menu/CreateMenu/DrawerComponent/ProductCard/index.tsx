@@ -1,14 +1,10 @@
 import React from "react";
 import { Flex, Image, Text } from "@chakra-ui/react";
-import matcha from "../../../../../assets/images/menu/CreateMenu/FREEZE-TRA-XANH.png";
+import { ProductData } from "../../../../../payloads/responses/ProductData.model";
+import { formatCurrency } from "../../../../../utils/functionHelper";
 
 interface ProductCardProps {
-  product: {
-    id: number;
-    name: string;
-    price: string;
-    description: string;
-  };
+  product: ProductData
   isSelected?: boolean;
   onClick: () => void;
 }
@@ -49,7 +45,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           transform: "scale(0.98)",
         }}
       >
-        <Image src={matcha} height="50%" borderRadius="10px" />
+        <Image src={product.imageUrl} height="50%" borderRadius="10px" />
         <Flex
           flexDirection="column"
           width="100%"
@@ -59,10 +55,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
         >
           <Flex justifyContent="space-between" width="100%">
             <Text fontSize="1.1vw" fontWeight="bold" color="#5A3D41">
-              {product.name}
+              {product.productName}
             </Text>
             <Text fontSize="1vw" fontWeight="bold" color="#5A3D41">
-              Giá {product.price}
+              Giá {formatCurrency(product.price.toString())}
             </Text>
           </Flex>
           <Text fontSize="0.6vw" color="#5A3D41" textAlign="justify">

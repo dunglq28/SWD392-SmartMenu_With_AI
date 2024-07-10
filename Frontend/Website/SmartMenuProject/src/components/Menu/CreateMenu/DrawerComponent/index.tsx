@@ -10,19 +10,27 @@ import {
   Button,
   Text,
 } from "@chakra-ui/react";
+import style from "./Drawer.module.scss";
+
 import HeaderImg from "../../../../assets/images/menu/CreateMenu/HeaderBackground.svg";
 import ProductCard from "./ProductCard";
-import matcha from "../../../../assets/images/menu/CreateMenu/FREEZE-TRA-XANH.png";
 import { ProductData } from "../../../../payloads/responses/ProductData.model";
+import { CategoryData } from "../../../../payloads/responses/CategoryData.model";
+import { formatCurrency } from "../../../../utils/functionHelper";
+import { toast } from "react-toastify";
 
 interface DrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onAddToMenu: (selectedProducts: ProductData[], Index: number) => void;
   products: ProductData[];
+  allSelectedProducts: ProductData[];
   currentListProducts: ProductData[];
   IndexList: number;
   MaxProduct: number;
+  handleChangeProductByCate: (cateId: number) => void;
+  categoryOptions: CategoryData[];
+  currentCategory: number;
 }
 
 const DrawerComponent: React.FC<DrawerProps> = ({
@@ -30,38 +38,63 @@ const DrawerComponent: React.FC<DrawerProps> = ({
   onClose,
   onAddToMenu,
   products, // Sử dụng danh sách sản phẩm từ prop
+  allSelectedProducts,
   currentListProducts,
   IndexList,
   MaxProduct,
+  handleChangeProductByCate,
+  categoryOptions,
+  currentCategory,
 }) => {
-  const [selectedProducts, setSelectedProducts] = useState<ProductData[]>([]);
+  const [selectedProductsOfMenu, setSelectedProductsOfMenu] = useState<
+    ProductData[]
+  >([]);
+  const [selectedProductsOfList, setSelectedProductsOfList] = useState<
+    ProductData[]
+  >([]);
 
   useEffect(() => {
-    setSelectedProducts(currentListProducts);
-  }, [currentListProducts]);
+    setSelectedProductsOfMenu(allSelectedProducts);
+    setSelectedProductsOfList(currentListProducts);
+  }, [currentListProducts, allSelectedProducts]);
+
   // Function để thêm sản phẩm đã chọn vào danh sách
   const handleAddToSelectedProducts = (product: ProductData) => {
+    if (selectedProductsOfList.length == MaxProduct) {
+      toast.error(`Danh sách hiện tại chỉ được chứa ${MaxProduct} sản phẩm`);
+    }
+
     // Kiểm tra nếu sản phẩm chưa được chọn và chưa đạt MaxProduct
     if (
-      !selectedProducts.find((p) => p.productId === product.productId) &&
-      selectedProducts.length < MaxProduct
+      !selectedProductsOfMenu.find((p) => p.productId === product.productId) &&
+      selectedProductsOfList.length < MaxProduct
     ) {
-      setSelectedProducts([...selectedProducts, product]);
+      setSelectedProductsOfMenu([...selectedProductsOfMenu, product]);
+      setSelectedProductsOfList([...selectedProductsOfList, product]);
     }
   };
 
   // Function để loại bỏ sản phẩm đã chọn khỏi danh sách
   const handleRemoveFromSelectedProducts = (productId: number) => {
-    const updatedProducts = selectedProducts.filter(
+    const updatedProducts = selectedProductsOfList.filter(
       (product) => product.productId !== productId
     );
-    setSelectedProducts(updatedProducts);
+    const updatedProductsOfMenu = selectedProductsOfMenu.filter(
+      (product) => product.productId !== productId
+    );
+    setSelectedProductsOfMenu(updatedProductsOfMenu);
+    setSelectedProductsOfList(updatedProducts);
   };
 
   // Function để thêm danh sách sản phẩm đã chọn vào menu
   const addToMenu = () => {
-    onAddToMenu(selectedProducts, IndexList);
-    setSelectedProducts([]); // Xóa danh sách sản phẩm đã chọn sau khi thêm vào menu
+    if (selectedProductsOfList.length != MaxProduct) {
+      toast.error(`Vui lòng chọn đủ ${MaxProduct} sản phẩm`);
+      return;
+    } 
+
+    onAddToMenu(selectedProductsOfList, IndexList);
+    setSelectedProductsOfList([]); // Xóa danh sách sản phẩm đã chọn sau khi thêm vào menu
     onClose(); // Đóng Drawer sau khi thêm vào menu
   };
 
@@ -104,9 +137,28 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                 rowGap="5px"
               >
                 {/* Replace with your actual category buttons */}
-                <Button height="60px" w="100%" border="1px solid #ccc">
-                  Freeze
-                </Button>
+                {categoryOptions.map((cate) => (
+                  <Button
+                    key={cate.categoryId}
+                    height="60px"
+                    marginBottom="10px"
+                    w="100%"
+                    border="1px solid #ccc"
+                    bg={
+                      currentCategory === cate.categoryId ? "#466d6b" : "white"
+                    }
+                    color={
+                      currentCategory === cate.categoryId ? "white" : "black"
+                    }
+                    _hover={{
+                      bg: "#466d6b",
+                      color: "#fff",
+                    }}
+                    onClick={() => handleChangeProductByCate(cate.categoryId)}
+                  >
+                    {cate.categoryName}
+                  </Button>
+                ))}
               </Flex>
             </Flex>
             {/* Center panel for product list */}
@@ -147,13 +199,8 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                 {products.map((product) => (
                   <ProductCard
                     key={product.productId}
-                    product={{
-                      id: product.productId,
-                      name: product.productName,
-                      price: product.price,
-                      description: product.description,
-                    }}
-                    isSelected={selectedProducts.some(
+                    product={product}
+                    isSelected={selectedProductsOfMenu.some(
                       (p) => p.productId === product.productId
                     )}
                     onClick={() => handleAddToSelectedProducts(product)}
@@ -195,7 +242,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                   overflow="auto"
                   padding="20px"
                 >
-                  {selectedProducts.map((product) => (
+                  {selectedProductsOfList.map((product) => (
                     <Flex
                       key={product.productId}
                       height="100px"
@@ -220,7 +267,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                         handleRemoveFromSelectedProducts(product.productId)
                       }
                     >
-                      <Image src={matcha} height="80%" />
+                      <Image src={product.imageUrl} height="80%" />
                       <Flex flexDirection="column" w="80%">
                         <Flex justifyContent="space-between">
                           <Text
@@ -235,7 +282,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                             fontWeight="bold"
                             color="#5A3D41"
                           >
-                            Giá {product.price}
+                            Giá {formatCurrency(product.price.toString())}
                           </Text>
                         </Flex>
                         <Text

@@ -241,5 +241,32 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
+        //[Authorize(Roles = UserRoles.BrandManager)]
+        [HttpGet(APIRoutes.CustomerSegment.GetAllNoPaging, Name = "get-customer-segment-async-no-paging")]
+        public async Task<IActionResult> GetAllNoPagingAsync([FromQuery(Name = "brand-id")] int brandId)
+        {
+            try
+            {
+                var viewCustomerSegment = await _customerSegmentService.GetAllNoPaingAsync(brandId);
+
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Tải dữ liệu thành công",
+                    Data = viewCustomerSegment,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Tải dữ liệu thất bại!" + ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
     }
 }

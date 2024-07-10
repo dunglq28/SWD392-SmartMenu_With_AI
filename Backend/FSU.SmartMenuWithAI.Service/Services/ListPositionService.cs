@@ -40,23 +40,34 @@ namespace FSU.SmartMenuWithAI.Service.Services
             pagin.TotalPage = PaginHelper.PageCount(pagin.TotalRecord, pageSize!.Value);
             return pagin;
         }
-        public async Task<ListPositionDTO> UpdateAsync(int id, int totalProduct)
+        public async Task<ListPositionDTO> UpdateAsync(int id, int totalProduct, string listName)
         {
             var listPosition = await _unitOfWork.ListPositionRepository.GetByID(id);
             if (listPosition == null)
                 return null!;
+            if (listPosition == null)
+                return null!;
 
+            // Validate listName
+            if (string.IsNullOrEmpty(listName))
+                return null!; 
+
+            // Validate totalProduct
+            if (totalProduct <= 0)
+                return null!; 
             listPosition.TotalProduct = totalProduct;
+            listPosition.ListName = listName;
             _unitOfWork.ListPositionRepository.Update(listPosition);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             return _mapper.Map<ListPositionDTO>(listPosition);
         }
-        public async Task<ListPositionDTO> Insert(int totalProduct, int brandId)
+        public async Task<ListPositionDTO> Insert(int totalProduct, int brandId, string listName)
         {
             var listPosition = new ListPosition();
             listPosition.ListCode = Guid.NewGuid().ToString();
             listPosition.BrandId = brandId;
             listPosition.TotalProduct = totalProduct;
+            listPosition.ListName = listName;
             listPosition.CreateDate = DateOnly.FromDateTime(DateTime.Now);
 
             Expression<Func<Brand, bool>> condition = x => x.BrandId == brandId && (x.Status != (int)Status.Deleted);

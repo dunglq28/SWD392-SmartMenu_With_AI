@@ -196,17 +196,19 @@
 
         public static class CustomerSegment
         {
-            public const string GetAll = Base + "/customer-segment/";
+            public const string GetAll = Base + "/customer-segments/";
 
-            public const string GetByID = Base + "/customer-segment/get-by-id";
+            public const string GetAllNoPaging = Base + "/customer-segments/no-paging";
 
-            public const string UpdateName = Base + "/customer-segment/update-name";
+            public const string GetByID = Base + "/customer-segments/get-by-id";
 
-            public const string UpdateValue = Base + "/customer-segment/update-value";
+            public const string UpdateName = Base + "/customer-segments/update-name";
 
-            public const string Delete = Base + "/customer-segment/";
+            public const string UpdateValue = Base + "/customer-segments/update-value";
 
-            public const string Add = Base + "/customer-segment/";
+            public const string Delete = Base + "/customer-segments/";
+
+            public const string Add = Base + "/customer-segments/";
         }
     }
 }

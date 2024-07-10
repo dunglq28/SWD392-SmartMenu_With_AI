@@ -41,6 +41,18 @@ export const getCategories = async (
   return apiResponse.data as GetData<CategoryData>;
 };
 
+export const getCategoriesByBrandId = async (
+  Id: number
+): Promise<GetData<CategoryData>> => {
+  const res = await axiosAuth.get("categories", {
+    params: {
+      brandId: Id,
+    },
+  });
+  const apiResponse = res.data as ApiResponse<Object>;
+  return apiResponse.data as GetData<CategoryData>;
+};
+
 export const getCategory = async (
   id: number
 ): Promise<ApiResponse<CategoryData>> => {

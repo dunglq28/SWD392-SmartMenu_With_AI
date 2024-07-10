@@ -23,6 +23,20 @@ export const getProducts = async (
   return apiResponse.data as GetData<ProductData>;
 };
 
+export const getProductsByCategory = async (
+  brandId: number,
+  categoryId: number
+): Promise<GetData<ProductData>> => {
+  const res = await axiosAuth.get("products/get-by-category", {
+    params: {
+      brandId: brandId,
+      categoryId: categoryId,
+    },
+  });
+  const apiResponse = res.data as ApiResponse<Object>;
+  return apiResponse.data as GetData<ProductData>;
+};
+
 export const getProduct = async (
   id: number
 ): Promise<ApiResponse<ProductData>> => {

@@ -10,8 +10,8 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
            int searchKey,
            int? pageIndex = null,
            int? pageSize = null);
-        Task<ListPositionDTO> Insert(int totalProduct, int brandID);
-        Task<ListPositionDTO> UpdateAsync(int id, int totalProduct);
+        Task<ListPositionDTO> Insert(int totalProduct, int brandID, string listName);
+        Task<ListPositionDTO> UpdateAsync(int id, int totalProduct, string listName);
         Task<bool> DeleteAsync(int id);
 
     }

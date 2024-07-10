@@ -56,7 +56,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         {
             try
             {
-                var createdProductList = await _productListService.Insert(request.ProductId, request.ListId, request.Price, request.IndexInList, request.BrandId);
+                var createdProductList = await _productListService.Insert(request.ProductId, request.ListId, request.IndexInList, request.BrandId);
                 if (createdProductList != null)
                 {
                     return Ok(new BaseResponse
@@ -94,12 +94,11 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         public async Task<IActionResult> UpdateAsync([FromForm(Name = "product-id")] int productId,
                                                         [FromForm(Name = "list-id")] int listId,
                                                         [FromForm(Name = "index-in-list")] int index,
-                                                        [FromForm(Name = "price")] int price,
                                                         [FromForm(Name = "new-product-id")] int newProductId)
         {
             try
             {
-                var updatedProductList = await _productListService.UpdateAsync(productId, listId, index ,price, newProductId);
+                var updatedProductList = await _productListService.UpdateAsync(productId, listId, index, newProductId);
                 if (updatedProductList == null)
                 {
                     return NotFound(new BaseResponse
