@@ -11,13 +11,4 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.ListPosition
         [Required(ErrorMessage = "Thiếu danh sách chi tiết")]
         public List<ListDetail>? ListDetails { get; set; }
     }
-    //public class ListDetail
-    //{
-    //    [Required(ErrorMessage = "Thiếu List Name")]
-    //    public string ListName { get; set; }
-
-    //    [Required(ErrorMessage = "Thiếu số sản phẩm")]
-    //    [Range(1, int.MaxValue, ErrorMessage = "Số không hợp lệ.")]
-    //    public int TotalProduct { get; set; }
-    //}
 }
