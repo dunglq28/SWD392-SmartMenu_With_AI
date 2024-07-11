@@ -232,17 +232,55 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     // }
     const element = document.querySelector(".takeAPhoto") as HTMLElement;
     if (element) {
-      try {
-        const canvas = await html2canvas(element, { scale: 3, useCORS: true });
-        const imageDataURL = canvas
-          .toDataURL("image/jpeg", 0.92)
-          .replace("image/jpeg", "image/octet-stream");
-        setCapturedImage(imageDataURL);
-      } catch (error) {
-        console.error("Failed to capture image:", error);
-        setCapturedImage(undefined); // or handle error state accordingly
-      }
+      html2canvas(element, { scale: 3, useCORS: true })
+        .then((canvas) => {
+          // Lấy chuỗi base64 từ canvas
+          const imageDataURL = canvas.toDataURL("image/png");
+
+          // Tạo Blob từ chuỗi base64
+          const blob = dataURItoBlob(imageDataURL);
+
+          // Tạo URL từ Blob để hiển thị hoặc tải xuống
+          const url = URL.createObjectURL(blob);
+
+          setCapturedImage(url); // Lưu trữ URL để hiển thị ảnh đã chụp
+          console.log(url); // In URL ra để kiểm tra trong console
+
+          // Kiểm tra và xử lý nếu cần thiết
+          if (
+            imageDataURL.includes("image/png") &&
+            !imageDataURL.includes("data:,")
+          ) {
+            // Tạo một File từ Blob để sử dụng trong ứng dụng của bạn
+            const file = new File([blob], "captured_image.png", {
+              type: "image/png",
+            });
+
+            // Cập nhật state menuImage với File đã tạo
+            setMenu((prevMenu) => ({
+              ...prevMenu,
+              menuImage: { value: file, errorMessage: "" },
+            }));
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to capture image:", error);
+          setCapturedImage(undefined); // Xử lý trạng thái lỗi nếu cần
+        });
     }
+  };
+
+  // Hàm chuyển đổi Data URI thành Blob
+  const dataURItoBlob = (dataURI: string): Blob => {
+    const byteString = atob(dataURI.split(",")[1]);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < byteString.length; i++) {
+      uint8Array[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([arrayBuffer], { type: "image/png" });
   };
 
   const handleCloseForm = () => {
