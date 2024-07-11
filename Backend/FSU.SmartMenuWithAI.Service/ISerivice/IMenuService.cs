@@ -12,7 +12,7 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
     public interface IMenuService
     {
         Task<bool> UpdateAsync(int id, bool isActive);
-        Task<MenuDTO> Insert(MenuDTO reqObj);
+        Task<MenuDTO> Insert(MenuDTO reqObj, List<int> segmentIds, int priority);
         Task<PageEntity<MenuDTO>?> GetAllAsync( int brandID, int? pageIndex, int? pageSize);
         Task<MenuDTO?> GetAsync(int id);
         Task<bool> Delete(int id);

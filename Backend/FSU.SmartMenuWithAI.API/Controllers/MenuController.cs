@@ -20,12 +20,14 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         private readonly IMenuService _menuService;
         private readonly ImageFileValidator _imageFileValidator;
         private readonly IS3Service _s3Service;
+        private readonly IMenuSegmentService _menuSegmentService;
 
-        public MenuController(IMenuService menuService, IS3Service s3Service)
+        public MenuController(IMenuService menuService, IS3Service s3Service, IMenuSegmentService menuSegmentService)
         {
             _menuService = menuService;
             _imageFileValidator = new ImageFileValidator();
             _s3Service = s3Service;
+            _menuSegmentService = menuSegmentService;
         }
 
         //[Authorize(Roles = UserRoles.Admin)]
@@ -56,7 +58,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                     IsActive = reqObj.IsActive,
                     Description = reqObj.Description,
                 };
-                var menuAdd = await _menuService.Insert(dto);
+                var menuAdd = await _menuService.Insert(dto, priority:reqObj.Priority, segmentIds: reqObj.SegmentIds);
 
 
                 // tạo thành công
@@ -64,7 +66,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     if (reqObj.MenuImage != null)
                     {
-                        await _s3Service.UploadItemAsync(reqObj.MenuImage, menuAdd.MenuCode!, FolderRootImg.Menu);
+                        await _s3Service.UploadItemAsync(reqObj.MenuImage,menuAdd.MenuCode!, FolderRootImg.Menu);
                     }
                     return Ok(new BaseResponse
                     {
@@ -135,7 +137,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Menu.Update, Name = "UpdateMenuAsync")]
-        public async Task<IActionResult> UpdateUserAsync([FromQuery(Name = "menu-id")] int menuId, UpdateMenuRequest reqObj)
+        public async Task<IActionResult> UpdateMenuAsync([FromQuery(Name = "menu-id")] int menuId, UpdateMenuRequest reqObj)
         {
             try
             {
@@ -297,6 +299,134 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpGet(APIRoutes.Menu.GetMenuSegmentByID, Name = "get-menu-segment-by-id")]
+        public async Task<IActionResult> GetMenuSegmentAsync([FromQuery(Name = "menu-id")] int MenuId, [FromQuery(Name = "segment-id")] int segmentId)
+        {
+            try
+            {
+                var menu = await _menuSegmentService.GetByID(menuId: MenuId, SegmentId: segmentId);
 
+                if (menu == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy thông tin",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Lấy thông tin thành công",
+                    Data = menu,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
+
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpDelete(APIRoutes.Menu.DeleteMenuSegment, Name = "delete-menu-segment")]
+        public async Task<IActionResult> DeleteMenuSegmentAsync([FromQuery(Name ="menu-id")] int Menuid, [FromQuery(Name = ("segment-id"))]int segmentId)
+        {
+            try
+            {
+                var result = await _menuSegmentService.Delete(menuId: Menuid, SegmentID: segmentId);
+                if (!result)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Menu không tồn tại",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Xoá thành công",
+                    Data = null,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
+
+        //[Authorize(Roles = UserRoles.Admin)]
+        [HttpPut(APIRoutes.Menu.UpdateMenuSegment, Name = "update-menu-segment")]
+        public async Task<IActionResult> UpdateMenuSegmentAsync([FromBody] UpdateMenuSegmentRequest reqObj)
+        {
+            try
+            {
+                var menuSegInDB = await _menuSegmentService.GetByID(menuId:reqObj.MenuId, SegmentId:reqObj.SegmentId);
+                if (menuSegInDB != null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy thông tin.",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                var menuSegDTO = new MenuSegmentDTO
+                {
+                    SegmentId = reqObj.SegmentId,
+                    MenuId = reqObj.MenuId,
+                    Priority = reqObj.Priority
+                };
+                var result = await _menuSegmentService.Update(menuSegDTO);
+
+                if (result == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Cập nhật thất bại.",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Cập nhật thành công",
+                    Data = result,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
     }
 }

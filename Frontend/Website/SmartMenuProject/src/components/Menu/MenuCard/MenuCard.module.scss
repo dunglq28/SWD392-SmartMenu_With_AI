@@ -1,6 +1,6 @@
 .Card {
   width: 31%;
-  height: 60vh;
+  // height: 20vh;
   justify-content: center;
   align-items: center;
   .MenuCard {
@@ -30,6 +30,7 @@
         text-align: center;
       }
       .Description {
+        margin-top: 14px;
         text-align: center;
       }
     }

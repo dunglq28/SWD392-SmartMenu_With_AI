@@ -28,12 +28,13 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<bool> Delete(int id)
         {
-            var deleteMenu = await _unitOfWork.MenuRepository.GetByID(id);
+            string includeProperties = "MenuLists,MenuSegments";
+            var deleteMenu = await _unitOfWork.MenuRepository.GetByCondition(x => x.MenuId == id, includeProperties);
             if (deleteMenu == null)
             {
                 return false;
             }
-            _unitOfWork.MenuRepository.Delete(id);
+            _unitOfWork.MenuRepository.Delete(deleteMenu);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             return result;
         }
@@ -43,7 +44,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             Expression<Func<Menu, bool>> filter = brandID > 0 ? x => x.BrandId == brandID : null!;
 
             Func<IQueryable<Menu>, IOrderedQueryable<Menu>> orderBy = q => q.OrderByDescending(x => x.MenuId);
-            string includeProperties = "Brand";
+            string includeProperties = "Brand,MenuLists,MenuSegments";
 
             var entities = await _unitOfWork.MenuRepository
                 .Get(filter: filter, orderBy: orderBy, includeProperties: includeProperties, pageIndex: pageIndex, pageSize: pageSize);
@@ -61,32 +62,53 @@ namespace FSU.SmartMenuWithAI.Service.Services
             string includeProperties = "Brand";
 
             var menu = await _unitOfWork.MenuRepository.GetByCondition(filter, includeProperties);
-            if (menu != null)
-            {
-                var mapDTO = _mapper.Map<MenuDTO>(menu);
-                mapDTO.BrandName = menu.Brand.BrandName;
-                return mapDTO;
-            }
-            return null;
+            var mapDTO = _mapper.Map<MenuDTO>(menu);
+            return mapDTO;
         }
 
-        public async Task<MenuDTO> Insert(MenuDTO reqObj)
+        public async Task<MenuDTO> Insert(MenuDTO reqObj, List<int> segmentIds, int priority)
         {
-            var menu = new Menu();
-            menu.MenuCode = CodeHelper.GenerateCode();
-            menu.CreateDate = DateOnly.FromDateTime(DateTime.Now);
-            menu.IsActive = reqObj.IsActive!.Value;
-            menu.BrandId = reqObj.BrandId!.Value;
-            menu.Description = reqObj.Description;
-            menu.MenuImage = _s3Service.GetPreSignedURL(reqObj.BrandId + menu.MenuCode, FolderRootImg.Menu);
+            if (segmentIds.IsNullOrEmpty())
+            {
+                throw new Exception("Chưa có phân khúc khách hàng sử dụng");
+            }
+            var menuSegments = new List<MenuSegment>();
+            string includeProperties = "Menu,Segment";
+            
+            foreach (var segId in segmentIds)
+            {
+                Expression<Func<MenuSegment, bool>> checkPriorityExist = x => x.Priority == priority && x.Menu.BrandId == reqObj.BrandId && x.SegmentId == segId;
+                var priorityExist = await _unitOfWork.MenuSegmentRepository.GetByCondition(checkPriorityExist, includeProperties);
+                if (priorityExist != null)
+                {
+                    throw new Exception($"Phân khúc khách hàng '{priorityExist.Segment.SegmentName}' đã tồn tại Ưu tiên '{priority}'");
+                } else
+                {
+                    menuSegments.Add(new MenuSegment 
+                    { 
+                        Priority = priority, 
+                        SegmentId = segId 
+                    });
+                }
+            }
+
+            string generateCode = CodeHelper.GenerateCode();
+
+            var menu = new Menu { 
+            MenuCode = generateCode,
+            CreateDate = DateOnly.FromDateTime(DateTime.Now),
+            IsActive = reqObj.IsActive!.Value,
+            BrandId = reqObj.BrandId!.Value,
+            Priority = priority,
+            Description = reqObj.Description,
+            MenuImage = _s3Service.GetPreSignedURL(generateCode, FolderRootImg.Menu),
+            MenuSegments = menuSegments
+            };
             await _unitOfWork.MenuRepository.Insert(menu);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             if (result == true)
             {
-                // nếu kiểm tra đã thêm xuống db thì lấy lại menu đó từ db bằng code.
-                Expression<Func<Menu, bool>> getByCode = x => x.MenuCode == menu.MenuCode && x.BrandId == menu.BrandId;
-                var menuInDb = await _unitOfWork.MenuRepository.GetByCondition(getByCode);
-                var mapdto = _mapper.Map<MenuDTO>(menuInDb);
+                var mapdto = _mapper.Map<MenuDTO>(menu);
                 return mapdto;
             }
             return null!;

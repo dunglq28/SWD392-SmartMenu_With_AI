@@ -103,6 +103,7 @@ builder.Services.AddScoped<IAttributeService, AttributeService>();
 builder.Services.AddScoped<IListPositionService, ListPositionService>();
 builder.Services.AddScoped<IProductListService, ProductListService>();
 builder.Services.AddScoped<ISegmentAttributeService, SegmentAttributeService>();
+builder.Services.AddScoped<IMenuSegmentService, MenuSegmentService>();
 
 
 
