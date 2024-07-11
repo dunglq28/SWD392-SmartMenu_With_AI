@@ -156,6 +156,8 @@
             public const string GetByBrandID = Base + "/list-positions/get-by-brand-id";
 
             public const string Add = Base + "/list-positions/";
+            public const string AddListList = Base + "/list-positions/add-list-list";
+
 
             public const string Update = Base + "/list-positions/";
 

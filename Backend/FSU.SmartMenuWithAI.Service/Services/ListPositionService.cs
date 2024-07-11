@@ -1,10 +1,12 @@
 ﻿using Amazon.Rekognition.Model;
 using AutoMapper;
+using Azure.Core;
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
 using FSU.SmartMenuWithAI.Service.Common.Enums;
 using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
+using FSU.SmartMenuWithAI.Service.Models.ListPosition;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
 using FSU.SmartMenuWithAI.Service.Utils;
 using System.Linq.Expressions;
@@ -50,11 +52,11 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
             // Validate listName
             if (string.IsNullOrEmpty(listName))
-                return null!; 
+                return null!;
 
             // Validate totalProduct
             if (totalProduct <= 0)
-                return null!; 
+                return null!;
             listPosition.TotalProduct = totalProduct;
             listPosition.ListName = listName;
             _unitOfWork.ListPositionRepository.Update(listPosition);
@@ -83,6 +85,51 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 return _mapper?.Map<ListPositionDTO>(listPosition)!;
             }
             return null!;
+        }
+        public async Task<List<ListPositionDTO>> Insert2(int brandId, List<ListDetail> listDetails)
+        {
+            // Kiểm tra nếu listDetails là null hoặc không có phần tử nào
+            if (listDetails == null || !listDetails.Any())
+            {
+                throw new ArgumentException("ListDetails cannot be null or empty.");
+            }
+            Expression<Func<Brand, bool>> condition = x => x.BrandId == brandId && (x.Status != (int)Status.Deleted);
+            var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
+            if (entity == null)
+            {
+                throw new Exception("Không tìm thấy brand");
+            }
+
+            var listPositionDTOs = new List<ListPositionDTO>();
+
+            foreach (var detail in listDetails)
+            {
+                var listPosition = new ListPosition
+                {
+                    ListCode = Guid.NewGuid().ToString(),
+                    BrandId = brandId,
+                    TotalProduct = detail.TotalProduct,
+                    ListName = detail.ListName,
+                    CreateDate = DateOnly.FromDateTime(DateTime.Now)
+                };
+                await _unitOfWork.ListPositionRepository.Insert(listPosition);
+                var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+                if (result)
+                {
+                    var listPositionDTO = _mapper?.Map<ListPositionDTO>(listPosition);
+                    if (listPositionDTO != null)
+                    {
+                        listPositionDTOs.Add(listPositionDTO);
+                    }
+                }
+                else
+                {
+                    throw new Exception("Lỗi khi lưu vào cơ sở dữ liệu");
+                }
+            }
+            // Lưu các thay đổi vào cơ sở dữ liệu
+            await _unitOfWork.SaveAsync();
+            return listPositionDTOs;
         }
         public async Task<bool> DeleteAsync(int id)
         {
