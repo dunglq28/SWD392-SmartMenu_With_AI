@@ -3,6 +3,8 @@ import axiosMultipartForm from "../api/axiosMultipartForm";
 import { ApiResponse } from "../payloads/responses/ApiResponse.model";
 import axiosAuth from "../api/axiosAuth";
 import { listAddToMenu } from "../payloads/requests/createRequests.model";
+import { MenuData } from "../payloads/responses/MenuData.model";
+import { GetData } from "../payloads/responses/GetData.model";
 
 // Luồng tạo menu
 //================================================================//
@@ -23,11 +25,13 @@ export const createMenu = async (
 
 export const createListPosition = async (
   totalProducts: number,
+  listName: string,
   brandId: number
 ): Promise<ApiResponse<Object>> => {
   try {
     const res = await axiosAuth.post("list-positions", {
       totalProduct: totalProducts,
+      listName: listName,
       brandId: brandId,
     });
     const apiResponse = res.data as ApiResponse<Object>;
@@ -84,3 +88,18 @@ export const createProductList = async (
   }
 };
 //================================================================//
+export const getAllMenu = async (
+  brandId: number,
+  currentPage: number,
+  rowsPerPage: number
+): Promise<GetData<MenuData>> => {
+  const res = await axiosAuth.get("menus", {
+    params: {
+      brandId: brandId,
+      pageNumber: currentPage,
+      pageSize: rowsPerPage,
+    },
+  });
+  const apiResponse = res.data as ApiResponse<Object>;
+  return apiResponse.data as GetData<MenuData>;
+};

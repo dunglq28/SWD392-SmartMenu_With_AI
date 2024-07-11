@@ -11,32 +11,31 @@ import { toast } from "react-toastify";
 import { getProductsByCategory } from "../../../services/ProductService";
 import { CustomerSegmentData } from "../../../payloads/responses/CustomerSegment.model";
 import { MenuList } from "../../../models/Menu.model";
+import { createListPosition, createMenu } from "../../../services/MenuService";
 
 function CreateMenu() {
   const [isOpenCreateMenu, setIsOpenCreateMenu] = useState(false);
   const [isOpenListProduct, setIsOpenListProduct] = useState(false);
-  const [selectedProducts1, setSelectedProducts1] = useState<MenuList>({
+  const initializeMenuListState = (listIndex: number, maxProduct: number) => ({
     listName: "",
     productData: [],
-    listIndex: 1,
+    listIndex,
+    maxProduct,
   });
-  const [selectedProducts2, setSelectedProducts2] = useState<MenuList>({
-    listName: "",
-    productData: [],
-    listIndex: 2,
-  });
-  const [selectedProducts3, setSelectedProducts3] = useState<MenuList>({
-    listName: "",
-    productData: [],
-    listIndex: 3,
-  });
-  const [selectedProducts4, setSelectedProducts4] = useState<MenuList>({
-    listName: "",
-    productData: [],
-    listIndex: 4,
-  });
+  const [selectedProducts1, setSelectedProducts1] = useState<MenuList>(
+    initializeMenuListState(1, 4)
+  );
+  const [selectedProducts2, setSelectedProducts2] = useState<MenuList>(
+    initializeMenuListState(2, 4)
+  );
+  const [selectedProducts3, setSelectedProducts3] = useState<MenuList>(
+    initializeMenuListState(3, 4)
+  );
+  const [selectedProducts4, setSelectedProducts4] = useState<MenuList>(
+    initializeMenuListState(4, 2)
+  );
   const [selectedProductspotLight, setSelectedProductspotLight] =
-    useState<MenuList>({ listName: "", productData: [], listIndex: 5 });
+    useState<MenuList>(initializeMenuListState(5, 1));
   const [currentListProduct, setCurrentListProduct] = useState<ProductData[]>(
     []
   );
@@ -92,11 +91,16 @@ function CreateMenu() {
 
   const onCloseListProduct = () => setIsOpenListProduct(false);
 
-  const handleAddToMenu = (products: ProductData[], Index: number) => {
+  const handleAddToMenu = (
+    products: ProductData[],
+    Index: number,
+    maxProduct: number
+  ) => {
     const newMenuList: MenuList = {
       listName: "",
       productData: products,
       listIndex: Index,
+      maxProduct: maxProduct,
     };
     switch (Index) {
       case 1:
@@ -210,25 +214,67 @@ function CreateMenu() {
     loadData();
   }, []);
 
-  const handleCreateMenu = (customerSegment: number, description: string) => {
-    console.log(selectedProducts1);
-    console.log(selectedProducts2);
-    console.log(selectedProducts3);
-    console.log(selectedProducts4);
-    console.log(selectedProductspotLight);
-    console.log(customerSegment);
-    console.log(description);
+  const handleCreateMenu = async (menuForm: FormData) => {
+    const allListProducts: MenuList[] = [];
+    allListProducts.push(selectedProducts1);
+    allListProducts.push(selectedProducts2);
+    allListProducts.push(selectedProducts3);
+    allListProducts.push(selectedProducts4);
+    allListProducts.push(selectedProductspotLight);
+
+    // try {
+    //   // setIsLoading(true);
+    //   const menuResult = await createMenu(menuForm);
+
+    //   if (menuResult.statusCode === 200) {
+    //     // allListProducts.push(selectedProducts1);
+    //     // allListProducts.push(selectedProducts2);
+    //     // allListProducts.push(selectedProducts3);
+    //     // allListProducts.push(selectedProducts4);
+    //     // allListProducts.push(selectedProductspotLight);
+
+    //     // const listPositionResult = await createListPosition()
+    //     toast.success("Thêm mới menu thành công");
+    //   } else {
+    //     toast.error(menuResult.message);
+    //   }
+    // } finally {
+    //   // setTimeout(() => {
+    //   //   setIsLoading(false);
+    //   // }, 1000);
+    // }
   };
 
   const resetLists = () => {
-    setSelectedProducts1({ listName: "", productData: [], listIndex: 1 });
-    setSelectedProducts2({ listName: "", productData: [], listIndex: 2 });
-    setSelectedProducts3({ listName: "", productData: [], listIndex: 3 });
-    setSelectedProducts4({ listName: "", productData: [], listIndex: 4 });
+    setSelectedProducts1({
+      listName: "",
+      productData: [],
+      listIndex: 1,
+      maxProduct: 4,
+    });
+    setSelectedProducts2({
+      listName: "",
+      productData: [],
+      listIndex: 2,
+      maxProduct: 4,
+    });
+    setSelectedProducts3({
+      listName: "",
+      productData: [],
+      listIndex: 3,
+      maxProduct: 4,
+    });
+    setSelectedProducts4({
+      listName: "",
+      productData: [],
+      listIndex: 4,
+      maxProduct: 2,
+    });
     setSelectedProductspotLight({
       listName: "",
       productData: [],
       listIndex: 5,
+      maxProduct: 2,
     });
     setAllSelectedProducts([]);
   };

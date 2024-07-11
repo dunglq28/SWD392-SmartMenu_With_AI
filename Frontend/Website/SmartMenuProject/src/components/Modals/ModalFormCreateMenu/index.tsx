@@ -22,6 +22,8 @@ import {
   AlertDialogFooter,
   useDisclosure,
   Textarea,
+  NumberInput,
+  NumberInputField,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
 import Draggable from "react-draggable";
@@ -52,7 +54,7 @@ interface ModalProps {
   selectedProductspotLight: MenuList;
   checkListNamesNotEmpty: () => boolean;
   handleChangeTitle: (listName: string, index: number) => void;
-  handleCreateMenu: (customerSegment: number, description: string) => void;
+  handleCreateMenu: (menuForm: FormData) => void;
   resetLists: () => void;
 }
 
@@ -80,10 +82,10 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   >([]);
   const [menu, setMenu] = useState<Menu>({
     isActive: true,
-    segmentId: [],
-    BrandId: 0,
-    Description: "",
-    menuImage: null,
+    segmentId: { value: [], errorMessage: "" },
+    Description: { value: "", errorMessage: "" },
+    menuImage: { value: null, errorMessage: "" },
+    priority: { value: 0, errorMessage: "" },
   });
   const imageRef = React.useRef<HTMLImageElement>(null);
   const {
@@ -97,8 +99,8 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     const loadData = async () => {
       try {
         const segments = await getCustomerSegmentsNoPaging(brandId);
-        if (segments) {
-          const options = segments.list.map((segment) => ({
+        if (segments.statusCode === 200) {
+          const options = segments.data.map((segment) => ({
             value: segment.customerSegmentId,
             label: `${segment.customerSegmentName}, ${segment.demographic}, ${segment.age} tuổi`,
           }));
@@ -148,9 +150,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   };
 
   const handleChange = (field: keyof Menu, value: string | number) => {
-    setMenu((prevFormData) => ({
-      ...prevFormData,
-      [field]: value,
+    setMenu((prevMenu) => ({
+      ...prevMenu,
+      [field]: { value, errorMessage: "" },
     }));
   };
 
@@ -187,27 +189,35 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   const [capturedImage, setCapturedImage] = useState<string | undefined>(
     undefined
   );
-  const [capturedImageFile, setCapturedImageFile] = useState<File | null>(null);
 
   const handleCaptureAndDisplay = () => {
     const element = document.querySelector(".takeAPhoto") as HTMLElement;
     if (element) {
-      html2canvas(element, { scale: 2 })
+      html2canvas(element, { scale: 3, useCORS: true })
         .then((canvas) => {
           const imageDataURL = canvas.toDataURL("image/png");
           setCapturedImage(imageDataURL);
-          fetch(imageDataURL)
-            .then((res) => res.blob())
-            .then((blob) => {
-              // Create a File from the Blob
-              const file = new File([blob], "captured_image.png", {
-                type: "image/png",
+          if (
+            imageDataURL.includes("image/png") &&
+            !imageDataURL.includes("data:,")
+          ) {
+            fetch(imageDataURL)
+              .then((res) => res.blob())
+              .then((blob) => {
+                // Create a File from the Blob
+                const file = new File([blob], "captured_image.png", {
+                  type: "image/png",
+                });
+
+                setMenu((prevMenu) => ({
+                  ...prevMenu,
+                  menuImage: { value: file, errorMessage: "" },
+                }));
+              })
+              .catch((error) => {
+                console.error("Failed to convert image to file:", error);
               });
-              setCapturedImageFile(file);
-            })
-            .catch((error) => {
-              console.error("Failed to convert image to file:", error);
-            });
+          }
         })
         .catch((error) => {
           console.error("Failed to capture image:", error);
@@ -233,12 +243,51 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   };
 
   const handleDonebtn = () => {
-    // console.log(menu);
-    console.log(capturedImageFile);
+    const errors = {
+      Description: menu.Description.value ? "" : "Mô tả là bắt buộc",
+      segmentId:
+        menu.segmentId.value.length > 0
+          ? ""
+          : "Phân khúc khách hàng là bắt buộc",
+      priority: menu.priority.value !== 0 ? "" : "Độ ưu tiên là bắt buộc",
+    };
 
-    // handleCreateMenu(, description);
-    // setCurrentTab(0);
-    // onClose();
+    const updatedMenu = {
+      ...menu,
+      Description: {
+        ...menu.Description,
+        errorMessage: errors.Description,
+      },
+      segmentId: {
+        ...menu.segmentId,
+        errorMessage: errors.segmentId,
+      },
+      priority: {
+        ...menu.priority,
+        errorMessage: errors.priority,
+      },
+    };
+
+    setMenu(updatedMenu);
+
+    const hasErrors = Object.values(errors).some((error) => error !== "");
+    if (!hasErrors) {
+      const menuForm = new FormData();
+      menuForm.append("IsActive", menu.isActive.toString());
+      menuForm.append("BrandId", brandId.toString());
+      menuForm.append("Description", menu.Description.value);
+      menuForm.append("Priority", menu.priority.value.toString());
+      if (menu.menuImage.value) {
+        menuForm.append("MenuImage", menu.menuImage.value);
+      }
+      menu.segmentId.value.forEach((id) => {
+        menuForm.append("SegmentIds", id.toString());
+      });
+
+      handleCreateMenu(menuForm);
+      // setCurrentTab(0);
+      // onClose();
+    }
   };
 
   return (
@@ -1134,6 +1183,34 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                           placeholder="Chọn phân khúc"
                           onChange={handleSegmentChange}
                         />
+                        {menu.segmentId.errorMessage && (
+                          <Text className={style.ErrorText}>
+                            {menu.segmentId.errorMessage}
+                          </Text>
+                        )}
+                      </Flex>
+                      <Flex flexDirection="column" rowGap="1vw" width="50%">
+                        <Text as="b" fontSize="20px">
+                          Độ ưu tiên
+                        </Text>
+                        <NumberInput
+                          value={menu.priority.value}
+                          min={0}
+                          onChange={(valueAsString, valueAsNumber) =>
+                            handleChange("priority", valueAsNumber)
+                          }
+                        >
+                          <NumberInputField
+                            border="2px solid #55ad9b"
+                            _focus={{ border: "2px solid #95d2b3" }}
+                            _hover={{ border: "2px solid #95d2b3" }}
+                          />
+                        </NumberInput>
+                        {menu.priority.errorMessage && (
+                          <Text className={style.ErrorText}>
+                            {menu.priority.errorMessage}
+                          </Text>
+                        )}
                       </Flex>
                       <Flex flexDirection="column" rowGap="1vw" width="50%">
                         <Text as="b" fontSize="20px">
@@ -1143,11 +1220,16 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                           border="2px solid #55ad9b"
                           _focus={{ border: "2px solid #95d2b3" }}
                           _hover={{ border: "2px solid #95d2b3" }}
-                          value={menu.Description}
+                          value={menu.Description.value}
                           onChange={(e) =>
                             handleChange("Description", e.target.value)
                           }
                         />
+                        {menu.Description.errorMessage && (
+                          <Text className={style.ErrorText}>
+                            {menu.Description.errorMessage}
+                          </Text>
+                        )}
                       </Flex>
                       <Flex flexDirection="column" rowGap="1vw" width="50%">
                         <Text as="b" fontSize="20px">

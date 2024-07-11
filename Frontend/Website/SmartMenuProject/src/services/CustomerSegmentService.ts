@@ -12,7 +12,7 @@ export const getCustomerSegments = async (
   rowsPerPage: number,
   searchValue: string
 ): Promise<GetData<CustomerSegmentData>> => {
-  const res = await axiosAuth.get("customer-segment", {
+  const res = await axiosAuth.get("customer-segments", {
     params: {
       brandId: brandId,
       pageNumber: currentPage,
@@ -26,20 +26,20 @@ export const getCustomerSegments = async (
 
 export const getCustomerSegmentsNoPaging = async (
   brandId: number,
-): Promise<GetData<CustomerSegmentData>> => {
-  const res = await axiosAuth.get("customer-segment/no-paging", {
+): Promise<ApiResponse<CustomerSegmentData[]>> => {
+  const res = await axiosAuth.get("customer-segments/no-paging", {
     params: {
       brandId: brandId,
     },
   });
-  const apiResponse = res.data as ApiResponse<Object>;
-  return apiResponse.data as GetData<CustomerSegmentData>;
+  const apiResponse = res.data as ApiResponse<CustomerSegmentData[]>;
+  return apiResponse
 };
 
 export const getCustomerSegment = async (
   id: number
 ): Promise<ApiResponse<CustomerSegmentData>> => {
-  const res = await axiosAuth.get("customer-segment/get-by-id", {
+  const res = await axiosAuth.get("customer-segments/get-by-id", {
     params: {
       customerSegmentId: id,
     },
@@ -53,7 +53,7 @@ export const createCustomerSegment = async (
   customerSegment: customerSegmentCreate,
 ): Promise<ApiResponse<Object>> => {
   try {
-    const res = await axiosAuth.post("customer-segment", {
+    const res = await axiosAuth.post("customer-segments", {
       segmentName: customerSegment.segmentName,
       age: customerSegment.age,
       gender: customerSegment.gender,
@@ -76,7 +76,7 @@ export const updateCustomerSegment = async (
   customerSegment: customerSegmentUpdate,
 ): Promise<ApiResponse<Object>> => {
   try {
-    const res = await axiosAuth.put(`customer-segment/update-value`, {
+    const res = await axiosAuth.put(`customer-segments/update-value`, {
       segmentId: segmentId,
       segmentName: customerSegment.segmentName,
       age: customerSegment.age,
@@ -97,7 +97,7 @@ export const updateCustomerSegment = async (
 export const deleteCustomerSegment = async (
   id: number
 ): Promise<ApiResponse<Object>> => {
-  const res = await axiosAuth.delete("customer-segment", {
+  const res = await axiosAuth.delete("customer-segments", {
     params: {
       segmentId: id,
     },
