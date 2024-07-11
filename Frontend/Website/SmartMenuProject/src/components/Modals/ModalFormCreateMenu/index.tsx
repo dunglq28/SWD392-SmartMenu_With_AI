@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Flex,
@@ -22,6 +22,8 @@ import {
   AlertDialogFooter,
   useDisclosure,
   Textarea,
+  NumberInput,
+  NumberInputField,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
 import Draggable from "react-draggable";
@@ -37,7 +39,9 @@ import { MdPhoneInTalk } from "react-icons/md";
 import html2canvas from "html2canvas";
 import { formatCurrency } from "../../../utils/functionHelper";
 import { toast } from "react-toastify";
-import { MenuList } from "../../../models/MenuList.model";
+import { getCustomerSegmentsNoPaging } from "../../../services/CustomerSegmentService";
+import { CustomerSegmentData } from "../../../payloads/responses/CustomerSegment.model";
+import { Menu, MenuList } from "../../../models/Menu.model";
 
 interface ModalProps {
   isOpen: boolean;
@@ -50,6 +54,7 @@ interface ModalProps {
   selectedProductspotLight: MenuList;
   checkListNamesNotEmpty: () => boolean;
   handleChangeTitle: (listName: string, index: number) => void;
+  handleCreateMenu: (menuForm: FormData) => void;
   resetLists: () => void;
 }
 
@@ -64,12 +69,24 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   selectedProductspotLight,
   checkListNamesNotEmpty,
   handleChangeTitle,
+  handleCreateMenu,
   resetLists,
 }) => {
+  const brandId = Number(localStorage.getItem("BrandId"));
   const [currentTab, setCurrentTab] = React.useState(0);
   const [IsDraggable, setIsDraggable] = React.useState(false);
   const [isBorder, setIsBorder] = React.useState(false);
   const [dimensions, setDimensions] = React.useState({ width: 5, height: 5 });
+  const [customerSegmentOptions, setCustomerSegmentOptions] = useState<
+    { value: number; label: string }[]
+  >([]);
+  const [menu, setMenu] = useState<Menu>({
+    isActive: true,
+    segmentId: { value: [], errorMessage: "" },
+    Description: { value: "", errorMessage: "" },
+    menuImage: { value: null, errorMessage: "" },
+    priority: { value: 0, errorMessage: "" },
+  });
   const imageRef = React.useRef<HTMLImageElement>(null);
   const {
     isOpen: isOpenAlertCancelForm,
@@ -77,6 +94,27 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     onClose: onCloseAlertCancelForm,
   } = useDisclosure();
   const cancelRef = React.useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const segments = await getCustomerSegmentsNoPaging(brandId);
+        if (segments.statusCode === 200) {
+          const options = segments.data.map((segment) => ({
+            value: segment.customerSegmentId,
+            label: `${segment.customerSegmentName}, ${segment.demographic}, ${segment.age} tuổi`,
+          }));
+          setCustomerSegmentOptions(options);
+        } else {
+          throw new Error("Invalid response format");
+        }
+      } catch (err) {
+        toast.error("Error fetching data");
+      }
+    };
+
+    loadData();
+  }, []);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -111,21 +149,35 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     setIsBorder(!isBorder);
   };
 
+  const handleChange = (field: keyof Menu, value: string | number) => {
+    setMenu((prevMenu) => ({
+      ...prevMenu,
+      [field]: { value, errorMessage: "" },
+    }));
+  };
+
+  const handleSegmentChange = (selectedOptions: any) => {
+    const selectedSegmentIds = selectedOptions
+      ? selectedOptions.map((option: any) => option.value)
+      : [];
+    handleChange("segmentId", selectedSegmentIds);
+  };
+
   const handleNextTab = () => {
-    if (
-      selectedProducts1.productData.length == 0 ||
-      selectedProducts2.productData.length == 0 ||
-      selectedProducts3.productData.length == 0 ||
-      selectedProducts4.productData.length == 0 ||
-      selectedProductspotLight.productData.length == 0
-    ) {
-      toast.error("Vui lòng chọn đầy đủ các danh sách");
-      return;
-    }
-    if (!checkListNamesNotEmpty()) {
-      toast.error("Vui lòng điền đẩy đủ tiêu đề");
-      return;
-    }
+    // if (
+    //   selectedProducts1.productData.length == 0 ||
+    //   selectedProducts2.productData.length == 0 ||
+    //   selectedProducts3.productData.length == 0 ||
+    //   selectedProducts4.productData.length == 0 ||
+    //   selectedProductspotLight.productData.length == 0
+    // ) {
+    //   toast.error("Vui lòng chọn đầy đủ các danh sách");
+    //   return;
+    // }
+    // if (!checkListNamesNotEmpty()) {
+    //   toast.error("Vui lòng điền đẩy đủ tiêu đề");
+    //   return;
+    // }
     handleCaptureAndDisplay();
     setCurrentTab((prevTab) => (prevTab < 2 ? prevTab + 1 : prevTab));
   };
@@ -134,14 +186,6 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     setCurrentTab((prevTab) => (prevTab > 0 ? 0 : prevTab));
   };
 
-  const CustomerSegmentList = [
-    { value: "1", label: "Khách hàng tiềm năng" },
-    { value: "2", label: "Khách hàng mới" },
-    { value: "3", label: "Khách hàng trung thành" },
-    { value: "4", label: "Khách hàng VIP" },
-    { value: "5", label: "Khách hàng doanh nghiệp" },
-  ];
-
   const [capturedImage, setCapturedImage] = useState<string | undefined>(
     undefined
   );
@@ -149,10 +193,31 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   const handleCaptureAndDisplay = () => {
     const element = document.querySelector(".takeAPhoto") as HTMLElement;
     if (element) {
-      html2canvas(element, { scale: 2 })
+      html2canvas(element, { scale: 3, useCORS: true })
         .then((canvas) => {
           const imageDataURL = canvas.toDataURL("image/png");
           setCapturedImage(imageDataURL);
+          if (
+            imageDataURL.includes("image/png") &&
+            !imageDataURL.includes("data:,")
+          ) {
+            fetch(imageDataURL)
+              .then((res) => res.blob())
+              .then((blob) => {
+                // Create a File from the Blob
+                const file = new File([blob], "captured_image.png", {
+                  type: "image/png",
+                });
+
+                setMenu((prevMenu) => ({
+                  ...prevMenu,
+                  menuImage: { value: file, errorMessage: "" },
+                }));
+              })
+              .catch((error) => {
+                console.error("Failed to convert image to file:", error);
+              });
+          }
         })
         .catch((error) => {
           console.error("Failed to capture image:", error);
@@ -178,8 +243,51 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   };
 
   const handleDonebtn = () => {
-    setCurrentTab(0);
-    onClose();
+    const errors = {
+      Description: menu.Description.value ? "" : "Mô tả là bắt buộc",
+      segmentId:
+        menu.segmentId.value.length > 0
+          ? ""
+          : "Phân khúc khách hàng là bắt buộc",
+      priority: menu.priority.value !== 0 ? "" : "Độ ưu tiên là bắt buộc",
+    };
+
+    const updatedMenu = {
+      ...menu,
+      Description: {
+        ...menu.Description,
+        errorMessage: errors.Description,
+      },
+      segmentId: {
+        ...menu.segmentId,
+        errorMessage: errors.segmentId,
+      },
+      priority: {
+        ...menu.priority,
+        errorMessage: errors.priority,
+      },
+    };
+
+    setMenu(updatedMenu);
+
+    const hasErrors = Object.values(errors).some((error) => error !== "");
+    if (!hasErrors) {
+      const menuForm = new FormData();
+      menuForm.append("IsActive", menu.isActive.toString());
+      menuForm.append("BrandId", brandId.toString());
+      menuForm.append("Description", menu.Description.value);
+      menuForm.append("Priority", menu.priority.value.toString());
+      if (menu.menuImage.value) {
+        menuForm.append("MenuImage", menu.menuImage.value);
+      }
+      menu.segmentId.value.forEach((id) => {
+        menuForm.append("SegmentIds", id.toString());
+      });
+
+      handleCreateMenu(menuForm);
+      // setCurrentTab(0);
+      // onClose();
+    }
   };
 
   return (
@@ -254,7 +362,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
-                                onChange={(e) => handleChangeTitle(e.target.value, 1)}
+                                onChange={(e) =>
+                                  handleChangeTitle(e.target.value, 1)
+                                }
                               />
                             </Flex>
                           </Draggable>
@@ -364,7 +474,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
-                                onChange={(e) => handleChangeTitle(e.target.value, 2)}
+                                onChange={(e) =>
+                                  handleChangeTitle(e.target.value, 2)
+                                }
                               />
                             </Flex>
                           </Draggable>
@@ -476,7 +588,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
-                                onChange={(e) => handleChangeTitle(e.target.value, 3)}
+                                onChange={(e) =>
+                                  handleChangeTitle(e.target.value, 3)
+                                }
                               />
                             </Flex>
                           </Draggable>
@@ -581,7 +695,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
-                                onChange={(e) => handleChangeTitle(e.target.value, 4)}
+                                onChange={(e) =>
+                                  handleChangeTitle(e.target.value, 4)
+                                }
                               />
                             </Flex>
                           </Draggable>
@@ -789,8 +905,10 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                   contentEditable={true}
                                   spellCheck={false}
                                 >
-                                  {selectedProductspotLight.productData.length !== 0
-                                    ? selectedProductspotLight.productData[0].productName
+                                  {selectedProductspotLight.productData
+                                    .length !== 0
+                                    ? selectedProductspotLight.productData[0]
+                                        .productName
                                     : "Sản Phẩm Spotlight"}
                                 </Text>
                               </Draggable>
@@ -830,12 +948,16 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                               alignItems="center"
                               bg="#fff"
                             >
-                              {selectedProductspotLight.productData.length !== 0 ? (
+                              {selectedProductspotLight.productData.length !==
+                              0 ? (
                                 // <Image
                                 //   src={spotLightProduct.spotlightVideoImageUrl}
                                 // />
                                 <Image
-                                  src={selectedProductspotLight.productData[0].imageUrl}
+                                  src={
+                                    selectedProductspotLight.productData[0]
+                                      .imageUrl
+                                  }
                                   onClick={() => onOpenListProduct(5)}
                                 />
                               ) : (
@@ -1017,15 +1139,16 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                   <Image src={capturedImage} alt="enter" />
                 </TabPanel>
                 <TabPanel>
-                  <Flex width="100%" justifyContent="center">
+                  <Flex width="100%" height="100%" justifyContent="center">
                     <Flex
                       justifyContent="center"
-                      width="60%"
+                      width="70%"
+                      height="100%"
+                      padding="40px 0 40px 0"
                       flexDirection="column"
                       alignItems="center"
                       rowGap="2vw"
                       boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px;"
-                      height="26vw"
                       transition="0.3s"
                       borderRadius="10px"
                       _hover={{
@@ -1036,17 +1159,58 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                       <Flex flexDirection="column" rowGap="1vw" width="50%">
                         <Text as="b" fontSize="20px">
                           Phân khúc khách hàng
+                          <br />
+                          <div
+                            style={{
+                              fontSize: "14px",
+                              color: "rgb(127 113 113)",
+                              fontStyle: "italic",
+                            }}
+                          >
+                            Có thể chọn nhiều phân khúc khách hàng
+                          </div>
                         </Text>
                         <Select
-                          options={CustomerSegmentList}
+                          options={customerSegmentOptions}
                           closeMenuOnSelect={true}
+                          isMulti
                           styles={{
                             control: (styles) => ({
                               ...styles,
                               border: "2px solid #55ad9b",
                             }),
                           }}
+                          placeholder="Chọn phân khúc"
+                          onChange={handleSegmentChange}
                         />
+                        {menu.segmentId.errorMessage && (
+                          <Text className={style.ErrorText}>
+                            {menu.segmentId.errorMessage}
+                          </Text>
+                        )}
+                      </Flex>
+                      <Flex flexDirection="column" rowGap="1vw" width="50%">
+                        <Text as="b" fontSize="20px">
+                          Độ ưu tiên
+                        </Text>
+                        <NumberInput
+                          value={menu.priority.value}
+                          min={0}
+                          onChange={(valueAsString, valueAsNumber) =>
+                            handleChange("priority", valueAsNumber)
+                          }
+                        >
+                          <NumberInputField
+                            border="2px solid #55ad9b"
+                            _focus={{ border: "2px solid #95d2b3" }}
+                            _hover={{ border: "2px solid #95d2b3" }}
+                          />
+                        </NumberInput>
+                        {menu.priority.errorMessage && (
+                          <Text className={style.ErrorText}>
+                            {menu.priority.errorMessage}
+                          </Text>
+                        )}
                       </Flex>
                       <Flex flexDirection="column" rowGap="1vw" width="50%">
                         <Text as="b" fontSize="20px">
@@ -1056,7 +1220,16 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                           border="2px solid #55ad9b"
                           _focus={{ border: "2px solid #95d2b3" }}
                           _hover={{ border: "2px solid #95d2b3" }}
+                          value={menu.Description.value}
+                          onChange={(e) =>
+                            handleChange("Description", e.target.value)
+                          }
                         />
+                        {menu.Description.errorMessage && (
+                          <Text className={style.ErrorText}>
+                            {menu.Description.errorMessage}
+                          </Text>
+                        )}
                       </Flex>
                       <Flex flexDirection="column" rowGap="1vw" width="50%">
                         <Text as="b" fontSize="20px">

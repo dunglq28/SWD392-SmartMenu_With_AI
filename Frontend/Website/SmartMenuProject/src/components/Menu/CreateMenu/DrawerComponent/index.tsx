@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 interface DrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddToMenu: (selectedProducts: ProductData[], Index: number) => void;
+  onAddToMenu: (selectedProducts: ProductData[], Index: number, maxProduct: number) => void;
   products: ProductData[];
   allSelectedProducts: ProductData[];
   currentListProducts: ProductData[];
@@ -93,7 +93,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
       return;
     } 
 
-    onAddToMenu(selectedProductsOfList, IndexList);
+    onAddToMenu(selectedProductsOfList, IndexList, MaxProduct);
     setSelectedProductsOfList([]); // Xóa danh sách sản phẩm đã chọn sau khi thêm vào menu
     onClose(); // Đóng Drawer sau khi thêm vào menu
   };
