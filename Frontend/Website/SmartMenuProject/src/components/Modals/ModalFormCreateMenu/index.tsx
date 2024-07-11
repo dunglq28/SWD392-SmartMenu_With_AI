@@ -190,58 +190,39 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     undefined
   );
 
-  // const handleCaptureAndDisplay = () => {
-  //   const element = document.querySelector(".takeAPhoto") as HTMLElement;
-  //   if (element) {
-  //     html2canvas(element, { scale: 3, useCORS: true })
-  //       .then((canvas) => {
-  //         const imageDataURL = canvas.toDataURL("image/png");
-  //         setCapturedImage(imageDataURL);
-  //         if (
-  //           imageDataURL.includes("image/png") &&
-  //           !imageDataURL.includes("data:,")
-  //         ) {
-  //           fetch(imageDataURL)
-  //             .then((res) => res.blob())
-  //             .then((blob) => {
-  //               // Create a File from the Blob
-  //               const file = new File([blob], "captured_image.png", {
-  //                 type: "image/png",
-  //               });
-
-  //               setMenu((prevMenu) => ({
-  //                 ...prevMenu,
-  //                 menuImage: { value: file, errorMessage: "" },
-  //               }));
-  //             })
-  //             .catch((error) => {
-  //               console.error("Failed to convert image to file:", error);
-  //             });
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error("Failed to capture image:", error);
-  //         setCapturedImage(undefined); // or handle error state accordingly
-  //       });
-  //   }
-  // };
-  const handleCaptureAndDisplay = async () => {
-    // if (!imageLoaded) {
-    //   console.error("Image not loaded yet");
-    //   return;
-    // }
+  const handleCaptureAndDisplay = () => {
     const element = document.querySelector(".takeAPhoto") as HTMLElement;
     if (element) {
-      try {
-        const canvas = await html2canvas(element, { scale: 3, useCORS: true });
-        const imageDataURL = canvas
-          .toDataURL("image/jpeg", 0.92)
-          .replace("image/jpeg", "image/octet-stream");
-        setCapturedImage(imageDataURL);
-      } catch (error) {
-        console.error("Failed to capture image:", error);
-        setCapturedImage(undefined); // or handle error state accordingly
-      }
+      html2canvas(element, { scale: 3, useCORS: true })
+        .then((canvas) => {
+          const imageDataURL = canvas.toDataURL("image/png");
+          setCapturedImage(imageDataURL);
+          if (
+            imageDataURL.includes("image/png") &&
+            !imageDataURL.includes("data:,")
+          ) {
+            fetch(imageDataURL)
+              .then((res) => res.blob())
+              .then((blob) => {
+                // Create a File from the Blob
+                const file = new File([blob], "captured_image.png", {
+                  type: "image/png",
+                });
+
+                setMenu((prevMenu) => ({
+                  ...prevMenu,
+                  menuImage: { value: file, errorMessage: "" },
+                }));
+              })
+              .catch((error) => {
+                console.error("Failed to convert image to file:", error);
+              });
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to capture image:", error);
+          setCapturedImage(undefined); // or handle error state accordingly
+        });
     }
   };
 
@@ -341,12 +322,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
             <Tabs index={currentTab}>
               <TabPanels>
                 <TabPanel>
-                  <Flex width="100%" justifyContent="center" userSelect="none">
-                    <Image
-                      className="takeAPhoto"
-                      src="https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/76hongtradao.png
-"
-                    />
+                  <Flex
+                    width="100%"
+                    justifyContent="center"
+                    className="takeAPhoto"
+                    userSelect="none"
+                  >
                     <Flex
                       width={`${dimensions.width}px`}
                       height={`${dimensions.height}px`}
