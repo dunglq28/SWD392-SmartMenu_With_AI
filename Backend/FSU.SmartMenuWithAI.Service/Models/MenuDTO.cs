@@ -23,5 +23,6 @@ namespace FSU.SmartMenuWithAI.Service.Models
         public string? BrandName { get; set; }
 
         public string? Description { get; set; }
+        public int? Priority { get; set; }
     }
 }

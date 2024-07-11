@@ -58,7 +58,7 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
                 query = query.Skip(validPageIndex * validPageSize).Take(validPageSize);
             }
 
-            return await query.ToListAsync();
+            return await query.AsNoTracking().ToListAsync();
         }
 
         public virtual async Task<TEntity> GetByID(int id)
@@ -84,7 +84,7 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
                 }
             }
 
-            return await query.FirstOrDefaultAsync()!;
+            return await query.AsNoTracking().FirstOrDefaultAsync()!;
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAllNoPaging(
@@ -110,7 +110,7 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
                     query = query.Include(includeProperty);
                 }
             }
-            return await query.ToListAsync();
+            return await query.AsNoTracking().ToListAsync();
 
         }
 
