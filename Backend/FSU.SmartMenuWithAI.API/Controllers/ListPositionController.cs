@@ -120,10 +120,16 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         {
             try
             {
+                // Kiểm tra nếu request là null
+                if (request == null)
+                {
+                    throw new ArgumentException("Tổng số sản phẩm không được để trống.");
+                }
+
                 // Kiểm tra yêu cầu
                 if (request.ListDetails == null || !request.ListDetails.Any())
                 {
-                    throw new ArgumentException("ListDetails cannot be null or empty.");
+                    throw new ArgumentException("Danh sách chi tiết không được để trống.");
                 }
 
                 // Kiểm tra từng cặp ListDetail
@@ -131,11 +137,11 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     if (detail.TotalProduct <= 0)
                     {
-                        throw new ArgumentException("TotalProduct must be greater than 0.");
+                        throw new ArgumentException("Tổng số sản phẩm phải lớn hơn 0 và không được để trống.");
                     }
                     if (string.IsNullOrWhiteSpace(detail.ListName))
                     {
-                        throw new ArgumentException("ListName cannot be null or empty.");
+                        throw new ArgumentException("Tên danh sách không được để trống.");
                     }
                 }
                 var createdListPosition = await _listPositionService.Insert2(request.BrandId, request.ListDetails);
