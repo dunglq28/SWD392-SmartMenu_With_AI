@@ -97,7 +97,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 var createdListPosition = await _listPositionService.Insert(request.TotalProduct, request.BrandId, request.ListName);
                 return Ok(new BaseResponse
                 {
-                    StatusCode = StatusCodes.Status201Created,
+                    StatusCode = StatusCodes.Status200OK,
                     Message = "Tạo mới thành công",
                     Data = createdListPosition,
                     IsSuccess = true
@@ -147,7 +147,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 var createdListPosition = await _listPositionService.Insert2(request.BrandId, request.ListDetails);
                 return Ok(new BaseResponse
                 {
-                    StatusCode = StatusCodes.Status201Created,
+                    StatusCode = StatusCodes.Status200OK,
                     Message = "Tạo mới thành công",
                     Data = createdListPosition,
                     IsSuccess = true

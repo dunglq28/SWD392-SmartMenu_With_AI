@@ -11,7 +11,11 @@ import { toast } from "react-toastify";
 import { getProductsByCategory } from "../../../services/ProductService";
 import { CustomerSegmentData } from "../../../payloads/responses/CustomerSegment.model";
 import { MenuList } from "../../../models/Menu.model";
-import { createListPosition, createMenu } from "../../../services/MenuService";
+import {
+  createListPosition,
+  createMenu,
+  createMenuList,
+} from "../../../services/MenuService";
 
 function CreateMenu() {
   const [isOpenCreateMenu, setIsOpenCreateMenu] = useState(false);
@@ -116,6 +120,7 @@ function CreateMenu() {
         setSelectedProducts4(newMenuList);
         break;
       case 5:
+        newMenuList.listName = newMenuList.productData[0].productName;
         setSelectedProductspotLight(newMenuList);
         break;
     }
@@ -184,7 +189,7 @@ function CreateMenu() {
       case 5:
         updatedMenuList = {
           ...selectedProductspotLight,
-          listName: listName,
+          listName: selectedProductspotLight.productData[0].productName,
         };
         setSelectedProductspotLight(updatedMenuList);
         break;
@@ -215,34 +220,62 @@ function CreateMenu() {
   }, []);
 
   const handleCreateMenu = async (menuForm: FormData) => {
-    const allListProducts: MenuList[] = [];
-    allListProducts.push(selectedProducts1);
-    allListProducts.push(selectedProducts2);
-    allListProducts.push(selectedProducts3);
-    allListProducts.push(selectedProducts4);
-    allListProducts.push(selectedProductspotLight);
+    // const allListProducts: MenuList[] = [];
+    // allListProducts.push(selectedProducts1);
+    // allListProducts.push(selectedProducts2);
+    // allListProducts.push(selectedProducts3);
+    // allListProducts.push(selectedProducts4);
+    // allListProducts.push(selectedProductspotLight);
 
-    // try {
-    //   // setIsLoading(true);
-    //   const menuResult = await createMenu(menuForm);
+    try {
+      // setIsLoading(true);
+      const menuResult = await createMenu(menuForm);
 
-    //   if (menuResult.statusCode === 200) {
-    //     // allListProducts.push(selectedProducts1);
-    //     // allListProducts.push(selectedProducts2);
-    //     // allListProducts.push(selectedProducts3);
-    //     // allListProducts.push(selectedProducts4);
-    //     // allListProducts.push(selectedProductspotLight);
+      if (menuResult.statusCode === 200) {
+        const allListProducts: MenuList[] = [];
+        allListProducts.push(selectedProducts1);
+        allListProducts.push(selectedProducts2);
+        allListProducts.push(selectedProducts3);
+        allListProducts.push(selectedProducts4);
+        allListProducts.push(selectedProductspotLight);
 
-    //     // const listPositionResult = await createListPosition()
-    //     toast.success("Thêm mới menu thành công");
-    //   } else {
-    //     toast.error(menuResult.message);
-    //   }
-    // } finally {
-    //   // setTimeout(() => {
-    //   //   setIsLoading(false);
-    //   // }, 1000);
-    // }
+        const listPositionResult = await createListPosition(
+          allListProducts,
+          brandId
+        );
+
+        if (listPositionResult.statusCode === 200) {
+          const listAddToMenu = listPositionResult.data.map((list, index) => ({
+            listId: list.listId,
+            listIndex: allListProducts[index].listIndex,
+          }));
+
+          const menuListResult = await createMenuList(
+            menuResult.data.menuId,
+            brandId,
+            listAddToMenu
+          );
+          
+          if (menuListResult.statusCode === 200) {
+            toast.success("Thêm mới menu thành công");
+          } else {
+            toast.error(menuListResult.message);
+          }
+        } else {
+          console.log(listPositionResult);
+
+          toast.error(listPositionResult.message);
+        }
+      } else {
+        console.log(menuResult);
+
+        toast.error(menuResult.message);
+      }
+    } finally {
+      // setTimeout(() => {
+      //   setIsLoading(false);
+      // }, 1000);
+    }
   };
 
   const resetLists = () => {

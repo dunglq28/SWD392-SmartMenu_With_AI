@@ -6,3 +6,12 @@ export interface MenuData {
   description: string;
   brandId: number;
 }
+
+export interface ListData {
+  listId: number;
+  listCode: string;
+  listName: string;
+  totalProduct: string;
+  createDate: Date;
+  brandId: number;
+}

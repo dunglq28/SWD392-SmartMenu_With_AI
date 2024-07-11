@@ -3,42 +3,46 @@ import axiosMultipartForm from "../api/axiosMultipartForm";
 import { ApiResponse } from "../payloads/responses/ApiResponse.model";
 import axiosAuth from "../api/axiosAuth";
 import { listAddToMenu } from "../payloads/requests/createRequests.model";
-import { MenuData } from "../payloads/responses/MenuData.model";
+import { ListData, MenuData } from "../payloads/responses/MenuData.model";
 import { GetData } from "../payloads/responses/GetData.model";
+import { MenuList } from "../models/Menu.model";
 
 // Luồng tạo menu
 //================================================================//
 export const createMenu = async (
   menuForm: FormData
-): Promise<ApiResponse<Object>> => {
+): Promise<ApiResponse<MenuData>> => {
   try {
     const res = await axiosMultipartForm.post("menus", menuForm);
-    const apiResponse = res.data as ApiResponse<Object>;
+    const apiResponse = res.data as ApiResponse<MenuData>;
     return apiResponse;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      return error.response.data as ApiResponse<Object>;
+      return error.response.data as ApiResponse<MenuData>;
     }
     throw new Error("Unexpected error");
   }
 };
 
 export const createListPosition = async (
-  totalProducts: number,
-  listName: string,
+  menuList: MenuList[],
   brandId: number
-): Promise<ApiResponse<Object>> => {
+): Promise<ApiResponse<ListData[]>> => {
   try {
-    const res = await axiosAuth.post("list-positions", {
-      totalProduct: totalProducts,
-      listName: listName,
+    const listDetails = menuList.map((list) => ({
+      "list-name": list.listName,
+      "total-product": list.maxProduct,
+    }));
+    
+    const res = await axiosAuth.post("list-positions/add-list-list", {
       brandId: brandId,
+      listDetails: listDetails,
     });
-    const apiResponse = res.data as ApiResponse<Object>;
+    const apiResponse = res.data as ApiResponse<ListData[]>;
     return apiResponse;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      return error.response.data as ApiResponse<Object>;
+      return error.response.data as ApiResponse<ListData[]>;
     }
     throw new Error("Unexpected error");
   }
@@ -50,7 +54,9 @@ export const createMenuList = async (
   listAddToMenu: listAddToMenu[]
 ): Promise<ApiResponse<Object>> => {
   try {
-    const res = await axiosAuth.post("list-positions", {
+    console.log(listAddToMenu);
+    
+    const res = await axiosAuth.post("menu-list", {
       menuId: menuId,
       brandId: brandId,
       listAddToMenu: listAddToMenu,
