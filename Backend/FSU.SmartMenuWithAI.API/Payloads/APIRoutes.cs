@@ -177,6 +177,7 @@
             public const string GetByID = Base + "/product-lists/get-by-id";
 
             public const string Add = Base + "/product-lists/add";
+            public const string AddListProduct = Base + "/product-lists/add-list-product";
 
             public const string Update = Base + "/product-lists/update";
 
