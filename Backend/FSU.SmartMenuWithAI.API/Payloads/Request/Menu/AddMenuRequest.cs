@@ -28,6 +28,7 @@ namespace FSU.SmartMenuWithAI.API.Payloads.Request.Menu
 
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("segment-ids")]
         public List<int> SegmentIds { get; set; }
     }

@@ -59,9 +59,8 @@ namespace FSU.SmartMenuWithAI.Service.Services
         public async Task<MenuDTO?> GetAsync(int id)
         {
             Expression<Func<Menu, bool>> filter = x => x.MenuId == id;
-            string includeProperties = "Brand";
 
-            var menu = await _unitOfWork.MenuRepository.GetByCondition(filter, includeProperties);
+            var menu = await _unitOfWork.MenuRepository.GetByCondition(filter);
             var mapDTO = _mapper.Map<MenuDTO>(menu);
             return mapDTO;
         }
@@ -74,7 +73,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             }
             var menuSegments = new List<MenuSegment>();
             string includeProperties = "Menu,Segment";
-            
+
             foreach (var segId in segmentIds)
             {
                 Expression<Func<MenuSegment, bool>> checkPriorityExist = x => x.Priority == priority && x.Menu.BrandId == reqObj.BrandId && x.SegmentId == segId;
@@ -82,27 +81,29 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 if (priorityExist != null)
                 {
                     throw new Exception($"Phân khúc khách hàng '{priorityExist.Segment.SegmentName}' đã tồn tại Ưu tiên '{priority}'");
-                } else
+                }
+                else
                 {
-                    menuSegments.Add(new MenuSegment 
-                    { 
-                        Priority = priority, 
-                        SegmentId = segId 
+                    menuSegments.Add(new MenuSegment
+                    {
+                        Priority = priority,
+                        SegmentId = segId
                     });
                 }
             }
 
             string generateCode = CodeHelper.GenerateCode();
 
-            var menu = new Menu { 
-            MenuCode = generateCode,
-            CreateDate = DateOnly.FromDateTime(DateTime.Now),
-            IsActive = reqObj.IsActive!.Value,
-            BrandId = reqObj.BrandId!.Value,
-            Priority = priority,
-            Description = reqObj.Description,
-            MenuImage = _s3Service.GetPreSignedURL(generateCode, FolderRootImg.Menu),
-            MenuSegments = menuSegments
+            var menu = new Menu
+            {
+                MenuCode = generateCode,
+                CreateDate = DateOnly.FromDateTime(DateTime.Now),
+                IsActive = reqObj.IsActive!.Value,
+                BrandId = reqObj.BrandId!.Value,
+                Priority = priority,
+                Description = reqObj.Description,
+                MenuImage = _s3Service.GetPreSignedURL(generateCode, FolderRootImg.Menu),
+                MenuSegments = menuSegments
             };
             await _unitOfWork.MenuRepository.Insert(menu);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
@@ -114,17 +115,50 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return null!;
         }
 
-        public async Task<bool> UpdateAsync(int id, bool isActive)
+        public async Task<bool> UpdateAsync(List<int> segmentIds, MenuDTO dtoToUpdate)
         {
-            var menu = await _unitOfWork.MenuRepository.GetByID(id);
-            if (menu == null)
+            try
             {
-                return false;
+                Expression<Func<Menu, bool>> filter = x => x.MenuId == dtoToUpdate.MenuId;
+                string includeProperties = "Brand,MenuSegments,MenuSegments";
+                var menu = await _unitOfWork.MenuRepository.GetByCondition(filter, includeProperties);
+                if (menu == null)
+                {
+                    return false;
+                }
+                if (dtoToUpdate.Priority.HasValue)
+                {
+                    menu.Priority = dtoToUpdate.Priority.Value;
+                }
+                if (!string.IsNullOrEmpty(dtoToUpdate.Description))
+                {
+                    menu.Description = dtoToUpdate.Description;
+                }
+                if (!string.IsNullOrEmpty(dtoToUpdate.MenuImage))
+                {
+                    menu.MenuImage = dtoToUpdate.MenuImage;
+                }
+                if (dtoToUpdate.IsActive.HasValue)
+                {
+                    menu.IsActive = dtoToUpdate.IsActive.Value;
+                }
+
+                menu.MenuSegments.Clear();
+
+                foreach (var newSegmentId in segmentIds)
+                {
+                    var newMenuSegment = new MenuSegment { SegmentId = newSegmentId, Priority = dtoToUpdate.Priority!.Value };
+                    menu.MenuSegments.Add(newMenuSegment);
+                }
+
+                _unitOfWork.MenuRepository.Update(menu);
+                var result = await _unitOfWork.SaveAsync() > 0;
+                return result;
             }
-            menu.IsActive = isActive;
-            _unitOfWork.MenuRepository.Update(menu);
-            var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
-            return result;
+            catch (Exception ex)
+            {
+                throw new Exception("UpdateAsync method failed.", ex);
+            }
         }
 
         public async Task<MenuDTO> RecomendMenu(IFormFile fileImage, int brandId)
@@ -148,5 +182,6 @@ namespace FSU.SmartMenuWithAI.Service.Services
             var mapdto2 = _mapper.Map<MenuDTO>(menuDefault.FirstOrDefault());
             return mapdto2;
         }
+
     }
 }

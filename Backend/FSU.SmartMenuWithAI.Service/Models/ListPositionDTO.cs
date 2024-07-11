@@ -1,4 +1,7 @@
-﻿namespace FSU.SmartMenuWithAI.Service.Models
+﻿using FSU.SmartMenuWithAI.Repository.Entities;
+using FSU.SmartMenuWithAI.Service.Models.MenuList;
+
+namespace FSU.SmartMenuWithAI.Service.Models
 {
     public class ListPositionDTO
     {
@@ -12,5 +15,9 @@
 
         public int BrandId { get; set; }
         public string? ListName { get; set; }
+
+        public virtual ICollection<MenuListDTO> MenuLists { get; set; } = new List<MenuListDTO>();
+
+        public virtual ICollection<ProductListDTO> ProductLists { get; set; } = new List<ProductListDTO>();
     }
 }

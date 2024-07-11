@@ -1,4 +1,4 @@
-using Amazon.S3;
+﻿using Amazon.S3;
 using Amazon;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
@@ -15,6 +15,7 @@ using FSU.SmartMenuWithAI.Repository.Repositories;
 using FSU.SmartMenuWithAI.API.Payloads.Responses;
 using FSU.SmartMenuWithAI.Service.Mappings;
 using FSU.SmartMenuWithAI.Repository.Entities;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,6 +86,7 @@ builder.Services.AddScoped<IListPositionRepository, ListPositionRepository>();
 builder.Services.AddScoped<IProductListRepository, ProductListRepository>();
 builder.Services.AddScoped<ICustomerSegmentRepository, CustomerSegmentRepository>();
 builder.Services.AddScoped<IMenuSegmentRepository, MenuSegmentRepository>();
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 
 
 // Register servicies
@@ -135,7 +137,12 @@ builder.Services.AddCors(p => p.AddPolicy("Cors", policy =>
           .AllowAnyHeader()
           .AllowAnyMethod();
 }));
-
+// add  json option để tránh vòng lặp tại json khi trả về
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.WriteIndented = true;
+});
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FSU.SmartMenuWithAI.Repository.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +18,8 @@ namespace FSU.SmartMenuWithAI.Service.Models
         public int IndexInList { get; set; }
 
         public int BrandId { get; set; }
+        public virtual ListPositionDTO List { get; set; } = null!;
+
+        public virtual ProductDTO Product { get; set; } = null!;
     }
 }
