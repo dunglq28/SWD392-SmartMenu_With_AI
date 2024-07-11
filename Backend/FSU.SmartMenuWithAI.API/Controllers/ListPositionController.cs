@@ -115,6 +115,50 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
 
         //[Authorize(Roles = UserRoles)]
+        [HttpPost(APIRoutes.ListPosition.AddListList, Name = "AddListListPosition")]
+        public async Task<IActionResult> CreateListListAsync([FromBody] CreateListList request)
+        {
+            try
+            {
+                // Kiểm tra yêu cầu
+                if (request.ListDetails == null || !request.ListDetails.Any())
+                {
+                    throw new ArgumentException("ListDetails cannot be null or empty.");
+                }
+
+                // Kiểm tra từng cặp ListDetail
+                foreach (var detail in request.ListDetails)
+                {
+                    if (detail.TotalProduct <= 0)
+                    {
+                        throw new ArgumentException("TotalProduct must be greater than 0.");
+                    }
+                    if (string.IsNullOrWhiteSpace(detail.ListName))
+                    {
+                        throw new ArgumentException("ListName cannot be null or empty.");
+                    }
+                }
+                var createdListPosition = await _listPositionService.Insert2(request.BrandId, request.ListDetails);
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status201Created,
+                    Message = "Tạo mới thành công",
+                    Data = createdListPosition,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Lỗi khi tạo mới!" + ex.Message,
+                    IsSuccess = false
+                });
+            }
+        }
+
+        //[Authorize(Roles = UserRoles)]
         [HttpPut(APIRoutes.ListPosition.Update, Name = "UpdateListPosition")]
         public async Task<IActionResult> UpdateAsync([FromForm] int id, [FromForm(Name = "total-product")] int totalProduct, [FromForm(Name = "list-name")] string listName)
         {
