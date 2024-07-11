@@ -75,7 +75,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             var menuSegment = await _unitOfWork.MenuSegmentRepository.GetByCondition(condition);
             if (menuSegment != null)
             {
-                menuSegment.Priority = entityToUpdate.Priority;
+                _unitOfWork.MenuSegmentRepository.Update(menuSegment);
             }
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             if (!result)
