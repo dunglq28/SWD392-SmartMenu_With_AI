@@ -176,7 +176,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                     if (product.BrandId != brandId)
                     {
                         throw new Exception("Brand ID không khớp với Product.");
-                    }                 
+                    }
 
                     // Check if indexInList is valid
                     if (detailIndex.IndexInList < 0)
@@ -192,22 +192,13 @@ namespace FSU.SmartMenuWithAI.Service.Services
                     };
                     await _unitOfWork.ProductListRepository.Insert(productList);
                     var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
-                    if (result)
+                    var listPositionDTO = _mapper?.Map<ProductListDTO>(productList);
+                    if (listPositionDTO != null)
                     {
-                        var listPositionDTO = _mapper?.Map<ProductListDTO>(productList);
-                        if (listPositionDTO != null)
-                        {
-                            listPositionDTOs.Add(listPositionDTO);
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception("Lỗi khi lưu vào cơ sở dữ liệu");
+                        listPositionDTOs.Add(listPositionDTO);
                     }
                 }
             }
-            // Lưu các thay đổi vào cơ sở dữ liệu
-            await _unitOfWork.SaveAsync();
             return listPositionDTOs;
         }
         public async Task<ProductListDTO> UpdateAsync(int productId, int listId, int index, int newProductId)

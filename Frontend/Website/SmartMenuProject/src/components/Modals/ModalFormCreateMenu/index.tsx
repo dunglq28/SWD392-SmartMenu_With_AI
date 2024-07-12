@@ -58,8 +58,10 @@ interface ModalProps {
   checkListNamesNotEmpty: () => boolean;
   handleChangeTitle: (listName: string, index: number) => void;
   handleCreateMenu: (menuForm: FormData) => void;
+  handleUpdateMenu: (menuForm: FormData) => void;
   resetLists: () => void;
   isEdit: boolean;
+  menuId: Number;
 }
 
 const ModalFormCreateMenu: React.FC<ModalProps> = ({
@@ -76,8 +78,10 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   checkListNamesNotEmpty,
   handleChangeTitle,
   handleCreateMenu,
+  handleUpdateMenu,
   resetLists,
   isEdit,
+  menuId,
 }) => {
   const navigate = useNavigate();
   const brandId = Number(localStorage.getItem("BrandId"));
@@ -159,27 +163,43 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   };
 
   const handleSegmentChange = (selectedOptions: any) => {
-    const selectedSegmentIds = selectedOptions
-      ? selectedOptions.map((option: any) => option.value)
-      : [];
-    handleChange("segmentId", selectedSegmentIds);
+    setMenu({
+      ...menu,
+      segmentId: {
+        value: selectedOptions
+          ? selectedOptions.map((option: any) => option.value)
+          : [],
+        errorMessage: "",
+      },
+    });
+  };
+
+  const getSelectedSegments = () => {
+    return menu.segmentId.value
+      .map((segmentId) => {
+        const segmentOption = customerSegmentOptions.find(
+          (option) => option.value === segmentId
+        );
+        return segmentOption ? segmentOption : null;
+      })
+      .filter((option) => option !== null);
   };
 
   const handleNextTab = () => {
-    // if (
-    //   selectedProducts1.productData.length == 0 ||
-    //   selectedProducts2.productData.length == 0 ||
-    //   selectedProducts3.productData.length == 0 ||
-    //   selectedProducts4.productData.length == 0 ||
-    //   selectedProductspotLight.productData.length == 0
-    // ) {
-    //   toast.error("Vui lòng chọn đầy đủ các danh sách");
-    //   return;
-    // }
-    // if (!checkListNamesNotEmpty()) {
-    //   toast.error("Vui lòng điền đẩy đủ tiêu đề");
-    //   return;
-    // }
+    if (
+      selectedProducts1.productData.length == 0 ||
+      selectedProducts2.productData.length == 0 ||
+      selectedProducts3.productData.length == 0 ||
+      selectedProducts4.productData.length == 0 ||
+      selectedProductspotLight.productData.length == 0
+    ) {
+      toast.error("Vui lòng chọn đầy đủ các danh sách");
+      return;
+    }
+    if (!checkListNamesNotEmpty()) {
+      toast.error("Vui lòng điền đẩy đủ tiêu đề");
+      return;
+    }
     handleCaptureAndDisplay();
     setCurrentTab((prevTab) => (prevTab < 2 ? prevTab + 1 : prevTab));
   };
@@ -250,7 +270,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
 
   const handleDonebtn = () => {
     const errors = {
-      Description: menu.Description.value ? "" : "Mô tả là bắt buộc",
+      description: menu.description.value !== "" ? "" : "Mô tả là bắt buộc",
       segmentId:
         menu.segmentId.value.length > 0
           ? ""
@@ -260,9 +280,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
 
     const updatedMenu = {
       ...menu,
-      Description: {
-        ...menu.Description,
-        errorMessage: errors.Description,
+      description: {
+        ...menu.description,
+        errorMessage: errors.description,
       },
       segmentId: {
         ...menu.segmentId,
@@ -277,22 +297,26 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     setMenu(updatedMenu);
 
     const hasErrors = Object.values(errors).some((error) => error !== "");
+
     if (!hasErrors) {
       const menuForm = new FormData();
       menuForm.append("IsActive", menu.isActive.toString());
       menuForm.append("BrandId", brandId.toString());
-      menuForm.append("Description", menu.Description.value);
+      menuForm.append("Description", menu.description.value);
       menuForm.append("Priority", menu.priority.value.toString());
       if (menu.menuImage.value) {
-        // menuForm.append("MenuImage", menu.menuImage.value);
-        menuForm.append("MenuImage", "null");
+        menuForm.append("MenuImage", menu.menuImage.value);
+        // menuForm.append("MenuImage", "null");
       }
       menu.segmentId.value.forEach((id) => {
         menuForm.append("SegmentIds", id.toString());
       });
-
-      // handleCreateMenu(menuForm);
-      // setCurrentTab(0);
+      if (!isEdit) {
+        handleCreateMenu(menuForm);
+      } else {
+        menuForm.append("menuId", menuId.toString());
+        handleUpdateMenu(menuForm);
+      }
     }
   };
 
@@ -481,6 +505,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
+                                value={selectedProducts2.listName}
                                 onChange={(e) =>
                                   handleChangeTitle(e.target.value, 2)
                                 }
@@ -595,6 +620,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
+                                value={selectedProducts3.listName}
                                 onChange={(e) =>
                                   handleChangeTitle(e.target.value, 3)
                                 }
@@ -702,6 +728,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
+                                value={selectedProducts4.listName}
                                 onChange={(e) =>
                                   handleChangeTitle(e.target.value, 4)
                                 }
@@ -1189,6 +1216,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                           }}
                           placeholder="Chọn phân khúc"
                           onChange={handleSegmentChange}
+                          value={getSelectedSegments()}
                         />
                         {menu.segmentId.errorMessage && (
                           <Text className={style.ErrorText}>
@@ -1227,14 +1255,14 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                           border="2px solid #55ad9b"
                           _focus={{ border: "2px solid #95d2b3" }}
                           _hover={{ border: "2px solid #95d2b3" }}
-                          value={menu.Description.value}
+                          value={menu.description.value}
                           onChange={(e) =>
-                            handleChange("Description", e.target.value)
+                            handleChange("description", e.target.value)
                           }
                         />
-                        {menu.Description.errorMessage && (
+                        {menu.description.errorMessage && (
                           <Text className={style.ErrorText}>
-                            {menu.Description.errorMessage}
+                            {menu.description.errorMessage}
                           </Text>
                         )}
                       </Flex>

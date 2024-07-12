@@ -32,7 +32,7 @@ const resources = {
         "customer segment":"Phân Khúc Khách Hàng",
         "customerSegment":"Phân Khúc Khách Hàng",
         "products":"Sản Phẩm",
-        "categories":"Loại Sản Phẩm",
+        "categories":"Loại Danh Mục",
         "menu":"Thực Đơn",
         "settings": "Cài Đặt",
         "new product":"Sản Phẩm Mới",

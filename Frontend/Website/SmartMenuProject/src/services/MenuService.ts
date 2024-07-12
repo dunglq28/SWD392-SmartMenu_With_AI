@@ -131,3 +131,62 @@ export const getMenuSegment = async (
   const apiResponse = res.data as ApiResponse<MenuData>;
   return apiResponse;
 };
+//================================================================//
+export const updateMenu = async (
+  menu: FormData
+): Promise<ApiResponse<MenuData>> => {
+  try {
+    const res = await axiosMultipartForm.put("menus", menu);
+    const apiResponse = res.data as ApiResponse<MenuData>;
+    return apiResponse;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return error.response.data as ApiResponse<MenuData>;
+    }
+    throw new Error("Unexpected error");
+  }
+};
+
+export const updateListPosition = async (
+  menuList: MenuList[],
+  brandId: number
+): Promise<ApiResponse<ListData[]>> => {
+  try {
+    const listDetails = menuList.map((list) => ({
+      "list-id": list.listId,
+      "list-name": list.listName,
+      "total-product": list.maxProduct,
+    }));
+
+    const res = await axiosAuth.put("list-positions/update-list-list", {
+      brandId: brandId,
+      listDetails: listDetails,
+    });
+    const apiResponse = res.data as ApiResponse<ListData[]>;
+    return apiResponse;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return error.response.data as ApiResponse<ListData[]>;
+    }
+    throw new Error("Unexpected error");
+  }
+};
+
+export const updateProductList = async (
+  brandId: number,
+  listProductDetails: ListProductDetails[]
+): Promise<ApiResponse<Object>> => {
+  try {
+    const res = await axiosAuth.put("product-lists/update-list-product", {
+      brandId: brandId,
+      listProductDetails: listProductDetails,
+    });
+    const apiResponse = res.data as ApiResponse<Object>;
+    return apiResponse;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return error.response.data as ApiResponse<Object>;
+    }
+    throw new Error("Unexpected error");
+  }
+};

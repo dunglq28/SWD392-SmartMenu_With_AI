@@ -93,7 +93,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
         ...prevData,
         brandName: {
           ...prevData.brandName,
-          errorMessage: "Brand Name is required",
+          errorMessage: "Tên thương hiệu là bắt buộc",
         },
       }));
       hasError = true;
@@ -108,7 +108,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
         ...prevData,
         image: {
           ...prevData.image,
-          errorMessage: "Image is required",
+          errorMessage: "Logo là bắt buộc",
         },
       }));
       hasError = true;
@@ -142,7 +142,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
               <Input
                 value={formData.brandName.value}
                 onChange={handleBrandNameChange}
-                placeholder="Brand Name"
+                placeholder="Tên thương hiệu"
                 pl={3}
               />
               {formData.brandName.errorMessage && (

@@ -50,6 +50,7 @@ function Menu() {
         setIsLoading(true);
         const loadData = async () => {
           var result = await getAllMenu(Number(brandId), currentPage, rowsPerPage);
+          
           setData(result.list);
           setTotalPages(result.totalPage);
           setTotalRecords(result.totalRecord);

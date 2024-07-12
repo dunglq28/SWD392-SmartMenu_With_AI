@@ -70,7 +70,7 @@ const ModalFormCategory: React.FC<ModalFormCategoryProps> = ({
     const errors = {
       categoryName: formData.categoryName.value
         ? ""
-        : "Category name is required",
+        : "Tên danh mục là bắt buộc",
     };
 
     const updatedFormData = {

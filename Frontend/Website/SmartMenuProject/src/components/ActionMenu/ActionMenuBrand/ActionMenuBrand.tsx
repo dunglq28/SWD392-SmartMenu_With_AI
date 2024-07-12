@@ -84,8 +84,17 @@ const ActionMenuBrand: FC<ActionMenuProps> = ({
     }
   };
 
-  const handleViewClick = () => {
-    navigate(`/branches/${brandName}`, { state: { id, brandName } });
+  const handleViewClick = (path: string) => {
+    switch (path) {
+      case "branches":
+        navigate(`/branches/${brandName}`, { state: { id, brandName } });
+        break;
+      case "categories":
+        navigate(`/categories/${brandName}`, { state: { id, brandName } });
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -102,12 +111,43 @@ const ActionMenuBrand: FC<ActionMenuProps> = ({
           <PopoverContent className={style.PopoverContent}>
             <PopoverArrow />
             <PopoverBody>
-              <Flex className={style.PopupButton} onClick={handleViewClick}>
+              <Flex
+                className={style.PopupButton}
+                onClick={() => handleViewClick("branches")}
+              >
+                <Text className={style.PopupButtonText}>Xem sản phẩm</Text>
+              </Flex>
+              <Flex
+                className={style.PopupButton}
+                onClick={() => handleViewClick("categories")}
+              >
+                <Text className={style.PopupButtonText}>Xem danh mục</Text>
+              </Flex>
+              <Flex
+                className={style.PopupButton}
+                onClick={() => handleViewClick("branches")}
+              >
+                <Text className={style.PopupButtonText}>
+                  Xem phân khúc khách hàng
+                </Text>
+              </Flex>
+              <Flex
+                className={style.PopupButton}
+                onClick={() => handleViewClick("branches")}
+              >
+                <Text className={style.PopupButtonText}>Xem menu</Text>
+              </Flex>
+              <Flex
+                className={style.PopupButton}
+                onClick={() => handleViewClick("branches")}
+              >
                 <Text className={style.PopupButtonText}>Xem chi nhánh</Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={handleEditClick}>
-                <Text className={style.PopupButtonText}>Cập nhật thương hiệu</Text>
+                <Text className={style.PopupButtonText}>
+                  Cập nhật thương hiệu
+                </Text>
               </Flex>
               <Divider />
               <Flex className={style.PopupButton} onClick={onOpen}>

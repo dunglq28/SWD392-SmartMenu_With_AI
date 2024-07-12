@@ -17,8 +17,12 @@ import {
   createMenuList,
   createProductList,
   getMenu,
+  updateListPosition,
+  updateMenu,
+  updateProductList,
 } from "../../../services/MenuService";
 import { useLocation, useNavigate } from "react-router-dom";
+import Loading from "../../../components/Loading";
 
 function CreateMenu() {
   const navigate = useNavigate();
@@ -28,6 +32,7 @@ function CreateMenu() {
   const [isOpenCreateMenu, setIsOpenCreateMenu] = useState(false);
   const [isOpenListProduct, setIsOpenListProduct] = useState(false);
   const initializeMenuListState = (listIndex: number, maxProduct: number) => ({
+    listId: 0,
     listName: "",
     productData: [],
     listIndex,
@@ -56,10 +61,11 @@ function CreateMenu() {
   const [menu, setMenu] = useState<Menu>({
     isActive: true,
     segmentId: { value: [], errorMessage: "" },
-    Description: { value: "", errorMessage: "" },
+    description: { value: "", errorMessage: "" },
     menuImage: { value: null, errorMessage: "" },
     priority: { value: 0, errorMessage: "" },
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const brandId = Number(localStorage.getItem("BrandId"));
   const [currentListIndex, setCurrentIndex] = useState(0);
   const [maxProduct, setMaxProduct] = useState(0);
@@ -155,6 +161,7 @@ function CreateMenu() {
         break;
       case 5:
         newMenuList = {
+          ...selectedProductspotLight,
           listName: products[0].productName,
           productData: products,
           listIndex: Index,
@@ -260,7 +267,7 @@ function CreateMenu() {
 
   const handleCreateMenu = async (menuForm: FormData) => {
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
       const menuResult = await createMenu(menuForm);
 
       if (menuResult.statusCode === 200) {
@@ -322,48 +329,21 @@ function CreateMenu() {
         toast.error(menuResult.message);
       }
     } finally {
-      // setTimeout(() => {
-      //   setIsLoading(false);
-      // }, 1000);
+      setIsLoading(false);
     }
   };
 
   const resetLists = () => {
-    setSelectedProducts1({
-      listName: "",
-      productData: [],
-      listIndex: 1,
-      maxProduct: 4,
-    });
-    setSelectedProducts2({
-      listName: "",
-      productData: [],
-      listIndex: 2,
-      maxProduct: 4,
-    });
-    setSelectedProducts3({
-      listName: "",
-      productData: [],
-      listIndex: 3,
-      maxProduct: 4,
-    });
-    setSelectedProducts4({
-      listName: "",
-      productData: [],
-      listIndex: 4,
-      maxProduct: 2,
-    });
-    setSelectedProductspotLight({
-      listName: "",
-      productData: [],
-      listIndex: 5,
-      maxProduct: 2,
-    });
+    setSelectedProducts1(initializeMenuListState(1, 4));
+    setSelectedProducts2(initializeMenuListState(2, 4));
+    setSelectedProducts3(initializeMenuListState(3, 4));
+    setSelectedProducts4(initializeMenuListState(4, 2));
+    setSelectedProductspotLight(initializeMenuListState(5, 1));
     setAllSelectedProducts([]);
     setMenu({
       isActive: true,
       segmentId: { value: [], errorMessage: "" },
-      Description: { value: "", errorMessage: "" },
+      description: { value: "", errorMessage: "" },
       menuImage: { value: null, errorMessage: "" },
       priority: { value: 0, errorMessage: "" },
     });
@@ -375,13 +355,80 @@ function CreateMenu() {
       try {
         const loadData = async () => {
           var result = await getMenu(menuId);
+
           if (result.statusCode === 200) {
             setMenu({
               isActive: true,
-              segmentId: { value: [], errorMessage: "" },
-              Description: { value: result.data.description, errorMessage: "" },
+              segmentId: {
+                value: result.data.menuSegments.map(
+                  (segment) => segment.segmentId
+                ),
+                errorMessage: "",
+              },
+              description: { value: result.data.description, errorMessage: "" },
               menuImage: { value: null, errorMessage: "" },
               priority: { value: result.data.priority, errorMessage: "" },
+            });
+
+            result.data.menuLists.forEach((menuList) => {
+              let newMenuList: MenuList;
+              const productData = menuList.list.productLists.map(
+                (pl) => pl.product
+              );
+              switch (menuList.listIndex) {
+                case 1:
+                  newMenuList = {
+                    listId: menuList.list.listId,
+                    listName: menuList.list.listName,
+                    productData: productData,
+                    listIndex: 1,
+                    maxProduct: menuList.list.totalProduct,
+                  };
+                  setSelectedProducts1(newMenuList);
+                  break;
+                case 2:
+                  newMenuList = {
+                    listId: menuList.list.listId,
+                    listName: menuList.list.listName,
+                    productData: productData,
+                    listIndex: 2,
+                    maxProduct: menuList.list.totalProduct,
+                  };
+                  setSelectedProducts2(newMenuList);
+                  break;
+                case 3:
+                  newMenuList = {
+                    listId: menuList.list.listId,
+                    listName: menuList.list.listName,
+                    productData: productData,
+                    listIndex: 3,
+                    maxProduct: menuList.list.totalProduct,
+                  };
+                  setSelectedProducts3(newMenuList);
+                  break;
+                case 4:
+                  newMenuList = {
+                    listId: menuList.list.listId,
+                    listName: menuList.list.listName,
+                    productData: productData,
+                    listIndex: 4,
+                    maxProduct: menuList.list.totalProduct,
+                  };
+                  setSelectedProducts4(newMenuList);
+                  break;
+                case 5:
+                  newMenuList = {
+                    listId: menuList.list.listId,
+                    listName: menuList.list.listName,
+                    productData: productData,
+                    listIndex: 5,
+                    maxProduct: menuList.list.totalProduct,
+                  };
+                  setSelectedProductspotLight(newMenuList);
+                  break;
+                default:
+                  break;
+              }
             });
           }
         };
@@ -389,18 +436,73 @@ function CreateMenu() {
         setTimeout(loadData, 500);
       } catch (err) {
         toast.error("Lỗi khi lấy dữ liệu");
-        // setIsLoading(false);
       }
 
-      // setSelectedProducts1({
-      //   listName: "hello",
-      //   productData: [],
-      //   listIndex: 1,
-      //   maxProduct: 4,
-      // });
       onOpenCreateMenu();
     }
   }, []);
+
+  const handleUpdateMenu = async (menuForm: FormData) => {
+    try {
+      setIsLoading(true);
+      const menuResult = await updateMenu(menuForm);
+
+      if (menuResult.statusCode === 200) {
+        const allListProducts: MenuList[] = [];
+        allListProducts.push(selectedProducts1);
+        allListProducts.push(selectedProducts2);
+        allListProducts.push(selectedProducts3);
+        allListProducts.push(selectedProducts4);
+        allListProducts.push(selectedProductspotLight);
+
+        const listPositionResult = await updateListPosition(
+          allListProducts,
+          brandId
+        );
+
+        if (listPositionResult.statusCode === 200) {
+          const listProductDetails = listPositionResult.data.map(
+            (list, index) => ({
+              listId: list.listId,
+              indexProducts: allListProducts[index].productData.map(
+                (product, productIndex) => ({
+                  productId: product.productId,
+                  indexInList: productIndex + 1,
+                })
+              ),
+            })
+          );
+
+          const productListResult = await updateProductList(
+            brandId,
+            listProductDetails
+          );
+
+          if (productListResult.statusCode === 200) {
+            resetLists();
+            const toastMessage = "Cập nhât menu thành công";
+            navigate("/menu", { state: { toastMessage } });
+          } else {
+            toast.error(productListResult.message);
+          }
+        } else {
+          toast.error(listPositionResult.message);
+        }
+      } else {
+        toast.error(menuResult.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Flex className={style.Container}>
+        <Loading />;
+      </Flex>
+    );
+  }
 
   return (
     <Flex className={style.Container}>
@@ -426,8 +528,10 @@ function CreateMenu() {
         checkListNamesNotEmpty={checkListNamesNotEmpty}
         handleChangeTitle={handleChangeTitle}
         handleCreateMenu={handleCreateMenu}
+        handleUpdateMenu={handleUpdateMenu}
         resetLists={resetLists}
         isEdit={isEdit}
+        menuId={menuId}
       />
       <DrawerComponent
         isOpen={isOpenListProduct}
