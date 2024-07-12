@@ -3,7 +3,7 @@ import { ProductData } from "./../payloads/responses/ProductData.model";
 export interface Menu {
   isActive: boolean;
   segmentId: { value: number[]; errorMessage: string };
-  Description: { value: string; errorMessage: string };
+  description: { value: string; errorMessage: string };
   menuImage: { value: File | null; errorMessage: string };
   priority: { value: number; errorMessage: string };
 }

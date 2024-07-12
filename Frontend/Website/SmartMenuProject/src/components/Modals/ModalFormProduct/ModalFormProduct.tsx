@@ -131,7 +131,7 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
       if (!isImage) {
         setFormData((prevData) => ({
           ...prevData,
-          image: { value: null, errorMessage: "File must be an image" },
+          image: { value: null, errorMessage: "Tệp phải là một hình ảnh" },
         }));
         return;
       }
@@ -154,21 +154,21 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
 
   const handleSubmit = async () => {
     const errors = {
-      category: formData.category.value ? "" : "Category is required",
-      productName: formData.productName.value ? "" : "Product name is required",
+      category: formData.category.value ? "" : "Danh mục là bắt buộc",
+      productName: formData.productName.value ? "" : "Tên sản phẩm là bắt buộc",
       image: "",
       description: formData.description.value
         ? formData.description.value.length < 5 ||
           formData.description.value.length > 300
-          ? "Description must be between 5 and 300 characters"
+          ? "Mô tả phải từ 5 đến 300 ký tự"
           : ""
-        : "Description is required",
+        : "Mô tả là bắt buộc",
       price: formData.price.value
         ? isNaN(Number(formData.price.value)) ||
           Number(formData.price.value) <= 1000
-          ? "Price must be a number greater than 1000 has format: 100000"
+          ? "Giá phải là một số lớn hơn 1000 có định dạng: 1000000"
           : ""
-        : "Price is required",
+        : "Giá là bắt buộc",
     };
 
     if (
@@ -176,7 +176,7 @@ const ModalFormProduct: React.FC<ModalFormProductProps> = ({
       !formData.imageUrl?.value &&
       !formData.image.errorMessage
     ) {
-      errors.image = "Image is required";
+      errors.image = "Hình ảnh là bắt buộc";
     }
 
     const updatedFormData = {

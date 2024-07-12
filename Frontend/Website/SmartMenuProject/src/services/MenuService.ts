@@ -131,3 +131,18 @@ export const getMenuSegment = async (
   const apiResponse = res.data as ApiResponse<MenuData>;
   return apiResponse;
 };
+//================================================================//
+export const updateMenu = async (
+  menu: FormData
+): Promise<ApiResponse<MenuData>> => {
+  try {
+    const res = await axiosMultipartForm.put("menus", menu);
+    const apiResponse = res.data as ApiResponse<MenuData>;
+    return apiResponse;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return error.response.data as ApiResponse<MenuData>;
+    }
+    throw new Error("Unexpected error");
+  }
+};
