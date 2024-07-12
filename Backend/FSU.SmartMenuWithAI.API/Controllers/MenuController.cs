@@ -137,17 +137,25 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         //[Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Menu.Update, Name = "UpdateMenuAsync")]
-        public async Task<IActionResult> UpdateMenuAsync([FromQuery(Name = "menu-id")] int menuId, UpdateMenuRequest reqObj)
+        public async Task<IActionResult> UpdateMenuAsync([FromForm] UpdateMenuRequest reqObj)
         {
             try
             {
-                var menuInDB = await _menuService.GetAsync(menuId);
+                var menuInDB = await _menuService.GetAsync(reqObj.menuId);
                 if (reqObj.MenuImage != null && menuInDB != null)
                 {
                     await _s3Service.UploadItemAsync(reqObj.MenuImage, menuInDB!.MenuCode!, FolderRootImg.Menu);
                 }
                 // không cần update hình ở db vì đè lên đường dẫn cũ trên aws là hình thay đổi mà vẫn giữ tên
-                var result = await _menuService.UpdateAsync(menuId, reqObj.isActive);
+                var dto = new MenuDTO
+                {
+                    MenuId = reqObj.menuId,
+                    Description = reqObj.Description,
+                    IsActive = reqObj.isActive,
+                    Priority = reqObj.Priority,
+
+                };
+                var result = await _menuService.UpdateAsync(segmentIds:reqObj.SegmentIds,dtoToUpdate: dto );
 
                 if (result == false)
                 {
