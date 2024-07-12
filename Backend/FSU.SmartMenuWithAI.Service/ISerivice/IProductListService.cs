@@ -14,6 +14,7 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
         Task<ProductListDTO> GetByID(int productId, int listId);
         Task<ProductListDTO> Insert(int productId, int listId, int indexInList, int brandId);
         Task<List<ProductListDTO>> Insert2(int brandId, List<ListProductDetail> listProductDetails);
+        Task<List<ProductListDTO>> Update2(int brandId, List<ListProductDetail> listProductDetails);
         Task<ProductListDTO> UpdateAsync(int productId, int listId, int index, int newProductId);
         Task<bool> DeleteAsync(int productId, int listId);
 

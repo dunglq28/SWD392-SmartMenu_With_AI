@@ -141,5 +141,33 @@ namespace FSU.SmartMenuWithAI.Service.Services
             await _unitOfWork.SaveAsync();
             return true;
         }
+        public async Task<List<ListPositionDTO>> UpdateAsync2(int brandID, List<ListDetailUpdate> listDetailUpdates)
+        {
+            var listPositionDTOs = new List<ListPositionDTO>();
+
+            foreach (var detail in listDetailUpdates)
+            {
+                var listPositionToUpdate = await _unitOfWork.ListPositionRepository.GetByID(detail.ListId);
+                listPositionToUpdate.ListName = detail.ListName;
+                listPositionToUpdate.TotalProduct = detail.TotalProduct;
+                _unitOfWork.ListPositionRepository.Update(listPositionToUpdate);
+                var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+                if (result)
+                {
+                    var listPositionDTO = _mapper?.Map<ListPositionDTO>(listPositionToUpdate);
+                    if (listPositionDTO != null)
+                    {
+                        listPositionDTOs.Add(listPositionDTO);
+                    }
+                }
+                else
+                {
+                    throw new Exception("Lỗi khi cập nhật vào cơ sở dữ liệu");
+                }
+            }
+            // Lưu các thay đổi vào cơ sở dữ liệu
+            await _unitOfWork.SaveAsync();
+            return listPositionDTOs;
+        }
     }
 }

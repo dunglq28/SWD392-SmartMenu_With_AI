@@ -146,6 +146,70 @@ namespace FSU.SmartMenuWithAI.Service.Services
             await _unitOfWork.SaveAsync();
             return listPositionDTOs;
         }
+        public async Task<List<ProductListDTO>> Update2(int brandId, List<ListProductDetail> listProductDetails)
+        {
+            var listPositionDTOs = new List<ProductListDTO>();
+            foreach (var detail in listProductDetails)
+            {
+                var porductListToupdate = await _unitOfWork.ProductListRepository.Get(p => p.ListId == detail.ListId);
+                foreach (var listProduct in porductListToupdate)
+                {
+                    _unitOfWork.ProductListRepository.Delete(listProduct);
+                }
+                foreach (var detailIndex in detail.IndexProducts)
+                {
+                    // Check if the listId exists in the ListPosition table
+                    var listPosition = await _unitOfWork.ListPositionRepository.GetByID(detail.ListId);
+                    if (listPosition == null)
+                    {
+                        throw new Exception("List ID không tồn tại.");
+                    }
+
+                    // Check if the productId exists in the Product table
+                    var product = await _unitOfWork.ProductRepository.GetByID(detailIndex.ProductId);
+                    if (product == null)
+                    {
+                        throw new Exception("Product ID không tồn tại");
+                    }
+
+                    // Check if the brandId matches the brandId of the product
+                    if (product.BrandId != brandId)
+                    {
+                        throw new Exception("Brand ID không khớp với Product.");
+                    }                 
+
+                    // Check if indexInList is valid
+                    if (detailIndex.IndexInList < 0)
+                    {
+                        throw new Exception("Index không hợp lệ.");
+                    }
+                    var productList = new ProductList()
+                    {
+                        BrandId = brandId,
+                        ListId = detail.ListId,
+                        ProductId = detailIndex.ProductId,
+                        IndexInList = detailIndex.IndexInList,
+                    };
+                    await _unitOfWork.ProductListRepository.Insert(productList);
+                    var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
+                    if (result)
+                    {
+                        var listPositionDTO = _mapper?.Map<ProductListDTO>(productList);
+                        if (listPositionDTO != null)
+                        {
+                            listPositionDTOs.Add(listPositionDTO);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Lỗi khi lưu vào cơ sở dữ liệu");
+                    }
+                }
+            }
+            // Lưu các thay đổi vào cơ sở dữ liệu
+            await _unitOfWork.SaveAsync();
+            return listPositionDTOs;
+        }
         public async Task<ProductListDTO> UpdateAsync(int productId, int listId, int index, int newProductId)
         {
             // Retrieve the existing product list item from the repository
