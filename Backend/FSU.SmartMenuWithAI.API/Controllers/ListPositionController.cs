@@ -197,7 +197,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 var updatedListPosition = await _listPositionService.UpdateAsync2(request.BrandId, request.ListDetails);
                 return Ok(new BaseResponse
                 {
-                    StatusCode = StatusCodes.Status201Created,
+                    StatusCode = StatusCodes.Status200OK,
                     Message = "Cập nhật thành công",
                     Data = updatedListPosition,
                     IsSuccess = true

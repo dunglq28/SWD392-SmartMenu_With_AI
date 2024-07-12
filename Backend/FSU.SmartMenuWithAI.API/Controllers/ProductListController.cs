@@ -130,7 +130,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         //[Authorize(Roles = UserRoles)]
         [HttpPut(APIRoutes.ProductList.UpdateListProduct, Name = "UpdateListProductList")]
         public async Task<IActionResult> UpdateListProductListAsync([FromBody] CreateListProductList request)
-        {
+        {   
             try
             {
                 var updatedProductList = await _productListService.Update2(request.BrandId, request.ListProductDetails);
@@ -138,7 +138,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     return Ok(new BaseResponse
                     {
-                        StatusCode = StatusCodes.Status201Created,
+                        StatusCode = StatusCodes.Status200OK,
                         Message = "Cập nhật thành công",
                         Data = updatedProductList,
                         IsSuccess = true

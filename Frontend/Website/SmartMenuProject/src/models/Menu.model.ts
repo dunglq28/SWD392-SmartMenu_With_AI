@@ -9,6 +9,7 @@ export interface Menu {
 }
 
 export interface MenuList {
+  listId: number;
   listName: string;
   productData: ProductData[];
   listIndex: number;

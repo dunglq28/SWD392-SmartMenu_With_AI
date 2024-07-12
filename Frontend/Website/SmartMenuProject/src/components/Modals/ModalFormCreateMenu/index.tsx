@@ -312,7 +312,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
         menuForm.append("SegmentIds", id.toString());
       });
       if (!isEdit) {
-        // handleCreateMenu(menuForm);
+        handleCreateMenu(menuForm);
       } else {
         menuForm.append("menuId", menuId.toString());
         handleUpdateMenu(menuForm);
