@@ -42,6 +42,7 @@ import { toast } from "react-toastify";
 import { getCustomerSegmentsNoPaging } from "../../../services/CustomerSegmentService";
 import { CustomerSegmentData } from "../../../payloads/responses/CustomerSegment.model";
 import { Menu, MenuList } from "../../../models/Menu.model";
+import { useNavigate } from "react-router-dom";
 
 interface ModalProps {
   isOpen: boolean;
@@ -52,10 +53,13 @@ interface ModalProps {
   selectedProducts3: MenuList;
   selectedProducts4: MenuList;
   selectedProductspotLight: MenuList;
+  menu: Menu;
+  setMenu: React.Dispatch<React.SetStateAction<Menu>>;
   checkListNamesNotEmpty: () => boolean;
   handleChangeTitle: (listName: string, index: number) => void;
   handleCreateMenu: (menuForm: FormData) => void;
   resetLists: () => void;
+  isEdit: boolean;
 }
 
 const ModalFormCreateMenu: React.FC<ModalProps> = ({
@@ -67,11 +71,15 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   selectedProducts3,
   selectedProducts4,
   selectedProductspotLight,
+  menu,
+  setMenu,
   checkListNamesNotEmpty,
   handleChangeTitle,
   handleCreateMenu,
   resetLists,
+  isEdit,
 }) => {
+  const navigate = useNavigate();
   const brandId = Number(localStorage.getItem("BrandId"));
   const [currentTab, setCurrentTab] = React.useState(0);
   const [IsDraggable, setIsDraggable] = React.useState(false);
@@ -80,13 +88,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   const [customerSegmentOptions, setCustomerSegmentOptions] = useState<
     { value: number; label: string }[]
   >([]);
-  const [menu, setMenu] = useState<Menu>({
-    isActive: true,
-    segmentId: { value: [], errorMessage: "" },
-    Description: { value: "", errorMessage: "" },
-    menuImage: { value: null, errorMessage: "" },
-    priority: { value: 0, errorMessage: "" },
-  });
+
   const imageRef = React.useRef<HTMLImageElement>(null);
   const {
     isOpen: isOpenAlertCancelForm,
@@ -197,8 +199,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
         .then((canvas) => {
           const imageDataURL = canvas.toDataURL("image/png");
           setCapturedImage(imageDataURL);
-          // console.log(imageDataURL);
-          
+
           if (
             imageDataURL.includes("image/png") &&
             !imageDataURL.includes("data:,")
@@ -227,24 +228,11 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
         });
     }
   };
-  // const handleCaptureAndDisplay = async () => {
- 
-  //   const element = document.querySelector(".takeAPhoto") as HTMLElement;
-  //   if (element) {
-  //     try {
-  //       const canvas = await html2canvas(element, { scale: 3, useCORS: true });
-  //       const imageDataURL = canvas
-  //         .toDataURL("image/jpeg", 0.92)
-  //         .replace("image/jpeg", "image/octet-stream");
-  //       setCapturedImage(imageDataURL);
-  //     } catch (error) {
-  //       console.error("Failed to capture image:", error);
-  //       setCapturedImage(undefined); // or handle error state accordingly
-  //     }
-  //   }
-  // };
 
   const handleCloseForm = () => {
+    if (isEdit) {
+      navigate("/menu");
+    }
     setCurrentTab(0);
     onCloseAlertCancelForm();
     resetLists();
@@ -303,9 +291,8 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
         menuForm.append("SegmentIds", id.toString());
       });
 
-      handleCreateMenu(menuForm);
+      // handleCreateMenu(menuForm);
       // setCurrentTab(0);
-      // onClose();
     }
   };
 
@@ -317,7 +304,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
             {currentTab === 0 ? (
               <Flex columnGap="20px">
                 <Text as="b" fontSize="30px">
-                  Tạo menu
+                  {isEdit ? "Cập nhật menu" : "Tạo menu"}
                 </Text>
                 <Button onClick={handleDraggable}>
                   Draggable: {(!IsDraggable).toString()}
@@ -381,6 +368,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
+                                value={selectedProducts1.listName}
                                 onChange={(e) =>
                                   handleChangeTitle(e.target.value, 1)
                                 }
@@ -1252,7 +1240,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                       </Flex>
                       <Flex flexDirection="column" rowGap="1vw" width="50%">
                         <Text as="b" fontSize="20px">
-                          Ngày tạo
+                          {isEdit ? "Ngày cập nhật" : "Ngày tạo"}
                         </Text>
                         <Input
                           userSelect="none"
@@ -1276,7 +1264,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
               </Button>
               <Button onClick={handlePreviousTab}>Back</Button>
               {currentTab === 2 ? (
-                <Button onClick={handleDonebtn}>Create menu</Button>
+                <Button onClick={handleDonebtn}>
+                  {isEdit ? "Update menu" : "Create menu"}
+                </Button>
               ) : (
                 <Button onClick={handleNextTab}>Next</Button>
               )}
@@ -1292,12 +1282,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Hủy tạo menu
+              {isEdit ? "Huỷ cập nhật menu" : "Hủy tạo menu"}
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Menu đang tạo sẽ không thể phục hồi sau khi bị hủy, bạn có chắc
-              chắn muốn hủy ?
+              Menu đang {isEdit ? "cập nhật" : "tạo"} sẽ không thể phục hồi sau
+              khi bị hủy, bạn có chắc chắn muốn hủy ?
             </AlertDialogBody>
 
             <AlertDialogFooter>

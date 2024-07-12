@@ -61,7 +61,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     return Ok(new BaseResponse
                     {
-                        StatusCode = StatusCodes.Status201Created,
+                        StatusCode = StatusCodes.Status200OK,
                         Message = "Tạo mới thành công",
                         Data = createdProductList,
                         IsSuccess = true
@@ -100,7 +100,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     return Ok(new BaseResponse
                     {
-                        StatusCode = StatusCodes.Status201Created,
+                        StatusCode = StatusCodes.Status200OK,
                         Message = "Tạo mới thành công",
                         Data = createdProductList,
                         IsSuccess = true
