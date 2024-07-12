@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using FSU.SmartMenuWithAI.Repository.Interfaces;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -84,13 +83,14 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
                 }
             }
 
-            return await query.AsNoTracking().FirstOrDefaultAsync()!;
+            return await query.FirstOrDefaultAsync()!;
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAllNoPaging(
             Expression<Func<TEntity, bool>> filter = null!,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null!,
-            string includeProperties = "")
+            string includeProperties = "", 
+            string thenIncludeProperties ="")
         {
             IQueryable<TEntity> query = dbSet;
             if (filter != null)
@@ -108,6 +108,15 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
                     (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProperty);
+                }
+            }
+            if (!thenIncludeProperties.IsNullOrEmpty())
+            {
+
+                foreach (var thenIncludeProperty in thenIncludeProperties.Split
+                    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(thenIncludeProperty);
                 }
             }
             return await query.AsNoTracking().ToListAsync();

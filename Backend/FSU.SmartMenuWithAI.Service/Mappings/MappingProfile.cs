@@ -25,23 +25,31 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
             CreateMap<Brand, BrandDTO>().ReverseMap();
             // menu
             CreateMap<Menu, MenuDTO>()
-                .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.Brand.BrandName))
+                .ForMember(dto => dto.BrandName, opt => opt.MapFrom(entity => entity.Brand.BrandName))
+                .ForMember(dto => dto.MenuLists, opt => opt.MapFrom(entity => entity.MenuLists))
+                .ForMember(dto => dto.MenuSegments, opt => opt.MapFrom(entity => entity.MenuSegments))
                 .ReverseMap();
             // category
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<Category, CategoryViewModel>().ReverseMap();
             // product
             CreateMap<Product, ProductDTO>()
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
+                .ForMember(dto => dto.CategoryName, opt => opt.MapFrom(obj => obj.Category.CategoryName))
                 .ReverseMap();
             // attribute
             CreateMap<Attribute, AttributeDTO>().ReverseMap();
             CreateMap<GroupAttribute, GroupAttributeDTO>().ReverseMap();
             // menu list
-            CreateMap<MenuList, MenuListDTO>().ReverseMap();
+            CreateMap<MenuList, MenuListDTO>()
+                .ForMember(dto => dto.List, opt => opt.MapFrom(src => src.List))
+                .ForMember(dto => dto.Menu, opt => opt.MapFrom(src => src.Menu))
+                .ReverseMap();
             CreateMap<MenuList, CreateMenuListDTO>().ReverseMap();
             // listPosition
-            CreateMap<ListPosition, ListPositionDTO>().ReverseMap();
+            CreateMap<ListPosition, ListPositionDTO>()
+                .ForMember(dto => dto.MenuLists, opt => opt.MapFrom(src => src.MenuLists))
+                .ForMember(dto => dto.ProductLists, opt => opt.MapFrom(src => src.ProductLists))
+                .ReverseMap();
             // Customer segment
             CreateMap<CustomerSegment, CustomerSegmentDTO>()
                 .ForMember(dest => dest.SegmentAttributes, opt => opt.MapFrom(src => src.SegmentAttributes))
@@ -51,7 +59,10 @@ namespace FSU.SmartMenuWithAI.Service.Mappings
                 .ReverseMap();
             CreateMap<SegmentAttribute, AddAttributeSegmentDTO>().ReverseMap();
             //productlist
-            CreateMap<ProductList, ProductListDTO>().ReverseMap();
+            CreateMap<ProductList, ProductListDTO>()
+                .ForMember(dto => dto.List, opt => opt.MapFrom(src => src.List))
+                .ForMember(dto => dto.Product, opt => opt.MapFrom(src => src.Product))
+                .ReverseMap();
             //menu segment
             CreateMap<MenuSegment, MenuSegmentDTO>()
                 .ForMember(dest => dest.brandId, opt => opt.MapFrom(src => src.Menu.BrandId))

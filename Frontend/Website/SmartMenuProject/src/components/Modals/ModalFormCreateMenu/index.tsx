@@ -42,6 +42,7 @@ import { toast } from "react-toastify";
 import { getCustomerSegmentsNoPaging } from "../../../services/CustomerSegmentService";
 import { CustomerSegmentData } from "../../../payloads/responses/CustomerSegment.model";
 import { Menu, MenuList } from "../../../models/Menu.model";
+import { useNavigate } from "react-router-dom";
 
 interface ModalProps {
   isOpen: boolean;
@@ -52,10 +53,13 @@ interface ModalProps {
   selectedProducts3: MenuList;
   selectedProducts4: MenuList;
   selectedProductspotLight: MenuList;
+  menu: Menu;
+  setMenu: React.Dispatch<React.SetStateAction<Menu>>;
   checkListNamesNotEmpty: () => boolean;
   handleChangeTitle: (listName: string, index: number) => void;
   handleCreateMenu: (menuForm: FormData) => void;
   resetLists: () => void;
+  isEdit: boolean;
 }
 
 const ModalFormCreateMenu: React.FC<ModalProps> = ({
@@ -67,11 +71,15 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   selectedProducts3,
   selectedProducts4,
   selectedProductspotLight,
+  menu,
+  setMenu,
   checkListNamesNotEmpty,
   handleChangeTitle,
   handleCreateMenu,
   resetLists,
+  isEdit,
 }) => {
+  const navigate = useNavigate();
   const brandId = Number(localStorage.getItem("BrandId"));
   const [currentTab, setCurrentTab] = React.useState(0);
   const [IsDraggable, setIsDraggable] = React.useState(false);
@@ -80,13 +88,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   const [customerSegmentOptions, setCustomerSegmentOptions] = useState<
     { value: number; label: string }[]
   >([]);
-  const [menu, setMenu] = useState<Menu>({
-    isActive: true,
-    segmentId: { value: [], errorMessage: "" },
-    Description: { value: "", errorMessage: "" },
-    menuImage: { value: null, errorMessage: "" },
-    priority: { value: 0, errorMessage: "" },
-  });
+
   const imageRef = React.useRef<HTMLImageElement>(null);
   const {
     isOpen: isOpenAlertCancelForm,
@@ -190,100 +192,47 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     undefined
   );
 
-  // const handleCaptureAndDisplay = () => {
-  //   const element = document.querySelector(".takeAPhoto") as HTMLElement;
-  //   if (element) {
-  //     html2canvas(element, { scale: 3, useCORS: true })
-  //       .then((canvas) => {
-  //         const imageDataURL = canvas.toDataURL("image/png");
-  //         setCapturedImage(imageDataURL);
-  //         if (
-  //           imageDataURL.includes("image/png") &&
-  //           !imageDataURL.includes("data:,")
-  //         ) {
-  //           fetch(imageDataURL)
-  //             .then((res) => res.blob())
-  //             .then((blob) => {
-  //               // Create a File from the Blob
-  //               const file = new File([blob], "captured_image.png", {
-  //                 type: "image/png",
-  //               });
-
-  //               setMenu((prevMenu) => ({
-  //                 ...prevMenu,
-  //                 menuImage: { value: file, errorMessage: "" },
-  //               }));
-  //             })
-  //             .catch((error) => {
-  //               console.error("Failed to convert image to file:", error);
-  //             });
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error("Failed to capture image:", error);
-  //         setCapturedImage(undefined); // or handle error state accordingly
-  //       });
-  //   }
-  // };
-  const handleCaptureAndDisplay = async () => {
-    // if (!imageLoaded) {
-    //   console.error("Image not loaded yet");
-    //   return;
-    // }
+  const handleCaptureAndDisplay = () => {
     const element = document.querySelector(".takeAPhoto") as HTMLElement;
     if (element) {
       html2canvas(element, { scale: 3, useCORS: true })
         .then((canvas) => {
-          // Lấy chuỗi base64 từ canvas
           const imageDataURL = canvas.toDataURL("image/png");
+          setCapturedImage(imageDataURL);
 
-          // Tạo Blob từ chuỗi base64
-          const blob = dataURItoBlob(imageDataURL);
-
-          // Tạo URL từ Blob để hiển thị hoặc tải xuống
-          const url = URL.createObjectURL(blob);
-
-          setCapturedImage(url); // Lưu trữ URL để hiển thị ảnh đã chụp
-          console.log(url); // In URL ra để kiểm tra trong console
-
-          // Kiểm tra và xử lý nếu cần thiết
           if (
             imageDataURL.includes("image/png") &&
             !imageDataURL.includes("data:,")
           ) {
-            // Tạo một File từ Blob để sử dụng trong ứng dụng của bạn
-            const file = new File([blob], "captured_image.png", {
-              type: "image/png",
-            });
+            fetch(imageDataURL)
+              .then((res) => res.blob())
+              .then((blob) => {
+                // Create a File from the Blob
+                const file = new File([blob], "captured_image.png", {
+                  type: "image/png",
+                });
 
-            // Cập nhật state menuImage với File đã tạo
-            setMenu((prevMenu) => ({
-              ...prevMenu,
-              menuImage: { value: file, errorMessage: "" },
-            }));
+                setMenu((prevMenu) => ({
+                  ...prevMenu,
+                  menuImage: { value: file, errorMessage: "" },
+                }));
+              })
+              .catch((error) => {
+                console.error("Failed to convert image to file:", error);
+              });
           }
         })
         .catch((error) => {
           console.error("Failed to capture image:", error);
-          setCapturedImage(undefined); // Xử lý trạng thái lỗi nếu cần
+          setCapturedImage(undefined); // or handle error state accordingly
         });
     }
   };
 
-  // Hàm chuyển đổi Data URI thành Blob
-  const dataURItoBlob = (dataURI: string): Blob => {
-    const byteString = atob(dataURI.split(",")[1]);
-    const arrayBuffer = new ArrayBuffer(byteString.length);
-    const uint8Array = new Uint8Array(arrayBuffer);
-
-    for (let i = 0; i < byteString.length; i++) {
-      uint8Array[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([arrayBuffer], { type: "image/png" });
-  };
-
   const handleCloseForm = () => {
+    if (isEdit) {
+      navigate("/menu");
+    }
     setCurrentTab(0);
     onCloseAlertCancelForm();
     resetLists();
@@ -335,15 +284,15 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
       menuForm.append("Description", menu.Description.value);
       menuForm.append("Priority", menu.priority.value.toString());
       if (menu.menuImage.value) {
-        menuForm.append("MenuImage", menu.menuImage.value);
+        // menuForm.append("MenuImage", menu.menuImage.value);
+        menuForm.append("MenuImage", "null");
       }
       menu.segmentId.value.forEach((id) => {
         menuForm.append("SegmentIds", id.toString());
       });
 
-      handleCreateMenu(menuForm);
+      // handleCreateMenu(menuForm);
       // setCurrentTab(0);
-      // onClose();
     }
   };
 
@@ -355,7 +304,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
             {currentTab === 0 ? (
               <Flex columnGap="20px">
                 <Text as="b" fontSize="30px">
-                  Tạo menu
+                  {isEdit ? "Cập nhật menu" : "Tạo menu"}
                 </Text>
                 <Button onClick={handleDraggable}>
                   Draggable: {(!IsDraggable).toString()}
@@ -379,12 +328,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
             <Tabs index={currentTab}>
               <TabPanels>
                 <TabPanel>
-                  <Flex width="100%" justifyContent="center" userSelect="none">
-                    <Image
-                      className="takeAPhoto"
-                      src="https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/76hongtradao.png
-"
-                    />
+                  <Flex
+                    className="takeAPhoto"
+                    width="100%"
+                    justifyContent="center"
+                    userSelect="none"
+                  >
                     <Flex
                       width={`${dimensions.width}px`}
                       height={`${dimensions.height}px`}
@@ -419,6 +368,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
+                                value={selectedProducts1.listName}
                                 onChange={(e) =>
                                   handleChangeTitle(e.target.value, 1)
                                 }
@@ -1290,7 +1240,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                       </Flex>
                       <Flex flexDirection="column" rowGap="1vw" width="50%">
                         <Text as="b" fontSize="20px">
-                          Ngày tạo
+                          {isEdit ? "Ngày cập nhật" : "Ngày tạo"}
                         </Text>
                         <Input
                           userSelect="none"
@@ -1314,7 +1264,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
               </Button>
               <Button onClick={handlePreviousTab}>Back</Button>
               {currentTab === 2 ? (
-                <Button onClick={handleDonebtn}>Create menu</Button>
+                <Button onClick={handleDonebtn}>
+                  {isEdit ? "Update menu" : "Create menu"}
+                </Button>
               ) : (
                 <Button onClick={handleNextTab}>Next</Button>
               )}
@@ -1330,12 +1282,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Hủy tạo menu
+              {isEdit ? "Huỷ cập nhật menu" : "Hủy tạo menu"}
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Menu đang tạo sẽ không thể phục hồi sau khi bị hủy, bạn có chắc
-              chắn muốn hủy ?
+              Menu đang {isEdit ? "cập nhật" : "tạo"} sẽ không thể phục hồi sau
+              khi bị hủy, bạn có chắc chắn muốn hủy ?
             </AlertDialogBody>
 
             <AlertDialogFooter>
