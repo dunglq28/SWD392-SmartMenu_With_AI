@@ -168,6 +168,8 @@
 
 
             public const string Update = Base + "/list-positions/";
+            public const string UpdateListList = Base + "/list-positions/update-list-list";
+
 
             public const string Delete = Base + "/list-positions/";
 
@@ -180,6 +182,7 @@
             public const string AddListProduct = Base + "/product-lists/add-list-product";
 
             public const string Update = Base + "/product-lists/update";
+            public const string UpdateListProduct = Base + "/product-lists/update-list-product";
 
             public const string Delete = Base + "/product-lists/delete";
 
