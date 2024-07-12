@@ -4,6 +4,7 @@ export interface MenuData {
   menuId: number;
   menuCode: string;
   menuImage: string;
+  createDate: Date;
   description: string;
   priority: number;
   menuLists: MenuLists[];
