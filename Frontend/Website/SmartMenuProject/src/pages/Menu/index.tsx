@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Button,
   Card,
@@ -7,18 +7,24 @@ import {
   Text,
   Link as ChakraLink,
 } from "@chakra-ui/react";
-import { Link as ReactRouterLink } from "react-router-dom";
+import {
+  Link as ReactRouterLink,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import style from "./Menu.module.scss";
 import MenuCard from "../../components/Menu/MenuCard";
 import { MenuData } from "../../payloads/responses/MenuData.model";
 import { getAllMenu } from "../../services/MenuService";
-import { getOptions } from "../../utils/functionHelper";
+import { getBrandOptions, getOptions } from "../../utils/functionHelper";
 import { toast } from "react-toastify";
 import NavigationDot from "../../components/NavigationDot/NavigationDot";
+import Loading from "../../components/Loading";
 
 function Menu() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
   const [data, setData] = useState<MenuData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
@@ -26,34 +32,38 @@ function Menu() {
   const [totalPages, setTotalPages] = useState<number>(10);
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const brandId = localStorage.getItem("BrandId");
+  const flagRef = useRef(false);
+
+  useEffect(() => {
+    if (location.state?.toastMessage && !flagRef.current) {
+      toast.success(location.state.toastMessage, {
+        autoClose: 2500,
+      });
+      flagRef.current = true;
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location.state, navigate]);
 
   const fetchData = useCallback(
     async (searchValue?: string) => {
       try {
         setIsLoading(true);
-        let result;
-
         const loadData = async () => {
-          result = await getAllMenu(Number(brandId), currentPage, rowsPerPage);
+          var result = await getAllMenu(Number(brandId), currentPage, rowsPerPage);
           setData(result.list);
           setTotalPages(result.totalPage);
           setTotalRecords(result.totalRecord);
-          setRowsPerPageOption(getOptions(result.totalRecord));
+          setRowsPerPageOption(getBrandOptions(result.totalRecord));
           setIsLoading(false);
-          setIsInitialLoad(false);
         };
 
-        if (isInitialLoad) {
-          setTimeout(loadData, 500);
-        } else {
-          await loadData();
-        }
+        setTimeout(loadData, 500);
       } catch (err) {
         toast.error("Lỗi khi lấy dữ liệu");
         setIsLoading(false);
       }
     },
-    [currentPage, rowsPerPage, isInitialLoad]
+    [currentPage, rowsPerPage]
   );
 
   useEffect(() => {
@@ -75,6 +85,18 @@ function Menu() {
     [setCurrentPage, setRowsPerPage]
   );
 
+  if (isLoading) {
+    return (
+      <Flex className={style.Container}>
+        <Loading />;
+      </Flex>
+    );
+  }
+
+  const handleClickMenu = (menuId: number) => {
+    navigate(`/menu/update-menu`, { state: { menuId } });
+  };
+
   return (
     <>
       <Flex className={style.Container}>
@@ -89,7 +111,11 @@ function Menu() {
         </Flex>
         <Flex className={style.CardContainer}>
           {data.map((menu, index) => (
-            <MenuCard key={index} menu={menu} />
+            <MenuCard
+              key={index}
+              menu={menu}
+              handleClickMenu={handleClickMenu}
+            />
           ))}
         </Flex>
         <div style={{ width: "100%" }}>

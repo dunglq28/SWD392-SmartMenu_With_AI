@@ -32,6 +32,7 @@ export const publicRoutes: RouteItem[] = [
   { path: "/categories", component: Category },
   { path: "/menu", component: Menu },
   { path: "/menu/create-menu", component: CreateMenu, layout: HeaderOnly },
+  { path: "/menu/update-menu", component: CreateMenu, layout: HeaderOnly },
   { path: "/settings", component: Settings },
   { path: "/new", component: New },
   { path: "/profile", component: Profile, layout: HeaderOnly },

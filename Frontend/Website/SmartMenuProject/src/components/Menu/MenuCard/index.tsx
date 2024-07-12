@@ -6,19 +6,27 @@ import moment from "moment";
 
 interface MenuCardProps {
   menu: MenuData;
+  handleClickMenu: (menuId: number) => void;
 }
 
-const MenuCard: React.FC<MenuCardProps> = ({ menu }) => (
-  <Flex className={style.Card}>
+const MenuCard: React.FC<MenuCardProps> = ({ menu, handleClickMenu }) => (
+  <Flex className={style.Card} onClick={() => handleClickMenu(menu.menuId)}>
     <Card className={style.MenuCard}>
-      <Image src={FakeMenu} alt="Menu thông minh"/>
-      {/* <Image src={menu.imageUrl} alt="Menu thông minh"/> */}
+      {menu.imageUrl ? (
+        <Image src={menu.imageUrl} alt="Menu thông minh" />
+      ) : (
+        <Image src={FakeMenu} alt="Menu thông minh" />
+      )}
       <Flex className={style.MenuCardTitle}>
-        <Text className={style.Description}>{menu.description}</Text>
-        {/* <Flex columnGap="10px">
+        {menu.description ? (
+          <Text className={style.Description}>{menu.description}</Text>
+        ) : (
+          <Text className={style.Description}>dsdsdsdssd</Text>
+        )}
+        <Flex columnGap="10px">
           <Text as="b">Độ ưu tiên:</Text>
-          <Text>1</Text>
-        </Flex> */}
+          <Text>{menu.priority}</Text>
+        </Flex>
         <Flex columnGap="10px">
           <Text as="b">Ngày tạo:</Text>
           <Text>{moment(menu.createDate).format("DD/MM/YYYY")}</Text>
