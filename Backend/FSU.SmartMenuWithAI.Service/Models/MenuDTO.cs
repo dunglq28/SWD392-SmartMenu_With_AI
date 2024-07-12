@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FSU.SmartMenuWithAI.Repository.Entities;
+using FSU.SmartMenuWithAI.Service.Models.MenuList;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,11 @@ namespace FSU.SmartMenuWithAI.Service.Models
         public string? BrandName { get; set; }
 
         public string? Description { get; set; }
+
         public int? Priority { get; set; }
+
+        public virtual ICollection<MenuListDTO> MenuLists { get; set; } = new List<MenuListDTO>();
+
+        public virtual ICollection<MenuSegmentDTO> MenuSegments { get; set; } = new List<MenuSegmentDTO>();
     }
 }

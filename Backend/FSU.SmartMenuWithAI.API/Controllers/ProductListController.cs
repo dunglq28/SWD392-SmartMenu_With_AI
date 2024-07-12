@@ -61,7 +61,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     return Ok(new BaseResponse
                     {
-                        StatusCode = StatusCodes.Status201Created,
+                        StatusCode = StatusCodes.Status200OK,
                         Message = "Tạo mới thành công",
                         Data = createdProductList,
                         IsSuccess = true
@@ -89,6 +89,82 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
+        //[Authorize(Roles = UserRoles)]
+        [HttpPost(APIRoutes.ProductList.AddListProduct, Name = "AddListProductList")]
+        public async Task<IActionResult> CreateListProductListAsync([FromBody] CreateListProductList request)
+        {
+            try
+            {
+                var createdProductList = await _productListService.Insert2(request.BrandId, request.ListProductDetails);
+                if (createdProductList != null)
+                {
+                    return Ok(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status200OK,
+                        Message = "Tạo mới thành công",
+                        Data = createdProductList,
+                        IsSuccess = true
+                    });
+                }
+                else
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "Tạo mới không thành công ",
+                        Data = createdProductList,
+                        IsSuccess = false
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Lỗi khi tạo mới!" + ex.Message,
+                    IsSuccess = false
+                });
+            }
+        }
+        //[Authorize(Roles = UserRoles)]
+        [HttpPut(APIRoutes.ProductList.UpdateListProduct, Name = "UpdateListProductList")]
+        public async Task<IActionResult> UpdateListProductListAsync([FromBody] CreateListProductList request)
+        {   
+            try
+            {
+                var updatedProductList = await _productListService.Update2(request.BrandId, request.ListProductDetails);
+                if (updatedProductList != null)
+                {
+                    return Ok(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status200OK,
+                        Message = "Cập nhật thành công",
+                        Data = updatedProductList,
+                        IsSuccess = true
+                    });
+                }
+                else
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        Message = "Cập nhật không thành công ",
+                        Data = updatedProductList,
+                        IsSuccess = false
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Lỗi khi cập nhật!" + ex.Message,
+                    IsSuccess = false
+                });
+            }
+        }
         //[Authorize(Roles = UserRoles)]
         [HttpPut(APIRoutes.ProductList.Update, Name = "update-product-list")]
         public async Task<IActionResult> UpdateAsync([FromForm(Name = "product-id")] int productId,

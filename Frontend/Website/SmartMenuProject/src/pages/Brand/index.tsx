@@ -134,8 +134,7 @@ function Brand() {
               <div className={style.card}>
                 <Image
                   boxSize="140px"
-                  objectFit="cover"
-                  borderRadius="full"
+                  objectFit="contain"
                   loading="lazy"
                   src={brand.imageUrl}
                   alt={brand.imageName}

@@ -15,7 +15,7 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
         private AccountRepository _accountRepo;
         private GenericRepository<Category> _categoryRepo;
         private GenericRepository<Store> _storeRepo;
-        private GenericRepository<Menu> _menuRepo;
+        private MenuRepository _menuRepo;
         private GenericRepository<Product> _productRepo;
         private MenuListRepository _menuListRepo;
         private BrandRepository _brandRepo;
@@ -113,13 +113,13 @@ namespace FSU.SmartMenuWithAI.Repository.UnitOfWork
                 return _storeRepo;
             }
         }
-        GenericRepository<Menu> IUnitOfWork.MenuRepository
+        MenuRepository IUnitOfWork.MenuRepository
         {
             get
             {
                 if (_menuRepo == null)
                 {
-                    this._menuRepo = new GenericRepository<Menu>(_context);
+                    this._menuRepo = new MenuRepository(_context);
                 }
                 return _menuRepo;
             }

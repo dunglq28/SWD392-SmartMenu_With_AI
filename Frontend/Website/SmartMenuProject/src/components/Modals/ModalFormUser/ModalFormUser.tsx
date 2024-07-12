@@ -136,7 +136,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
       },
       false
     );
-    // onClose();
+    onClose();
   };
 
   const openFormPreviousHandler = () => {
@@ -159,7 +159,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         ...prevData,
         fullName: {
           ...prevData.fullName,
-          errorMessage: "Full Name is required",
+          errorMessage: "Họ và tên là bắt buộc",
         },
       }));
       hasError = true;
@@ -168,7 +168,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         ...prevData,
         fullName: {
           ...prevData.fullName,
-          errorMessage: "Full Name must be at least 6 characters",
+          errorMessage: "Họ và tên phải có ít nhất 6 ký tự",
         },
       }));
       hasError = true;
@@ -179,7 +179,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         ...prevData,
         phoneNumber: {
           ...prevData.phoneNumber,
-          errorMessage: "Phone Number is required",
+          errorMessage: "Số điện thoại là bắt buộc",
         },
       }));
       hasError = true;
@@ -188,7 +188,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         ...prevData,
         phoneNumber: {
           ...prevData.phoneNumber,
-          errorMessage: "Invalid phone number",
+          errorMessage: "Số điện thoại không hợp lệ",
         },
       }));
       hasError = true;
@@ -199,7 +199,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         ...prevData,
         DOB: {
           ...prevData.DOB,
-          errorMessage: "Date of Birth is required",
+          errorMessage: "Ngày sinh là bắt buộc",
         },
       }));
       hasError = true;

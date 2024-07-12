@@ -31,6 +31,7 @@ import ModalForm from "../../components/Modals/ModalForm/ModalForm";
 import ModalFormCategory from "../../components/Modals/ModalFormCategory/ModalFormCategory";
 import ActionMenuCategory from "../../components/ActionMenu/ActionMenuCategory/ActionMenuCategory";
 import { getOptions } from "../../utils/functionHelper";
+import { useLocation } from "react-router-dom";
 
 function Category() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -41,7 +42,9 @@ function Category() {
   const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
   const [totalPages, setTotalPages] = useState<number>(10);
   const [totalRecords, setTotalRecords] = useState<number>(0);
-  const brandId = localStorage.getItem("BrandId");
+  const location = useLocation();
+  const { state } = location;
+  const brandId = state?.id || localStorage.getItem("BrandId");
   const {
     isOpen: isOpenCategory,
     onOpen: onOpenCategory,
@@ -145,8 +148,13 @@ function Category() {
     }
   }
 
-  async function handleEdit(cateId: number, brandId: number, categoryName: string, onClose: () => void) {
-    try { 
+  async function handleEdit(
+    cateId: number,
+    brandId: number,
+    categoryName: string,
+    onClose: () => void
+  ) {
+    try {
       var result = await updateCategory(cateId, brandId, categoryName);
       if (result.statusCode === 200) {
         fetchData();
@@ -190,7 +198,7 @@ function Category() {
       <Flex className={style.Category}>
         <TableContainer className={style.CategoryTbl}>
           <Table>
-            <TableCaption>Bảng quản lý loại sản phẩm</TableCaption>
+            <TableCaption>Bảng quản lý loại danh mục</TableCaption>
             <Thead>
               <Tr>
                 <Th className={style.HeaderTbl}>Id</Th>

@@ -44,6 +44,7 @@ import { toast } from "react-toastify";
 import { getCustomerSegmentsNoPaging } from "../../../services/CustomerSegmentService";
 import { CustomerSegmentData } from "../../../payloads/responses/CustomerSegment.model";
 import { Menu, MenuList } from "../../../models/Menu.model";
+import { useNavigate } from "react-router-dom";
 
 interface ModalProps {
   isOpen: boolean;
@@ -54,10 +55,15 @@ interface ModalProps {
   selectedProducts3: MenuList;
   selectedProducts4: MenuList;
   selectedProductspotLight: MenuList;
+  menu: Menu;
+  setMenu: React.Dispatch<React.SetStateAction<Menu>>;
   checkListNamesNotEmpty: () => boolean;
   handleChangeTitle: (listName: string, index: number) => void;
   handleCreateMenu: (menuForm: FormData) => void;
+  handleUpdateMenu: (menuForm: FormData) => void;
   resetLists: () => void;
+  isEdit: boolean;
+  menuId: Number;
 }
 
 const ModalFormCreateMenu: React.FC<ModalProps> = ({
@@ -69,11 +75,17 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   selectedProducts3,
   selectedProducts4,
   selectedProductspotLight,
+  menu,
+  setMenu,
   checkListNamesNotEmpty,
   handleChangeTitle,
   handleCreateMenu,
+  handleUpdateMenu,
   resetLists,
+  isEdit,
+  menuId,
 }) => {
+  const navigate = useNavigate();
   const brandId = Number(localStorage.getItem("BrandId"));
   const [currentTab, setCurrentTab] = React.useState(0);
   const [IsDraggable, setIsDraggable] = React.useState(false);
@@ -83,13 +95,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   const [customerSegmentOptions, setCustomerSegmentOptions] = useState<
     { value: number; label: string }[]
   >([]);
-  const [menu, setMenu] = useState<Menu>({
-    isActive: true,
-    segmentId: { value: [], errorMessage: "" },
-    Description: { value: "", errorMessage: "" },
-    menuImage: { value: null, errorMessage: "" },
-    priority: { value: 0, errorMessage: "" },
-  });
+
   const imageRef = React.useRef<HTMLImageElement>(null);
   const {
     isOpen: isOpenAlertCancelForm,
@@ -160,27 +166,43 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   };
 
   const handleSegmentChange = (selectedOptions: any) => {
-    const selectedSegmentIds = selectedOptions
-      ? selectedOptions.map((option: any) => option.value)
-      : [];
-    handleChange("segmentId", selectedSegmentIds);
+    setMenu({
+      ...menu,
+      segmentId: {
+        value: selectedOptions
+          ? selectedOptions.map((option: any) => option.value)
+          : [],
+        errorMessage: "",
+      },
+    });
+  };
+
+  const getSelectedSegments = () => {
+    return menu.segmentId.value
+      .map((segmentId) => {
+        const segmentOption = customerSegmentOptions.find(
+          (option) => option.value === segmentId
+        );
+        return segmentOption ? segmentOption : null;
+      })
+      .filter((option) => option !== null);
   };
 
   const handleNextTab = () => {
-    // if (
-    //   selectedProducts1.productData.length == 0 ||
-    //   selectedProducts2.productData.length == 0 ||
-    //   selectedProducts3.productData.length == 0 ||
-    //   selectedProducts4.productData.length == 0 ||
-    //   selectedProductspotLight.productData.length == 0
-    // ) {
-    //   toast.error("Vui lòng chọn đầy đủ các danh sách");
-    //   return;
-    // }
-    // if (!checkListNamesNotEmpty()) {
-    //   toast.error("Vui lòng điền đẩy đủ tiêu đề");
-    //   return;
-    // }
+    if (
+      selectedProducts1.productData.length == 0 ||
+      selectedProducts2.productData.length == 0 ||
+      selectedProducts3.productData.length == 0 ||
+      selectedProducts4.productData.length == 0 ||
+      selectedProductspotLight.productData.length == 0
+    ) {
+      toast.error("Vui lòng chọn đầy đủ các danh sách");
+      return;
+    }
+    if (!checkListNamesNotEmpty()) {
+      toast.error("Vui lòng điền đẩy đủ tiêu đề");
+      return;
+    }
     handleCaptureAndDisplay();
     setCurrentTab((prevTab) => (prevTab < 2 ? prevTab + 1 : prevTab));
   };
@@ -250,56 +272,42 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
         allowTaint: false,
       })
         .then((canvas) => {
-          // Lấy chuỗi base64 từ canvas
           const imageDataURL = canvas.toDataURL("image/png");
+          setCapturedImage(imageDataURL);
 
-          // Tạo Blob từ chuỗi base64
-          const blob = dataURItoBlob(imageDataURL);
-
-          // Tạo URL từ Blob để hiển thị hoặc tải xuống
-          const url = URL.createObjectURL(blob);
-
-          setCapturedImage(url); // Lưu trữ URL để hiển thị ảnh đã chụp
-          console.log(url); // In URL ra để kiểm tra trong console
-
-          // Kiểm tra và xử lý nếu cần thiết
           if (
             imageDataURL.includes("image/png") &&
             !imageDataURL.includes("data:,")
           ) {
-            // Tạo một File từ Blob để sử dụng trong ứng dụng của bạn
-            const file = new File([blob], "captured_image.png", {
-              type: "image/png",
-            });
+            fetch(imageDataURL)
+              .then((res) => res.blob())
+              .then((blob) => {
+                // Create a File from the Blob
+                const file = new File([blob], "captured_image.png", {
+                  type: "image/png",
+                });
 
-            // Cập nhật state menuImage với File đã tạo
-            setMenu((prevMenu) => ({
-              ...prevMenu,
-              menuImage: { value: file, errorMessage: "" },
-            }));
+                setMenu((prevMenu) => ({
+                  ...prevMenu,
+                  menuImage: { value: file, errorMessage: "" },
+                }));
+              })
+              .catch((error) => {
+                console.error("Failed to convert image to file:", error);
+              });
           }
         })
         .catch((error) => {
           console.error("Failed to capture image:", error);
-          setCapturedImage(undefined); // Xử lý trạng thái lỗi nếu cần
+          setCapturedImage(undefined); // or handle error state accordingly
         });
     }
   };
 
-  // Hàm chuyển đổi Data URI thành Blob
-  const dataURItoBlob = (dataURI: string): Blob => {
-    const byteString = atob(dataURI.split(",")[1]);
-    const arrayBuffer = new ArrayBuffer(byteString.length);
-    const uint8Array = new Uint8Array(arrayBuffer);
-
-    for (let i = 0; i < byteString.length; i++) {
-      uint8Array[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([arrayBuffer], { type: "image/png" });
-  };
-
   const handleCloseForm = () => {
+    if (isEdit) {
+      navigate("/menu");
+    }
     setCurrentTab(0);
     onCloseAlertCancelForm();
     resetLists();
@@ -320,7 +328,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
 
   const handleDonebtn = () => {
     const errors = {
-      Description: menu.Description.value ? "" : "Mô tả là bắt buộc",
+      description: menu.description.value !== "" ? "" : "Mô tả là bắt buộc",
       segmentId:
         menu.segmentId.value.length > 0
           ? ""
@@ -330,9 +338,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
 
     const updatedMenu = {
       ...menu,
-      Description: {
-        ...menu.Description,
-        errorMessage: errors.Description,
+      description: {
+        ...menu.description,
+        errorMessage: errors.description,
       },
       segmentId: {
         ...menu.segmentId,
@@ -347,22 +355,26 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     setMenu(updatedMenu);
 
     const hasErrors = Object.values(errors).some((error) => error !== "");
+
     if (!hasErrors) {
       const menuForm = new FormData();
       menuForm.append("IsActive", menu.isActive.toString());
       menuForm.append("BrandId", brandId.toString());
-      menuForm.append("Description", menu.Description.value);
+      menuForm.append("Description", menu.description.value);
       menuForm.append("Priority", menu.priority.value.toString());
       if (menu.menuImage.value) {
         menuForm.append("MenuImage", menu.menuImage.value);
+        // menuForm.append("MenuImage", "null");
       }
       menu.segmentId.value.forEach((id) => {
         menuForm.append("SegmentIds", id.toString());
       });
-
-      handleCreateMenu(menuForm);
-      // setCurrentTab(0);
-      // onClose();
+      if (!isEdit) {
+        handleCreateMenu(menuForm);
+      } else {
+        menuForm.append("menuId", menuId.toString());
+        handleUpdateMenu(menuForm);
+      }
     }
   };
 
@@ -374,7 +386,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
             {currentTab === 0 ? (
               <Flex columnGap="20px">
                 <Text as="b" fontSize="30px">
-                  Tạo menu
+                  {isEdit ? "Cập nhật menu" : "Tạo menu"}
                 </Text>
                 <Button
                   className={style.primaryButton}
@@ -413,10 +425,10 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
               <TabPanels>
                 <TabPanel>
                   <Flex
+                    className="takeAPhoto"
                     width="100%"
                     justifyContent="center"
                     userSelect="none"
-                    className="takeAPhoto"
                   >
                     <Flex
                       width={`${dimensions.width}px`}
@@ -452,6 +464,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
+                                value={selectedProducts1.listName}
                                 onChange={(e) =>
                                   handleChangeTitle(e.target.value, 1)
                                 }
@@ -567,6 +580,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
+                                value={selectedProducts2.listName}
                                 onChange={(e) =>
                                   handleChangeTitle(e.target.value, 2)
                                 }
@@ -684,6 +698,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
+                                value={selectedProducts3.listName}
                                 onChange={(e) =>
                                   handleChangeTitle(e.target.value, 3)
                                 }
@@ -793,6 +808,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 fontWeight="bold"
                                 textAlign="center"
                                 placeholder="Tiêu đề"
+                                value={selectedProducts4.listName}
                                 onChange={(e) =>
                                   handleChangeTitle(e.target.value, 4)
                                 }
@@ -1278,6 +1294,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                           }}
                           placeholder="Chọn phân khúc"
                           onChange={handleSegmentChange}
+                          value={getSelectedSegments()}
                         />
                         {menu.segmentId.errorMessage && (
                           <Text className={style.ErrorText}>
@@ -1316,20 +1333,20 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                           border="2px solid #55ad9b"
                           _focus={{ border: "2px solid #95d2b3" }}
                           _hover={{ border: "2px solid #95d2b3" }}
-                          value={menu.Description.value}
+                          value={menu.description.value}
                           onChange={(e) =>
-                            handleChange("Description", e.target.value)
+                            handleChange("description", e.target.value)
                           }
                         />
-                        {menu.Description.errorMessage && (
+                        {menu.description.errorMessage && (
                           <Text className={style.ErrorText}>
-                            {menu.Description.errorMessage}
+                            {menu.description.errorMessage}
                           </Text>
                         )}
                       </Flex>
                       <Flex flexDirection="column" rowGap="1vw" width="50%">
                         <Text as="b" fontSize="20px">
-                          Ngày tạo
+                          {isEdit ? "Ngày cập nhật" : "Ngày tạo"}
                         </Text>
                         <Input
                           userSelect="none"
@@ -1359,7 +1376,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
               </Button>
               {currentTab === 2 ? (
                 <Button className={style.primaryButton} onClick={handleDonebtn}>
-                  Create menu
+                  {isEdit ? "Update menu" : "Create menu"}
                 </Button>
               ) : (
                 <Button className={style.primaryButton} onClick={handleNextTab}>
@@ -1378,12 +1395,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Hủy tạo menu
+              {isEdit ? "Huỷ cập nhật menu" : "Hủy tạo menu"}
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Menu đang tạo sẽ không thể phục hồi sau khi bị hủy, bạn có chắc
-              chắn muốn hủy ?
+              Menu đang {isEdit ? "cập nhật" : "tạo"} sẽ không thể phục hồi sau
+              khi bị hủy, bạn có chắc chắn muốn hủy ?
             </AlertDialogBody>
 
             <AlertDialogFooter>

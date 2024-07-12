@@ -17,5 +17,9 @@ namespace FSU.SmartMenuWithAI.Service.Models.MenuList
 
         public int BrandId { get; set; }
 
+        public virtual ListPositionDTO List { get; set; } = null!;
+
+        public virtual MenuDTO Menu { get; set; } = null!;
+
     }
 }
