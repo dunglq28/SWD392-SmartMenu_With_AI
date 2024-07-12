@@ -165,6 +165,55 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         }
 
         //[Authorize(Roles = UserRoles)]
+        [HttpPut(APIRoutes.ListPosition.UpdateListList, Name = "UpdateListListPosition")]
+        public async Task<IActionResult> UpdtateListListAsync([FromBody] UpdateListListPosition request)
+        {
+            try
+            {
+                // Kiểm tra nếu request là null
+                if (request == null)
+                {
+                    throw new ArgumentException("Số không được để trống.");
+                }
+
+                // Kiểm tra yêu cầu
+                if (request.ListDetails == null || !request.ListDetails.Any())
+                {
+                    throw new ArgumentException("Danh sách chi tiết không được để trống.");
+                }
+
+                // Kiểm tra từng cặp ListDetail
+                foreach (var detail in request.ListDetails)
+                {
+                    if (detail.TotalProduct <= 0)
+                    {
+                        throw new ArgumentException("Tổng số sản phẩm phải lớn hơn 0 và không được để trống.");
+                    }
+                    if (string.IsNullOrWhiteSpace(detail.ListName))
+                    {
+                        throw new ArgumentException("Tên danh sách không được để trống.");
+                    }
+                }
+                var updatedListPosition = await _listPositionService.UpdateAsync2(request.BrandId, request.ListDetails);
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status201Created,
+                    Message = "Cập nhật thành công",
+                    Data = updatedListPosition,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Lỗi khi cập nhật!" + ex.Message,
+                    IsSuccess = false
+                });
+            }
+        }
+        //[Authorize(Roles = UserRoles)]
         [HttpPut(APIRoutes.ListPosition.Update, Name = "UpdateListPosition")]
         public async Task<IActionResult> UpdateAsync([FromForm] int id, [FromForm(Name = "total-product")] int totalProduct, [FromForm(Name = "list-name")] string listName)
         {
