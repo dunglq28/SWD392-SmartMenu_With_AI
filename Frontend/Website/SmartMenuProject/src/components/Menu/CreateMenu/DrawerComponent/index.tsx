@@ -22,7 +22,11 @@ import { toast } from "react-toastify";
 interface DrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddToMenu: (selectedProducts: ProductData[], Index: number, maxProduct: number) => void;
+  onAddToMenu: (
+    selectedProducts: ProductData[],
+    Index: number,
+    maxProduct: number
+  ) => void;
   products: ProductData[];
   allSelectedProducts: ProductData[];
   currentListProducts: ProductData[];
@@ -91,7 +95,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     if (selectedProductsOfList.length != MaxProduct) {
       toast.error(`Vui lòng chọn đủ ${MaxProduct} sản phẩm`);
       return;
-    } 
+    }
 
     onAddToMenu(selectedProductsOfList, IndexList, MaxProduct);
     setSelectedProductsOfList([]); // Xóa danh sách sản phẩm đã chọn sau khi thêm vào menu
@@ -233,19 +237,38 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                 </Text>
                 <Image src={HeaderImg} />
               </Flex>
-              <Flex height="80%" width="100%" justifyContent="center">
+              <Flex
+                height="73%"
+                width="100%"
+                flexDirection="column"
+                rowGap="1vw"
+              >
+                <Flex
+                  justifyContent="space-between"
+                  padding="0 1.3vw"
+                  userSelect="none"
+                >
+                  <Text fontWeight="bold" color="#444444">
+                    Tối đa: {MaxProduct}
+                  </Text>
+                  <Text fontWeight="bold" color="#444444">
+                    Đã chọn: {selectedProductsOfList.length}
+                  </Text>
+                </Flex>
                 <Flex
                   width="100%"
-                  height="99%"
                   flexDirection="column"
                   rowGap="10px"
                   overflow="auto"
                   padding="20px"
+                  borderTop="1px solid #ccc"
+                  borderBottom="1px solid #ccc"
+                  borderRadius="20px"
                 >
                   {selectedProductsOfList.map((product) => (
                     <Flex
                       key={product.productId}
-                      height="100px"
+                      height="6.5vw"
                       width="100%"
                       justifyContent="center"
                       alignItems="center"
@@ -298,7 +321,9 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                   ))}
                 </Flex>
               </Flex>
-              <Button onClick={addToMenu}>Thêm vào menu</Button>
+              <Button className={style.primaryButton} onClick={addToMenu}>
+                Thêm vào menu
+              </Button>
             </Flex>
           </Flex>
         </DrawerBody>
