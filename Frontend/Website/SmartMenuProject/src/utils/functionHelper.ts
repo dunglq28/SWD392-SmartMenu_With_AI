@@ -24,7 +24,7 @@ export const formatCurrency = (amount: string): string => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
-  }).format(number);
+  }).format(number).replace("₫", "").replace(".000","");
 };
 
 export const getRoleName = (roleId: number): string => {
