@@ -16,6 +16,7 @@ import {
   createMenu,
   createMenuList,
   createProductList,
+  deleteMenu,
   getMenu,
   updateListPosition,
   updateMenu,
@@ -496,6 +497,20 @@ function CreateMenu() {
     }
   };
 
+  const handleDeleteMenu = async (menuId: Number) => {
+    try {
+      setIsLoading(true);
+      const result = await deleteMenu(menuId);
+      if (result.statusCode === 200) {
+        resetLists();
+        const toastMessage = "Xoá menu thành công";
+        navigate("/menu", { state: { toastMessage } });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <Flex className={style.Container}>
@@ -529,6 +544,7 @@ function CreateMenu() {
         handleChangeTitle={handleChangeTitle}
         handleCreateMenu={handleCreateMenu}
         handleUpdateMenu={handleUpdateMenu}
+        handleDeleteMenu={handleDeleteMenu}
         resetLists={resetLists}
         isEdit={isEdit}
         menuId={menuId}

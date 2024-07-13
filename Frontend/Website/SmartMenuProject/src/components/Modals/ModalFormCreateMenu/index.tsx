@@ -38,11 +38,15 @@ import circleStar from "../../../assets/images/menu/CreateMenu/circleStar.svg";
 
 import { MdPhoneInTalk } from "react-icons/md";
 import html2canvas from "html2canvas";
-import { formatCurrencyMenu } from "../../../utils/functionHelper";
+import {
+  formatCurrencyMenu,
+  translateDemographics,
+} from "../../../utils/functionHelper";
 import { toast } from "react-toastify";
 import { getCustomerSegmentsNoPaging } from "../../../services/CustomerSegmentService";
 import { Menu, MenuList } from "../../../models/Menu.model";
 import { useNavigate } from "react-router-dom";
+import CustomAlertDialog from "../../AlertDialog";
 
 interface ModalProps {
   isOpen: boolean;
@@ -59,9 +63,10 @@ interface ModalProps {
   handleChangeTitle: (listName: string, index: number) => void;
   handleCreateMenu: (menuForm: FormData) => void;
   handleUpdateMenu: (menuForm: FormData) => void;
+  handleDeleteMenu: (menuId: Number) => void;
   resetLists: () => void;
   isEdit: boolean;
-  menuId: Number;
+  menuId: number;
 }
 
 const ModalFormCreateMenu: React.FC<ModalProps> = ({
@@ -79,6 +84,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   handleChangeTitle,
   handleCreateMenu,
   handleUpdateMenu,
+  handleDeleteMenu,
   resetLists,
   isEdit,
   menuId,
@@ -88,7 +94,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
   const [currentTab, setCurrentTab] = React.useState(0);
   const [IsDraggable, setIsDraggable] = React.useState(false);
   const [isBorder, setIsBorder] = React.useState(false);
-  const [isItemUpdate, setIsItemUpdate] = React.useState(false);
+  const [isItemUpdate, setIsItemUpdate] = React.useState(true);
   const [dimensions, setDimensions] = React.useState({ width: 5, height: 5 });
   const [customerSegmentOptions, setCustomerSegmentOptions] = useState<
     { value: number; label: string }[]
@@ -100,6 +106,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     onOpen: onOpenAlertCancelForm,
     onClose: onCloseAlertCancelForm,
   } = useDisclosure();
+  const {
+    isOpen: isOpenAlertConfirmForm,
+    onOpen: onOpenAlertConfirmForm,
+    onClose: onCloseAlertConfirmForm,
+  } = useDisclosure();
+
   const cancelRef = React.useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -109,7 +121,9 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
         if (segments.statusCode === 200) {
           const options = segments.data.map((segment) => ({
             value: segment.customerSegmentId,
-            label: `${segment.customerSegmentName}, ${segment.demographic}, ${segment.age} tuổi`,
+            label: `${segment.customerSegmentName}, ${translateDemographics(
+              segment.demographic
+            )}, ${segment.age} tuổi`,
           }));
           setCustomerSegmentOptions(options);
         } else {
@@ -360,6 +374,14 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                 >
                   Đặt lại menu
                 </Button>
+                {isEdit && (
+                  <Button
+                    style={{ backgroundColor: "#E53E3E", color: "#fff" }}
+                    onClick={onOpenAlertConfirmForm}
+                  >
+                    Xoá menu
+                  </Button>
+                )}
               </Flex>
             ) : currentTab === 1 ? (
               <Text as="b" fontSize="30px">
@@ -1317,13 +1339,13 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
           <ModalFooter>
             <Flex columnGap="30px" zIndex={100}>
               <Button onClick={onOpenAlertCancelForm} colorScheme="red">
-                Cancel
+                Huỷ
               </Button>
               <Button
                 className={style.primaryButton}
                 onClick={handlePreviousTab}
               >
-                Back
+                Quay lại
               </Button>
               {currentTab === 2 ? (
                 <Button className={style.primaryButton} onClick={handleDonebtn}>
@@ -1331,7 +1353,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                 </Button>
               ) : (
                 <Button className={style.primaryButton} onClick={handleNextTab}>
-                  Next
+                  Tiếp theo
                 </Button>
               )}
             </Flex>
@@ -1369,6 +1391,16 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
+
+      <CustomAlertDialog
+        onClose={onCloseAlertConfirmForm}
+        isOpen={isOpenAlertConfirmForm}
+        id={menuId}
+        onDelete={handleDeleteMenu}
+        titleHeader="Xoá menu"
+        titleBody="Bạn có chắc không? Bạn không thể hoàn tác hành động này sau đó."
+        btnName="Xoá"
+      />
     </>
   );
 };

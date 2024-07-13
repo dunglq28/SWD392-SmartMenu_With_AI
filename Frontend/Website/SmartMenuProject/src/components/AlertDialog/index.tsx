@@ -8,6 +8,7 @@ import {
   AlertDialogOverlay,
   Button,
 } from "@chakra-ui/react";
+import style from "./AlertDialog.module.scss"
 
 interface AlertDialogProps {
   isOpen: boolean;
@@ -45,11 +46,11 @@ const CustomAlertDialog: React.FC<AlertDialogProps> = ({
           <AlertDialogBody>{titleBody}</AlertDialogBody>
 
           <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onClose}>
+            <Button colorScheme="red" ref={cancelRef} onClick={onClose}>
               Huỷ
             </Button>
             <Button
-              colorScheme="red"
+              className={style.primaryButton}
               onClick={() => {
                 onDelete(id);
                 onClose();
