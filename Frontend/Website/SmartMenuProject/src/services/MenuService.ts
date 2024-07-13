@@ -190,3 +190,15 @@ export const updateProductList = async (
     throw new Error("Unexpected error");
   }
 };
+//================================================================//
+export const deleteMenu = async (
+  menuId: Number
+): Promise<ApiResponse<Object>> => {
+  const res = await axiosAuth.delete("menus", {
+    params: {
+      id: menuId,
+    },
+  });
+  const apiResponse = res.data as ApiResponse<Object>;
+  return apiResponse;
+};
