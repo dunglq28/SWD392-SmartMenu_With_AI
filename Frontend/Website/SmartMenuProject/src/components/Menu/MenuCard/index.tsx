@@ -13,9 +13,9 @@ const MenuCard: React.FC<MenuCardProps> = ({ menu, handleClickMenu }) => (
   <Flex className={style.Card} onClick={() => handleClickMenu(menu.menuId)}>
     <Card className={style.MenuCard}>
       {menu.menuImage ? (
-        <Image src={menu.menuImage} alt="Menu thông minh" />
+        <Image className={style.imageContainer} src={menu.menuImage} alt="Menu thông minh" />
       ) : (
-        <Image src={FakeMenu} alt="Menu thông minh" />
+        <Image className={style.imageContainer} src={FakeMenu} alt="Menu thông minh" />
       )}
       <Flex className={style.MenuCardTitle}>
         {menu.description ? (

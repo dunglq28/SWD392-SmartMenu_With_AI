@@ -29,7 +29,6 @@ import { FaPlus } from "react-icons/fa6";
 import Draggable from "react-draggable";
 import Select from "react-select";
 import template from "../../../assets/images/menu/CreateMenu/menuTemplate1.svg";
-import { ProductData } from "../../../payloads/responses/ProductData.model";
 import style from "./ModalFormCreateMenu.module.scss";
 import component1 from "../../../assets/images/menu/CreateMenu/Component1.svg";
 import component2 from "../../../assets/images/menu/CreateMenu/Component2.svg";
@@ -39,10 +38,9 @@ import circleStar from "../../../assets/images/menu/CreateMenu/circleStar.svg";
 
 import { MdPhoneInTalk } from "react-icons/md";
 import html2canvas from "html2canvas";
-import { formatCurrency } from "../../../utils/functionHelper";
+import { formatCurrencyMenu } from "../../../utils/functionHelper";
 import { toast } from "react-toastify";
 import { getCustomerSegmentsNoPaging } from "../../../services/CustomerSegmentService";
-import { CustomerSegmentData } from "../../../payloads/responses/CustomerSegment.model";
 import { Menu, MenuList } from "../../../models/Menu.model";
 import { useNavigate } from "react-router-dom";
 
@@ -215,54 +213,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
     undefined
   );
 
-  // const handleCaptureAndDisplay = () => {
-  //   const element = document.querySelector(".takeAPhoto") as HTMLElement;
-
-  //   if (element) {
-  //     html2canvas(element, {
-  //       scale: 3,
-  //       useCORS: true,
-  //       allowTaint: true,
-  //       imageTimeout: 5000,
-  //       removeContainer: true,
-  //     })
-  //       .then((canvas) => {
-  //         const imageDataURL = canvas.toDataURL("image/png");
-  //         setCapturedImage(imageDataURL);
-  //         if (
-  //           imageDataURL.includes("image/png") &&
-  //           !imageDataURL.includes("data:,")
-  //         ) {
-  //           fetch(imageDataURL)
-  //             .then((res) => res.blob())
-  //             .then((blob) => {
-  //               // Create a File from the Blob
-  //               const file = new File([blob], "captured_image.png", {
-  //                 type: "image/png",
-  //               });
-
-  //               setMenu((prevMenu) => ({
-  //                 ...prevMenu,
-  //                 menuImage: { value: file, errorMessage: "" },
-  //               }));
-  //             })
-  //             .catch((error) => {
-  //               console.error("Failed to convert image to file:", error);
-  //             });
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error("Failed to capture image:", error);
-  //         setCapturedImage(undefined); // or handle error state accordingly
-  //       });
-  //   }
-  // };
-
   const handleCaptureAndDisplay = async () => {
-    // if (!imageLoaded) {
-    //   console.error("Image not loaded yet");
-    //   return;
-    // }
     const element = document.querySelector(".takeAPhoto") as HTMLElement;
     if (element) {
       html2canvas(element, {
@@ -534,7 +485,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                           fontSize="0.7vw"
                                           color="#B1292D"
                                         >
-                                          {formatCurrency(
+                                          {formatCurrencyMenu(
                                             product.price.toString()
                                           )}
                                         </Text>
@@ -645,7 +596,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                           fontSize="0.7vw"
                                           color="#B1292D"
                                         >
-                                          {formatCurrency(
+                                          {formatCurrencyMenu(
                                             product.price.toString()
                                           )}
                                         </Text>
@@ -762,7 +713,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                           fontSize="0.7vw"
                                           color="#B1292D"
                                         >
-                                          {formatCurrency(
+                                          {formatCurrencyMenu(
                                             product.price.toString()
                                           )}
                                         </Text>
@@ -872,7 +823,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                           fontSize="0.7vw"
                                           color="#B1292D"
                                         >
-                                          {formatCurrency(
+                                          {formatCurrencyMenu(
                                             product.price.toString()
                                           )}
                                         </Text>
@@ -1072,7 +1023,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                                 <Text className={style.spotLight}>
                                   {selectedProductspotLight.productData
                                     .length !== 0
-                                    ? formatCurrency(
+                                    ? formatCurrencyMenu(
                                         selectedProductspotLight.productData[0].price.toString()
                                       )
                                     : "0"}
