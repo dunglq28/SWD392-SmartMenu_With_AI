@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using FSU.SmartMenuWithAI.API.Common.Constants;
 using FSU.SmartMenuWithAI.API.Payloads.Request.Category;
 using FSU.SmartMenuWithAI.Service.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -20,6 +21,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         {
             _categoryService = appUserService;
         }
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpPost(APIRoutes.Category.Add, Name = "AddCategoryAsync")]
         public async Task<IActionResult> AddAsync([FromBody] AddCagetoryRequest reqObj)
         {
@@ -61,7 +63,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpDelete(APIRoutes.Category.Delete, Name = "DeleteCategoryAsync")]
         public async Task<IActionResult> DeleteAsync([FromQuery] int id)
         {
@@ -98,7 +100,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpPut(APIRoutes.Category.Update, Name = "UpdateCategoryAsync")]
         public async Task<IActionResult> UpdateCategoryAsync(int id, [FromBody] AddCagetoryRequest reqObj)
         {
@@ -147,7 +149,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager + UserRoles.Store)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpGet(APIRoutes.Category.GetAll, Name = "GetCategoriesAsync")]
         public async Task<IActionResult> GetAllAsync([FromQuery(Name = "brand-id")] int brandID
             , [FromQuery(Name = "search-key")] string? searchKey = null
@@ -178,7 +180,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager + UserRoles.Store)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpGet(APIRoutes.Category.GetByID, Name = "GetCategoryByID")]
         public async Task<IActionResult> GetAsync([FromQuery] int Id)
         {
@@ -216,7 +218,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin + UserRoles.BrandManager + UserRoles.Store)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpGet(APIRoutes.Category.GetByBrandID, Name = "GetCategoryByBrandID")]
         public async Task<IActionResult> GetByBrandIdAsync([FromQuery(Name = "brand-id")] int brandId)
         {

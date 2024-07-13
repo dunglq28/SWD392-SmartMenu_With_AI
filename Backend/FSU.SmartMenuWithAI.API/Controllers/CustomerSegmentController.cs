@@ -24,6 +24,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         {
             _customerSegmentService = customerSegmentService;
         }
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpPost(APIRoutes.CustomerSegment.Add, Name = "AddCustomerSegmentAsync")]
         public async Task<IActionResult> AddAsync([FromBody] AddCusSegmentRequest reqObj)
         {
@@ -63,7 +64,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = $"{UserRoles.Admin},{UserRoles.BrandManager}")]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpDelete(APIRoutes.CustomerSegment.Delete, Name = "delete-customer-segment-async")]
         public async Task<IActionResult> DeleteAsynce([FromQuery(Name = "segment-id")] int segmendId)
         {
@@ -137,7 +138,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
         //        });
         //    }
         //}
-        //[Authorize(Roles = UserRoles.BrandManager)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpGet(APIRoutes.CustomerSegment.GetAll, Name = "get-customer-segment-async")]
         public async Task<IActionResult> GetAllAsync([FromQuery(Name = "brand-id")] int brandId, [FromQuery(Name = "search-key")] string? searchKey
             , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
@@ -166,7 +167,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
-        //[Authorize(Roles = UserRoles.BrandManager)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpPut(APIRoutes.CustomerSegment.UpdateValue, Name = "update-segment-value-async")]
         public async Task<IActionResult> UpdateSegmentValueAsync([FromBody] UpdateCustomerSegmentRequest updateReq)
         {
@@ -204,7 +205,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
-        //        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpGet(APIRoutes.CustomerSegment.GetByID, Name = "get-by-cus-segment-id-async")]
         public async Task<IActionResult> GetAsync([FromQuery(Name = "customer-segment-id")] int segmentId)
         {
@@ -241,7 +242,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
-        //[Authorize(Roles = UserRoles.BrandManager)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpGet(APIRoutes.CustomerSegment.GetAllNoPaging, Name = "get-customer-segment-async-no-paging")]
         public async Task<IActionResult> GetAllNoPagingAsync([FromQuery(Name = "brand-id")] int brandId)
         {

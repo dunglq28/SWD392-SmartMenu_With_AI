@@ -28,11 +28,20 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<bool> Delete(int id)
         {
-            string includeProperties = "MenuLists,MenuSegments";
-            var deleteMenu = await _unitOfWork.MenuRepository.GetByCondition(x => x.MenuId == id, includeProperties);
+            var deleteMenu = await _unitOfWork.MenuRepository.GetByCondition(x => x.MenuId == id);
             if (deleteMenu == null)
             {
                 return false;
+            }
+            // Xóa tất cả các ProductLists
+            foreach (var menuList in deleteMenu.MenuLists)
+            {
+                foreach (var productList in menuList.List.ProductLists)
+                {
+                    _unitOfWork.ProductListRepository.Delete(productList);
+                }
+                // Xóa MenuLists sau khi xóa ProductLists
+                _unitOfWork.MenuListRepository.Delete(menuList);
             }
             _unitOfWork.MenuRepository.Delete(deleteMenu);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;

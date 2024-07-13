@@ -8,6 +8,7 @@ using FSU.SmartMenuWithAI.API.Common.Constants;
 using FSU.SmartMenuWithAI.API.Payloads.Request.Brand;
 using Microsoft.EntityFrameworkCore;
 using FSU.SmartMenuWithAI.Service.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -25,7 +26,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             _imageFileValidator = new ImageFileValidator();
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost(APIRoutes.Brand.Add, Name = "add-brand-async")]
         public async Task<IActionResult> AddAsync([FromForm] CreateBrandRequest reqObj)
         {
@@ -72,7 +73,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = $"{UserRoles.Admin},{UserRoles.BrandManager}")]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpDelete(APIRoutes.Brand.Delete, Name = "delete-brand-async")]
         public async Task<IActionResult> DeleteAsynce([FromQuery] int id)
         {
@@ -108,7 +109,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.Brand.Update, Name = "update-brand-async")]
         public async Task<IActionResult> UpdateUserAsync([FromForm] int id, [FromForm] UpdateBrandRequest reqObj)
         {
@@ -176,7 +177,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Brand.GetAll, Name = "get-brands-async")]
         public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search-key")] string? searchKey
             , [FromQuery(Name = "page-number")] int pageNumber = Page.DefaultPageIndex
@@ -205,7 +206,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin+","+UserRoles.BrandManager)]
         [HttpGet(APIRoutes.Brand.GetByID, Name = "GetBrandByID")]
         public async Task<IActionResult> GetAsync([FromQuery] int id)
         {
@@ -242,7 +243,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Brand.GetAllName, Name = "GetAllBrandName")]
         public async Task<IActionResult> GetAllBrandNameAsync()
         {
@@ -280,7 +281,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles)]
+        [Authorize(Roles = UserRoles.BrandManager+","+UserRoles.Admin)]
         [HttpGet(APIRoutes.Brand.GetByUserID, Name = "GetBrandByUserId")]
         public async Task<IActionResult> GetBrandByUserIdAsync([FromQuery(Name = "user-id")] int userId)
         {
