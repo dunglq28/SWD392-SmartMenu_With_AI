@@ -45,12 +45,44 @@ export const formatCurrency = (amount: string): string => {
 };
 
 export const getRoleName = (roleId: number): string => {
-  if (roleId === UserRole.BrandManager) {
-    return "Brand Manager";
+  if (roleId === UserRole.Admin) {
+    return "Quản trị viên";
+  } else if (roleId === UserRole.BrandManager) {
+    return "Quản lý thương hiệu";
   } else if (roleId === UserRole.BranchManager) {
-    return "Branch Manager";
+    return "Quản lý chi nhánh";
   }
-  return UserRole[roleId] || "Unknown Role";
+  return UserRole[roleId]
+    ? `Vai trò: ${UserRole[roleId]}`
+    : "Vai trò không xác định";
+};
+
+export const getGender = (gender: string): string => {
+  if (gender === "Male") {
+    return "Nam";
+  } else if (gender === "Female") {
+    return "Nữ";
+  }
+  return gender;
+};
+
+export const translateDemographics = (demographics: string): string => {
+  const [gender, time] = demographics.split(", ") as [string, string];
+
+  const genderMap: { [key: string]: string } = {
+    Male: "Nam",
+    Female: "Nữ",
+  };
+
+  const timeMap: { [key: string]: string } = {
+    Morning: "Buổi Sáng",
+    Afternoon: "Buổi Trưa",
+    Evening: "Buổi Chiều",
+  };
+
+  return `${genderMap[gender] || "Không xác định"}, ${
+    timeMap[time] || "Không xác định"
+  }`;
 };
 
 export const capitalizeWords = (str: string) => {

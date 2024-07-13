@@ -26,7 +26,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import ModalForm from "../../components/Modals/ModalForm/ModalForm";
 import ModalFormCustomerSegment from "../../components/Modals/ModalFormCustomerSegment/ModalFormCusSegment";
 import ActionMenuCustomerSegment from "../../components/ActionMenu/ActionMenuCustomerSegment/ActionMenuCusSegment";
-import { getOptions } from "../../utils/functionHelper";
+import { getOptions, translateDemographics } from "../../utils/functionHelper";
 import {
   createCustomerSegment,
   deleteCustomerSegment,
@@ -283,7 +283,7 @@ function CustomerSegment() {
                   <Tr className={style.CustomerSegmentItem}>
                     <Td>{(currentPage - 1) * rowsPerPage + index + 1}</Td>
                     <Td>{customerSegment.customerSegmentName}</Td>
-                    <Td>{`${customerSegment.demographic}, ${customerSegment.age} tuổi`}</Td>
+                    <Td>{`${translateDemographics(customerSegment.demographic)}, ${customerSegment.age} tuổi`}</Td>
                     <Td>
                       {" "}
                       {moment(customerSegment.createDate).format("DD/MM/YYYY")}

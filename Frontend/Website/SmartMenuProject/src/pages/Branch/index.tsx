@@ -48,21 +48,28 @@ function Branch() {
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const flagRef = useRef(false);
 
-  const toastMessage = localStorage.getItem("toastMessage");
-
   useEffect(() => {
+    const toastMessage = localStorage.getItem("toastMessage");
     if (toastMessage && !flagRef.current) {
+      const brandName = localStorage.getItem("brandName");
+      const brandId = localStorage.getItem("brandId");
+      if (brandName && brandId) {
+        setBrandInfo({
+          id: brandId,
+          brandName: brandName,
+        });
+      }
       toast.success(toastMessage, {
         autoClose: 2500,
       });
+
       flagRef.current = true;
       localStorage.removeItem("toastMessage");
-      navigate(`${location.pathname}`, {
-        state: { id: brandInfo.id },
-        replace: true,
-      });
+      localStorage.removeItem("brandName");
+      localStorage.removeItem("brandId");
+      fetchData();
     }
-  }, [toastMessage, location.pathname, navigate, brandInfo.id]);
+  }, [location.pathname, navigate, brandInfo.id]);
 
   const fetchData = useCallback(
     async (searchValue?: string) => {
@@ -71,7 +78,6 @@ function Branch() {
         setIsLoading(false);
         return;
       }
-
       try {
         setIsLoading(true);
         let result;
@@ -215,7 +221,7 @@ function Branch() {
                         <Td>
                           {moment(branch.createDate).format("DD/MM/YYYY")}
                         </Td>
-                        <Td>{branch.isActive ? "Yes" : "No"}</Td>
+                        <Td>{branch.isActive ? "Có" : "Không"}</Td>
                         <Td>
                           <ActionMenuBranch
                             id={branch.storeId}

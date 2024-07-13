@@ -22,7 +22,7 @@ import Loading from "../../components/Loading";
 import Searchbar from "../../components/Searchbar";
 import ActionMenuUser from "../../components/ActionMenu/ActionMenuUser/ActionMenuUser";
 import { userUpdate } from "../../payloads/requests/updateRequests.model";
-import { getOptions, getRoleName } from "../../utils/functionHelper";
+import { getGender, getOptions, getRoleName } from "../../utils/functionHelper";
 
 function User() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -163,11 +163,11 @@ function User() {
                     <Td>{user.fullname}</Td>
                     <Td>{user.userName}</Td>
                     <Td>{moment(user.dob).format("DD/MM/YYYY")}</Td>
-                    <Td>{user.gender}</Td>
+                    <Td>{getGender(user.gender)}</Td>
                     <Td>{user.phone}</Td>
                     <Td>{getRoleName(user.roleId)}</Td>
                     <Td>{moment(user.createDate).format("DD/MM/YYYY")}</Td>
-                    <Td>{user.isActive ? "Yes" : "No"}</Td>
+                    <Td>{user.isActive ? "Có" : "Không"}</Td>
                     <Td>
                       <ActionMenuUser
                         id={user.userId}

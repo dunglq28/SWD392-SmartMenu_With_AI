@@ -39,7 +39,11 @@ import { UserForm } from "../../models/UserForm.model";
 import { createUser } from "../../services/UserService";
 import { toast } from "react-toastify";
 import { createBrand } from "../../services/BrandService";
-import { getInitialUserData } from "../../utils/initialUserData";
+import {
+  getInitialBranchData,
+  getInitialBrandData,
+  getInitialUserData,
+} from "../../utils/initialData";
 import { BranchForm } from "../../models/BranchForm.model";
 import { createBranch } from "../../services/BranchService";
 import { capitalizeWords } from "../../utils/functionHelper";
@@ -53,44 +57,12 @@ function Sidebar() {
   const [formPrevious, setFormPrevious] = useState(CurrentForm.BRAND);
 
   //BRAND DATA
-  const [brandData, setBrandData] = useState<BrandForm>({
-    brandName: {
-      value: "",
-      errorMessage: "",
-    },
-    image: {
-      value: null,
-      errorMessage: "",
-    },
-  });
+  const [brandData, setBrandData] = useState<BrandForm>(getInitialBrandData());
 
   //BRANCH DATA
-  const [branchData, setBranchData] = useState<BranchForm>({
-    brandName: {
-      id: "",
-      value: "",
-      errorMessage: "",
-    },
-    city: {
-      id: "",
-      name: "",
-      errorMessage: "",
-    },
-    district: {
-      id: "",
-      name: "",
-      errorMessage: "",
-    },
-    ward: {
-      id: "",
-      name: "",
-      errorMessage: "",
-    },
-    address: {
-      value: "",
-      errorMessage: "",
-    },
-  });
+  const [branchData, setBranchData] = useState<BranchForm>(
+    getInitialBranchData()
+  );
 
   // USER DATA
   const [userData, setUserData] = useState<UserForm>(getInitialUserData());
@@ -239,11 +211,13 @@ function Sidebar() {
 
   async function saveBrandHandle(data: UserForm) {
     try {
-      setUserData(data);
       const brandForm = new FormData();
 
       if (brandData.image.value && brandData.brandName.value) {
-        brandForm.append("BrandName", capitalizeWords(brandData.brandName.value));
+        brandForm.append(
+          "BrandName",
+          capitalizeWords(brandData.brandName.value)
+        );
         brandForm.append("Image", brandData.image.value);
       }
 
@@ -255,7 +229,7 @@ function Sidebar() {
         const brandResult = await createBrand(brandForm);
 
         if (brandResult.statusCode === 200) {
-          onCloseUser();
+          await onCloseUser();
           const toastMessage = "Thêm thương hiệu mới thành công";
           const pathname = location.pathname;
           const formattedPathname = pathname.replace("/", "");
@@ -274,18 +248,13 @@ function Sidebar() {
 
   async function saveBranchHandle(data: UserForm) {
     try {
-      setUserData(data);
-      console.log(data);
-
       const userResult = await createUser(data, 3);
-      console.log(userResult);
 
       if (userResult.statusCode === 200) {
         const branchResult = await createBranch(
           branchData,
           userResult.data.toString()
         );
-        console.log(branchResult);
 
         if (branchResult.statusCode === 200) {
           await onCloseUser();
@@ -295,7 +264,9 @@ function Sidebar() {
           const brandName = branchData.brandName.value;
           const id = branchData.brandName.id;
           localStorage.setItem("toastMessage", toastMessage);
-          if (formattedPathname === `/branches/${brandName}`) {
+          localStorage.setItem("brandName", brandName);
+          localStorage.setItem("brandId", id);
+          if (formattedPathname === `branches/${brandName}`) {
             window.location.reload();
           } else {
             navigate(`/branches/${brandName}`, { state: { id } });
@@ -397,6 +368,7 @@ function Sidebar() {
         }
         onClose={onCloseBranch}
         isOpen={isOpenBranch}
+        updateBranchData={updateBranchData}
         title={t("Tạo chi nhánh mới")}
       />
 
@@ -421,7 +393,9 @@ function Sidebar() {
         onClose={onCloseUser}
         isOpen={isOpenUser}
         title={t("Thêm người dùng mới")}
+        updateBranchData={updateBranchData}
         updateBrandData={updateBrandData}
+        updateUserData={updateUserData}
       />
     </Flex>
   );
