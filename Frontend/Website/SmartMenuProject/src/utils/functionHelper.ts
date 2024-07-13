@@ -16,7 +16,7 @@ export const getBrandOptions = (total: number): number[] => {
   return [6];
 };
 
-export const formatCurrency = (amount: string): string => {
+export const formatCurrencyMenu = (amount: string): string => {
   const number = parseFloat(amount.replace(/,/g, ""));
   if (isNaN(number)) {
     return amount;
@@ -24,7 +24,24 @@ export const formatCurrency = (amount: string): string => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
-  }).format(number).replace("₫", "").replace(".000","");
+  })
+    .format(number)
+    .replace("₫", "")
+    .replace(".000", "");
+};
+
+export const formatCurrency = (amount: string): string => {
+  const number = parseFloat(amount.replace(/,/g, ""));
+  if (isNaN(number)) {
+    return amount;
+  }
+
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  })
+    .format(number)
+    .trim();
 };
 
 export const getRoleName = (roleId: number): string => {
@@ -43,5 +60,3 @@ export const capitalizeWords = (str: string) => {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 };
-
-

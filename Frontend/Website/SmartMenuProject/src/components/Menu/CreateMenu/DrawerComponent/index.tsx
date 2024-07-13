@@ -248,18 +248,28 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                   padding="0 1.3vw"
                   userSelect="none"
                 >
-                  <Text fontWeight="bold" color="#444444">
+                  <Text fontWeight="bold" color="#1b4754">
                     Tối đa: {MaxProduct}
                   </Text>
-                  <Text fontWeight="bold" color="#444444">
+                  <Text fontWeight="bold" color="#1b4754">
                     Đã chọn: {selectedProductsOfList.length}
+                  </Text>
+                </Flex>
+                <Flex
+                  justifyContent="space-between"
+                  padding="0 1.3vw"
+                  userSelect="none"
+                >
+                  <Text fontWeight="bold" color="#1b4754">
+                    Nhấn vào sản phẩm để bỏ chọn
                   </Text>
                 </Flex>
                 <Flex
                   width="100%"
                   flexDirection="column"
-                  rowGap="10px"
+                  rowGap="20px"
                   overflow="auto"
+                  margin="0 10px 0 15px"
                   padding="20px"
                   borderTop="1px solid #ccc"
                   borderBottom="1px solid #ccc"
@@ -321,7 +331,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                   ))}
                 </Flex>
               </Flex>
-              <Button className={style.primaryButton} onClick={addToMenu}>
+              <Button className={style.primaryButton} style={{marginTop: "30px"}} onClick={addToMenu}>
                 Thêm vào menu
               </Button>
             </Flex>

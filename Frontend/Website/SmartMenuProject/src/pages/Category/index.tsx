@@ -42,9 +42,7 @@ function Category() {
   const [rowsPerPageOption, setRowsPerPageOption] = useState<number[]>([5]);
   const [totalPages, setTotalPages] = useState<number>(10);
   const [totalRecords, setTotalRecords] = useState<number>(0);
-  const location = useLocation();
-  const { state } = location;
-  const brandId = state?.id || localStorage.getItem("BrandId");
+  const brandId = localStorage.getItem("BrandId");
   const {
     isOpen: isOpenCategory,
     onOpen: onOpenCategory,
