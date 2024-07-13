@@ -78,6 +78,7 @@ function Login() {
     try {
       setIsLoading(true);
       const response = await login(credentials.username, credentials.password);
+      
       if (
         response.data.roleId.toString() === UserRole.BranchManager.toString()
       ) {
@@ -90,7 +91,7 @@ function Login() {
         localStorage.setItem("AccessToken", response.data.token.accessToken);
         localStorage.setItem("RefreshToken", response.data.token.refreshToken);
         const toastMessage = response.message;
-
+        
         if (
           response.data.roleId.toString() === UserRole.BrandManager.toString()
         ) {
@@ -101,7 +102,7 @@ function Login() {
           navigate("/products", { state: { toastMessage } });
         } else if (
           response.data.roleId.toString() === UserRole.Admin.toString()
-        ) {
+        ) {          
           localStorage.setItem("UserId", response.data.userId.toString());
           navigate("/dashboard", { state: { toastMessage } });
         }

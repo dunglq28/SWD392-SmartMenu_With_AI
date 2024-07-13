@@ -3,7 +3,7 @@
     public static class UserRoles
     {
         public const string Admin = "Admin";
-        public const string BrandManager = "BrandManager";
-        public const string Store = "Store";
+        public const string BrandManager = "Brand Manager";
+        public const string Store = "Branch Manager";
     }
 }
