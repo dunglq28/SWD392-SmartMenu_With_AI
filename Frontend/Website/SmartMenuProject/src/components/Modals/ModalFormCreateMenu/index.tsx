@@ -397,16 +397,12 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
             <Tabs index={currentTab}>
               <TabPanels>
                 <TabPanel>
-                  <Flex
-                    className="takeAPhoto"
-                    width="100%"
-                    justifyContent="center"
-                    userSelect="none"
-                  >
+                  <Flex width="100%" justifyContent="center" userSelect="none">
                     <Flex
                       width={`${dimensions.width}px`}
                       height={`${dimensions.height}px`}
                       position="absolute"
+                      className="takeAPhoto"
                     >
                       <Flex
                         height="100%"
@@ -1192,10 +1188,29 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                         </Flex>
                       </Flex>
                       {/* End Spotlight */}
+                      <Flex
+                        width={`${dimensions.width}px`}
+                        position="absolute"
+                        zIndex={-1}
+                      >
+                        <Image
+                          ref={imageRef}
+                          src={template}
+                          onLoad={handleImageLoad}
+                          style={{ pointerEvents: "none" }}
+                        />
+                      </Flex>
+                      <Flex
+                        width={`${dimensions.width}px`}
+                        height={`${dimensions.height}px`}
+                        position="absolute"
+                        bg="#B8D7D5"
+                        zIndex={-2}
+                      ></Flex>
                     </Flex>
 
                     {/* Menu img */}
-                    <Flex w="60%" zIndex={-1}>
+                    <Flex w="60%" zIndex={-99}>
                       <Image
                         ref={imageRef}
                         src={template}
@@ -1206,22 +1221,23 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                     {/* End Menu img */}
 
                     {/* Background of menu */}
-                    <Flex
-                      width={`${dimensions.width}px`}
-                      height={`${dimensions.height}px`}
-                      position="absolute"
-                      bg="#B8D7D5"
-                      zIndex={-2}
-                    ></Flex>
+
                     {/* End Background of menu */}
                   </Flex>
                 </TabPanel>
                 <TabPanel>
-                  <Image
-                    src={capturedImage}
-                    alt="enter"
-                    style={{ pointerEvents: "none" }}
-                  />
+                  <Flex w="100%" justifyContent="center">
+                    <Flex
+                      width={`${dimensions.width}px`}
+                      height={`${dimensions.height}px`}
+                    >
+                      <Image
+                        src={capturedImage}
+                        alt="enter"
+                        style={{ pointerEvents: "none" }}
+                      />
+                    </Flex>
+                  </Flex>
                 </TabPanel>
                 <TabPanel>
                   <Flex width="100%" height="100%" justifyContent="center">
