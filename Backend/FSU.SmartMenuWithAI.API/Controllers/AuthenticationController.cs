@@ -11,6 +11,8 @@ using FSU.SmartMenuWithAI.Service.Utils;
 using FSU.SmartMenuWithAI.Service.ISerivice;
 using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.API.Payloads.Request;
+using Microsoft.AspNetCore.Authorization;
+using FSU.SmartMenuWithAI.API.Common.Constants;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -276,7 +278,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.BrandManager + "," + UserRoles.Admin+","+UserRoles.Store)]
         [HttpPut(APIRoutes.Account.ChangePassword, Name = "ChangePasswordAsync")]
         public async Task<IActionResult> ChangePasswordAsync(int id, [FromBody] ChangePasswordRequest reqObj)
         {

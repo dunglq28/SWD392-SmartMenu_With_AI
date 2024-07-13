@@ -21,7 +21,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             _appUserService = appUserService;
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost(APIRoutes.AppUser.Add, Name = "AddUserAsync")]
         public async Task<IActionResult> AddAsync([FromBody] AddUserRequest reqObj)
         {
@@ -69,7 +69,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpDelete(APIRoutes.AppUser.Delete, Name = "DeleteUserAsync")]
         public async Task<IActionResult> DeleteAsynce([FromQuery] int id)
         {
@@ -106,7 +106,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPut(APIRoutes.AppUser.Update, Name = "UpdateUserAsync")]
         public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateAppUserRequest reqObj)
         {
@@ -151,7 +151,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.AppUser.GetAll, Name = "GetUsersAsync")]
         public async Task<IActionResult> GetAllAsync([FromQuery(Name = "curr-id-login")] int currIdLoginID
             , [FromQuery(Name = "search-key")] string? searchKey
@@ -182,7 +182,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.AppUser.GetByID, Name = "GetUserByID")]
         public async Task<IActionResult> GetAsync([FromQuery] int Id)
         {

@@ -23,15 +23,15 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
 
         }
 
-        public async Task<Menu> GetByCondition(Expression<Func<Menu, bool>> filter = null)
+        public async Task<Menu> GetByCondition(Expression<Func<Menu, bool>> filter = null!)
         {
-            var query = await _context.Menus.Where(filter).Include(x => x.MenuLists.OrderBy(x => x.ListIndex))
+            var query = await _context.Menus.Where(filter).Include(x => x.MenuLists)
                 .ThenInclude(x => x.List)
-                .ThenInclude(x => x.ProductLists.OrderBy(x => x.IndexInList)) 
+                .ThenInclude(x => x.ProductLists)
                 .ThenInclude(x => x.Product)
                 .Include(x => x.MenuSegments)
                 .ThenInclude(x => x.Segment)
-                .Include(x => x.Brand).AsNoTracking().FirstOrDefaultAsync();
+                .Include(x => x.Brand).FirstOrDefaultAsync();
 
             return query!;
         }

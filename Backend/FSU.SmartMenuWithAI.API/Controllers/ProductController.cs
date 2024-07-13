@@ -7,6 +7,7 @@ using FSU.SmartMenuWithAI.API.Common.Constants;
 using FSU.SmartMenuWithAI.API.Payloads.Request.Product;
 using FSU.SmartMenuWithAI.Service.Models;
 using FSU.SmartMenuWithAI.Service.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -27,7 +28,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             _s3Service = s3Service;
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpPost(APIRoutes.Product.Add, Name = "AddProductAsync")]
         public async Task<IActionResult> AddAsync([FromForm] AddProductRequest reqObj)
         {
@@ -112,7 +113,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpDelete(APIRoutes.Product.Delete, Name = "DeleteProductAsync")]
         public async Task<IActionResult> DeleteAsynce([FromQuery] int id)
         {
@@ -149,7 +150,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpPut(APIRoutes.Product.Update, Name = "UpdateProductAsync")]
         public async Task<IActionResult> UpdateProductAsync([FromQuery(Name = "product-id")] int id, [FromForm] UpdateProductRequest reqObj)
         {
@@ -219,7 +220,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpGet(APIRoutes.Product.GetAllByCategory, Name = "GetProductByCategoryAsync")]
         public async Task<IActionResult> GetAllByCategoryAsync([FromQuery(Name = "search-key")] string? searchKey
             , [FromQuery(Name = "brand-id")] int brandID
@@ -251,7 +252,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpGet(APIRoutes.Product.GetAll, Name = "GetProductInBrandAsync")]
         public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search-key")] string? searchKey
             , [FromQuery(Name = "brand-id")] int brandID
@@ -281,7 +282,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.BrandManager)]
         [HttpGet(APIRoutes.Product.GetByID, Name = "GetProductByID")]
         public async Task<IActionResult> GetAsync([FromQuery] int Id)
         {

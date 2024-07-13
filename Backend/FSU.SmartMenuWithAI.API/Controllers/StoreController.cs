@@ -8,6 +8,7 @@ using FSU.SmartMenuWithAI.API.Payloads.Request.Store;
 using FSU.SmartMenuWithAI.Service.Models;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -23,7 +24,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             _storeService = storeService;
 
         }
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost(APIRoutes.Store.Add, Name = "AddStoreAsync")]
         public async Task<IActionResult> AddAsync([FromBody] AddStoreRequest reqObj)
         {
@@ -70,7 +71,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin+","+UserRoles.BrandManager)]
         [HttpDelete(APIRoutes.Store.Delete, Name = "DeleteStoreAsync")]
         public async Task<IActionResult> DeleteAsynce([FromQuery] int id)
         {
@@ -107,7 +108,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin+","+UserRoles.BrandManager)]
         [HttpPut(APIRoutes.Store.Update, Name = "UpdateStoreAsync")]
         public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateStoreRequest reqObj)
         {
@@ -151,7 +152,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpGet(APIRoutes.Store.GetAll, Name = "GetStoreAsync")]
         public async Task<IActionResult> GetAllAsync([FromQuery(Name = "brand-id")] int brandID
             , [FromQuery(Name = "search-key")] string? searchKey
@@ -182,7 +183,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        //[Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin+","+UserRoles.BrandManager)]
         [HttpGet(APIRoutes.Store.GetByID, Name = "GetStoreByID")]
         public async Task<IActionResult> GetAsync([FromQuery] int Id)
         {
