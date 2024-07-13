@@ -47,6 +47,15 @@ namespace FSU.SmartMenuWithAI.Service.Services
         }
         public async Task<bool> Delete(int id)
         {
+            var stores = await _unitOfWork.StoreRepository.Get(s=> s.BrandId == id);
+            foreach (var store in stores)
+            {
+                store.Status = (int)Status.Deleted;
+                var userStore = await _unitOfWork.AppUserRepository.GetByID(store.UserId);
+                userStore.Status = (int)Status.Deleted;
+                _unitOfWork.StoreRepository.Update(store);
+                _unitOfWork.AppUserRepository.Update(userStore);
+            }
             var brandDelete = await _unitOfWork.BrandRepository.GetByID(id);
             if (brandDelete == null || brandDelete.Status == (int)Status.Deleted)
             {
