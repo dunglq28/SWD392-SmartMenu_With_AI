@@ -23,6 +23,7 @@ import {
 import Loading from "../../Loading";
 import { BrandData } from "../../../payloads/responses/BrandData.model";
 import { getAllBrandName } from "../../../services/BrandService";
+import { getInitialBranchData } from "../../../utils/initialData";
 
 interface ModalFormBranchProps {
   branchData: BranchForm;
@@ -232,16 +233,7 @@ const ModalFormBranch: React.FC<ModalFormBranchProps> = ({
   };
 
   const cancelHandler = () => {
-    updateBranchData(
-      {
-        brandName: { id: "", value: "", errorMessage: "" },
-        city: { id: "", name: "", errorMessage: "" },
-        district: { id: "", name: "", errorMessage: "" },
-        ward: { id: "", name: "", errorMessage: "" },
-        address: { value: "", errorMessage: "" },
-      },
-      false
-    );
+    updateBranchData(getInitialBranchData(), false);
     onClose();
   };
 

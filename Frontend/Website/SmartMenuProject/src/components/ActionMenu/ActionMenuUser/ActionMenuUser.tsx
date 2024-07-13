@@ -24,7 +24,7 @@ import ModalForm from "../../Modals/ModalForm/ModalForm";
 import ModalFormUser from "../../Modals/ModalFormUser/ModalFormUser";
 import { useTranslation } from "react-i18next";
 import { UserForm } from "../../../models/UserForm.model";
-import { getInitialUserData } from "../../../utils/initialUserData";
+import { getInitialUserData } from "../../../utils/initialData";
 import { getUser } from "../../../services/UserService";
 import CustomAlertDialog from "../../AlertDialog";
 import { userUpdate } from "../../../payloads/requests/updateRequests.model";

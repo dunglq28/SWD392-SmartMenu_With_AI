@@ -549,59 +549,60 @@ INSERT INTO MenuList (MenuID, ListID, ListIndex, BrandID) VALUES
 (1, 10, 2, 1);
 
 --CustomerSegment
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc già', N'Nam, Sáng', '8/17/2023', '3/25/2024', 1, 21); --1--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc già', N'Male, Morning', '8/17/2023', '3/25/2024', 1, 21); --1--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc già', N'Nữ, Sáng', '8/17/2023', '3/25/2024', 1, 21); --2--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc già', N'Female, Morning', '8/17/2023', '3/25/2024', 1, 21); --2--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc già', N'Nam, Trưa', '8/17/2023', '3/25/2024', 1, 21); --3--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc già', N'Male, Afternoon', '8/17/2023', '3/25/2024', 1, 21); --3--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc già', N'Nữ, Trưa', '8/17/2023', '3/25/2024', 1, 21); --4--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc già', N'Female, Afternoon', '8/17/2023', '3/25/2024', 1, 21); --4--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc già', N'Nam, Chiều', '8/17/2023', '3/25/2024', 1, 21); --5--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc già', N'Male, Evening', '8/17/2023', '3/25/2024', 1, 21); --5--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc già', N'Nữ, Chiều', '8/17/2023', '3/25/2024', 1, 21); --6--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc già', N'Female, Evening', '8/17/2023', '3/25/2024', 1, 21); --6--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trung niên', N'Nam, Sáng', '8/17/2023', '3/25/2024', 1, 21); --7--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc trung niên', N'Male, Morning', '8/17/2023', '3/25/2024', 1, 21); --7--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trung niên', N'Nữ, Sáng', '8/17/2023', '3/25/2024', 1, 21); --8--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc trung niên', N'Female, Morning', '8/17/2023', '3/25/2024', 1, 21); --8--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trung niên', N'Nam, Trưa', '8/17/2023', '3/25/2024', 1, 21); --9--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc trung niên', N'Male, Afternoon', '8/17/2023', '3/25/2024', 1, 21); --9--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trung niên', N'Nữ, Trưa', '8/17/2023', '3/25/2024', 1, 21); --10--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc trung niên', N'Female, Afternoon', '8/17/2023', '3/25/2024', 1, 21); --10--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trung niên', N'Nam, Chiều', '8/17/2023', '3/25/2024', 1, 21); --11--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc trung niên', N'Male, Evening', '8/17/2023', '3/25/2024', 1, 21); --11--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trung niên', N'Nữ, Chiều', '8/17/2023', '3/25/2024', 1, 21); --12--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc trung niên', N'Female, Evening', '8/17/2023', '3/25/2024', 1, 21); --12--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trẻ', N'Nam, Sáng', '8/17/2023', '3/25/2024', 1, 21); --13--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc trẻ', N'Male, Morning', '8/17/2023', '3/25/2024', 1, 21); --13--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trẻ', N'Nữ, Sáng', '8/17/2023', '3/25/2024', 1, 21); --14--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc trẻ', N'Female, Morning', '8/17/2023', '3/25/2024', 1, 21); --14--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trẻ', N'Nam, Trưa', '8/17/2023', '3/25/2024', 1, 21); --15--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc trẻ', N'Male, Afternoon', '8/17/2023', '3/25/2024', 1, 21); --15--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trẻ', N'Nữ, Trưa', '8/17/2023', '3/25/2024', 1, 21); --16--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc trẻ', N'Female, Afternoon', '8/17/2023', '3/25/2024', 1, 21); --16--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trẻ', N'Nam, Chiều', '8/17/2023', '3/25/2024', 1, 21); --16--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc trẻ', N'Male, Evening', '8/17/2023', '3/25/2024', 1, 21); --17--
 
-insert into CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
-values (NewID(), N'Phân khúc trẻ', N'Nữ, Chiều', '8/17/2023', '3/25/2024', 1, 21); --17--
+INSERT INTO CustomerSegment (SegmentCode, SegmentName, Demographics, CreateDate, UpdateDate, Status, BrandID) 
+VALUES (NEWID(), N'Phân khúc trẻ', N'Female, Evening', '8/17/2023', '3/25/2024', 1, 21); --18--
+
 					
 ------------------------------------
 

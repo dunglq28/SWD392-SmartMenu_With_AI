@@ -13,6 +13,7 @@ import {
 import styles from "./ModalFormBrand.module.scss";
 import { BrandForm } from "../../../models/BrandForm.model";
 import { isImageFile } from "../../../utils/validation";
+import { getInitialBrandData } from "../../../utils/initialData";
 
 interface ModalFormBrandProps {
   brandData: BrandForm;
@@ -75,13 +76,7 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
   };
 
   const cancelHandler = () => {
-    updateBrandData?.(
-      {
-        brandName: { value: "", errorMessage: "" },
-        image: { value: null, errorMessage: "" },
-      },
-      false
-    );
+    updateBrandData?.(getInitialBrandData(), false);
     onClose();
   };
 
@@ -185,13 +180,10 @@ const ModalFormBrand: React.FC<ModalFormBrandProps> = ({
       </ModalBody>
       <ModalFooter>
         <Flex>
-          <Button
-            className={styles.CancelBtn}
-            onClick={cancelHandler}
-          >
+          <Button className={styles.CancelBtn} onClick={cancelHandler}>
             Huỷ
           </Button>
-          <Button  onClick={handleNextForm} className={styles.MainBtn}>
+          <Button onClick={handleNextForm} className={styles.MainBtn}>
             {isEdit ? "Lưu" : "Tiếp tục"}
           </Button>
         </Flex>

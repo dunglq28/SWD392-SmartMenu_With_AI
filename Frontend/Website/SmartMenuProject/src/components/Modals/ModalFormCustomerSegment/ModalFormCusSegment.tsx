@@ -210,7 +210,7 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
           gender: genders,
           session: formData.sessions.value,
         };
-
+        
         handleCreate?.(brandId, customerSegmentCreate);
       } else {
         var customerSegmentUpdate: customerSegmentUpdate = {
@@ -250,9 +250,9 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
                 value={formData.gender.value}
                 onChange={(e) => handleChange("gender", e.target.value)}
               >
-                <option value="Nam">Nam</option>
-                <option value="Nữ">Nữ</option>
-                {!isEdit && <option value="Cả hai">Cả hai</option>}
+                <option value="Male">Nam</option>
+                <option value="Female">Nữ</option>
+                {!isEdit && <option value="Both">Cả hai</option>}
               </Select>
               {formData.gender.errorMessage && (
                 <Text className={style.ErrorText}>
@@ -267,22 +267,22 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
               <Flex className={style.CheckboxGroup}>
                 <Checkbox
                   className={style.checkboxItem}
-                  isChecked={formData.sessions.value.includes("Sáng")}
-                  onChange={() => handleCheckboxChange("Sáng")}
+                  isChecked={formData.sessions.value.includes("Morning")}
+                  onChange={() => handleCheckboxChange("Morning")}
                 >
                   Buổi sáng
                 </Checkbox>
                 <Checkbox
                   className={style.checkboxItem}
-                  isChecked={formData.sessions.value.includes("Trưa")}
-                  onChange={() => handleCheckboxChange("Trưa")}
+                  isChecked={formData.sessions.value.includes("Afternoon")}
+                  onChange={() => handleCheckboxChange("Afternoon")}
                 >
                   Buối trưa
                 </Checkbox>
                 <Checkbox
                   className={style.checkboxItem}
-                  isChecked={formData.sessions.value.includes("Chiều")}
-                  onChange={() => handleCheckboxChange("Chiều")}
+                  isChecked={formData.sessions.value.includes("Evening")}
+                  onChange={() => handleCheckboxChange("Evening")}
                 >
                   Buổi chiều
                 </Checkbox>
@@ -294,9 +294,9 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
                 onChange={handleRadioChange}
               >
                 <Stack direction="row">
-                  <Radio value="Sáng">Buổi sáng</Radio>
-                  <Radio value="Trưa">Buổi trưa</Radio>
-                  <Radio value="Chiều">Buổi chiều</Radio>
+                  <Radio value="Morning">Buổi sáng</Radio>
+                  <Radio value="Afternoon">Buổi trưa</Radio>
+                  <Radio value="Evening">Buổi chiều</Radio>
                 </Stack>
               </RadioGroup>
             )}
@@ -313,7 +313,7 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
               <Input
                 className={style.InputField}
                 value={formData.ageFrom.value}
-                placeholder="Format: 18"
+                placeholder="Định dạng: 18"
                 onChange={(e) => handleChange("ageFrom", e.target.value)}
               />
               {formData.ageFrom.errorMessage && (
@@ -327,7 +327,7 @@ const ModalFormCustomerSegment: React.FC<ModalFormCustomerSegmentProps> = ({
               <Input
                 className={style.InputField}
                 value={formData.ageTo.value}
-                placeholder="Format: 25"
+                placeholder="Định dạng: 25"
                 onChange={(e) => handleChange("ageTo", e.target.value)}
               />
               {formData.ageTo.errorMessage && (
