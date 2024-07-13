@@ -107,6 +107,13 @@
 
             public const string RecomendMenu = Base + "/menus/recomend-menu";
 
+            public const string GetMenuSegmentByID = Base + "/menu-segments/get-by-id";
+
+            public const string DeleteMenuSegment = Base + "/menu-segmnets/delete-menu-segment";
+
+            public const string UpdateMenuSegment = Base + "/menu-segmnets/update-menu-segment";
+
+
         }
 
         public static class GroupAttribute
@@ -157,6 +164,8 @@
             public const string GetByBrandID = Base + "/list-positions/get-by-brand-id";
 
             public const string Add = Base + "/list-positions/";
+            public const string AddListList = Base + "/list-positions/add-list-list";
+
 
             public const string Update = Base + "/list-positions/";
 
