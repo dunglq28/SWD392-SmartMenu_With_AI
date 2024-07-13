@@ -152,7 +152,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Admin + "," + UserRoles.BrandManager)]
         [HttpGet(APIRoutes.Store.GetAll, Name = "GetStoreAsync")]
         public async Task<IActionResult> GetAllAsync([FromQuery(Name = "brand-id")] int brandID
             , [FromQuery(Name = "search-key")] string? searchKey
