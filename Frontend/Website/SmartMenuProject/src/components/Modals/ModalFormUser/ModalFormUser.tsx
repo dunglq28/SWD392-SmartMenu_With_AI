@@ -76,7 +76,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
     },
     phoneNumber: { value: userData.phoneNumber.value, errorMessage: "" },
     DOB: { value: userData.DOB.value, errorMessage: "" },
-    gender: { value: userData.gender.value || "Male", errorMessage: "" },
+    gender: { value: userData.gender.value || "Nam", errorMessage: "" },
     isActive: { value: userData.isActive.value || 1, errorMessage: "" },
   });
 
@@ -131,7 +131,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         userName: { value: "", errorMessage: "" },
         phoneNumber: { value: "", errorMessage: "" },
         DOB: { value: null, errorMessage: "" },
-        gender: { value: "", errorMessage: "" },
+        gender: { value: "Nam", errorMessage: "" },
         isActive: { value: null, errorMessage: "" },
       },
       false
@@ -153,7 +153,7 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
 
   const handleSaveForm = () => {
     let hasError = false;
-
+    
     if (formData.fullName.value.trim() === "") {
       setFormData((prevData) => ({
         ...prevData,
@@ -210,8 +210,10 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
         updateUserData(formData, true);
       } else {
         if (formPrevious === CurrentForm.BRAND) {
+           cancelHandler();
           saveBrandHandle?.(formData);
         } else if (formPrevious === CurrentForm.BRANCH) {
+          cancelHandler();
           saveBranchHandle?.(formData);
         }
       }
@@ -305,11 +307,11 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
                 onChange={handleGenderChange}
               >
                 <Stack spacing={5} direction="row" ml={3}>
-                  <Radio value="Male">
-                    <Text className={styles.textFontWeight600}>Male</Text>
+                  <Radio value="Nam">
+                    <Text className={styles.textFontWeight600}>Nam</Text>
                   </Radio>
-                  <Radio value="Female">
-                    <Text className={styles.textFontWeight600}>Female</Text>
+                  <Radio value="Nữ">
+                    <Text className={styles.textFontWeight600}>Nữ</Text>
                   </Radio>
                 </Stack>
               </RadioGroup>
@@ -327,8 +329,8 @@ const ModalFormUser: React.FC<ModalFormBrandProps> = ({
                 <option disabled hidden value="">
                   Select one
                 </option>
-                <option value="1">Hoạt đông</option>
-                <option value="0">Không hoạt động</option>
+                <option value="1">Hoạt động</option>
+                <option value="0">Không hoạt động</option>  
               </Select>
             </Box>
           </Flex>

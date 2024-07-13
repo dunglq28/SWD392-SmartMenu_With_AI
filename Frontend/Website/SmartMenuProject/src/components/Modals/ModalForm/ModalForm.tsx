@@ -12,6 +12,12 @@ import styles from "./ModalForm.module.scss";
 import { themeColors } from "../../../constants/GlobalStyles";
 import { BrandForm } from "../../../models/BrandForm.model";
 import { BranchForm } from "../../../models/BranchForm.model";
+import { UserForm } from "../../../models/UserForm.model";
+import {
+  getInitialBranchData,
+  getInitialBrandData,
+  getInitialUserData,
+} from "../../../utils/initialData";
 
 interface ModalFormProps {
   isOpen: boolean;
@@ -20,6 +26,7 @@ interface ModalFormProps {
   title: string;
   updateBrandData?: (data: BrandForm, isSave: boolean) => void;
   updateBranchData?: (data: BranchForm, isSave: boolean) => void;
+  updateUserData?: (data: UserForm, isSave: boolean) => void;
 }
 
 const ModalForm: React.FC<ModalFormProps> = ({
@@ -29,29 +36,21 @@ const ModalForm: React.FC<ModalFormProps> = ({
   title,
   updateBrandData,
   updateBranchData,
+  updateUserData,
 }) => {
   function cancelHandler() {
     if (updateBrandData) {
-      updateBrandData(
-        {
-          brandName: { value: "", errorMessage: "" },
-          image: { value: null, errorMessage: "" },
-        },
-        false
-      );
+      updateBrandData(getInitialBrandData(), false);
     }
+
     if (updateBranchData) {
-      updateBranchData(
-        {
-          brandName: { id: "", value: "", errorMessage: "" },
-          city: { id: "", name: "", errorMessage: "" },
-          district: { id: "", name: "", errorMessage: "" },
-          ward: { id: "", name: "", errorMessage: "" },
-          address: { value: "", errorMessage: "" },
-        },
-        false
-      );
+      updateBranchData(getInitialBranchData(), false);
     }
+
+    if (updateUserData) {
+      updateUserData(getInitialUserData(), false);
+    }
+
     onClose();
   }
 
