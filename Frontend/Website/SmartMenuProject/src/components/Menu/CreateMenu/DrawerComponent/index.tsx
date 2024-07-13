@@ -238,7 +238,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                 <Image src={HeaderImg} />
               </Flex>
               <Flex
-                height="73%"
+                height="83%"
                 width="100%"
                 flexDirection="column"
                 rowGap="1vw"
@@ -331,7 +331,7 @@ const DrawerComponent: React.FC<DrawerProps> = ({
                   ))}
                 </Flex>
               </Flex>
-              <Button className={style.primaryButton} style={{marginTop: "30px"}} onClick={addToMenu}>
+              <Button className={style.primaryButton} onClick={addToMenu}>
                 Thêm vào menu
               </Button>
             </Flex>
