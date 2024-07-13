@@ -31,8 +31,10 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 return false;
             }
             deleteStore.Status = (int)Status.Deleted;
-
+            var userStore = await _unitOfWork.AppUserRepository.GetByID(deleteStore.UserId);
+            userStore.Status = (int)Status.Deleted;
             _unitOfWork.StoreRepository.Update(deleteStore);
+            _unitOfWork.AppUserRepository.Update(userStore);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             return result;
 
