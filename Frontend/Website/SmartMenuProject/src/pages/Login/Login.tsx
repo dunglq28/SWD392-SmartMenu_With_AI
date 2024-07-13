@@ -78,6 +78,12 @@ function Login() {
     try {
       setIsLoading(true);
       const response = await login(credentials.username, credentials.password);
+      if (
+        response.data.roleId.toString() === UserRole.BranchManager.toString()
+      ) {
+        toast.error("Bạn không có quyền truy cập vào website");
+        return;
+      }
 
       if (response.statusCode === 200) {
         localStorage.setItem("RoleId", response.data.roleId.toString());
@@ -86,9 +92,7 @@ function Login() {
         const toastMessage = response.message;
 
         if (
-          response.data.roleId.toString() ===
-            UserRole.BrandManager.toString() ||
-          response.data.roleId.toString() === UserRole.BranchManager.toString()
+          response.data.roleId.toString() === UserRole.BrandManager.toString()
         ) {
           const brand = await getBrandByUserId(response.data.userId);
           localStorage.setItem("BrandId", brand.data.brandId.toString());
