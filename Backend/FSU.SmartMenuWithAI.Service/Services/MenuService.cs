@@ -42,6 +42,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 }
                 // Xóa MenuLists sau khi xóa ProductLists
                 _unitOfWork.MenuListRepository.Delete(menuList);
+                _unitOfWork.ListPositionRepository.Delete(menuList.List);
             }
             _unitOfWork.MenuRepository.Delete(deleteMenu);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
