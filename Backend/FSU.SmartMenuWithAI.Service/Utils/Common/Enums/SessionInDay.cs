@@ -13,6 +13,7 @@ namespace FSU.SmartMenuWithAI.Service.Utils.Common.Enums
         Afternoon,  // trưa
         Brunch,     // xế
         Evening,    // tối
-        Night       // khuya
+        Night,       // khuya
+        Midnight
     }
 }

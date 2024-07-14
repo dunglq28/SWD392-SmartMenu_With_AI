@@ -30,11 +30,13 @@ import { getRoleName } from "../../utils/functionHelper";
 function Header() {
   const location = useLocation();
   const { t } = useTranslation();
-  const pathname = location.pathname;
+  const pathname = decodeURIComponent(location.pathname);
   const [previousPathName, setPreviousPathName] = useState<string | null>(null);
 
   const formattedPathname = pathname.replace("/", "");
-  const translatedPathname = t(formattedPathname).toUpperCase();
+  const pathParts = pathname.split("/").filter((part) => part);
+  const translatedPathParts = pathParts.map((part) => t(part));
+  const translatedPathname = translatedPathParts.join(" / ").toUpperCase();
 
   const brandName = localStorage.getItem("BrandName");
   const logoUrl = localStorage.getItem("BrandLogo");
@@ -109,7 +111,7 @@ function Header() {
       items.push(
         <BreadcrumbItem key="previous">
           <BreadcrumbLink as={ReactRouterLink} to={`/${previousPathName}`}>
-            {previousPathName}
+            {t(previousPathName)}
           </BreadcrumbLink>
         </BreadcrumbItem>
       );
@@ -129,8 +131,10 @@ function Header() {
       <BreadcrumbItem key="current" isCurrentPage>
         <BreadcrumbLink>
           {formattedPathname === "menu/create-menu"
-            ? "create Menu"
-            : formattedPathname}
+            ? "Tạo Menu"
+            : formattedPathname.includes("branches")
+            ? t("branches")
+            : t(formattedPathname)}
         </BreadcrumbLink>
       </BreadcrumbItem>
     );
@@ -143,8 +147,8 @@ function Header() {
       <Flex flexDirection="column">
         <Breadcrumb fontSize="16px">{generateBreadcrumbItems()}</Breadcrumb>
         <Text className={style.PathName}>
-          {translatedPathname === "MENU/CREATE-MENU"
-            ? "CREATE MENU"
+          {translatedPathname === "THỰC ĐƠN / CREATE-MENU"
+            ? "TẠO MENU"
             : translatedPathname}
         </Text>
       </Flex>

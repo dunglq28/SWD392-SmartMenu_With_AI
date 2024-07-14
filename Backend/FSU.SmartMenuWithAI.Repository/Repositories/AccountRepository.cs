@@ -22,7 +22,7 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
         public async Task<AppUser?> CheckLoginAsync(string userName, string password)
         {
             password = PasswordHelper.ConvertToEncrypt(password);
-            var user = await _context.AppUsers.FirstOrDefaultAsync(u => u.UserName == userName && u.Password == password && u.Status == (int)Status.Exist);
+            var user = await _context.AppUsers.FirstOrDefaultAsync(u => u.UserName.Equals(userName)&& u.Password == password && u.Status == (int)Status.Exist);
             if (user == null)
             {
                 return null;

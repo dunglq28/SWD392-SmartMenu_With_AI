@@ -9,6 +9,8 @@ using static Amazon.S3.Util.S3EventNotification;
 using FSU.SmartMenuWithAI.Service.Models.Pagination;
 using FSU.SmartMenuWithAI.Service.Utils;
 using System.Linq.Expressions;
+using System.Reflection.Metadata;
+using FSU.SmartMenuWithAI.Service.Common.Constants;
 
 namespace FSU.SmartMenuWithAI.Service.Services
 {
@@ -47,7 +49,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
         }
         public async Task<bool> Delete(int id)
         {
-            var stores = await _unitOfWork.StoreRepository.Get(s=> s.BrandId == id);
+            var stores = await _unitOfWork.StoreRepository.Get(s => s.BrandId == id);
             foreach (var store in stores)
             {
                 store.Status = (int)Status.Deleted;
@@ -153,9 +155,10 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<BrandDTO> GetBrandByUserID(int userID)
         {
+            var brandEntity = new Brand();
             Expression<Func<Brand, bool>> condition = x => x.UserId == userID && x.Status != (int)Status.Deleted;
-            var entity = await _unitOfWork.BrandRepository.GetByCondition(condition);
-            return _mapper.Map<BrandDTO?>(entity)!;
+            brandEntity = await _unitOfWork.BrandRepository.GetByCondition(condition);
+            return _mapper.Map<BrandDTO?>(brandEntity)!;
         }
     }
 }

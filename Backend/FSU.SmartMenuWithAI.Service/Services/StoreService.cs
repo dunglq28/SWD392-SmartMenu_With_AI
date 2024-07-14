@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Amazon.Rekognition.Model;
+using AutoMapper;
 using FSU.SmartMenuWithAI.Repository.Entities;
 using FSU.SmartMenuWithAI.Repository.UnitOfWork;
 using FSU.SmartMenuWithAI.Service.Common.Enums;
@@ -31,8 +32,10 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 return false;
             }
             deleteStore.Status = (int)Status.Deleted;
-
+            var userStore = await _unitOfWork.AppUserRepository.GetByID(deleteStore.UserId);
+            userStore.Status = (int)Status.Deleted;
             _unitOfWork.StoreRepository.Update(deleteStore);
+            _unitOfWork.AppUserRepository.Update(userStore);
             var result = await _unitOfWork.SaveAsync() > 0 ? true : false;
             return result;
 
@@ -40,12 +43,12 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<PageEntity<StoreDTO>?> GetAllAsync(string? searchKey, int brandID, int? pageIndex = null, int? pageSize = null)
         {
-            Expression<Func<Store, bool>> filter = searchKey != null 
-                ? x => x.Address.Contains(searchKey) && x.BrandId == brandID  && (x.Status != (int)Status.Deleted)
+            Expression<Func<Store, bool>> filter = searchKey != null
+                ? x => x.Address.Contains(searchKey) && x.BrandId == brandID && (x.Status != (int)Status.Deleted)
                 : x => x.BrandId == brandID && (x.Status != (int)Status.Deleted);
             Expression<Func<Store, bool>> filterRecord = x => x.Status != (int)Status.Deleted && x.BrandId == brandID;
 
-            Func<IQueryable<Store>, IOrderedQueryable<Store>> orderBy = q => q.OrderByDescending(x => x.StoreId) ;
+            Func<IQueryable<Store>, IOrderedQueryable<Store>> orderBy = q => q.OrderByDescending(x => x.StoreId);
             string includeProperties = "Brand,User";
 
             var entities = await _unitOfWork.StoreRepository
@@ -68,6 +71,18 @@ namespace FSU.SmartMenuWithAI.Service.Services
             var mapDTO = _mapper.Map<StoreDTO>(store);
 
             return mapDTO;
+        }
+
+        public async Task<BrandDTO> GetBrandOfStoreByUserID(int userId)
+        {
+            Expression<Func<Store, bool>> condition = x => x.UserId == userId && x.Status != (int)Status.Deleted;
+            var storeEntity = await _unitOfWork.StoreRepository.GetByCondition(condition);
+            if (storeEntity != null)
+            {
+                var brandEntity = await _unitOfWork.BrandRepository.GetByCondition(x => x.BrandId == storeEntity!.BrandId && x.Status != (int)Status.Deleted);
+                return _mapper.Map<BrandDTO?>(brandEntity)!;
+            }
+            return null!;
         }
 
         public async Task<bool> Insert(StoreDTO entity)

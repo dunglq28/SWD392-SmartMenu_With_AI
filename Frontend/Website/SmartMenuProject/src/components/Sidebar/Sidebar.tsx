@@ -259,7 +259,7 @@ function Sidebar() {
         if (branchResult.statusCode === 200) {
           await onCloseUser();
           const toastMessage = "Thêm chi nhánh mới thành công";
-          const pathname = location.pathname;
+          const pathname = decodeURIComponent(location.pathname);
           const formattedPathname = pathname.replace("/", "");
           const brandName = branchData.brandName.value;
           const id = branchData.brandName.id;
