@@ -153,20 +153,11 @@ namespace FSU.SmartMenuWithAI.Service.Services
             return pagin;
         }
 
-        public async Task<BrandDTO> GetBrandByUserID(int userID, string role)
+        public async Task<BrandDTO> GetBrandByUserID(int userID)
         {
             var brandEntity = new Brand();
-            if (string.Equals(role, UserRoles.BrandManager, StringComparison.OrdinalIgnoreCase))
-            {
-                Expression<Func<Brand, bool>> condition = x => x.UserId == userID && x.Status != (int)Status.Deleted;
-                brandEntity = await _unitOfWork.BrandRepository.GetByCondition(condition);
-            }
-            if (string.Equals(role, UserRoles.Store, StringComparison.OrdinalIgnoreCase))
-            {
-                Expression<Func<Store, bool>> condition = x => x.UserId == userID && x.Status != (int)Status.Deleted;
-                var storeEntity = await _unitOfWork.StoreRepository.GetByCondition(condition);
-                brandEntity = await _unitOfWork.BrandRepository.GetByCondition(x => x.BrandId == storeEntity.BrandId && x.Status != (int)Status.Deleted );
-            }
+            Expression<Func<Brand, bool>> condition = x => x.UserId == userID && x.Status != (int)Status.Deleted;
+            brandEntity = await _unitOfWork.BrandRepository.GetByCondition(condition);
             return _mapper.Map<BrandDTO?>(brandEntity)!;
         }
     }

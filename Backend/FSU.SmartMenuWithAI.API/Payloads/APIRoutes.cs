@@ -76,6 +76,8 @@
             public const string Delete = Base + "/stores/";
 
             public const string Add = Base + "/stores/";
+
+            public const string GetByUserID = Base + "/stores/get-brand-of-store-by-user-id";
         }
 
         public static class Category
