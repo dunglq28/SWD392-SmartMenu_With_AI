@@ -31,33 +31,28 @@ const handleAxiosError = (error) => {
   if (error.message === "Network Error" && !error.response) {
     Toast.show({
       type: 'error',
-      text1: 'Lỗi mạng',
-      text2: 'Vui lòng kiểm tra kết nối!'
+      text1: 'Vui lòng kiểm tra kết nối!'
     });
   } else if (error.response && error.response.status === 403) {
     Toast.show({
       type: 'error',
-      text1: 'Lỗi',
-      text2: error.response.data.message
+      text1: error.response.data.message
     });
   } else if (error.response && error.response.status === 401) {
     Toast.show({
       type: 'error',
-      text1: 'Lỗi',
-      text2: error.response.data.message
+      text1: error.response.data.message
     });
   } else if (error.response && error.response.status === 400) {
     Toast.show({
       type: 'error',
-      text1: 'Lỗi',
-      text2: "Đăng nhập thất bại"
+      text1: "Đăng nhập thất bại"
     });
   } else {
     // Custom handling for other errors
     Toast.show({
       type: 'error',
-      text1: 'Lỗi',
-      text2: 'Đã xảy ra lỗi, vui lòng thử lại sau.'
+      text1: 'Đã xảy ra lỗi, vui lòng thử lại sau.'
     });
   }
   return Promise.reject(error);
