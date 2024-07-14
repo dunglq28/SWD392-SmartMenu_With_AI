@@ -12,7 +12,7 @@ import {
 import { GlobalStyle } from "../constants/styles";
 import { drinks } from "../Data/drinks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getBrandByUserId } from "../services/BrandService";
+import { getBrandOfStoreByUserId } from "../services/BranchService";
 
 const categories = [
   { id: 1, name: "Cà phê" },
@@ -29,9 +29,13 @@ const HomeScreen = () => {
       setIsLoading(true);
       try {
         const userId = await AsyncStorage.getItem("UserId");
-        console.log(userId);
-        const result = await getBrandByUserId(userId);
+        const result = await getBrandOfStoreByUserId(userId);
         console.log(result);
+        if (result.statusCode === 200) {
+          AsyncStorage.setItem("BrandId", response.data.brandId.toString());
+          AsyncStorage.setItem("BrandName", response.data.brandName.toString());
+          AsyncStorage.setItem("BrandLogo", response.data.imageUrl.toString());
+        }
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu:", error);
       } finally {
