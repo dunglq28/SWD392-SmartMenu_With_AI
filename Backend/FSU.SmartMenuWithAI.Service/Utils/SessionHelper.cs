@@ -18,14 +18,17 @@ namespace FSU.SmartMenuWithAI.Service.Utils
                 case int n when (n >= 6 && n <= 12):
                     session = SessionInDay.Morning.ToString();
                     break;
-                //case int n when (n >= 10 && n <= 13):
-                //    session = SessionInDay.Noon.ToString();
-                //    break;
                 case int n when (n >= 13 && n <= 18):
                     session = SessionInDay.Afternoon.ToString();
                     break;
                 case int n when (n >= 19 && n <= 23):
                     session = SessionInDay.Evening.ToString();
+                    break;
+                case int n when (n >= 23 && n <= 5):
+                    session = SessionInDay.Evening.ToString();
+                    break;
+                default:
+                    session = SessionInDay.Morning.ToString();
                     break;
             }
             return session;

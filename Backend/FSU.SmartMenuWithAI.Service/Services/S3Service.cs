@@ -139,6 +139,9 @@ namespace FSU.SmartMenuWithAI.Service.Services
 
         public async Task<CustomerFaceRognizeDTO> AnalyzeFacesInImage(IFormFile file)
         {
+            try
+            {
+
             var ms = new MemoryStream();
            // copy qua memory stream vì detectface chỉ nhận file stream image
             file.CopyTo(ms);
@@ -162,10 +165,16 @@ namespace FSU.SmartMenuWithAI.Service.Services
             {
                 Age = AgeHelper.CalAverageAge(customerFace.AgeRange.Low, customerFace.AgeRange.High),
                 Emotions = customerFace.Emotions,
-                Gender = customerFace.Gender.Value.ToString(),
+                Gender = customerFace.Gender.ToString(),
                 Session = SessionHelper.GetSession() 
             };
             return faceAttributes;
+            }
+            catch
+            {
+                return null!;
+            }
+
         }
 
     }
