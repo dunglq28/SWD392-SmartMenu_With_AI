@@ -247,10 +247,12 @@ function CreateMenu() {
     const loadData = async () => {
       try {
         const result = await getCategoriesByBrandId(brandId);
+        console.log(result);
+        
         if (result) {
-          setCategoryOptions(result.list);
-          if (result.list.length > 0) {
-            const initialCategoryId = result.list[0].categoryId;
+          setCategoryOptions(result.data);
+          if (result.data.length > 0) {
+            const initialCategoryId = result.data[0].categoryId;
             handleChangeProductByCate(initialCategoryId);
             setStartCategory(initialCategoryId);
             setCurrentCategory(initialCategoryId);

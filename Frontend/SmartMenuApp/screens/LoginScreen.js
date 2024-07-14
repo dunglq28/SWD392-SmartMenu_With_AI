@@ -66,6 +66,10 @@ function LoginScreen({ navigation }) {
             type: "success",
             text1: "Đăng nhập thành công",
           });
+          setCredentials({
+            username: "",
+            password: "",
+          });
           navigation.navigate("HomeOverview");
         }
       }

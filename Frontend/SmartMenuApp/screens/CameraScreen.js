@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,9 +12,19 @@ import { FontAwesome } from "@expo/vector-icons";
 import { GlobalStyle } from "../constants/styles";
 import Loading from "../components/Loading";
 import LoadingSpinnerOverlay from "react-native-loading-spinner-overlay";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function CameraScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [brandLogo, setBrandLogo] = useState(null);
+
+  useEffect(() => {
+    const fetchBrandLogo = async () => {
+      const logo = await AsyncStorage.getItem("BrandLogo");
+      setBrandLogo(logo);
+    };
+    fetchBrandLogo();
+  }, []);
 
   const handleMenuOpen = () => {
     navigation.navigate("MenuRecommend");
@@ -61,30 +71,32 @@ function CameraScreen({ navigation }) {
               />
             </View>
             <View style={styles.logoContainer}>
-              <Image
-                source={require("../assets/phuclong.png")}
-                style={styles.logo}
-              />
+              <Image source={{ uri: brandLogo }} style={styles.logo} />
             </View>
           </View>
-          <Text style={styles.title}>Ứng dụng Menu Thông Minh</Text>
-          <Image
-            source={require("../assets/face-id.png")}
-            style={styles.faceIcon}
-          />
-          <Text style={styles.instructions}>
-            Đưa camera về phía mặt của bạn để quét
-          </Text>
-          <TouchableOpacity style={styles.button} onPress={openCamera}>
-            <FontAwesome name="camera" size={40} color="white" />
-            <Text style={styles.buttonText}>Quét Khuôn Mặt</Text>
-          </TouchableOpacity>
-          {/* {selectedImage && (
+          <View style={styles.wrapper}>
+            <Text style={styles.title}>Ứng dụng Menu Thông Minh</Text>
+            <Image
+              source={require("../assets/face-id.png")}
+              style={styles.faceIcon}
+            />
+            <Text style={styles.instructions}>
+              Đưa camera về phía mặt của bạn để quét
+            </Text>
+            <TouchableOpacity style={styles.button} onPress={openCamera}>
+              <FontAwesome name="camera" size={40} color="white" />
+              <Text style={styles.buttonText}>Quét Khuôn Mặt</Text>
+            </TouchableOpacity>
+            {/* {selectedImage && (
           <Image source={{ uri: selectedImage }} style={styles.image} />
         )} */}
-          <TouchableOpacity style={styles.loginButton} onPress={handleMenuOpen}>
-            <Text>MenuRecommend</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={handleMenuOpen}
+            >
+              <Text>MenuRecommend</Text>
+            </TouchableOpacity>
+          </View>
         </>
       )}
     </ScrollView>
@@ -107,7 +119,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     paddingHorizontal: 20,
-    marginBottom: 20,
     marginTop: 30,
   },
   logoContainer: {
@@ -119,19 +130,24 @@ const styles = StyleSheet.create({
     height: 100,
     marginRight: 10,
   },
+  wrapper: {
+    flex: 1,
+    alignItems: "center",
+    marginTop: -40
+  },
   faceIcon: {
     width: 350,
     height: 350,
     marginBottom: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
     color: "black",
     marginBottom: 10,
   },
   instructions: {
-    fontSize: 16,
+    fontSize: 18,
     color: "black",
     marginBottom: 20,
   },
