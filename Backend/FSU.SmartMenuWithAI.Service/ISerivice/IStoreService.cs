@@ -20,6 +20,6 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
         Task<bool> Delete(int id);
 
         Task<bool> UpdateAsync(int id, StoreDTO entityToUpdate);
-
+        Task<BrandDTO> GetBrandOfStoreByUserID(int userId);
     }
 }
