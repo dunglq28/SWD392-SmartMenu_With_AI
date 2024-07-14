@@ -11,6 +11,12 @@ import {
 } from "react-native";
 import { GlobalStyle } from "../constants/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const categories = [
+  { id: 1, name: "Cà phê" },
+  { id: 2, name: "Sinh tố" },
+  { id: 3, name: "Nước ép" },
+];
 import { getBrandOfStoreByUserId } from "../services/BranchService";
 import { getCategoriesByBrandId } from "../services/CategoryService";
 import { getProductsByCategory } from "../services/ProductService";
@@ -60,7 +66,10 @@ const HomeScreen = () => {
 
   const handleCategoryPress = async (categoryId) => {
     setActiveCategory(categoryId); // Cập nhật danh mục được chọn
-    const productsByCategory = await getProductsByCategory(brand.brandId, categoryId);
+    const productsByCategory = await getProductsByCategory(
+      brand.brandId,
+      categoryId
+    );
     setProducts(productsByCategory.list);
   };
 
