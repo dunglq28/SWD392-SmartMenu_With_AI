@@ -146,7 +146,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 }
 
                 var token = await _accountService.GenerateAccessTokenAsync(userDto.UserId.Value);
-                var brand = await _brandService.GetBrandByUserID(userDto.UserId.Value);
+                var brand = await _brandService.GetBrandByUserID(userDto.UserId.Value, UserRoles.Store);
 
                 return Ok(new BaseResponse
                 {

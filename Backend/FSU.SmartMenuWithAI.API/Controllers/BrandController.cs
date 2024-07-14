@@ -283,11 +283,12 @@ namespace FSU.SmartMenuWithAI.API.Controllers
 
         [Authorize(Roles = UserRoles.BrandManager + "," + UserRoles.Admin + "," + UserRoles.Store)]
         [HttpGet(APIRoutes.Brand.GetByUserID, Name = "GetBrandByUserId")]
-        public async Task<IActionResult> GetBrandByUserIdAsync([FromQuery(Name = "user-id")] int userId)
+        public async Task<IActionResult> GetBrandByUserIdAsync([FromQuery(Name = "user-id")] int userId, [FromQuery(Name = "role")]string role)
         {
             try
             {
-                var brands = await _brandService.GetBrandByUserID(userId);
+
+                var brands = await _brandService.GetBrandByUserID(userId, role);
 
                 if (brands == null)
                 {
