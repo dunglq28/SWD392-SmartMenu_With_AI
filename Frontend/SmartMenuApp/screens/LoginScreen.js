@@ -14,8 +14,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import Toast from "react-native-toast-message";
 import { login } from "../services/AuthenticationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import LoadingSpinnerOverlay from "react-native-loading-spinner-overlay"; 
-
+import LoadingSpinnerOverlay from "react-native-loading-spinner-overlay";
+import { UserRole } from "../constants/Enum";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -42,21 +42,38 @@ function LoginScreen({ navigation }) {
       });
       return;
     }
+
     try {
       setIsLoading(true);
       const response = await login(credentials.username, credentials.password);
-
-      // console.log(response);
       if (response && response.statusCode === 200) {
-        AsyncStorage.setItem("UserId", response.data.userId.toString());
-        AsyncStorage.setItem("AccessToken", response.data.token.accessToken);
-        AsyncStorage.setItem("RefreshToken", response.data.token.refreshToken);
-        Toast.show({
-          type: "success",
-          text1: "Đăng nhập thành công",
-        });
-        navigation.navigate("HomeOverview");
+        if (
+          response.data.roleId.toString() === UserRole.Admin.toString() ||
+          response.data.roleId.toString() === UserRole.BrandManager.toString()
+        ) {
+          Toast.show({
+            type: "error",
+            text1: "Bạn không có quyền truy cập vào ứng dụng",
+          });
+        } else {
+          AsyncStorage.setItem("UserId", response.data.userId.toString());
+          AsyncStorage.setItem("AccessToken", response.data.token.accessToken);
+          AsyncStorage.setItem(
+            "RefreshToken",
+            response.data.token.refreshToken
+          );
+          Toast.show({
+            type: "success",
+            text1: "Đăng nhập thành công",
+          });
+          navigation.navigate("HomeOverview");
+        }
       }
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Có lỗi xảy ra, vui lòng thử lại",
+      });
     } finally {
       setIsLoading(false);
     }

@@ -63,7 +63,7 @@ axiosMultipartForm.interceptors.response.use(
     const originalRequest = error.config;
 
     if (error.response && error.response.status === 403) {
-      toast.error(error.response.data.message);
+      toast.error("Bạn không có quyền truy cập vào tài nguyên này");
     }
 
     if (error.response && error.response.status === 401) {

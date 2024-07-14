@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,17 +12,35 @@ import {
 import { GlobalStyle } from "../constants/styles";
 import { drinks } from "../Data/drinks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
- 
+import { getBrandByUserId } from "../services/BrandService";
 
 const categories = [
   { id: 1, name: "Cà phê" },
   { id: 2, name: "Sinh tố" },
   { id: 3, name: "Nước ép" },
-
 ];
 
 const HomeScreen = () => {
-  const [activeCategory, setActiveCategory] = useState(categories[0].id); // Ban đầu chọn danh mục đầu tiên làm active
+  const [activeCategory, setActiveCategory] = useState(categories[0].id);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const userId = await AsyncStorage.getItem("UserId");
+        console.log(userId);
+        const result = await getBrandByUserId(userId);
+        console.log(result);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   // Render item cho FlatList trong cart
   const renderDrinkItem = ({ item }) => (

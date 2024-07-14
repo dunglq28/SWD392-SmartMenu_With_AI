@@ -82,7 +82,7 @@ function Login() {
       if (
         response.data.roleId.toString() === UserRole.BranchManager.toString()
       ) {
-        toast.error("Bạn không có quyền truy cập vào website");
+        toast.error("Bạn không có quyền truy cập vào trang web");
         return;
       }
 
