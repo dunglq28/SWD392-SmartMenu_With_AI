@@ -9,6 +9,7 @@ using FSU.SmartMenuWithAI.Service.Models;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
+using FSU.SmartMenuWithAI.Service.Services;
 
 namespace FSU.SmartMenuWithAI.API.Controllers
 {
@@ -215,6 +216,46 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = ex.Message,
+                    Data = null,
+                    IsSuccess = false
+                });
+            }
+        }
+
+        [Authorize(Roles = UserRoles.BrandManager + "," + UserRoles.Admin + "," + UserRoles.Store)]
+        [HttpGet(APIRoutes.Store.GetByUserID, Name = "get-brand-of-store-by-user-id")]
+        public async Task<IActionResult> GetBrandOfStoreByUserIdAsync([FromQuery(Name = "user-id")] int userId)
+        {
+            try
+            {
+
+                var brands = await _storeService.GetBrandOfStoreByUserID(userId);
+
+                if (brands == null)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        StatusCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy thương hiệu cho người dùng này",
+                        Data = null,
+                        IsSuccess = false
+                    });
+                }
+
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Tìm thành công",
+                    Data = brands,
+                    IsSuccess = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Lỗi khi tìm kiếm!" + ex.Message,
                     Data = null,
                     IsSuccess = false
                 });

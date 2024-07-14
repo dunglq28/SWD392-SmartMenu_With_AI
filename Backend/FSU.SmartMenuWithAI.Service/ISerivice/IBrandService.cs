@@ -23,7 +23,7 @@ namespace FSU.SmartMenuWithAI.Service.ISerivice
             string searchKey,
         int? pageIndex = null,
         int? pageSize = null);
-        Task<BrandDTO> GetBrandByUserID(int userID, string role);
+        Task<BrandDTO> GetBrandByUserID(int userID);
 
     }
 }
