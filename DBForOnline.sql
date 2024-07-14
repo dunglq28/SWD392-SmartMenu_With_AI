@@ -1,15 +1,4 @@
-﻿Use [master]
-
-Drop DATABASE [SmartMenu]
-GO
-
-CREATE DATABASE [SmartMenu];
-GO
-
-USE [SmartMenu];
-GO
-
-CREATE TABLE Role
+﻿CREATE TABLE Role
 (
   RoleID INT NOT NULL IDENTITY(1,1),
   RoleName VARCHAR(50) NOT NULL,
@@ -35,9 +24,6 @@ CREATE TABLE AppUser
   PRIMARY KEY (UserID),
   FOREIGN KEY (RoleID) REFERENCES Role(RoleID)
 );
-
-ALTER TABLE AppUser
-ALTER COLUMN UserName VARCHAR(50) COLLATE SQL_Latin1_General_CP1_CS_AS;
 
 CREATE TABLE RefreshToken
 (
@@ -335,7 +321,7 @@ insert into Category ( CategoryCode, CategoryName, UpdateDate, CreateDate, Statu
 insert into Category ( CategoryCode, CategoryName, UpdateDate, CreateDate, Status, BrandID) values ( 'df96f303-4b98-4c00-87f8-aac0c5515251', 'Roofing (Metal)', '11/25/2023', '6/9/2023', 0, 9);
 insert into Category ( CategoryCode, CategoryName, UpdateDate, CreateDate, Status, BrandID) values ( 'd39030b3-6e13-4ca1-9ae3-83b1b381d1f9', 'Masonry', '4/22/2024', '10/2/2023', 2, 3);
 insert into Category ( CategoryCode, CategoryName, UpdateDate, CreateDate, Status, BrandID) values ( '114b10f0-4901-4463-9470-d38af73e2930', 'Overhead Doors', '8/21/2023', '2/15/2024', 1, 5);
-insert into Category ( CategoryCode, CategoryName, UpdateDate, CreateDate, Status, BrandID) values ( 'ad8c2c90-d367-49e3-ac09-f5ef59cc65f2', 'Painting & Vinyl Wall Covering', '11/18/2023', '10/31/2023', 0, 1);
+insert into Category ( CategoryCode, CategoryName, UpdateDate, CreateDate, Status, BrandID) values ( 'ad8c2c90-d367-49e3-ac09-f5ef59cc65f2', 'Painting & Vinyl Wall Covering', '11/18/2023', '10/31/2023', 0, 21);
 insert into Category ( CategoryCode, CategoryName, UpdateDate, CreateDate, Status, BrandID) values ( 'e50bf864-02b7-47d2-9785-93b07c16753f', 'Landscaping & Irrigation', '7/12/2023', '3/15/2024', 0, 9);
 insert into Category ( CategoryCode, CategoryName, UpdateDate, CreateDate, Status, BrandID) values ( '99d27e4f-8c1c-424a-9df4-831d656fc6bb', 'Structural & Misc Steel Erection', '4/12/2024', '11/25/2023', 1, 16);
 insert into Category ( CategoryCode, CategoryName, UpdateDate, CreateDate, Status, BrandID) values ( '1971fa1d-df64-4783-b77f-89fcba38b7b8', 'Structural and Misc Steel (Fabrication)', '9/3/2023', '8/15/2023', 2, 6);
@@ -516,12 +502,12 @@ insert into Product (ProductCode, ProductName, Description, CreateDate, BrandID,
 
 -- Insert 10 rows of data into the ListPosition table
 INSERT INTO ListPosition (ListCode, TotalProduct, CreateDate, BrandID) VALUES
-(NEWID(), 10, '2024-01-01', 1),
-(NEWID(), 20, '2024-01-02', 1),
-(NEWID(), 30, '2024-01-03', 1),
-(NEWID(), 15, '2024-01-04', 2),
-(NEWID(), 25, '2024-01-05', 2),
-(NEWID(), 35, '2024-01-06', 2),
+(NEWID(), 10, '2024-01-01', 21),
+(NEWID(), 20, '2024-01-02', 21),
+(NEWID(), 30, '2024-01-03', 21),
+(NEWID(), 15, '2024-01-04', 21),
+(NEWID(), 25, '2024-01-05', 1),
+(NEWID(), 35, '2024-01-06', 1),
 (NEWID(), 5, '2024-01-07', 3),
 (NEWID(), 10, '2024-01-08', 3),
 (NEWID(), 20, '2024-01-09', 3),
@@ -710,91 +696,90 @@ set IsActive = 1
 where UserCode = '9e2a9c0a-3f94-4b6a-8ef2-123456789012'
 
 -- Tạo các Category cho Phúc Long
-INSERT INTO [SmartMenu].[dbo].[Category] (CategoryCode, CategoryName, CreateDate, UpdateDate, Status, BrandID)
+INSERT INTO [dbo].[Category] (CategoryCode, CategoryName, CreateDate, UpdateDate, Status, BrandID)
 VALUES
-(NEWID(), N'Trà Sữa', '2024-07-01', '2024-07-01', 1, (SELECT BrandID FROM [SmartMenu].[dbo].[Brand] WHERE BrandName = N'Phúc Long')),
-(NEWID(), N'Cà Phê', '2024-07-01', '2024-07-01', 1, (SELECT BrandID FROM [SmartMenu].[dbo].[Brand] WHERE BrandName = N'Phúc Long')),
-(NEWID(), N'Đá xay', '2024-07-01', '2024-07-01', 1, (SELECT BrandID FROM [SmartMenu].[dbo].[Brand] WHERE BrandName = N'Phúc Long')),
-(NEWID(), N'Đồ Ăn Nhẹ', '2024-07-01', '2024-07-01', 1, (SELECT BrandID FROM [SmartMenu].[dbo].[Brand] WHERE BrandName = N'Phúc Long')),
-(NEWID(), N'Trà', '2024-07-01', '2024-07-01', 1, (SELECT BrandID FROM [SmartMenu].[dbo].[Brand] WHERE BrandName = N'Phúc Long'));
+(NEWID(), N'Trà Sữa', '2024-07-01', '2024-07-01', 1, (SELECT BrandID FROM [thetam1410_].[dbo].[Brand] WHERE BrandName = N'Phúc Long')),
+(NEWID(), N'Cà Phê', '2024-07-01', '2024-07-01', 1, (SELECT BrandID FROM [thetam1410_].[dbo].[Brand] WHERE BrandName = N'Phúc Long')),
+(NEWID(), N'Đá xay', '2024-07-01', '2024-07-01', 1, (SELECT BrandID FROM [thetam1410_].[dbo].[Brand] WHERE BrandName = N'Phúc Long')),
+(NEWID(), N'Đồ Ăn Nhẹ', '2024-07-01', '2024-07-01', 1, (SELECT BrandID FROM [thetam1410_].[dbo].[Brand] WHERE BrandName = N'Phúc Long')),
+(NEWID(), N'Trà', '2024-07-01', '2024-07-01', 1, (SELECT BrandID FROM [thetam1410_].[dbo].[Brand] WHERE BrandName = N'Phúc Long'));
 
 -- Lấy BrandID cho Brand 'Phúc Long'
 DECLARE @BrandID INT;
-SET @BrandID = (SELECT BrandID FROM [SmartMenu].[dbo].[Brand] WHERE BrandName = N'Phúc Long');
+SET @BrandID = (SELECT BrandID FROM [thetam1410_].[dbo].[Brand] WHERE BrandName = N'Phúc Long');
 -- Tạo các Product cho từng Category
 
 -- Tạo Product cho Category 'Trà Sữa'
 INSERT INTO [dbo].[Product] (ProductCode, CreateDate, ProductName, SpotlightVideo_ImageUrl, SpotlightVideo_ImageName, ImageUrl, ImageName, Description, CategoryID, BrandID, Price)
 VALUES
 (NEWID(), '2024-07-01', N'Trà Sữa Ô Long', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/52trasuaolong.png', 'trasuaolong.png', N'Oolong Milk Tea', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Trà Sữa' AND BrandID = @BrandID), @BrandID, 25000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Trà Sữa' AND BrandID = @BrandID), @BrandID, 25000),
 (NEWID(), '2024-07-01', N'Trà Sữa Matcha', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/53trasuamatcha.png', 'trasuamatcha.png', N'Matcha Milk Tea', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Trà Sữa' AND BrandID = @BrandID), @BrandID, 27000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Trà Sữa' AND BrandID = @BrandID), @BrandID, 27000),
 (NEWID(), '2024-07-01', N'Trà Sữa Mãng Cầu Jelly Dừa Sợi', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/54trasuamangcaujerryduasoi.png', 'trasuamangcaujerryduasoi.png', N'Soursop Jelly Coconut Milk Tea', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Trà Sữa' AND BrandID = @BrandID), @BrandID, 29000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Trà Sữa' AND BrandID = @BrandID), @BrandID, 29000),
 (NEWID(), '2024-07-01', N'Trà Sữa Nhãn Sen', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/55trasuanhansen.png', 'trasuanhansen.png', N'Longan Lotus Milk Tea', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Trà Sữa' AND BrandID = @BrandID), @BrandID, 26000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Trà Sữa' AND BrandID = @BrandID), @BrandID, 26000),
 (NEWID(), '2024-07-01', N'Hồng Trà Sữa', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/56hongtrasua.png', 'hongtrasua.png', N'Black Milk Tea', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Trà Sữa' AND BrandID = @BrandID), @BrandID, 30000);
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Trà Sữa' AND BrandID = @BrandID), @BrandID, 30000);
 
 -- Tạo Product cho Category 'Cà Phê'
 INSERT INTO [dbo].[Product] (ProductCode, CreateDate, ProductName, SpotlightVideo_ImageUrl, SpotlightVideo_ImageName, ImageUrl, ImageName, Description, CategoryID, BrandID, Price)
 VALUES
 (NEWID(), '2024-07-01', N'Cà Phê Sữa Đá', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/57caphesuada.png', 'caphesuada.png', N'Milk ice coffe', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Cà Phê' AND BrandID = @BrandID), @BrandID, 30000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Cà Phê' AND BrandID = @BrandID), @BrandID, 30000),
 (NEWID(), '2024-07-01', N'Cà Phê Đen', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/58capheden.png', 'capheden.png', N'Black coffee', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Cà Phê' AND BrandID = @BrandID), @BrandID, 35000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Cà Phê' AND BrandID = @BrandID), @BrandID, 35000),
 (NEWID(), '2024-07-01', N'Cà Phê Latte', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/59caphelatte.png', 'caphelatte.png', N'Coffee Latte', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Cà Phê' AND BrandID = @BrandID), @BrandID, 31000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Cà Phê' AND BrandID = @BrandID), @BrandID, 31000),
 (NEWID(), '2024-07-01', N'Bạc xỉu', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/60bacxiu.png', 'bacxiu.png', N'Faint silver', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Cà Phê' AND BrandID = @BrandID), @BrandID, 34000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Cà Phê' AND BrandID = @BrandID), @BrandID, 34000),
 (NEWID(), '2024-07-01', N'Cà Phê Cappuccino', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/61Cappuccino.png', 'Cappuccino.png', N'Cappuccino Coffee', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Cà Phê' AND BrandID = @BrandID), @BrandID, 28000);
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Cà Phê' AND BrandID = @BrandID), @BrandID, 28000);
 
 -- Tạo Product cho Category 'Đá xay'
 INSERT INTO [dbo].[Product] (ProductCode, CreateDate, ProductName, SpotlightVideo_ImageUrl, SpotlightVideo_ImageName, ImageUrl, ImageName, Description, CategoryID, BrandID, Price)
 VALUES
 (NEWID(), '2024-07-01', N'Chanh Đá Xay', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/62chanhdaxay.png', 'chanhdaxay.png', N'Ice Blended Lemon', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Đá xay' AND BrandID = @BrandID), @BrandID, 29000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Đá xay' AND BrandID = @BrandID), @BrandID, 29000),
 (NEWID(), '2024-07-01', N'Matcha Đá Xay', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/63matchadaxay.png', 'matchadaxay.png', N'Matcha Ice Blended', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Đá xay' AND BrandID = @BrandID), @BrandID, 28000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Đá xay' AND BrandID = @BrandID), @BrandID, 28000),
 (NEWID(), '2024-07-01', N'Oreo Capuchino Đá Xay', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/64oreocappuccinodaxay.png', 'oreocappuccinodaxay.png', N'Oreo Cappuccino Iced Blend', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Đá xay' AND BrandID = @BrandID), @BrandID, 36000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Đá xay' AND BrandID = @BrandID), @BrandID, 36000),
 (NEWID(), '2024-07-01', N'Capuchino Đá Xay', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/65cappucinodaxay.png', 'cappucinodaxay.png', N'Iced Blended Cappuccino', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Đá xay' AND BrandID = @BrandID), @BrandID, 38000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Đá xay' AND BrandID = @BrandID), @BrandID, 38000),
 (NEWID(), '2024-07-01', N'Sữa Chua Phúc Bồn Tử Đác Cam', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/66suachuaphucbontudaccam.png', 'suachuaphucbontudaccam.png', N'Orange Raspberry Yogurt', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Đá xay' AND BrandID = @BrandID), @BrandID, 33000);
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Đá xay' AND BrandID = @BrandID), @BrandID, 33000);
 
 -- Tạo Product cho Category 'Đồ Ăn Nhẹ'
-INSERT INTO [dbo].[Product] (ProductCode, CreateDate, ProductName, SpotlightVideo_ImageUrl, SpotlightVideo_ImageName, ImageUrl, ImageName, Description, CategoryID, BrandID, Price)
+INSERT INTO [thetam1410_].[dbo].[Product] (ProductCode, CreateDate, ProductName, SpotlightVideo_ImageUrl, SpotlightVideo_ImageName, ImageUrl, ImageName, Description, CategoryID, BrandID, Price)
 VALUES
 (NEWID(), '2024-07-01', N'Bánh Mì Phúc Long', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/67banhmiphuclong.png', 'banhmiphuclong.png', N'Phuc Long Bread', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Đồ Ăn Nhẹ' AND BrandID = @BrandID), @BrandID, 29000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Đồ Ăn Nhẹ' AND BrandID = @BrandID), @BrandID, 29000),
 (NEWID(), '2024-07-01', N'Bánh Choco Trà Xanh', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/68Green Tea Choco Cake.png', 'Green Tea Choco Cake.png', N'Green Tea Choco Cake', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Đồ Ăn Nhẹ' AND BrandID = @BrandID), @BrandID, 24000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Đồ Ăn Nhẹ' AND BrandID = @BrandID), @BrandID, 24000),
 (NEWID(), '2024-07-01', N'Passion Panna Cotta', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/69Passion Panna Cotta.png', 'Passion Panna Cotta.png', N'Passion Panna Cotta', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Đồ Ăn Nhẹ' AND BrandID = @BrandID), @BrandID, 35000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Đồ Ăn Nhẹ' AND BrandID = @BrandID), @BrandID, 35000),
 (NEWID(), '2024-07-01', N'Tiramisu nhỏ', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/70Tiramisu Mini.png', 'Tiramisu Mini.png', N'Tiramisu mini', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Đồ Ăn Nhẹ' AND BrandID = @BrandID), @BrandID, 31000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Đồ Ăn Nhẹ' AND BrandID = @BrandID), @BrandID, 31000),
 (NEWID(), '2024-07-01', N'Butter Chocolate Croissant 30g', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/71Butter Chocolate Croissant 30g.jpg', 'Butter Chocolate Croissant 30g.jpg', N'utter Chocolate Croissant 30g', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Đồ Ăn Nhẹ' AND BrandID = @BrandID), @BrandID, 30000);
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Đồ Ăn Nhẹ' AND BrandID = @BrandID), @BrandID, 30000);
 
 -- Tạo Product cho Category 'Trà'
-INSERT INTO [dbo].[Product] (ProductCode, CreateDate, ProductName, SpotlightVideo_ImageUrl, SpotlightVideo_ImageName, ImageUrl, ImageName, Description, CategoryID, BrandID, Price)
+INSERT INTO [thetam1410_].[dbo].[Product] (ProductCode, CreateDate, ProductName, SpotlightVideo_ImageUrl, SpotlightVideo_ImageName, ImageUrl, ImageName, Description, CategoryID, BrandID, Price)
 VALUES
 (NEWID(), '2024-07-01', N'Hồng Trà Chanh', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/72hongtrachanh.png', 'hongtrachanh.png', N'Black Lemon Tea', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Trà' AND BrandID = @BrandID), @BrandID, 27000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Trà' AND BrandID = @BrandID), @BrandID, 27000),
 (NEWID(), '2024-07-01', N'Trà Lài Đác Thơm', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/73tralaidacthom.png', 'tralaidacthom.png', N'Fragrant Dac Thom Jasmine Tea', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Trà' AND BrandID = @BrandID), @BrandID, 29000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Trà' AND BrandID = @BrandID), @BrandID, 29000),
 (NEWID(), '2024-07-01', N'Trà Nhãn Sen', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/74tranhansen.png', 'tranhansen.png', N'Longan Lotus Tea', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Trà' AND BrandID = @BrandID), @BrandID, 28000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Trà' AND BrandID = @BrandID), @BrandID, 28000),
 (NEWID(), '2024-07-01', N'Trà Vải Lài', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/75traivailai.png', 'traivailai.png', N'Jasmine Tea', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Trà' AND BrandID = @BrandID), @BrandID, 30000),
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Trà' AND BrandID = @BrandID), @BrandID, 30000),
 (NEWID(), '2024-07-01', N'Hồng Trà Đào', NULL, NULL, 'https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/products/76hongtradao.png', 'hongtradao.png', N'Peach Black Tea', 
-(SELECT CategoryID FROM [dbo].[Category] WHERE CategoryName = N'Trà' AND BrandID = @BrandID), @BrandID, 31000);
+(SELECT CategoryID FROM [thetam1410_].[dbo].[Category] WHERE CategoryName = N'Trà' AND BrandID = @BrandID), @BrandID, 31000);
 
-
-INSERT into [dbo].[ProductList](BrandID, ListID, ProductID, IndexInList) 
+INSERT into [thetam1410_].[dbo].[ProductList](BrandID, ListID, ProductID, IndexInList) 
 VALUES 
 (21, 1, 34 ,1 ),
 (21, 1, 35 ,2 ),
