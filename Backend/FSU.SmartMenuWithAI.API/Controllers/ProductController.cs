@@ -220,7 +220,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        [Authorize(Roles = UserRoles.BrandManager)]
+        [Authorize(Roles = UserRoles.BrandManager + "," + UserRoles.Store)]
         [HttpGet(APIRoutes.Product.GetAllByCategory, Name = "GetProductByCategoryAsync")]
         public async Task<IActionResult> GetAllByCategoryAsync([FromQuery(Name = "search-key")] string? searchKey
             , [FromQuery(Name = "brand-id")] int brandID
@@ -252,7 +252,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
             }
         }
 
-        [Authorize(Roles = UserRoles.BrandManager)]
+        [Authorize(Roles = UserRoles.BrandManager + "," + UserRoles.Store)]
         [HttpGet(APIRoutes.Product.GetAll, Name = "GetProductInBrandAsync")]
         public async Task<IActionResult> GetAllAsync([FromQuery(Name = "search-key")] string? searchKey
             , [FromQuery(Name = "brand-id")] int brandID
@@ -282,7 +282,7 @@ namespace FSU.SmartMenuWithAI.API.Controllers
                 });
             }
         }
-        [Authorize(Roles = UserRoles.BrandManager)]
+        [Authorize(Roles = UserRoles.BrandManager + "," + UserRoles.Store)]
         [HttpGet(APIRoutes.Product.GetByID, Name = "GetProductByID")]
         public async Task<IActionResult> GetAsync([FromQuery] int Id)
         {
