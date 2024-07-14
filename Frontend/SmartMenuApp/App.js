@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,9 +12,10 @@ import ProfileScreen from "./screens/ProfileScreen";
 import MenuRecommendScreen from "./screens/MenuRecommendScreen";
 import { GlobalStyle } from "./constants/styles";
 import Toast, { BaseToast } from "react-native-toast-message";
-import { LogBox } from 'react-native';
+import { LogBox } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
-LogBox.ignoreLogs(['Possible Unhandled Promise Rejection']);
+LogBox.ignoreLogs(["Possible Unhandled Promise Rejection"]);
 LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
@@ -24,7 +24,7 @@ const toastConfig = {
   success: (internalState) => (
     <BaseToast
       {...internalState}
-      style={{ borderLeftColor: "green",  width: "40%" }}
+      style={{ borderLeftColor: "green", width: "40%" }}
       contentContainerStyle={{ paddingHorizontal: 15 }}
       text1Style={{
         fontSize: 20,
@@ -39,15 +39,15 @@ const toastConfig = {
   error: (internalState) => (
     <BaseToast
       {...internalState}
-      style={{ borderLeftColor: "red", width: "40%"}}
+      style={{ borderLeftColor: "red", width: "40%" }}
       contentContainerStyle={{ paddingHorizontal: 15 }}
       text1Style={{
         fontSize: 20,
-        fontWeight: '400'
+        fontWeight: "400",
       }}
       text2Style={{
         fontSize: 15,
-        color: 'gray'
+        color: "gray",
       }}
     />
   ),
@@ -55,44 +55,47 @@ const toastConfig = {
 
 function HomeOverview() {
   return (
-    <BottomTabs.Navigator
-      screenOptions={{
-        tabBarActiveTintColor: GlobalStyle.colors.primaryButton,
-        tabBarInactiveTintColor: GlobalStyle.colors.darken30,
-        headerStyle: {
-          backgroundColor: GlobalStyle.colors.primary,
-        },
-        headerShown: false,
-      }}
-    >
-      <BottomTabs.Screen
-        name="Trang chủ"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
-          ),
+    <>
+      <StatusBar hidden={true} />
+      <BottomTabs.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: GlobalStyle.colors.primaryButton,
+          tabBarInactiveTintColor: GlobalStyle.colors.darken30,
+          headerStyle: {
+            backgroundColor: GlobalStyle.colors.primary,
+          },
+          headerShown: false,
         }}
-      />
-      <BottomTabs.Screen
-        name="Menu thông minh"
-        component={CameraScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="cafe" size={size} color={color} />
-          ),
-        }}
-      />
-      <BottomTabs.Screen
-        name="Hồ sơ"
-        component={ProfileScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
-          ),
-        }}
-      />
-    </BottomTabs.Navigator>
+      >
+        <BottomTabs.Screen
+          name="Trang chủ"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="home" size={size} color={color} />
+            ),
+          }}
+        />
+        <BottomTabs.Screen
+          name="Menu thông minh"
+          component={CameraScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="cafe" size={size} color={color} />
+            ),
+          }}
+        />
+        <BottomTabs.Screen
+          name="Hồ sơ"
+          component={ProfileScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="person" size={size} color={color} />
+            ),
+          }}
+        />
+      </BottomTabs.Navigator>
+    </>
   );
 }
 

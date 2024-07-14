@@ -12,6 +12,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { GlobalStyle } from "../constants/styles";
 import Loading from "../components/Loading";
 import LoadingSpinnerOverlay from "react-native-loading-spinner-overlay";
+import { recommendMenu } from "../services/MenuService";
 
 function CameraScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,11 +36,28 @@ function CameraScreen({ navigation }) {
       aspect: [4, 3],
       quality: 1,
       cameraType: ImagePicker.CameraType.front,
+      base64: true,
     });
 
     if (!result.cancelled) {
-      console.log(result.assets[0].uri);
-      navigation.navigate("MenuRecommend");
+      try {
+        const formData = new FormData();
+        formData.append("image", {
+          uri: `data:image/png;base64,${result.assets[0].base64}`,
+          name: "photo.png",
+          type: "image/png",
+        });
+
+        // Gọi API recommendMenu với formData
+        const brandId = 23;
+        const response = await recommendMenu(formData, brandId);
+
+        console.log("API Response:", response);
+
+        navigation.navigate("MenuRecommend");
+      } catch (error) {
+        console.error("Error recommending menu:", error);
+      }
     }
   };
 

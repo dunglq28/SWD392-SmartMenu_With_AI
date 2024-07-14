@@ -1,16 +1,9 @@
-import React, {  } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  ImageBackground,
-  Text,
-} from "react-native";
+import React from "react";
+import { View, StyleSheet, Image, ImageBackground, Text } from "react-native";
 import Button from "../components/UI/Button";
 import { GlobalStyle } from "../constants/styles";
 
 function WelcomeScreen({ navigation }) {
-
   return (
     <View style={styles.container}>
       <View>
@@ -25,9 +18,7 @@ function WelcomeScreen({ navigation }) {
         </ImageBackground>
       </View>
       <View style={styles.contentContainer}>
-        <Text style={styles.welcomeText}>
-          Chào mừng
-        </Text>
+        <Text style={styles.welcomeText}>Chào mừng</Text>
         <Text style={styles.description}>
           Chọn món dựa trên menu thông minh. Tận hưởng trải nghiệm đơn giản và
           hiệu quả để chọn món phù hợp với bạn

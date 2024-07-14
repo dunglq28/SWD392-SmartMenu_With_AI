@@ -12,13 +12,11 @@ import {
 import { GlobalStyle } from "../constants/styles";
 import { drinks } from "../Data/drinks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
- 
 
 const categories = [
   { id: 1, name: "Cà phê" },
   { id: 2, name: "Sinh tố" },
   { id: 3, name: "Nước ép" },
-
 ];
 
 const HomeScreen = () => {
