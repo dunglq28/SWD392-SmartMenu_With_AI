@@ -175,6 +175,12 @@ namespace FSU.SmartMenuWithAI.Service.Services
         {
             // lay duoc hinh anh phan tich ra attribute
             var customerAtt = await _s3Service.AnalyzeFacesInImage(fileImage);
+            if (customerAtt == null || customerAtt.Emotions.IsNullOrEmpty() || customerAtt.Session.IsNullOrEmpty() || customerAtt.Age == 0)
+            {
+                var menuRecomend = await _unitOfWork.MenuRepository.GetByCondition(x => x.BrandId == brandId);
+                var mapdto = _mapper.Map<MenuDTO>(menuRecomend);
+                return mapdto;
+            }
             // tim customer segment
             var customerSegment = await _segmentAttributeService.GetCusSegmentAsync(customerAtt);
 
