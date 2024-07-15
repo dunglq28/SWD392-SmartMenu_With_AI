@@ -107,7 +107,7 @@
 
             public const string Add = Base + "/menus/";
 
-            public const string RecomendMenu = Base + "/menus/recomend-menu";
+            public const string RecommendMenu = Base + "/menus/recommend-menu";
 
             public const string GetMenuSegmentByID = Base + "/menu-segments/get-by-id";
 
