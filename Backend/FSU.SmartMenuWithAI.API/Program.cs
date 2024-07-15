@@ -151,13 +151,8 @@ app.UseCors("Cors");
 // Config Middleware
 app.UseMiddleware<AccountStatusMiddleware>();
 app.UseMiddleware<TokenValidationMiddleware>();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
