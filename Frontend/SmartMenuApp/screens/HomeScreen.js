@@ -53,7 +53,7 @@ const HomeScreen = () => {
               result.data.brandId,
               cate[0].categoryId
             );
-            setProducts(initialProducts.list);
+            // setProducts(initialProducts.list);
           }
         }
       } finally {

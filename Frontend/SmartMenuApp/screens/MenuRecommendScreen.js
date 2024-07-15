@@ -1,7 +1,9 @@
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
 
-function MenuRecommendScreen() {
+function MenuRecommendScreen({ route }) {
+  const { responseData } = route.params;
+  console.log(responseData);
   return (
     <View style={styles.container}>
       <Image

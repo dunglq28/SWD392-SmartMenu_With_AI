@@ -165,7 +165,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             {
                 Age = AgeHelper.CalAverageAge(customerFace.AgeRange.Low, customerFace.AgeRange.High),
                 Emotions = customerFace.Emotions,
-                Gender = customerFace.Gender.ToString(),
+                Gender = customerFace.Gender.Value.ToString(),
                 Session = SessionHelper.GetSession() 
             };
             return faceAttributes;
