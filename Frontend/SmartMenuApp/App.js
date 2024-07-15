@@ -15,8 +15,8 @@ import Toast, { BaseToast } from "react-native-toast-message";
 import { LogBox } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
-// LogBox.ignoreLogs(['Possible Unhandled Promise Rejection']);
-// LogBox.ignoreAllLogs();
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection']);
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();

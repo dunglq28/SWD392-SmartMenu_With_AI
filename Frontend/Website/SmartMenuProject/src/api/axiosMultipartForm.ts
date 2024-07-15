@@ -12,8 +12,13 @@ import { refreshToken } from "../services/AuthenticationService";
 
 const API_HOST = import.meta.env.VITE_API_HOST;
 const API_PORT = import.meta.env.VITE_API_PORT;
+const API_DEVELOPMENT = import.meta.env.VITE_API_DEVELOPMENT;
+const API_DEPLOY = import.meta.env.VITE_API_DEPLOY;
 
-const BASE_URL = `${API_HOST}:${API_PORT}/api`;
+const BASE_URL =
+  API_DEVELOPMENT === true
+    ? `${API_HOST}:${API_PORT}/api`
+    : `${API_DEPLOY}/api`;
 
 const axiosMultipartForm: AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -36,9 +41,8 @@ axiosMultipartForm.interceptors.request.use(
     // if (config.data) {
     //   config.data = convertKeysToKebabCase(config.data);
     // }
-    
+
     return config;
-    
   },
   function (error) {
     return Promise.reject(error);
@@ -55,7 +59,6 @@ axiosMultipartForm.interceptors.response.use(
   },
 
   async function (error) {
-    
     if (error.message === "Network Error" && !error.response) {
       toast.error("Lỗi mạng, vui lòng kiểm tra kết nối!");
     }

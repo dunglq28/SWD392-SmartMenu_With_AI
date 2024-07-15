@@ -5,10 +5,11 @@ import {
   convertKeysToCamelCase,
   convertKeysToKebabCase,
 } from "../utils/keyCaseConverter";
-import { API_HOST, API_PORT } from "@env";
+import { API_HOST, API_PORT, IS_DEVELOPMENT, API_DEPLOY } from "@env";
 
-const BASE_URL = `${API_HOST}:${API_PORT}/api`;
-
+const BASE_URL =
+  IS_DEVELOPMENT === true ? `${API_HOST}:${API_PORT}/api` : `${API_DEPLOY}/api`;
+  
 const axiosMultipartForm = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -21,7 +22,7 @@ axiosMultipartForm.interceptors.request.use(
   async function (config) {
     // Lấy token từ AsyncStorage
     const token = await AsyncStorage.getItem("AccessToken");
-    
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -53,17 +54,6 @@ const handleAxiosError = (error) => {
     Toast.show({
       type: "error",
       text1: error.response.data.message,
-    });
-  } else if (error.response && error.response.status === 400) {
-    Toast.show({
-      type: "error",
-      text1: "Yêu cầu thất bại",
-    });
-  } else {
-    // Xử lý tùy chỉnh cho các lỗi khác
-    Toast.show({
-      type: "error",
-      text1: "Đã xảy ra lỗi, vui lòng thử lại sau.",
     });
   }
   return Promise.reject(error);
