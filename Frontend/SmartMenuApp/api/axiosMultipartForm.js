@@ -5,10 +5,11 @@ import {
   convertKeysToCamelCase,
   convertKeysToKebabCase,
 } from "../utils/keyCaseConverter";
-import { API_HOST, API_PORT } from "@env";
+import { API_HOST, API_PORT, IS_DEVELOPMENT, API_DEPLOY } from "@env";
 
-const BASE_URL = `${API_HOST}:${API_PORT}/api`;
-
+const BASE_URL =
+  IS_DEVELOPMENT === true ? `${API_HOST}:${API_PORT}/api` : `${API_DEPLOY}/api`;
+  
 const axiosMultipartForm = axios.create({
   baseURL: BASE_URL,
   headers: {

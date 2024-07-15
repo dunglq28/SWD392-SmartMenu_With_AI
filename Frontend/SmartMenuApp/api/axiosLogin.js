@@ -1,10 +1,15 @@
 import axios from "axios";
-import Toast from 'react-native-toast-message';
-import { convertKeysToCamelCase, convertKeysToKebabCase } from "../utils/keyCaseConverter";
+import Toast from "react-native-toast-message";
+import {
+  convertKeysToCamelCase,
+  convertKeysToKebabCase,
+} from "../utils/keyCaseConverter";
 
-import { API_HOST, API_PORT } from "@env";
+import { API_HOST, API_PORT, IS_DEVELOPMENT, API_DEPLOY } from "@env";
 
-const BASE_URL = `${API_HOST}:${API_PORT}/api`;
+const BASE_URL =
+  IS_DEVELOPMENT === true ? `${API_HOST}:${API_PORT}/api` : `${API_DEPLOY}/api`;
+  
 const axiosLogin = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -30,29 +35,29 @@ axiosLogin.interceptors.request.use(
 const handleAxiosError = (error) => {
   if (error.message === "Network Error" && !error.response) {
     Toast.show({
-      type: 'error',
-      text1: 'Vui lòng kiểm tra kết nối!'
+      type: "error",
+      text1: "Vui lòng kiểm tra kết nối!",
     });
   } else if (error.response && error.response.status === 403) {
     Toast.show({
-      type: 'error',
-      text1: error.response.data.message
+      type: "error",
+      text1: error.response.data.message,
     });
   } else if (error.response && error.response.status === 401) {
     Toast.show({
-      type: 'error',
-      text1: error.response.data.message
+      type: "error",
+      text1: error.response.data.message,
     });
   } else if (error.response && error.response.status === 400) {
     Toast.show({
-      type: 'error',
-      text1: "Đăng nhập thất bại"
+      type: "error",
+      text1: "Đăng nhập thất bại",
     });
   } else {
     // Custom handling for other errors
     Toast.show({
-      type: 'error',
-      text1: 'Đã xảy ra lỗi, vui lòng thử lại sau.'
+      type: "error",
+      text1: "Đã xảy ra lỗi, vui lòng thử lại sau.",
     });
   }
   return Promise.reject(error);

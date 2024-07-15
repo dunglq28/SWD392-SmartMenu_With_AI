@@ -276,7 +276,7 @@ function CustomerSegment() {
                 </Tr>
               ) : data.length === 0 ? (
                 <Tr>
-                  <Td colSpan={10}>Không có người dùng để hiển thị</Td>
+                  <Td colSpan={10}>Không có phân khúc khách hàng để hiển thị</Td>
                 </Tr>
               ) : (
                 data.map((customerSegment, index) => (

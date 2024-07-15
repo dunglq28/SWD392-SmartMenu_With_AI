@@ -49,8 +49,12 @@ function Menu() {
       try {
         setIsLoading(true);
         const loadData = async () => {
-          var result = await getAllMenu(Number(brandId), currentPage, rowsPerPage);
-          
+          var result = await getAllMenu(
+            Number(brandId),
+            currentPage,
+            rowsPerPage
+          );
+
           setData(result.list);
           setTotalPages(result.totalPage);
           setTotalRecords(result.totalRecord);
@@ -111,13 +115,17 @@ function Menu() {
           </ChakraLink>
         </Flex>
         <Flex className={style.CardContainer}>
-          {data.map((menu, index) => (
-            <MenuCard
-              key={index}
-              menu={menu}
-              handleClickMenu={handleClickMenu}
-            />
-          ))}
+          {data.length === 0 ? (
+            <div>Không có menu để hiển thị</div>
+          ) : (
+            data.map((menu, index) => (
+              <MenuCard
+                key={index}
+                menu={menu}
+                handleClickMenu={handleClickMenu}
+              />
+            ))
+          )}
         </Flex>
         <div style={{ width: "100%" }}>
           <NavigationDot

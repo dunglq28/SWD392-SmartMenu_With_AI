@@ -60,9 +60,8 @@ function CameraScreen({ navigation }) {
           type: "image/png",
         });
         formData.append("BrandId", brandId);
-        // const response = await recommendMenu(formData);
-        // console.log(response);
-        // navigation.navigate("MenuRecommend", { responseData: response });
+        const response = await recommendMenu(formData);
+        navigation.navigate("MenuRecommend", { menu: response.data.menuImage });
       } catch (error) {
         console.error("Error recommending menu:", error);
       } finally {
@@ -105,15 +104,15 @@ function CameraScreen({ navigation }) {
               <FontAwesome name="camera" size={40} color="white" />
               <Text style={styles.buttonText}>Quét Khuôn Mặt</Text>
             </TouchableOpacity>
-            {selectedImage && (
+            {/* {selectedImage && (
               <Image source={{ uri: selectedImage }} style={styles.image} />
-            )}
-            <TouchableOpacity
+            )} */}
+            {/* <TouchableOpacity
               style={styles.loginButton}
               onPress={handleMenuOpen}
             >
               <Text>MenuRecommend</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </>
       )}

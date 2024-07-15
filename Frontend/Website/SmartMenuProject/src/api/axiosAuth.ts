@@ -14,8 +14,13 @@ import {
 
 const API_HOST = import.meta.env.VITE_API_HOST;
 const API_PORT = import.meta.env.VITE_API_PORT;
+const API_DEVELOPMENT = import.meta.env.VITE_API_DEVELOPMENT;
+const API_DEPLOY = import.meta.env.VITE_API_DEPLOY;
 
-const BASE_URL = `${API_HOST}:${API_PORT}/api`;
+const BASE_URL =
+  API_DEVELOPMENT === true
+    ? `${API_HOST}:${API_PORT}/api`
+    : `${API_DEPLOY}/api`;
 
 const axiosAuth: AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -42,7 +47,7 @@ axiosAuth.interceptors.request.use(
     if (config.params) {
       config.params = convertQueryParamsToKebabCase(config.params);
     }
-    
+
     return config;
   },
   function (error) {

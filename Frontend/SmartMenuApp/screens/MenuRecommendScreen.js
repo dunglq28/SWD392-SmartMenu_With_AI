@@ -2,16 +2,10 @@ import React from "react";
 import { Image, StyleSheet, View } from "react-native";
 
 function MenuRecommendScreen({ route }) {
-  const { responseData } = route.params;
-  console.log(responseData);
+  const { menu } = route.params;
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.image}
-        source={{
-          uri: "https://smart-menu-with-ai.s3.ap-southeast-1.amazonaws.com/menus/XZ5Z4070018266DFF",
-        }}
-      />
+      <Image style={styles.image} source={{ uri: menu }} />
     </View>
   );
 }

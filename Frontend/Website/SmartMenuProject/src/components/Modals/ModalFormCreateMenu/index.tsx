@@ -1365,7 +1365,7 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
               </Button>
               {currentTab === 2 ? (
                 <Button className={style.primaryButton} onClick={handleDonebtn}>
-                  {isEdit ? "Update menu" : "Create menu"}
+                  {isEdit ? "Cập nhật menu" : "Tạo menu"}
                 </Button>
               ) : (
                 <Button className={style.primaryButton} onClick={handleNextTab}>
