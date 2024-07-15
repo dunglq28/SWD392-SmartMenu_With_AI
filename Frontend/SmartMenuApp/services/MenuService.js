@@ -1,13 +1,9 @@
-import axiosMenu from "../api/axiosMenu";
+import axiosMultipartForm from "../api/axiosMultipartForm";
 
-export const recommendMenu = async (faceImage, BrandId) => {
+export const recommendMenu = async (form) => {
   try {
-    const response = await axiosMenu.post("/menus/recomend-menu", {
-      faceImage,
-      BrandId,
-    });
-    console.log(response.data);
-    return response.data;
+    const response = await axiosMultipartForm.get("menus/recommend-menu", form);
+    return response;
   } catch (error) {
     throw error;
   }

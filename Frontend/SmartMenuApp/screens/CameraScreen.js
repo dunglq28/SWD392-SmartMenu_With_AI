@@ -50,26 +50,30 @@ function CameraScreen({ navigation }) {
     });
 
     if (!result.cancelled) {
+      setIsLoading(true);
       try {
+        const brandId = await AsyncStorage.getItem("BrandId");
         const formData = new FormData();
-        formData.append("image", {
-          uri: `data:image/png;base64,${result.assets[0].base64}`,
+        formData.append("faceImage", {
+          uri: `data:image/png;base64,${result.base64}`,
           name: "photo.png",
           type: "image/png",
         });
-
-        // Gọi API recommendMenu với formData
-        const brandId = 23;
-        const response = await recommendMenu(formData, brandId);
-
+        formData.append("BrandId", brandId);
+        const response = await recommendMenu(formData);
         console.log("API Response:", response);
-
-        navigation.navigate("MenuRecommend");
+        // navigation.navigate("MenuRecommend", { responseData: response });
       } catch (error) {
         console.error("Error recommending menu:", error);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
+
+  // useEffect(() => {
+  //   openCamera();
+  // }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

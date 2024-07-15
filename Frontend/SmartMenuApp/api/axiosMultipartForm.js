@@ -8,7 +8,8 @@ import {
 import { API_HOST, API_PORT } from "@env";
 
 const BASE_URL = `${API_HOST}:${API_PORT}/api`;
-const axiosMenu = axios.create({
+
+const axiosMultipartForm = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "multipart/form-data",
@@ -16,18 +17,19 @@ const axiosMenu = axios.create({
 });
 
 // Thêm interceptor cho request
-axiosMenu.interceptors.request.use(
+axiosMultipartForm.interceptors.request.use(
   async function (config) {
     // Lấy token từ AsyncStorage
-    const token = await AsyncStorage.getItem("RefreshToken");
+    const token = await AsyncStorage.getItem("AccessToken");
+    
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
     // Chuyển đổi dữ liệu sang dạng kebab-case nếu có
-    if (config.data) {
-      config.data = convertKeysToKebabCase(config.data);
-    }
+    // if (config.data) {
+    //   config.data = convertKeysToKebabCase(config.data);
+    // }
     return config;
   },
   function (error) {
@@ -40,40 +42,35 @@ const handleAxiosError = (error) => {
   if (error.message === "Network Error" && !error.response) {
     Toast.show({
       type: "error",
-      text1: "Lỗi mạng",
-      text2: "Vui lòng kiểm tra kết nối!",
+      text1: "Vui lòng kiểm tra kết nối!",
     });
   } else if (error.response && error.response.status === 403) {
     Toast.show({
       type: "error",
-      text1: "Lỗi",
-      text2: error.response.data.message,
+      text1: "Bạn không có quyền truy cập vào tài nguyên này",
     });
   } else if (error.response && error.response.status === 401) {
     Toast.show({
       type: "error",
-      text1: "Lỗi",
-      text2: error.response.data.message,
+      text1: error.response.data.message,
     });
   } else if (error.response && error.response.status === 400) {
     Toast.show({
       type: "error",
-      text1: "Lỗi",
-      text2: "Yêu cầu thất bại",
+      text1: "Yêu cầu thất bại",
     });
   } else {
     // Xử lý tùy chỉnh cho các lỗi khác
     Toast.show({
       type: "error",
-      text1: "Lỗi",
-      text2: "Đã xảy ra lỗi, vui lòng thử lại sau.",
+      text1: "Đã xảy ra lỗi, vui lòng thử lại sau.",
     });
   }
   return Promise.reject(error);
 };
 
 // Thêm interceptor cho response
-axiosMenu.interceptors.response.use(
+axiosMultipartForm.interceptors.response.use(
   function (response) {
     if (response.data) {
       response.data = convertKeysToCamelCase(response.data);
@@ -86,4 +83,4 @@ axiosMenu.interceptors.response.use(
   }
 );
 
-export default axiosMenu;
+export default axiosMultipartForm;
