@@ -27,9 +27,9 @@ namespace FSU.SmartMenuWithAI.Repository.Repositories
         {
             var highestMenuPriority = await _context.MenuSegments
                 .Include(x => x.Menu)
-                .Include(x => x.Segment)
+                //.Include(x => x.Segment)
                 .Where(ms => ms.SegmentId == segmentId
-            && ms.Menu.BrandId == BrandId).OrderByDescending( ms => ms.Priority).FirstOrDefaultAsync();
+            && ms.Menu.BrandId == BrandId).OrderBy( ms => ms.Priority).FirstOrDefaultAsync();
             if (highestMenuPriority != null)
             {
                 return highestMenuPriority;

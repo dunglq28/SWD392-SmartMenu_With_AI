@@ -187,7 +187,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
                 var customerSegment = await _segmentAttributeService.GetCusSegmentAsync(customerAtt);
 
                 // tim menu cos priority cao nhat trong bang MenuSegment
-                Func<IQueryable<MenuSegment>, IOrderedQueryable<MenuSegment>> orderBy = q => q.OrderByDescending(x => x.Priority);
+                Func<IQueryable<MenuSegment>, IOrderedQueryable<MenuSegment>> orderBy = q => q.OrderBy(x => x.Priority);
                 var menuSegment = await _unitOfWork.MenuSegmentRepository.HighestMenuSegment(segmentId: customerSegment.SegmentId, BrandId: brandId);
                 // tim menu theo id da lay duoc
                 if (menuSegment != null)
@@ -202,7 +202,7 @@ namespace FSU.SmartMenuWithAI.Service.Services
             }
             catch
             {
-                var menuDefault = await _unitOfWork.MenuRepository.GetByCondition(x => x.BrandId == brandId);
+                var menuDefault = await _unitOfWork.MenuRepository.GetByCondition(x => x.BrandId == brandId, null!);
                 var mapdto2 = _mapper.Map<MenuDTO>(menuDefault);
                 return mapdto2;
             }
