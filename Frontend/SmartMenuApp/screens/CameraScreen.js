@@ -10,7 +10,6 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesome } from "@expo/vector-icons";
 import { GlobalStyle } from "../constants/styles";
-import Loading from "../components/Loading";
 import LoadingSpinnerOverlay from "react-native-loading-spinner-overlay";
 import { recommendMenu } from "../services/MenuService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -18,6 +17,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 function CameraScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [brandLogo, setBrandLogo] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const fetchBrandLogo = async () => {
@@ -45,23 +45,23 @@ function CameraScreen({ navigation }) {
       allowsEditing: false,
       aspect: [4, 3],
       quality: 1,
-      cameraType: ImagePicker.CameraType.front,
-      base64: true,
+      cameraType: ImagePicker.CameraType.front,    
     });
 
-    if (!result.cancelled) {
+    if (!result.cancelled && result.assets) {
+      setSelectedImage(result.assets[0].uri);
       setIsLoading(true);
       try {
         const brandId = await AsyncStorage.getItem("BrandId");
         const formData = new FormData();
         formData.append("faceImage", {
-          uri: `data:image/png;base64,${result.base64}`,
+          uri: result.assets[0].uri,
           name: "photo.png",
           type: "image/png",
         });
         formData.append("BrandId", brandId);
-        const response = await recommendMenu(formData);
-        console.log("API Response:", response);
+        // const response = await recommendMenu(formData);
+        // console.log(response);
         // navigation.navigate("MenuRecommend", { responseData: response });
       } catch (error) {
         console.error("Error recommending menu:", error);
@@ -70,10 +70,6 @@ function CameraScreen({ navigation }) {
       }
     }
   };
-
-  // useEffect(() => {
-  //   openCamera();
-  // }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -109,9 +105,9 @@ function CameraScreen({ navigation }) {
               <FontAwesome name="camera" size={40} color="white" />
               <Text style={styles.buttonText}>Quét Khuôn Mặt</Text>
             </TouchableOpacity>
-            {/* {selectedImage && (
-          <Image source={{ uri: selectedImage }} style={styles.image} />
-        )} */}
+            {selectedImage && (
+              <Image source={{ uri: selectedImage }} style={styles.image} />
+            )}
             <TouchableOpacity
               style={styles.loginButton}
               onPress={handleMenuOpen}

@@ -21,7 +21,7 @@ axiosMultipartForm.interceptors.request.use(
   async function (config) {
     // Lấy token từ AsyncStorage
     const token = await AsyncStorage.getItem("AccessToken");
-    
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -53,17 +53,6 @@ const handleAxiosError = (error) => {
     Toast.show({
       type: "error",
       text1: error.response.data.message,
-    });
-  } else if (error.response && error.response.status === 400) {
-    Toast.show({
-      type: "error",
-      text1: "Yêu cầu thất bại",
-    });
-  } else {
-    // Xử lý tùy chỉnh cho các lỗi khác
-    Toast.show({
-      type: "error",
-      text1: "Đã xảy ra lỗi, vui lòng thử lại sau.",
     });
   }
   return Promise.reject(error);
