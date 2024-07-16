@@ -1196,7 +1196,6 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                         <Image
                           ref={imageRef}
                           src={template}
-                          onLoad={handleImageLoad}
                           style={{ pointerEvents: "none" }}
                         />
                       </Flex>
@@ -1227,11 +1226,10 @@ const ModalFormCreateMenu: React.FC<ModalProps> = ({
                 </TabPanel>
                 <TabPanel>
                   <Flex w="100%" justifyContent="center">
-                    <Flex
-                      width={`${dimensions.width}px`}
-                      height={`${dimensions.height}px`}
-                    >
+                    <Flex justifyContent="center">
                       <Image
+                        w="60%"
+                        h="auto"
                         src={capturedImage}
                         alt="enter"
                         style={{ pointerEvents: "none" }}
