@@ -1,5 +1,4 @@
 import Login from "../pages/Login/Login";
-import Dashboard from "../pages/Dashboard";
 import User from "../pages/User";
 import Brand from "../pages/Brand";
 import Products from "../pages/Product";
@@ -22,7 +21,6 @@ interface RouteItem {
 export const publicRoutes: RouteItem[] = [
   { path: "/", component: Login, layout: null },
   { path: "/login", component: Login, layout: null },
-  { path: "/dashboard", component: Dashboard },
   { path: "/users", component: User },
   { path: "/brands", component: Brand },
   { path: "/branches", component: Branch },
