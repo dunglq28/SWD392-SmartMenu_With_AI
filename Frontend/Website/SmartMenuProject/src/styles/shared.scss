@@ -76,7 +76,7 @@
   .settingsIconBtn {
     width: 0px;
     height: 25px;
-    background-color: transparent;
+    background-color: transparent !important;
     .settingsIcon {
       transition: 0.3s;
       width: 25px;
@@ -84,6 +84,7 @@
       cursor: pointer;
       &:hover {
         rotate: 180deg;
+        background-color: transparent !important;
       }
       &:active {
         width: 20px;

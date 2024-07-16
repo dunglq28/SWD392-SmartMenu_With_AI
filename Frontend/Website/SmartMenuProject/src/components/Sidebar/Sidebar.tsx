@@ -92,12 +92,6 @@ function Sidebar() {
   const roleId = roleIdString ? roleIdString : "";
   const menuItems = [
     {
-      icon: GoHome,
-      label: t("dashboard"),
-      to: "/dashboard",
-      permissionRole: UserRole.Admin,
-    },
-    {
       icon: AiOutlineUser,
       label: t("users"),
       to: "/users",
