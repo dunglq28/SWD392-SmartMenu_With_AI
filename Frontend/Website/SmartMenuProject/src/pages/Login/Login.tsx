@@ -19,7 +19,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import { login } from "../../services/AuthenticationService";
 import { toast } from "react-toastify";
-import Loading from "../../components/Loading";
+import Loading from "../../assets/gif/loadingCoffee.gif";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserRole } from "../../constants/Enum";
 import { getBrand, getBrandByUserId } from "../../services/BrandService";
@@ -46,11 +46,16 @@ function Login() {
   }, [location.state]);
 
   useEffect(() => {
+    const roleId = localStorage.getItem("RoleId");
     const isLoggedIn =
       localStorage.getItem("AccessToken") !== null &&
       localStorage.getItem("RefreshToken") !== null;
-    if (isLoggedIn) {
-      navigate("/dashboard");
+    if (isLoggedIn && roleId !== null) {
+      if (roleId.toString() === UserRole.Admin.toString()) {
+        navigate("/users");
+      } else if (roleId.toString() === UserRole.BrandManager.toString()) {
+        navigate("/products");
+      }
     }
   });
 
@@ -78,7 +83,7 @@ function Login() {
     try {
       setIsLoading(true);
       const response = await login(credentials.username, credentials.password);
-      
+
       if (
         response.data.roleId.toString() === UserRole.BranchManager.toString()
       ) {
@@ -91,7 +96,7 @@ function Login() {
         localStorage.setItem("AccessToken", response.data.token.accessToken);
         localStorage.setItem("RefreshToken", response.data.token.refreshToken);
         const toastMessage = response.message;
-        
+
         if (
           response.data.roleId.toString() === UserRole.BrandManager.toString()
         ) {
@@ -102,9 +107,9 @@ function Login() {
           navigate("/products", { state: { toastMessage } });
         } else if (
           response.data.roleId.toString() === UserRole.Admin.toString()
-        ) {          
+        ) {
           localStorage.setItem("UserId", response.data.userId.toString());
-          navigate("/dashboard", { state: { toastMessage } });
+          navigate("/users", { state: { toastMessage } });
         }
       }
     } finally {
@@ -113,7 +118,11 @@ function Login() {
   };
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <Flex height="50.5vw" width="100%" justifyContent="center" bg="#E1C278">
+        <Image src={Loading} />
+      </Flex>
+    );
   }
 
   return (
